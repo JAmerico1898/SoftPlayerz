@@ -1392,16 +1392,16 @@ if choose == "Ranking de Jogadores":
     if jogadores:
         #Determinar Temporada
         df3 = df.loc[(df['Atleta']==jogadores)]
-        temporadas = df3['Versão_Temporada']
+        temporadas = df3['Versão_Temporada'].unique()
         temporada = st.selectbox("Escolha a Temporada", options=temporadas)
         if temporada:
             #Determinar a Liga
             dfa = df3.loc[(df3['Versão_Temporada']==temporada)]
-            ligas = dfa['Liga']
+            ligas = dfa['Liga'].unique()
             liga = st.selectbox("Escolha a Liga", options=ligas)
             if liga:
                 df4 = dfa.loc[(dfa['Versão_Temporada']==temporada)&(dfa['Liga']==liga)]
-                posição = dfa['Posição']
+                posição = dfa['Posição'].unique()
                 posição = st.selectbox("Escolha a Posição", options=posição)
                 if posição == ("Goleiro"):
                         #####################################################################################################################
