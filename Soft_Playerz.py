@@ -9,7 +9,8 @@ import plotly.express as px
 import io
 import matplotlib.pyplot as plt
 from soccerplots.radar_chart import Radar
-
+from sklearn.decomposition import PCA
+from PIL import Image
 
 #CABEÇALHO DO FORM
 st.markdown("<h1 style='text-align: center;'>Ranking de Jogadores de Futebol</h1>", unsafe_allow_html=True)
@@ -25,13 +26,13 @@ df6 = pd.read_excel("Posições.xlsx")
 df7 = pd.read_excel("temporadas.xlsx")
 df8 = pd.read_excel("nacionalidades.xlsx")
 df9 = pd.read_excel("contratos.xlsx")
+df10 = pd.read_excel('jogadores_similares.xlsx')
 
 with st.sidebar:
 
     jogadores = df1["Atleta"]
-
-    choose = option_menu("Galeria de Apps", ["Ranking de Jogadores", "10 Melhores da Liga", "Nacionais pelo Mundo", "Free Agents pelo Mundo", "Histórico do Jogador", "Sobre o APP"],
-                         icons=['graph-up-arrow', 'sort-numeric-down', 'magic', 'search', 'mortarboard', 'book'],
+    choose = option_menu("Galeria de Apps", ["Ranking de Jogadores", "Jogadores Similares", "10 Melhores da Liga", "Nacionais pelo Mundo", "Free Agents pelo Mundo", "Histórico do Jogador", "Sobre o APP"],
+                         icons=['graph-up-arrow', 'image', 'sort-numeric-down', 'magic', 'search', 'mortarboard', 'book'],
                          menu_icon="app-indicator", default_index=0, 
                          styles={
                          "container": {"padding": "5!important", "background-color": "#fafafa"},
@@ -44,6 +45,7 @@ with st.sidebar:
 ###############################################################################################################################
 ###############################################################################################################################
 ###############################################################################################################################
+
 if choose == "Histórico do Jogador":
     nacionalidades = df8["Nacionalidade"]
     jogadores = st.selectbox("Escolha o Jogador", options=jogadores)
@@ -251,12 +253,11 @@ if choose == "10 Melhores da Liga":
             tabela_19 = tabela_19.head(10)
             st.dataframe(tabela_19, use_container_width=True, hide_index=True)
 
+###############################################################################################################################
+###############################################################################################################################
+###############################################################################################################################
+###############################################################################################################################
 
-
-###############################################################################################################################
-###############################################################################################################################
-###############################################################################################################################
-###############################################################################################################################
 if choose == "Nacionais pelo Mundo":
     nacionalidades = df8["Nacionalidade"]
     posições = df6["Posição"]
@@ -656,10 +657,11 @@ if choose == "Nacionais pelo Mundo":
 ###############################################################################################################################
 ###############################################################################################################################
 ###############################################################################################################################
+
 if choose == "Free Agents pelo Mundo":
     nacionalidades = df8["Nacionalidade"]
     posições = df6["Posição"]
-    funções = df2["Função"]
+    #funções = df2["Função"]
     contratos = ["2023-12-31", "2024-01-31", "2024-02-29", "2024-03-31", "2024-04-30", "2024-05-31", "2024-06-30"]
     temporada = 2023
     mundo_options = ['BRA1', 'ARG1', 'ENG1', 'ENG2', 'FRA1', 'FRA2', 'SPA1', 'SPA2', 'ITA1', 'ITA2', 'GER1', 'POR1', 'POR2', 'SWZ', 'CZH', 'CRO', 'SER', 'RUS', 'UKR', 'BEL1', 'BEL2', 'CHN',
@@ -731,7 +733,6 @@ if choose == "Free Agents pelo Mundo":
                                             'L_Rating':'Rating', 'L_Ranking':'Ranking', 'L_Percentil':'Percentil', 'Size':'Qtde Atletas'})
         st.markdown("<h4 style='text-align: center;'>Goleiros Líberos </b></h4>", unsafe_allow_html=True)
         st.dataframe(tabela_8, use_container_width=True, hide_index=True)
-
 
     elif posição == ("Lateral"):
         st.markdown("<h4 style='text-align: center;'>Free Agents Nacionais Mais Bem Ranqueados<br>Laterais </b></h4>", unsafe_allow_html=True)
@@ -1387,6 +1388,7 @@ if choose == "Free Agents pelo Mundo":
 ###############################################################################################################################
 ###############################################################################################################################
 ###############################################################################################################################
+
 if choose == "Ranking de Jogadores":
     jogadores = st.selectbox("Escolha o Jogador", options=jogadores)
     if jogadores:
@@ -1491,12 +1493,15 @@ if choose == "Ranking de Jogadores":
                         Atleta = ['Percentil na Liga']
                         tabela_d['Atleta'] = Atleta 
                         tabela_d.insert(0, 'Atleta', tabela_d.pop('Atleta'))
-                        tabela_2 = tabela_2.append(tabela_c).reset_index()
-                        tabela_2 = tabela_2.append(tabela_d).reset_index()
+                        tabela_2 = pd.concat([tabela_2, tabela_c, tabela_d]).reset_index(drop=True)
+                        #tabela_2 = pd.concat([tabela_2, tabela_d]).reset_index(drop=True)
+                        #tabela_2 = tabela_2.append(tabela_c).reset_index()
+                        #tabela_2 = tabela_2.append(tabela_d).reset_index()
                         tabela_2 = tabela_2.transpose()
-                        tabela_2 = tabela_2.drop([tabela_2.index[0], tabela_2.index[1]])
+                        #tabela_2 = tabela_2.drop([tabela_2.index[0], tabela_2.index[1]])
                         st.markdown("<h4 style='text-align: center;'>Desempenho do Jogador na Liga/Temporada</h4>", unsafe_allow_html=True)
                         st.dataframe(tabela_2, use_container_width=True)
+                        
                         #####################################################################################################################
                         #####################################################################################################################
                         ##################################################################################################################### 
@@ -1540,12 +1545,12 @@ if choose == "Ranking de Jogadores":
                         #Adjusting Player Dataframe
                         Role_1_Mean_Charts = Role_1_Mean_Charts.rename(columns={'Interceptações.1': 'Interceptações'})    
                         #Concatenating Dataframes
-                        Role_1_Mean_Charts = Role_1_Mean_Charts.append(League_Mean).reset_index()
+                        Role_1_Mean_Charts = pd.concat([Role_1_Mean_Charts, League_Mean]).reset_index(drop=True)
+                        #Role_1_Mean_Charts = Role_1_Mean_Charts.append(League_Mean).reset_index()
                         Role_1_Mean_Charts = Role_1_Mean_Charts.rename(columns={'Interceptações.1': 'Interceptações'})    
-                        
                         # Preparing the Graph
                         params = list(Role_1_Mean_Charts.columns)
-                        params = params[2:]
+                        params = params[1:]
 
                         #Preparing Data
                         ranges = []
@@ -1565,8 +1570,8 @@ if choose == "Ranking de Jogadores":
                             if Role_1_Mean_Charts['Atleta'][x] == 'Média da Liga':
                                 b_values = Role_1_Mean_Charts.iloc[x].values.tolist()
                                     
-                        a_values = a_values[2:]
-                        b_values = b_values[2:]
+                        a_values = a_values[1:]
+                        b_values = b_values[1:]
 
                         values = [a_values, b_values]
 
@@ -1668,11 +1673,12 @@ if choose == "Ranking de Jogadores":
                         #Adjusting Player Dataframe
                         Role_2_Mean_Charts = Role_2_Mean_Charts.rename(columns={'Interceptações.1': 'Interceptações'})    
                         #Concatenating Dataframes
-                        Role_2_Mean_Charts = Role_2_Mean_Charts.append(League_Mean).reset_index()
+                        Role_2_Mean_Charts = pd.concat([Role_2_Mean_Charts, League_Mean]).reset_index(drop=True)
+                        #Role_2_Mean_Charts = Role_2_Mean_Charts.append(League_Mean).reset_index()
                         
                         # Preparing the Graph
                         params = list(Role_2_Mean_Charts.columns)
-                        params = params[2:]
+                        params = params[1:]
                         #Preparing Data
                         ranges = []
                         a_values = []
@@ -1691,8 +1697,8 @@ if choose == "Ranking de Jogadores":
                             if Role_2_Mean_Charts['Atleta'][x] == 'Média da Liga':
                                 b_values = Role_2_Mean_Charts.iloc[x].values.tolist()
                                     
-                        a_values = a_values[2:]
-                        b_values = b_values[2:]
+                        a_values = a_values[1:]
+                        b_values = b_values[1:]
 
                         values = [a_values, b_values]
 
@@ -1717,6 +1723,7 @@ if choose == "Ranking de Jogadores":
                         ###############################################################################################################################
                         ###############################################################################################################################
                         ###############################################################################################################################
+
                 elif posição == ("Lateral"):
                         ##################################################################################################################### 
                         #####################################################################################################################
@@ -1873,10 +1880,11 @@ if choose == "Ranking de Jogadores":
                         Atleta = ['Percentil na Liga']
                         tabela_d['Atleta'] = Atleta 
                         tabela_d.insert(0, 'Atleta', tabela_d.pop('Atleta'))
-                        tabela_2 = tabela_2.append(tabela_c).reset_index()
-                        tabela_2 = tabela_2.append(tabela_d).reset_index()
+                        tabela_2 = pd.concat([tabela_2, tabela_c, tabela_d]).reset_index(drop=True)
+#                        tabela_2 = tabela_2.append(tabela_c).reset_index()
+#                        tabela_2 = tabela_2.append(tabela_d).reset_index()
                         tabela_2 = tabela_2.transpose()
-                        tabela_2 = tabela_2.drop([tabela_2.index[0], tabela_2.index[1]])
+#                        tabela_2 = tabela_2.drop([tabela_2.index[0], tabela_2.index[1]])
                         st.markdown("<h4 style='text-align: center;'>Desempenho do Jogador na Liga/Temporada</h4>", unsafe_allow_html=True)
                         st.dataframe(tabela_2, use_container_width=True)
                         ##################################################################################################################### 
@@ -1891,7 +1899,6 @@ if choose == "Ranking de Jogadores":
                         #PLOTTING COMPARISON BETWEEN 1 PLAYER AND LEAGUE MEAN
                         #Determining Club and League 
                         Role_x_Mean_Charts  = Role_5_Mean_Charts.iloc[:, np.r_[1, 3, 36, 38, 18:36]]
-                        
                         Role_x_Mean_Charts = Role_x_Mean_Charts[(Role_x_Mean_Charts['Versão_Temporada']==temporada)&(Role_x_Mean_Charts['Liga']==liga)]
                         
                         Role_x_Mean_Charts['Ações_Defensivas_BemSucedidas_LM'] = Role_x_Mean_Charts['Ações_Defensivas_BemSucedidas'].mean()
@@ -1921,7 +1928,6 @@ if choose == "Ranking de Jogadores":
                         
                         #Selecting data to compare 1 player and league mean
                         Role_5_Mean_Charts  = Role_x_Mean_Charts.iloc[:, np.r_[0, 4:22]]
-
                         #Preparing League Mean Data
                         League_Mean = Role_x_Mean_Charts.iloc[:, np.r_[22:40]]
                         League_Mean['Atleta'] = 'Média da Liga' 
@@ -1936,15 +1942,13 @@ if choose == "Ranking de Jogadores":
                         #Merging Dataframes
                         #Adjusting Player Dataframe
                         #Concatenating Dataframes
-                        Role_5_Mean_Charts = Role_5_Mean_Charts.append(League_Mean).reset_index()
-
+                        Role_5_Mean_Charts = pd.concat([Role_5_Mean_Charts, League_Mean]).reset_index(drop=True)
+                        #Role_5_Mean_Charts = Role_5_Mean_Charts.append(League_Mean).reset_index()
                         #Splitting Columns
-                        Role_5_Mean_Charts_1 = Role_5_Mean_Charts.iloc[:, np.r_[1, 2:11]]
-                        Role_5_Mean_Charts_2 = Role_5_Mean_Charts.iloc[:, np.r_[1, 11:20]]
-
+                        Role_5_Mean_Charts_1 = Role_5_Mean_Charts.iloc[:, np.r_[0, 1:10]]
+                        Role_5_Mean_Charts_2 = Role_5_Mean_Charts.iloc[:, np.r_[0, 10:19]]
                         # Preparing Graph 1
                         # Get Parameters
-
                         params = list(Role_5_Mean_Charts_1.columns)
                         params = params[1:]
                         
@@ -2191,10 +2195,11 @@ if choose == "Ranking de Jogadores":
                         Atleta = ['Percentil na Liga']
                         tabela_d['Atleta'] = Atleta 
                         tabela_d.insert(0, 'Atleta', tabela_d.pop('Atleta'))
-                        tabela_2 = tabela_2.append(tabela_c).reset_index()
-                        tabela_2 = tabela_2.append(tabela_d).reset_index()
+                        tabela_2 = pd.concat([tabela_2, tabela_c, tabela_d]).reset_index(drop=True)
+#                        tabela_2 = tabela_2.append(tabela_c).reset_index()
+#                        tabela_2 = tabela_2.append(tabela_d).reset_index()
                         tabela_2 = tabela_2.transpose()
-                        tabela_2 = tabela_2.drop([tabela_2.index[0], tabela_2.index[1]])
+#                        tabela_2 = tabela_2.drop([tabela_2.index[0], tabela_2.index[1]])
                         st.markdown("<h4 style='text-align: center;'>Desempenho do Jogador na Liga/Temporada</h4>", unsafe_allow_html=True)
                         st.dataframe(tabela_2, use_container_width=True)
                         ##################################################################################################################### 
@@ -2246,12 +2251,14 @@ if choose == "Ranking de Jogadores":
                         #Merging Dataframes
                         #Adjusting Player Dataframe
                         #Concatenating Dataframes
-                        Role_8_Mean_Charts = Role_8_Mean_Charts.append(League_Mean).reset_index()
+                        Role_8_Mean_Charts = pd.concat([Role_8_Mean_Charts, League_Mean]).reset_index(drop=True)
+                        #Role_8_Mean_Charts = Role_8_Mean_Charts.append(League_Mean).reset_index()
 
                         #Splitting Columns
-                        Role_8_Mean_Charts_1 = Role_8_Mean_Charts.iloc[:, np.r_[1, 2:9]]
-                        Role_8_Mean_Charts_2 = Role_8_Mean_Charts.iloc[:, np.r_[1, 9:15]]
-
+                        Role_8_Mean_Charts_1 = Role_8_Mean_Charts.iloc[:, np.r_[0, 1:8]]
+#                        st.dataframe(Role_8_Mean_Charts_1)
+                        Role_8_Mean_Charts_2 = Role_8_Mean_Charts.iloc[:, np.r_[0, 8:14]]
+#                        st.dataframe(Role_8_Mean_Charts_2)
 
                         # Preparing Graph 1
                         # Get Parameters
@@ -2403,6 +2410,9 @@ if choose == "Ranking de Jogadores":
                         st.markdown("---")
                         #####################################################################################################################
                         #####################################################################################################################
+                        #####################################################################################################################
+                        #####################################################################################################################
+
                         # PRIMEIRO VOLANTE CONSTRUTOR
                         # Elaborar Tabela de Abertura com Rating, Ranking, Percentil
                         tabela_1 = pd.read_excel('PlayerAnalysis_Role_10.xlsx')
@@ -2502,10 +2512,11 @@ if choose == "Ranking de Jogadores":
                         Atleta = ['Percentil na Liga']
                         tabela_d['Atleta'] = Atleta 
                         tabela_d.insert(0, 'Atleta', tabela_d.pop('Atleta'))
-                        tabela_2 = tabela_2.append(tabela_c).reset_index()
-                        tabela_2 = tabela_2.append(tabela_d).reset_index()
+                        tabela_2 = pd.concat([tabela_2, tabela_c, tabela_d]).reset_index(drop=True)
+#                        tabela_2 = tabela_2.append(tabela_c).reset_index()
+#                        tabela_2 = tabela_2.append(tabela_d).reset_index()
                         tabela_2 = tabela_2.transpose()
-                        tabela_2 = tabela_2.drop([tabela_2.index[0], tabela_2.index[1]])
+#                        tabela_2 = tabela_2.drop([tabela_2.index[0], tabela_2.index[1]])
                         st.markdown("<h4 style='text-align: center;'>Desempenho do Jogador na Liga/Temporada</h4>", unsafe_allow_html=True)
                         st.dataframe(tabela_2, use_container_width=True)
                         ##################################################################################################################### 
@@ -2552,11 +2563,12 @@ if choose == "Ranking de Jogadores":
                         #Merging Dataframes
                         #Adjusting Player Dataframe
                         #Concatenating Dataframes
-                        Role_11_Mean_Charts = Role_11_Mean_Charts.append(League_Mean).reset_index()
+                        Role_11_Mean_Charts = pd.concat([Role_11_Mean_Charts, League_Mean]).reset_index(drop=True)
+                        #Role_11_Mean_Charts = Role_11_Mean_Charts.append(League_Mean).reset_index()
 
                         #Splitting Columns
-                        Role_11_Mean_Charts_1 = Role_11_Mean_Charts.iloc[:, np.r_[1, 2:8]]
-                        Role_11_Mean_Charts_2 = Role_11_Mean_Charts.iloc[:, np.r_[1, 8:13]]
+                        Role_11_Mean_Charts_1 = Role_11_Mean_Charts.iloc[:, np.r_[0, 1:7]]
+                        Role_11_Mean_Charts_2 = Role_11_Mean_Charts.iloc[:, np.r_[0, 7:12]]
 
 
                         # Preparing Graph 1
@@ -2808,10 +2820,11 @@ if choose == "Ranking de Jogadores":
                         Atleta = ['Percentil na Liga']
                         tabela_d['Atleta'] = Atleta 
                         tabela_d.insert(0, 'Atleta', tabela_d.pop('Atleta'))
-                        tabela_2 = tabela_2.append(tabela_c).reset_index()
-                        tabela_2 = tabela_2.append(tabela_d).reset_index()
+                        tabela_2 = pd.concat([tabela_2, tabela_c, tabela_d]).reset_index(drop=True)
+#                        tabela_2 = tabela_2.append(tabela_c).reset_index()
+#                        tabela_2 = tabela_2.append(tabela_d).reset_index()
                         tabela_2 = tabela_2.transpose()
-                        tabela_2 = tabela_2.drop([tabela_2.index[0], tabela_2.index[1]])
+#                        tabela_2 = tabela_2.drop([tabela_2.index[0], tabela_2.index[1]])
                         st.markdown("<h4 style='text-align: center;'>Desempenho do Jogador na Liga/Temporada</h4>", unsafe_allow_html=True)
                         st.dataframe(tabela_2, use_container_width=True)
                         ##################################################################################################################### 
@@ -2860,11 +2873,12 @@ if choose == "Ranking de Jogadores":
                         #Merging Dataframes
                         #Adjusting Player Dataframe
                         #Concatenating Dataframes
-                        Role_14_Mean_Charts = Role_14_Mean_Charts.append(League_Mean).reset_index()
+                        Role_14_Mean_Charts = pd.concat([Role_14_Mean_Charts, League_Mean]).reset_index(drop=True)
+                        #Role_14_Mean_Charts = Role_14_Mean_Charts.append(League_Mean).reset_index()
 
                         #Splitting Columns
-                        Role_14_Mean_Charts_1 = Role_14_Mean_Charts.iloc[:, np.r_[1, 2:9]]
-                        Role_14_Mean_Charts_2 = Role_14_Mean_Charts.iloc[:, np.r_[1, 9:15]]
+                        Role_14_Mean_Charts_1 = Role_14_Mean_Charts.iloc[:, np.r_[0, 1:8]]
+                        Role_14_Mean_Charts_2 = Role_14_Mean_Charts.iloc[:, np.r_[0, 8:14]]
 
 
                         # Preparing Graph 1
@@ -3049,10 +3063,11 @@ if choose == "Ranking de Jogadores":
                         Atleta = ['Percentil na Liga']
                         tabela_d['Atleta'] = Atleta 
                         tabela_d.insert(0, 'Atleta', tabela_d.pop('Atleta'))
-                        tabela_2 = tabela_2.append(tabela_c).reset_index()
-                        tabela_2 = tabela_2.append(tabela_d).reset_index()
+                        tabela_2 = pd.concat([tabela_2, tabela_c, tabela_d]).reset_index(drop=True)
+#                        tabela_2 = tabela_2.append(tabela_c).reset_index()
+#                        tabela_2 = tabela_2.append(tabela_d).reset_index()
                         tabela_2 = tabela_2.transpose()
-                        tabela_2 = tabela_2.drop([tabela_2.index[0], tabela_2.index[1]])
+#                        tabela_2 = tabela_2.drop([tabela_2.index[0], tabela_2.index[1]])
                         st.markdown("<h4 style='text-align: center;'>Desempenho do Jogador na Liga/Temporada</h4>", unsafe_allow_html=True)
                         st.dataframe(tabela_2, use_container_width=True)
                         ##################################################################################################################### 
@@ -3097,11 +3112,12 @@ if choose == "Ranking de Jogadores":
                         #Merging Dataframes
                         #Adjusting Player Dataframe
                         #Concatenating Dataframes
-                        Role_15_Mean_Charts = Role_15_Mean_Charts.append(League_Mean).reset_index()
+                        Role_15_Mean_Charts = pd.concat([Role_15_Mean_Charts, League_Mean]).reset_index(drop=True)
+                        #Role_15_Mean_Charts = Role_15_Mean_Charts.append(League_Mean).reset_index()
 
                         #Splitting Columns
-                        Role_15_Mean_Charts_1 = Role_15_Mean_Charts.iloc[:, np.r_[1, 2:7]]
-                        Role_15_Mean_Charts_2 = Role_15_Mean_Charts.iloc[:, np.r_[1, 7:12]]
+                        Role_15_Mean_Charts_1 = Role_15_Mean_Charts.iloc[:, np.r_[0, 1:6]]
+                        Role_15_Mean_Charts_2 = Role_15_Mean_Charts.iloc[:, np.r_[0, 6:11]]
 
 
                         # Preparing Graph 1
@@ -3268,10 +3284,11 @@ if choose == "Ranking de Jogadores":
                         Atleta = ['Percentil na Liga']
                         tabela_d['Atleta'] = Atleta 
                         tabela_d.insert(0, 'Atleta', tabela_d.pop('Atleta'))
-                        tabela_2 = tabela_2.append(tabela_c).reset_index()
-                        tabela_2 = tabela_2.append(tabela_d).reset_index()
+                        tabela_2 = pd.concat([tabela_2, tabela_c, tabela_d]).reset_index(drop=True)
+#                        tabela_2 = tabela_2.append(tabela_c).reset_index()
+#                        tabela_2 = tabela_2.append(tabela_d).reset_index()
                         tabela_2 = tabela_2.transpose()
-                        tabela_2 = tabela_2.drop([tabela_2.index[0], tabela_2.index[1]])
+#                        tabela_2 = tabela_2.drop([tabela_2.index[0], tabela_2.index[1]])
                         st.markdown("<h4 style='text-align: center;'>Desempenho do Jogador na Liga/Temporada</h4>", unsafe_allow_html=True)
                         st.dataframe(tabela_2, use_container_width=True)
                         ##################################################################################################################### 
@@ -3323,12 +3340,13 @@ if choose == "Ranking de Jogadores":
                         #Merging Dataframes
                         #Adjusting Player Dataframe
                         #Concatenating Dataframes
-                        Role_16_Mean_Charts = Role_16_Mean_Charts.append(League_Mean).reset_index()
+                        Role_16_Mean_Charts = pd.concat([Role_16_Mean_Charts, League_Mean]).reset_index(drop=True)
+                        #Role_16_Mean_Charts = Role_16_Mean_Charts.append(League_Mean).reset_index()
                         #Role_16_Mean_Charts = Role_16_Mean_Charts.rename(columns={'Interceptações.1': 'Interceptações'})    
 
                         #Splitting Columns
-                        Role_16_Mean_Charts_1 = Role_16_Mean_Charts.iloc[:, np.r_[1, 2:11]]
-                        Role_16_Mean_Charts_2 = Role_16_Mean_Charts.iloc[:, np.r_[1, 11:19]]
+                        Role_16_Mean_Charts_1 = Role_16_Mean_Charts.iloc[:, np.r_[0, 1:10]]
+                        Role_16_Mean_Charts_2 = Role_16_Mean_Charts.iloc[:, np.r_[0, 10:18]]
 
 
                         # Preparing Graph 1
@@ -3518,10 +3536,11 @@ if choose == "Ranking de Jogadores":
                         Atleta = ['Percentil na Liga']
                         tabela_d['Atleta'] = Atleta 
                         tabela_d.insert(0, 'Atleta', tabela_d.pop('Atleta'))
-                        tabela_2 = tabela_2.append(tabela_c).reset_index()
-                        tabela_2 = tabela_2.append(tabela_d).reset_index()
+                        tabela_2 = pd.concat([tabela_2, tabela_c, tabela_d]).reset_index(drop=True)
+#                        tabela_2 = tabela_2.append(tabela_c).reset_index()
+#                        tabela_2 = tabela_2.append(tabela_d).reset_index()
                         tabela_2 = tabela_2.transpose()
-                        tabela_2 = tabela_2.drop([tabela_2.index[0], tabela_2.index[1]])
+#                        tabela_2 = tabela_2.drop([tabela_2.index[0], tabela_2.index[1]])
                         st.markdown("<h4 style='text-align: center;'>Desempenho do Jogador na Liga/Temporada</h4>", unsafe_allow_html=True)
                         st.dataframe(tabela_2, use_container_width=True)
                         ##################################################################################################################### 
@@ -3569,12 +3588,13 @@ if choose == "Ranking de Jogadores":
                         #Merging Dataframes
                         #Adjusting Player Dataframe
                         #Concatenating Dataframes
-                        Role_17_Mean_Charts = Role_17_Mean_Charts.append(League_Mean).reset_index()
+                        Role_17_Mean_Charts = pd.concat([Role_17_Mean_Charts, League_Mean]).reset_index(drop=True)
+                        #Role_17_Mean_Charts = Role_17_Mean_Charts.append(League_Mean).reset_index()
                         #Role_17_Mean_Charts = Role_17_Mean_Charts.rename(columns={'Interceptações.1': 'Interceptações'})    
 
                         #Splitting Columns
-                        Role_17_Mean_Charts_1 = Role_17_Mean_Charts.iloc[:, np.r_[1, 2:9]]
-                        Role_17_Mean_Charts_2 = Role_17_Mean_Charts.iloc[:, np.r_[1, 9:15]]
+                        Role_17_Mean_Charts_1 = Role_17_Mean_Charts.iloc[:, np.r_[0, 1:8]]
+                        Role_17_Mean_Charts_2 = Role_17_Mean_Charts.iloc[:, np.r_[0, 8:14]]
 
 
                         # Preparing Graph 1
@@ -3733,10 +3753,11 @@ if choose == "Ranking de Jogadores":
                         Atleta = ['Percentil na Liga']
                         tabela_d['Atleta'] = Atleta 
                         tabela_d.insert(0, 'Atleta', tabela_d.pop('Atleta'))
-                        tabela_2 = tabela_2.append(tabela_c).reset_index()
-                        tabela_2 = tabela_2.append(tabela_d).reset_index()
+                        tabela_2 = pd.concat([tabela_2, tabela_c, tabela_d]).reset_index(drop=True)
+#                        tabela_2 = tabela_2.append(tabela_c).reset_index()
+#                        tabela_2 = tabela_2.append(tabela_d).reset_index()
                         tabela_2 = tabela_2.transpose()
-                        tabela_2 = tabela_2.drop([tabela_2.index[0], tabela_2.index[1]])
+#                        tabela_2 = tabela_2.drop([tabela_2.index[0], tabela_2.index[1]])
                         st.markdown("<h4 style='text-align: center;'>Desempenho do Jogador na Liga/Temporada</h4>", unsafe_allow_html=True)
                         st.dataframe(tabela_2, use_container_width=True)
                         ##################################################################################################################### 
@@ -3775,10 +3796,11 @@ if choose == "Ranking de Jogadores":
                         #Merging Dataframes
                         #Adjusting Player Dataframe
                         #Concatenating Dataframes
-                        Role_18_Mean_Charts = Role_18_Mean_Charts.append(League_Mean).reset_index()
+                        Role_18_Mean_Charts = pd.concat([Role_18_Mean_Charts, League_Mean]).reset_index(drop=True)
+                        #Role_18_Mean_Charts = Role_18_Mean_Charts.append(League_Mean).reset_index()
 
                         #Splitting Columns
-                        Role_18_Mean_Charts_1 = Role_18_Mean_Charts.iloc[:, np.r_[1, 2:9]]
+                        Role_18_Mean_Charts_1 = Role_18_Mean_Charts.iloc[:, np.r_[0, 1:8]]
 
 
                         # Preparing Graph 1
@@ -3901,10 +3923,11 @@ if choose == "Ranking de Jogadores":
                         Atleta = ['Percentil na Liga']
                         tabela_d['Atleta'] = Atleta 
                         tabela_d.insert(0, 'Atleta', tabela_d.pop('Atleta'))
-                        tabela_2 = tabela_2.append(tabela_c).reset_index()
-                        tabela_2 = tabela_2.append(tabela_d).reset_index()
+                        tabela_2 = pd.concat([tabela_2, tabela_c, tabela_d]).reset_index(drop=True)
+#                        tabela_2 = tabela_2.append(tabela_c).reset_index()
+#                        tabela_2 = tabela_2.append(tabela_d).reset_index()
                         tabela_2 = tabela_2.transpose()
-                        tabela_2 = tabela_2.drop([tabela_2.index[0], tabela_2.index[1]])
+#                        tabela_2 = tabela_2.drop([tabela_2.index[0], tabela_2.index[1]])
                         st.markdown("<h4 style='text-align: center;'>Desempenho do Jogador na Liga/Temporada</h4>", unsafe_allow_html=True)
                         st.dataframe(tabela_2, use_container_width=True)
                         #####################################################################################################################
@@ -3951,12 +3974,13 @@ if choose == "Ranking de Jogadores":
                         #Merging Dataframes
                         #Adjusting Player Dataframe
                         #Concatenating Dataframes
-                        Role_19_Mean_Charts = Role_19_Mean_Charts.append(League_Mean).reset_index()
+                        Role_19_Mean_Charts = pd.concat([Role_19_Mean_Charts, League_Mean]).reset_index(drop=True)
+                        #Role_19_Mean_Charts = Role_19_Mean_Charts.append(League_Mean).reset_index()
                         #Role_19_Mean_Charts = Role_19_Mean_Charts.rename(columns={'Interceptações.1': 'Interceptações'})    
 
                         #Splitting Columns
-                        Role_19_Mean_Charts_1 = Role_19_Mean_Charts.iloc[:, np.r_[1, 2:9]]
-                        Role_19_Mean_Charts_2 = Role_19_Mean_Charts.iloc[:, np.r_[1, 9:15]]
+                        Role_19_Mean_Charts_1 = Role_19_Mean_Charts.iloc[:, np.r_[0, 1:8]]
+                        Role_19_Mean_Charts_2 = Role_19_Mean_Charts.iloc[:, np.r_[0, 8:14]]
 
 
                         # Preparing Graph 1
@@ -4148,11 +4172,12 @@ if choose == "Ranking de Jogadores":
                         #Merging Dataframes
                         #Adjusting Player Dataframe
                         #Concatenating Dataframes
-                        Role_20_Mean_Charts = Role_20_Mean_Charts.append(League_Mean).reset_index()
+                        Role_20_Mean_Charts = pd.concat([Role_20_Mean_Charts, League_Mean]).reset_index(drop=True)
+                        #Role_20_Mean_Charts = Role_20_Mean_Charts.append(League_Mean).reset_index()
                         #Role_20_Mean_Charts = Role_20_Mean_Charts.rename(columns={'Interceptações.1': 'Interceptações'})    
 
                         #Splitting Columns
-                        Role_20_Mean_Charts_1 = Role_20_Mean_Charts.iloc[:, np.r_[1, 2:12]]
+                        Role_20_Mean_Charts_1 = Role_20_Mean_Charts.iloc[:, np.r_[0, 1:11]]
                         #Role_20_Mean_Charts_2 = Role_20_Mean_Charts.iloc[:, np.r_[1, 9:15]]
 
 
@@ -4243,7 +4268,7 @@ if choose == "Ranking de Jogadores":
                         tabela_2 = pd.read_excel('22_Role_Segundo_Atacante.xlsx')
                         tabela_2 = tabela_2.iloc[:, np.r_[1, 18:31, 6, 31, 33]]
                         tabela_2 = tabela_2[(tabela_2['Atleta']==jogadores)&(tabela_2['Código_Posição_Wyscout']==12)&(tabela_2['Versão_Temporada']==temporada)&(tabela_2['Liga']==liga)]
-                        tabela_2 = tabela_2.iloc[:, np.r_[0:13]]
+                        tabela_2 = tabela_2.iloc[:, np.r_[0:14]]
                         tabela_2  = pd.DataFrame(tabela_2)
                         tabela_2 = tabela_2.round(decimals=2)
                         # Média da Liga
@@ -4273,10 +4298,11 @@ if choose == "Ranking de Jogadores":
                         Atleta = ['Percentil na Liga']
                         tabela_d['Atleta'] = Atleta 
                         tabela_d.insert(0, 'Atleta', tabela_d.pop('Atleta'))
-                        tabela_2 = tabela_2.append(tabela_c).reset_index()
-                        tabela_2 = tabela_2.append(tabela_d).reset_index()
+                        tabela_2 = pd.concat([tabela_2, tabela_c, tabela_d]).reset_index(drop=True)
+#                        tabela_2 = tabela_2.append(tabela_c).reset_index()
+#                        tabela_2 = tabela_2.append(tabela_d).reset_index()
                         tabela_2 = tabela_2.transpose()
-                        tabela_2 = tabela_2.drop([tabela_2.index[0], tabela_2.index[1]])
+#                        tabela_2 = tabela_2.drop([tabela_2.index[0], tabela_2.index[1]])
                         st.markdown("<h4 style='text-align: center;'>Desempenho do Jogador na Liga/Temporada</h4>", unsafe_allow_html=True)
                         st.dataframe(tabela_2, use_container_width=True)
                         ##################################################################################################################### 
@@ -4323,12 +4349,13 @@ if choose == "Ranking de Jogadores":
                         #Merging Dataframes
                         #Adjusting Player Dataframe
                         #Concatenating Dataframes
-                        Role_22_Mean_Charts = Role_22_Mean_Charts.append(League_Mean).reset_index()
+                        Role_22_Mean_Charts = pd.concat([Role_22_Mean_Charts, League_Mean]).reset_index(drop=True)
+                        #Role_22_Mean_Charts = Role_22_Mean_Charts.append(League_Mean).reset_index()
                         #Role_22_Mean_Charts = Role_22_Mean_Charts.rename(columns={'Interceptações.1': 'Interceptações'})    
 
                         #Splitting Columns
-                        Role_22_Mean_Charts_1 = Role_22_Mean_Charts.iloc[:, np.r_[1, 2:9]]
-                        Role_22_Mean_Charts_2 = Role_22_Mean_Charts.iloc[:, np.r_[1, 9:15]]
+                        Role_22_Mean_Charts_1 = Role_22_Mean_Charts.iloc[:, np.r_[0, 1:8]]
+                        Role_22_Mean_Charts_2 = Role_22_Mean_Charts.iloc[:, np.r_[0, 8:14]]
 
 
                         # Preparing Graph 1
@@ -4490,10 +4517,11 @@ if choose == "Ranking de Jogadores":
                         Atleta = ['Percentil na Liga']
                         tabela_d['Atleta'] = Atleta 
                         tabela_d.insert(0, 'Atleta', tabela_d.pop('Atleta'))
-                        tabela_2 = tabela_2.append(tabela_c).reset_index()
-                        tabela_2 = tabela_2.append(tabela_d).reset_index()
+                        tabela_2 = pd.concat([tabela_2, tabela_c, tabela_d]).reset_index(drop=True)
+#                        tabela_2 = tabela_2.append(tabela_c).reset_index()
+#                        tabela_2 = tabela_2.append(tabela_d).reset_index()
                         tabela_2 = tabela_2.transpose()
-                        tabela_2 = tabela_2.drop([tabela_2.index[0], tabela_2.index[1]])
+#                        tabela_2 = tabela_2.drop([tabela_2.index[0], tabela_2.index[1]])
                         st.markdown("<h4 style='text-align: center;'>Desempenho do Jogador na Liga/Temporada</h4>", unsafe_allow_html=True)
                         st.dataframe(tabela_2, use_container_width=True)
                         ##################################################################################################################### 
@@ -4535,11 +4563,12 @@ if choose == "Ranking de Jogadores":
                         #Merging Dataframes
                         #Adjusting Player Dataframe
                         #Concatenating Dataframes
-                        Role_21_Mean_Charts = Role_21_Mean_Charts.append(League_Mean).reset_index()
+                        Role_21_Mean_Charts = pd.concat([Role_21_Mean_Charts, League_Mean]).reset_index(drop=True)
+                        #Role_21_Mean_Charts = Role_21_Mean_Charts.append(League_Mean).reset_index()
                         #Role_21_Mean_Charts = Role_21_Mean_Charts.rename(columns={'Interceptações.1': 'Interceptações'})    
 
                         #Splitting Columns
-                        Role_21_Mean_Charts_1 = Role_21_Mean_Charts.iloc[:, np.r_[1, 2:11]]
+                        Role_21_Mean_Charts_1 = Role_21_Mean_Charts.iloc[:, np.r_[0, 1:10]]
                         #Role_21_Mean_Charts_2 = Role_21_Mean_Charts.iloc[:, np.r_[1, 9:15]]
 
 
@@ -4592,4 +4621,15362 @@ if choose == "Ranking de Jogadores":
                         #####################################################################################################################
                         #####################################################################################################################
                         #####################################################################################################################
-                        ##################################################################################################################### 
+                        #####################################################################################################################
+
+jogadores_similares = df10["Atleta"].unique()
+fontsize = 20
+if choose == "Jogadores Similares":
+    jogador_similar = st.selectbox("Escolha o Jogador", options=jogadores_similares)
+    if jogador_similar:
+        #Determinar a Liga (pode haver duplicidades)
+        dfliga = df10.loc[(df10['Atleta'] == jogador_similar)]
+        ligas = dfliga['Liga'].unique()
+        liga_similar = st.selectbox("Escolha a Liga", options=ligas)
+        if liga_similar:
+            #Determinar Posição
+            df11 = df10.loc[(df10['Atleta']==jogador_similar) & (df10['Liga']==liga_similar)]
+            posições = df11['Posição'].unique()
+            posição_similar = st.selectbox("Escolha a Posição", options=posições)
+            if posição_similar:
+                #Determinar Perfil
+                df12 = df2.loc[(df2["Posição"]==posição_similar)]
+                perfis = df12["Função"].unique()
+                perfil_similar = st.selectbox("Escolha o Perfil em Campo", options=perfis)
+            
+                if perfil_similar == ("Goleiro"):
+                #####################################################################################################################
+                #####################################################################################################################
+                    # GOLEIRO CLÁSSICO
+                    # Texto de Abertura>
+                    markdown_amount_1 = f"<div style='text-align:center; font-size:{fontsize}px'>{jogador_similar:}</div>"
+                    st.markdown("<h4 style='text-align: center;'>Jogador Selecionado</b></h4>", unsafe_allow_html=True)
+                    st.markdown(markdown_amount_1, unsafe_allow_html=True)
+                    st.markdown("---")
+
+                    #Carregando arquivo de dados
+                    Role_1_data = pd.read_excel('1_Role_Goleiro_Similarity.xlsx')
+                    Role_1_data = Role_1_data.drop(Role_1_data.columns[0:4], axis=1)
+                    Role_1_data.reset_index(drop=True, inplace=True)
+
+                    # Step : Defina o atleta-alvo
+                    #base_bruta_similaridade = pd.read_excel("base_bruta_similaridade.xlsx")
+                    target = Role_1_data.loc[(Role_1_data['Atleta'] == jogador_similar)]
+
+                    #Step : Definindo "ID-alvo"
+                    given_ID = target.iat[0, -1]
+
+                    # Definição da Base de Trabalho
+                    selected = Role_1_data
+
+                    # Step 9: Add columns "1", "2", "3" to Role_1_data
+                    selected['1'] = given_ID[0]
+                    selected['2'] = given_ID[1]
+                    selected['3'] = given_ID[2]
+
+                    # Assigning correct columns to 1, 2, 3
+
+                    if given_ID[0] == "A":
+                        selected['1'] = selected["A1"]
+                    elif given_ID[0] == "B":
+                        selected['1'] = selected["B1"]
+                    elif given_ID[0] == "C":
+                        selected['1'] = selected["C1"]
+                    elif given_ID[0] == "D":
+                        selected['1'] = selected["D1"]
+                    elif given_ID[0] == "E":
+                        selected['1'] = selected["E1"]
+                    elif given_ID[0] == "F":
+                        selected['1'] = selected["F1"]
+                    elif given_ID[0] == "G":
+                        selected['1'] = selected["G1"]
+
+                    if given_ID[1] == "A":
+                        selected['2'] = selected["A1"]
+                    elif given_ID[1] == "B":
+                        selected['2'] = selected["B1"]
+                    elif given_ID[1] == "C":
+                        selected['2'] = selected["C1"]
+                    elif given_ID[1] == "D":
+                        selected['2'] = selected["D1"]
+                    elif given_ID[1] == "E":
+                        selected['2'] = selected["E1"]
+                    elif given_ID[1] == "F":
+                        selected['2'] = selected["F1"]
+                    elif given_ID[1] == "G":
+                        selected['2'] = selected["G1"]
+
+                    if given_ID[2] == "A":
+                        selected['3'] = selected["A1"]
+                    elif given_ID[2] == "B":
+                        selected['3'] = selected["B1"]
+                    elif given_ID[2] == "C":
+                        selected['3'] = selected["C1"]
+                    elif given_ID[2] == "D":
+                        selected['3'] = selected["D1"]
+                    elif given_ID[2] == "E":
+                        selected['3'] = selected["E1"]
+                    elif given_ID[2] == "F":
+                        selected['3'] = selected["F1"]
+                    elif given_ID[2] == "G":
+                        selected['3'] = selected["G1"]
+
+                    #############################################################
+
+                    # Applying PCA for Scaled Selected Columns
+
+                    leagues = ["ARG1", "AUT", "BEL1", "BRA1", "BRA2", "BUL","CHI", "CHN", 
+                            "COL", "DEN", "ECU", "ENG1", "ENG2", "FRA1", "FRA2", "GER1", 
+                            "GER2", "GRE", "HOL", "ITA1", "ITA2", "JAP", "MEX", "PAR", 
+                            "PER", "POR1", "QAT", "RUS", "SAUD", "SCT", "SER", "SPA1", 
+                            "SPA2", "SWZ", "TUR", "UAE", "UKR", "URU", "USA"]
+
+                    # Iterate over each league
+                    for league in leagues:
+
+                        # Extract columns 46 through 50
+                        Goleiro = selected.iloc[:, np.r_[-3:0]]
+
+                        # Defining Columns
+                        Goleiro_columns = Goleiro.columns
+
+                        # Applying PCA
+                        pca = PCA(n_components=2)
+                        principalComponents = pca.fit_transform(Goleiro)
+
+                        # Create a DataFrame with loadings
+                        LoadingsGoleiro = pd.DataFrame(pca.components_.T**2, index=Goleiro_columns, columns=['loading factor 1', 'loading factor 2'])
+
+                        # Multiplying Matrices to obtain Pre_Variables
+                        Similarity = pd.DataFrame(np.matmul(Goleiro, LoadingsGoleiro['loading factor 1']) + np.matmul(Goleiro, LoadingsGoleiro['loading factor 2']),
+                                                columns=["Similarity"])
+
+                    # Rebuilding Full Training Set
+                    selected = selected.join(Similarity)
+                    ##############################################################
+
+                    # Lista de Similares
+                    # Initialize an empty list to store DataFrames
+                    target = selected.loc[(Role_1_data['Atleta'] == jogador_similar)]
+                    target_similarity = target.iat[0, -1]
+
+                    selected["Índice de Similaridade"] = (selected['Similarity']/target_similarity)*100
+                    selected["Índice de Similaridade"] = round(selected["Índice de Similaridade"], 2)
+
+                    target = selected.loc[(selected['Atleta'] == jogador_similar)]
+                    selected['Dif_Similarity'] = abs(selected["Índice de Similaridade"] - 100)
+
+                    selected = selected.sort_values(by='Dif_Similarity')
+
+                    lista_similares = selected.iloc[1:31, np.r_[0, 2, 24, 29, -2:0]]
+                    lista_similares = lista_similares.sort_values(by='Rating', ascending=False)
+
+                    # Lista de Jogadores Similares Ordenados segundo o Rating
+                    st.markdown("<h4 style='text-align: center;'>30 Jogadores + Similares</b></h4>", unsafe_allow_html=True)
+                    st.dataframe(lista_similares, use_container_width=True, hide_index=True)
+                    st.markdown("---")    
+
+                    # Lista de Latinos
+                    selected_latam = selected[(selected["Nacionalidade"] == "Argentina")|(selected["Nacionalidade"] == "Brazil")
+                                        |(selected["Nacionalidade"] == "Bolivia")|(selected["Nacionalidade"] == "Chile")
+                                        |(selected["Nacionalidade"] == "Colombia")|(selected["Nacionalidade"] == "Costa Rica")
+                                        |(selected["Nacionalidade"] == "Ecuador")|(selected["Nacionalidade"] == "Mexico")
+                                        |(selected["Nacionalidade"] == "Panama")|(selected["Nacionalidade"] == "Paraguay")
+                                        |(selected["Nacionalidade"] == "Peru")|(selected["Nacionalidade"] == "Uruguay")
+                                        |(selected["Nacionalidade"] == "Venezuela")]
+
+                    lista_similares_latam = selected_latam.iloc[1:31, np.r_[0, 2, 24, 29, -2:0]]
+                    lista_similares_latam = lista_similares_latam.sort_values(by="Rating", ascending = False)
+                    
+                    #Texto para os Gráficos
+                    st.markdown("<h4 style='text-align: center;'>5 Jogadores Latinos Similares Melhor Ranquedos</b></h4>", unsafe_allow_html=True)
+                    st.markdown("---")    
+
+
+                    # Gerar Gráficos com os 5 melhores
+                    # Arquivo para o Gráfico
+                    Role_1_Mean_Charts = selected_latam.iloc[:, np.r_[0, 2, 24, 30:37]]
+                    target = target.iloc[:, np.r_[0, 2, 24, 30:37]]
+                    # Renomeando Colunas
+                    Role_1_Mean_Charts = Role_1_Mean_Charts.rename(columns={'Duelos_Aéreos_Ganhos_Percentil':'Duelos_Aéreos_Ganhos', 'Defesas_Percentil': 'Defesas', 
+                                                                                'Gols_Evitados_Percentil':'Gols_Evitados', 'Saídas_Percentil': 'Saídas', 
+                                                                                'Interceptações.1_Percentil': 'Interceptações', 'xG_Evitado_Percentil': 'xG_Evitado', 
+                                                                                'Finalizações_por_Gol_Sofrido_Percentil': 'Finalizações_por_Gol_Sofrido'})
+                    
+                    target = target.rename(columns={'Duelos_Aéreos_Ganhos_Percentil':'Duelos_Aéreos_Ganhos', 'Defesas_Percentil': 'Defesas', 
+                                                                                'Gols_Evitados_Percentil':'Gols_Evitados', 'Saídas_Percentil': 'Saídas', 
+                                                                                'Interceptações.1_Percentil': 'Interceptações', 'xG_Evitado_Percentil': 'xG_Evitado', 
+                                                                                'Finalizações_por_Gol_Sofrido_Percentil': 'Finalizações_por_Gol_Sofrido'})
+                    
+                    #Dropping Atleta-alvo
+                    Role_1_Mean_Charts = Role_1_Mean_Charts[Role_1_Mean_Charts['Atleta'] != jogador_similar] 
+                    #Extraindo 5 melhores
+                    Role_1_Mean_Charts = Role_1_Mean_Charts.iloc[0:5, :]
+
+                    #Primeiro Gráfico
+                    Role_1_first = Role_1_Mean_Charts.iloc[0:1, :]
+                    Role_1_first = pd.concat([Role_1_first, target]).reset_index()
+
+                    # Definindo atletas para comparar
+                    jogadores = Role_1_first.iat[0, 1]
+                    jogadores_clube = Role_1_first.iat[0, 2]
+                    jogadores_liga = Role_1_first.iat[0, 3]
+                    alvo = Role_1_first.iat[1, 1]
+                    alvo_clube = Role_1_first.iat[1, 2]
+                    alvo_liga = Role_1_first.iat[1, 3]
+
+                    # Preparing the Graph
+                    params = list(Role_1_first.columns)
+                    params = params[4:]
+
+                    #Preparing Data
+                    ranges = []
+                    a_values = []
+                    b_values = []
+
+                    for x in params:
+                        a = min(Role_1_first[params][x])
+                        a = 0
+                        b = max(Role_1_first[params][x])
+                        b = 100
+                        ranges.append((a, b))
+
+                    for x in range(len(Role_1_first['Atleta'])):
+                        if Role_1_first['Atleta'][x] == jogadores:
+                            a_values = Role_1_first.iloc[x].values.tolist()
+                        if Role_1_first['Atleta'][x] == alvo:
+                            b_values = Role_1_first.iloc[x].values.tolist()
+                            
+                    a_values = a_values[4:]
+                    b_values = b_values[4:]
+
+                    values = [a_values, b_values]
+
+                    #Plotting Data
+                    title = dict(
+                        title_name = jogadores,
+                        title_color = '#B6282F',
+                        subtitle_name = jogadores_clube + "/" + jogadores_liga,
+                        subtitle_color = '#B6282F',
+                        title_name_2 = alvo,
+                        title_color_2 = '#344D94',
+                        subtitle_name_2 = alvo_clube + "/" + alvo_liga,
+                        subtitle_color_2 = '#344D94',
+                        title_fontsize = 18,
+                    ) 
+
+                    endnote = 'Viz by@JAmerico1898\ Data from Wyscout\nAll data in League percentiles'
+
+                    radar=Radar(fontfamily='Cursive', range_fontsize=8)
+                    fig,ax = radar.plot_radar(ranges=ranges,params=params,values=values,radar_color=['#B6282F', '#344D94'], dpi=600, alphas=[.8,.6], title=title, endnote=endnote, compare=True)
+                    st.pyplot(fig)
+
+                    ############################################################################
+                    ############################################################################
+                    #Segundo Gráfico
+                    Role_1_second = Role_1_Mean_Charts.iloc[1:2, :]
+                    Role_1_second = pd.concat([Role_1_second, target]).reset_index()
+
+                    # Definindo atletas para comparar
+                    jogadores = Role_1_second.iat[0, 1]
+                    jogadores_clube = Role_1_second.iat[0, 2]
+                    jogadores_liga = Role_1_second.iat[0, 3]
+                    #alvo = Role_1_second.iat[1, 1]
+                    #alvo_clube = Role_1_second.iat[1, 2]
+
+                    # Preparing the Graph
+                    params = list(Role_1_second.columns)
+                    params = params[4:]
+
+                    #Preparing Data
+                    ranges = []
+                    a_values = []
+                    b_values = []
+
+                    for x in params:
+                        a = min(Role_1_second[params][x])
+                        a = 0
+                        b = max(Role_1_second[params][x])
+                        b = 100
+                        ranges.append((a, b))
+
+                    for x in range(len(Role_1_second['Atleta'])):
+                        if Role_1_second['Atleta'][x] == jogadores:
+                            a_values = Role_1_second.iloc[x].values.tolist()
+                        if Role_1_second['Atleta'][x] == alvo:
+                            b_values = Role_1_second.iloc[x].values.tolist()
+                            
+                    a_values = a_values[4:]
+                    b_values = b_values[4:]
+
+                    values = [a_values, b_values]
+
+                    #Plotting Data
+                    title = dict(
+                        title_name = jogadores,
+                        title_color = '#B6282F',
+                        subtitle_name = jogadores_clube + "/" + jogadores_liga,
+                        subtitle_color = '#B6282F',
+                        title_name_2 = alvo,
+                        title_color_2 = '#344D94',
+                        subtitle_name_2 = alvo_clube + "/" + alvo_liga,
+                        subtitle_color_2 = '#344D94',
+                        title_fontsize = 18,
+                    ) 
+
+                    endnote = 'Viz by@JAmerico1898\ Data from Wyscout\nAll data in League percentiles'
+
+                    radar=Radar(fontfamily='Cursive', range_fontsize=8)
+                    fig,ax = radar.plot_radar(ranges=ranges,params=params,values=values,radar_color=['#B6282F', '#344D94'], dpi=600, alphas=[.8,.6], title=title, endnote=endnote, compare=True)
+                    st.pyplot(fig)
+
+                    ############################################################################
+                    ############################################################################
+                    #Terceiro Gráfico
+                    Role_1_third = Role_1_Mean_Charts.iloc[2:3, :]
+                    Role_1_third = pd.concat([Role_1_third, target]).reset_index()
+
+                    # Definindo atletas para comparar
+                    jogadores = Role_1_third.iat[0, 1]
+                    jogadores_clube = Role_1_third.iat[0, 2]
+                    jogadores_liga = Role_1_third.iat[0, 3]
+                    #alvo = Role_1_fifth.iat[1, 1]
+                    #alvo_clube = Role_1_fifth.iat[1, 2]
+
+                    # Preparing the Graph
+                    params = list(Role_1_third.columns)
+                    params = params[4:]
+
+                    #Preparing Data
+                    ranges = []
+                    a_values = []
+                    b_values = []
+
+                    for x in params:
+                        a = min(Role_1_third[params][x])
+                        a = 0
+                        b = max(Role_1_third[params][x])
+                        b = 100
+                        ranges.append((a, b))
+
+                    for x in range(len(Role_1_third['Atleta'])):
+                        if Role_1_third['Atleta'][x] == jogadores:
+                            a_values = Role_1_third.iloc[x].values.tolist()
+                        if Role_1_third['Atleta'][x] == alvo:
+                            b_values = Role_1_third.iloc[x].values.tolist()
+                            
+                    a_values = a_values[4:]
+                    b_values = b_values[4:]
+
+                    values = [a_values, b_values]
+
+                    #Plotting Data
+                    title = dict(
+                        title_name = jogadores,
+                        title_color = '#B6282F',
+                        subtitle_name = jogadores_clube + "/" + jogadores_liga,
+                        subtitle_color = '#B6282F',
+                        title_name_2 = alvo,
+                        title_color_2 = '#344D94',
+                        subtitle_name_2 = alvo_clube + "/" + alvo_liga,
+                        subtitle_color_2 = '#344D94',
+                        title_fontsize = 18,
+                    ) 
+
+                    endnote = 'Viz by@JAmerico1898\ Data from Wyscout\nAll data in League percentiles'
+
+                    radar=Radar(fontfamily='Cursive', range_fontsize=8)
+                    fig,ax = radar.plot_radar(ranges=ranges,params=params,values=values,radar_color=['#B6282F', '#344D94'], dpi=600, alphas=[.8,.6], title=title, endnote=endnote, compare=True)
+                    st.pyplot(fig)
+
+                    ############################################################################
+                    ############################################################################
+                    #Quarto Gráfico
+                    Role_1_fourth = Role_1_Mean_Charts.iloc[3:4, :]
+                    Role_1_fourth = pd.concat([Role_1_fourth, target]).reset_index()
+
+                    # Definindo atletas para comparar
+                    jogadores = Role_1_fourth.iat[0, 1]
+                    jogadores_clube = Role_1_fourth.iat[0, 2]
+                    jogadores_liga = Role_1_fourth.iat[0, 3]
+                    #alvo = Role_1_fourth.iat[1, 1]
+                    #alvo_clube = Role_1_fourth.iat[1, 2]
+
+                    # Preparing the Graph
+                    params = list(Role_1_fourth.columns)
+                    params = params[4:]
+
+                    #Preparing Data
+                    ranges = []
+                    a_values = []
+                    b_values = []
+
+                    for x in params:
+                        a = min(Role_1_fourth[params][x])
+                        a = 0
+                        b = max(Role_1_fourth[params][x])
+                        b = 100
+                        ranges.append((a, b))
+
+                    for x in range(len(Role_1_fourth['Atleta'])):
+                        if Role_1_fourth['Atleta'][x] == jogadores:
+                            a_values = Role_1_fourth.iloc[x].values.tolist()
+                        if Role_1_fourth['Atleta'][x] == alvo:
+                            b_values = Role_1_fourth.iloc[x].values.tolist()
+                            
+                    a_values = a_values[4:]
+                    b_values = b_values[4:]
+
+                    values = [a_values, b_values]
+
+                    #Plotting Data
+                    title = dict(
+                        title_name = jogadores,
+                        title_color = '#B6282F',
+                        subtitle_name = jogadores_clube + "/" + jogadores_liga,
+                        subtitle_color = '#B6282F',
+                        title_name_2 = alvo,
+                        title_color_2 = '#344D94',
+                        subtitle_name_2 = alvo_clube + "/" + alvo_liga,
+                        subtitle_color_2 = '#344D94',
+                        title_fontsize = 18,
+                    ) 
+
+                    endnote = 'Viz by@JAmerico1898\ Data from Wyscout\nAll data in League percentiles'
+
+                    radar=Radar(fontfamily='Cursive', range_fontsize=8)
+                    fig,ax = radar.plot_radar(ranges=ranges,params=params,values=values,radar_color=['#B6282F', '#344D94'], dpi=600, alphas=[.8,.6], title=title, endnote=endnote, compare=True)
+                    st.pyplot(fig)
+
+                    ############################################################################
+                    ############################################################################
+                    #Quinto Gráfico
+                    Role_1_fifth = Role_1_Mean_Charts.iloc[4:5, :]
+                    Role_1_fifth = pd.concat([Role_1_fifth, target]).reset_index()
+
+                    # Definindo atletas para comparar
+                    jogadores = Role_1_fifth.iat[0, 1]
+                    jogadores_clube = Role_1_fifth.iat[0, 2]
+                    jogadores_liga = Role_1_fifth.iat[0, 3]
+                    #alvo = Role_1_fifth.iat[1, 1]
+                    #alvo_clube = Role_1_fifth.iat[1, 2]
+
+                    # Preparing the Graph
+                    params = list(Role_1_fifth.columns)
+                    params = params[4:]
+
+                    #Preparing Data
+                    ranges = []
+                    a_values = []
+                    b_values = []
+
+                    for x in params:
+                        a = min(Role_1_fifth[params][x])
+                        a = 0
+                        b = max(Role_1_fifth[params][x])
+                        b = 100
+                        ranges.append((a, b))
+
+                    for x in range(len(Role_1_fifth['Atleta'])):
+                        if Role_1_fifth['Atleta'][x] == jogadores:
+                            a_values = Role_1_fifth.iloc[x].values.tolist()
+                        if Role_1_fifth['Atleta'][x] == alvo:
+                            b_values = Role_1_fifth.iloc[x].values.tolist()
+                            
+                    a_values = a_values[4:]
+                    b_values = b_values[4:]
+
+                    values = [a_values, b_values]
+
+                    #Plotting Data
+                    title = dict(
+                        title_name = jogadores,
+                        title_color = '#B6282F',
+                        subtitle_name = jogadores_clube + "/" + jogadores_liga,
+                        subtitle_color = '#B6282F',
+                        title_name_2 = alvo,
+                        title_color_2 = '#344D94',
+                        subtitle_name_2 = alvo_clube + "/" + alvo_liga,
+                        subtitle_color_2 = '#344D94',
+                        title_fontsize = 18,
+                    ) 
+
+                    endnote = 'Viz by@JAmerico1898\ Data from Wyscout\nAll data in League percentiles'
+
+                    radar=Radar(fontfamily='Cursive', range_fontsize=8)
+                    fig,ax = radar.plot_radar(ranges=ranges,params=params,values=values,radar_color=['#B6282F', '#344D94'], dpi=600, alphas=[.8,.6], title=title, endnote=endnote, compare=True)
+                    st.pyplot(fig)
+
+                    ####################################################################################################
+                    ####################################################################################################
+                    ####################################################################################################
+                    ####################################################################################################
+                elif perfil_similar == ("Goleiro-Líbero"):
+                #####################################################################################################################
+                #####################################################################################################################
+                    # GOLEIRO LÍBERO
+                    # Texto de Abertura>
+                    markdown_amount_1 = f"<div style='text-align:center; font-size:{fontsize}px'>{jogador_similar:}</div>"
+                    st.markdown("<h4 style='text-align: center;'>Jogador Selecionado</b></h4>", unsafe_allow_html=True)
+                    st.markdown(markdown_amount_1, unsafe_allow_html=True)
+                    st.markdown("---")
+
+                    #Carregando arquivo de dados
+                    Role_2_data = pd.read_excel('2_Role_Goleiro_Líbero_Similarity.xlsx')
+                    Role_2_data = Role_2_data.drop(Role_2_data.columns[0:4], axis=1)
+                    Role_2_data.reset_index(drop=True, inplace=True)
+
+                    # Step : Defina o atleta-alvo
+                    #base_bruta_similaridade = pd.read_excel("base_bruta_similaridade.xlsx")
+                    target = Role_2_data.loc[(Role_2_data['Atleta'] == jogador_similar)]
+
+                    #Step : Definindo "ID-alvo"
+                    given_ID = target.iat[0, -1]
+
+                    # Definição da Base de Trabalho
+                    selected = Role_2_data
+
+                    # Step 9: Add columns "1", "2", "3" to Role_2_data
+                    selected['1'] = given_ID[0]
+                    selected['2'] = given_ID[1]
+                    selected['3'] = given_ID[2]
+                    selected['4'] = given_ID[3]
+
+                    # Assigning correct columns to 1, 2, 3
+
+                    if given_ID[0] == "A":
+                        selected['1'] = selected["A1"]
+                    elif given_ID[0] == "B":
+                        selected['1'] = selected["B1"]
+                    elif given_ID[0] == "C":
+                        selected['1'] = selected["C1"]
+                    elif given_ID[0] == "D":
+                        selected['1'] = selected["D1"]
+                    elif given_ID[0] == "E":
+                        selected['1'] = selected["E1"]
+                    elif given_ID[0] == "F":
+                        selected['1'] = selected["F1"]
+                    elif given_ID[0] == "G":
+                        selected['1'] = selected["G1"]
+                    elif given_ID[0] == "H":
+                        selected['1'] = selected["H1"]
+                    elif given_ID[0] == "I":
+                        selected['1'] = selected["I1"]
+                    elif given_ID[0] == "J":
+                        selected['1'] = selected["J1"]
+                    
+
+                    if given_ID[1] == "A":
+                        selected['2'] = selected["A1"]
+                    elif given_ID[1] == "B":
+                        selected['2'] = selected["B1"]
+                    elif given_ID[1] == "C":
+                        selected['2'] = selected["C1"]
+                    elif given_ID[1] == "D":
+                        selected['2'] = selected["D1"]
+                    elif given_ID[1] == "E":
+                        selected['2'] = selected["E1"]
+                    elif given_ID[1] == "F":
+                        selected['2'] = selected["F1"]
+                    elif given_ID[1] == "G":
+                        selected['2'] = selected["G1"]
+                    elif given_ID[1] == "H":
+                        selected['2'] = selected["H1"]
+                    elif given_ID[1] == "I":
+                        selected['2'] = selected["I1"]
+                    elif given_ID[1] == "J":
+                        selected['2'] = selected["J1"]
+
+                    if given_ID[2] == "A":
+                        selected['3'] = selected["A1"]
+                    elif given_ID[2] == "B":
+                        selected['3'] = selected["B1"]
+                    elif given_ID[2] == "C":
+                        selected['3'] = selected["C1"]
+                    elif given_ID[2] == "D":
+                        selected['3'] = selected["D1"]
+                    elif given_ID[2] == "E":
+                        selected['3'] = selected["E1"]
+                    elif given_ID[2] == "F":
+                        selected['3'] = selected["F1"]
+                    elif given_ID[2] == "G":
+                        selected['3'] = selected["G1"]
+                    elif given_ID[2] == "H":
+                        selected['3'] = selected["H1"]
+                    elif given_ID[2] == "I":
+                        selected['3'] = selected["I1"]
+                    elif given_ID[2] == "J":
+                        selected['3'] = selected["J1"]
+
+                    if given_ID[3] == "A":
+                        selected['4'] = selected["A1"]
+                    elif given_ID[3] == "B":
+                        selected['4'] = selected["B1"]
+                    elif given_ID[3] == "C":
+                        selected['4'] = selected["C1"]
+                    elif given_ID[3] == "D":
+                        selected['4'] = selected["D1"]
+                    elif given_ID[3] == "E":
+                        selected['4'] = selected["E1"]
+                    elif given_ID[3] == "F":
+                        selected['4'] = selected["F1"]
+                    elif given_ID[3] == "G":
+                        selected['4'] = selected["G1"]
+                    elif given_ID[3] == "H":
+                        selected['4'] = selected["H1"]
+                    elif given_ID[3] == "I":
+                        selected['4'] = selected["I1"]
+                    elif given_ID[3] == "J":
+                        selected['4'] = selected["J1"]
+
+                    #############################################################
+
+                    # Applying PCA for Scaled Selected Columns
+
+                    leagues = ["ARG1", "AUT", "BEL1", "BRA1", "BRA2", "BUL","CHI", "CHN", 
+                            "COL", "DEN", "ECU", "ENG1", "ENG2", "FRA1", "FRA2", "GER1", 
+                            "GER2", "GRE", "HOL", "ITA1", "ITA2", "JAP", "MEX", "PAR", 
+                            "PER", "POR1", "QAT", "RUS", "SAUD", "SCT", "SER", "SPA1", 
+                            "SPA2", "SWZ", "TUR", "UAE", "UKR", "URU", "USA"]
+
+                    # Iterate over each league
+                    for league in leagues:
+
+                        # Extract columns 46 through 50
+                        GoleiroLíbero = selected.iloc[:, np.r_[-4:0]]
+
+                        # Defining Columns
+                        GoleiroLíbero_columns = GoleiroLíbero.columns
+
+                        # Applying PCA
+                        pca = PCA(n_components=2)
+                        principalComponents = pca.fit_transform(GoleiroLíbero)
+
+                        # Create a DataFrame with loadings
+                        LoadingsGoleiroLíbero = pd.DataFrame(pca.components_.T**2, index=GoleiroLíbero_columns, columns=['loading factor 1', 'loading factor 2'])
+
+                        # Multiplying Matrices to obtain Pre_Variables
+                        Similarity = pd.DataFrame(np.matmul(GoleiroLíbero, LoadingsGoleiroLíbero['loading factor 1']) + np.matmul(GoleiroLíbero, LoadingsGoleiroLíbero['loading factor 2']),
+                                                columns=["Similarity"])
+
+                    # Rebuilding Full Training Set
+                    selected = selected.join(Similarity)
+                    ##############################################################
+
+                    # Lista de Similares
+                    # Initialize an empty list to store DataFrames
+                    target = selected.loc[(Role_2_data['Atleta'] == jogador_similar)]
+                    target_similarity = target.iat[0, -1]
+
+                    selected["Índice de Similaridade"] = (selected['Similarity']/target_similarity)*100
+                    selected["Índice de Similaridade"] = round(selected["Índice de Similaridade"], 2)
+
+                    target = selected.loc[(selected['Atleta'] == jogador_similar)]
+                    selected['Dif_Similarity'] = abs(selected["Índice de Similaridade"] - 100)
+
+                    selected = selected.sort_values(by='Dif_Similarity')
+
+                    lista_similares = selected.iloc[1:31, np.r_[0, 2, 27, 32, -2:0]]
+                    lista_similares = lista_similares.sort_values(by='Rating', ascending=False)
+
+                    # Lista de Jogadores Similares Ordenados segundo o Rating
+                    st.markdown("<h4 style='text-align: center;'>30 Jogadores + Similares</b></h4>", unsafe_allow_html=True)
+                    st.dataframe(lista_similares, use_container_width=True, hide_index=True)
+                    st.markdown("---")    
+
+                    # Lista de Latinos
+                    selected_latam = selected[(selected["Nacionalidade"] == "Argentina")|(selected["Nacionalidade"] == "Brazil")
+                                        |(selected["Nacionalidade"] == "Bolivia")|(selected["Nacionalidade"] == "Chile")
+                                        |(selected["Nacionalidade"] == "Colombia")|(selected["Nacionalidade"] == "Costa Rica")
+                                        |(selected["Nacionalidade"] == "Ecuador")|(selected["Nacionalidade"] == "Mexico")
+                                        |(selected["Nacionalidade"] == "Panama")|(selected["Nacionalidade"] == "Paraguay")
+                                        |(selected["Nacionalidade"] == "Peru")|(selected["Nacionalidade"] == "Uruguay")
+                                        |(selected["Nacionalidade"] == "Venezuela")]
+
+                    lista_similares_latam = selected_latam.iloc[1:31, np.r_[0, 2, 27, 32, -2:0]]
+                    lista_similares_latam = lista_similares_latam.sort_values(by="Rating", ascending = False)
+                    
+                    #Texto para os Gráficos
+                    st.markdown("<h4 style='text-align: center;'>5 Jogadores Latinos Similares Melhor Ranquedos</b></h4>", unsafe_allow_html=True)
+                    st.markdown("---")    
+
+
+                    # Gerar Gráficos com os 5 melhores
+                    # Arquivo para o Gráfico
+                    Role_2_Mean_Charts = selected_latam.iloc[:, np.r_[0, 2, 27, 33:43]]
+                    target = target.iloc[:, np.r_[0, 2, 27, 33:43]]
+                    # Renomeando Colunas
+                    Role_2_Mean_Charts = Role_2_Mean_Charts.rename(columns={'Duelos_Aéreos_Ganhos_Percentil':'Duelos_Aéreos_Ganhos', 
+                                                                            'Passes_Curtos_Médios_Certos_Percentil':'Passes_Curtos_Médios_Certos',
+                                                                            'Passes_Longos_Certos_Percentil':'Passes_Longos_Certos', 
+                                                                            'Passes_Progressivos_Certos_Percentil':'Passes_Progressivos_Certos',
+                                                                            'Defesas_Percentil': 'Defesas', 
+                                                                            'Gols_Evitados_Percentil':'Gols_Evitados', 
+                                                                            'Saídas_Percentil':'Saídas',
+                                                                            'Interceptações.1_Percentil': 'Interceptações', 
+                                                                            'xG_Evitado_Percentil': 'xG_Evitado', 
+                                                                            'Finalizações_por_Gol_Sofrido_Percentil': 'Finalizações_por_Gol_Sofrido'})
+                    
+                    target = target.rename(columns={'Duelos_Aéreos_Ganhos_Percentil':'Duelos_Aéreos_Ganhos', 
+                                                                            'Passes_Curtos_Médios_Certos_Percentil':'Passes_Curtos_Médios_Certos',
+                                                                            'Passes_Longos_Certos_Percentil':'Passes_Longos_Certos', 
+                                                                            'Passes_Progressivos_Certos_Percentil':'Passes_Progressivos_Certos',
+                                                                            'Defesas_Percentil': 'Defesas', 
+                                                                            'Gols_Evitados_Percentil':'Gols_Evitados', 
+                                                                            'Saídas_Percentil':'Saídas',
+                                                                            'Interceptações.1_Percentil': 'Interceptações', 
+                                                                            'xG_Evitado_Percentil': 'xG_Evitado', 
+                                                                            'Finalizações_por_Gol_Sofrido_Percentil': 'Finalizações_por_Gol_Sofrido'})
+                    
+                    #Dropping Atleta-alvo
+                    Role_2_Mean_Charts = Role_2_Mean_Charts[Role_2_Mean_Charts['Atleta'] != jogador_similar] 
+                    #Extraindo 5 melhores
+                    Role_2_Mean_Charts = Role_2_Mean_Charts.iloc[0:5, :]
+
+                    #Primeiro Gráfico
+                    Role_2_first = Role_2_Mean_Charts.iloc[0:1, :]
+                    Role_2_first = pd.concat([Role_2_first, target]).reset_index()
+
+                    # Definindo atletas para comparar
+                    jogadores = Role_2_first.iat[0, 1]
+                    jogadores_clube = Role_2_first.iat[0, 2]
+                    jogadores_liga = Role_2_first.iat[0, 3]
+                    alvo = Role_2_first.iat[1, 1]
+                    alvo_clube = Role_2_first.iat[1, 2]
+                    alvo_liga = Role_2_first.iat[1, 3]
+
+                    # Preparing the Graph
+                    params = list(Role_2_first.columns)
+                    params = params[4:]
+
+                    #Preparing Data
+                    ranges = []
+                    a_values = []
+                    b_values = []
+
+                    for x in params:
+                        a = min(Role_2_first[params][x])
+                        a = 0
+                        b = max(Role_2_first[params][x])
+                        b = 100
+                        ranges.append((a, b))
+
+                    for x in range(len(Role_2_first['Atleta'])):
+                        if Role_2_first['Atleta'][x] == jogadores:
+                            a_values = Role_2_first.iloc[x].values.tolist()
+                        if Role_2_first['Atleta'][x] == alvo:
+                            b_values = Role_2_first.iloc[x].values.tolist()
+                            
+                    a_values = a_values[4:]
+                    b_values = b_values[4:]
+
+                    values = [a_values, b_values]
+
+                    #Plotting Data
+                    title = dict(
+                        title_name = jogadores,
+                        title_color = '#B6282F',
+                        subtitle_name = jogadores_clube + "/" + jogadores_liga,
+                        subtitle_color = '#B6282F',
+                        title_name_2 = alvo,
+                        title_color_2 = '#344D94',
+                        subtitle_name_2 = alvo_clube + "/" + alvo_liga,
+                        subtitle_color_2 = '#344D94',
+                        title_fontsize = 18,
+                    ) 
+
+                    endnote = 'Viz by@JAmerico1898\ Data from Wyscout\nAll data in League percentiles'
+
+                    radar=Radar(fontfamily='Cursive', range_fontsize=8)
+                    fig,ax = radar.plot_radar(ranges=ranges,params=params,values=values,radar_color=['#B6282F', '#344D94'], dpi=600, alphas=[.8,.6], title=title, endnote=endnote, compare=True)
+                    st.pyplot(fig)
+
+                    ############################################################################
+                    ############################################################################
+                    #Segundo Gráfico
+                    Role_2_second = Role_2_Mean_Charts.iloc[1:2, :]
+                    Role_2_second = pd.concat([Role_2_second, target]).reset_index()
+
+                    # Definindo atletas para comparar
+                    jogadores = Role_2_second.iat[0, 1]
+                    jogadores_clube = Role_2_second.iat[0, 2]
+                    jogadores_liga = Role_2_second.iat[0, 3]
+
+                    # Preparing the Graph
+                    params = list(Role_2_second.columns)
+                    params = params[4:]
+
+                    #Preparing Data
+                    ranges = []
+                    a_values = []
+                    b_values = []
+
+                    for x in params:
+                        a = min(Role_2_second[params][x])
+                        a = 0
+                        b = max(Role_2_second[params][x])
+                        b = 100
+                        ranges.append((a, b))
+
+                    for x in range(len(Role_2_second['Atleta'])):
+                        if Role_2_second['Atleta'][x] == jogadores:
+                            a_values = Role_2_second.iloc[x].values.tolist()
+                        if Role_2_second['Atleta'][x] == alvo:
+                            b_values = Role_2_second.iloc[x].values.tolist()
+                            
+                    a_values = a_values[4:]
+                    b_values = b_values[4:]
+
+                    values = [a_values, b_values]
+
+                    #Plotting Data
+                    title = dict(
+                        title_name = jogadores,
+                        title_color = '#B6282F',
+                        subtitle_name = jogadores_clube + "/" + jogadores_liga,
+                        subtitle_color = '#B6282F',
+                        title_name_2 = alvo,
+                        title_color_2 = '#344D94',
+                        subtitle_name_2 = alvo_clube + "/" + alvo_liga,
+                        subtitle_color_2 = '#344D94',
+                        title_fontsize = 18,
+                    ) 
+
+                    endnote = 'Viz by@JAmerico1898\ Data from Wyscout\nAll data in League percentiles'
+
+                    radar=Radar(fontfamily='Cursive', range_fontsize=8)
+                    fig,ax = radar.plot_radar(ranges=ranges,params=params,values=values,radar_color=['#B6282F', '#344D94'], dpi=600, alphas=[.8,.6], title=title, endnote=endnote, compare=True)
+                    st.pyplot(fig)
+
+                    ############################################################################
+                    ############################################################################
+                    #Terceiro Gráfico
+                    Role_2_third = Role_2_Mean_Charts.iloc[2:3, :]
+                    Role_2_third = pd.concat([Role_2_third, target]).reset_index()
+
+                    # Definindo atletas para comparar
+                    jogadores = Role_2_third.iat[0, 1]
+                    jogadores_clube = Role_2_third.iat[0, 2]
+                    jogadores_liga = Role_2_third.iat[0, 3]
+
+                    # Preparing the Graph
+                    params = list(Role_2_third.columns)
+                    params = params[4:]
+
+                    #Preparing Data
+                    ranges = []
+                    a_values = []
+                    b_values = []
+
+                    for x in params:
+                        a = min(Role_2_third[params][x])
+                        a = 0
+                        b = max(Role_2_third[params][x])
+                        b = 100
+                        ranges.append((a, b))
+
+                    for x in range(len(Role_2_third['Atleta'])):
+                        if Role_2_third['Atleta'][x] == jogadores:
+                            a_values = Role_2_third.iloc[x].values.tolist()
+                        if Role_2_third['Atleta'][x] == alvo:
+                            b_values = Role_2_third.iloc[x].values.tolist()
+                            
+                    a_values = a_values[4:]
+                    b_values = b_values[4:]
+
+                    values = [a_values, b_values]
+
+                    #Plotting Data
+                    title = dict(
+                        title_name = jogadores,
+                        title_color = '#B6282F',
+                        subtitle_name = jogadores_clube + "/" + jogadores_liga,
+                        subtitle_color = '#B6282F',
+                        title_name_2 = alvo,
+                        title_color_2 = '#344D94',
+                        subtitle_name_2 = alvo_clube + "/" + alvo_liga,
+                        subtitle_color_2 = '#344D94',
+                        title_fontsize = 18,
+                    ) 
+
+                    endnote = 'Viz by@JAmerico1898\ Data from Wyscout\nAll data in League percentiles'
+
+                    radar=Radar(fontfamily='Cursive', range_fontsize=8)
+                    fig,ax = radar.plot_radar(ranges=ranges,params=params,values=values,radar_color=['#B6282F', '#344D94'], dpi=600, alphas=[.8,.6], title=title, endnote=endnote, compare=True)
+                    st.pyplot(fig)
+
+                    ############################################################################
+                    ############################################################################
+                    #Quarto Gráfico
+                    Role_2_fourth = Role_2_Mean_Charts.iloc[3:4, :]
+                    Role_2_fourth = pd.concat([Role_2_fourth, target]).reset_index()
+
+                    # Definindo atletas para comparar
+                    jogadores = Role_2_fourth.iat[0, 1]
+                    jogadores_clube = Role_2_fourth.iat[0, 2]
+                    jogadores_liga = Role_2_fourth.iat[0, 3]
+                    #alvo = Role_2_fourth.iat[1, 1]
+                    #alvo_clube = Role_2_fourth.iat[1, 2]
+
+                    # Preparing the Graph
+                    params = list(Role_2_fourth.columns)
+                    params = params[4:]
+
+                    #Preparing Data
+                    ranges = []
+                    a_values = []
+                    b_values = []
+
+                    for x in params:
+                        a = min(Role_2_fourth[params][x])
+                        a = 0
+                        b = max(Role_2_fourth[params][x])
+                        b = 100
+                        ranges.append((a, b))
+
+                    for x in range(len(Role_2_fourth['Atleta'])):
+                        if Role_2_fourth['Atleta'][x] == jogadores:
+                            a_values = Role_2_fourth.iloc[x].values.tolist()
+                        if Role_2_fourth['Atleta'][x] == alvo:
+                            b_values = Role_2_fourth.iloc[x].values.tolist()
+                            
+                    a_values = a_values[4:]
+                    b_values = b_values[4:]
+
+                    values = [a_values, b_values]
+
+                    #Plotting Data
+                    title = dict(
+                        title_name = jogadores,
+                        title_color = '#B6282F',
+                        subtitle_name = jogadores_clube + "/" + jogadores_liga,
+                        subtitle_color = '#B6282F',
+                        title_name_2 = alvo,
+                        title_color_2 = '#344D94',
+                        subtitle_name_2 = alvo_clube + "/" + alvo_liga,
+                        subtitle_color_2 = '#344D94',
+                        title_fontsize = 18,
+                    ) 
+
+                    endnote = 'Viz by@JAmerico1898\ Data from Wyscout\nAll data in League percentiles'
+
+                    radar=Radar(fontfamily='Cursive', range_fontsize=8)
+                    fig,ax = radar.plot_radar(ranges=ranges,params=params,values=values,radar_color=['#B6282F', '#344D94'], dpi=600, alphas=[.8,.6], title=title, endnote=endnote, compare=True)
+                    st.pyplot(fig)
+
+                    ############################################################################
+                    ############################################################################
+                    #Quinto Gráfico
+                    Role_2_fifth = Role_2_Mean_Charts.iloc[4:5, :]
+                    Role_2_fifth = pd.concat([Role_2_fifth, target]).reset_index()
+
+                    # Definindo atletas para comparar
+                    jogadores = Role_2_fifth.iat[0, 1]
+                    jogadores_clube = Role_2_fifth.iat[0, 2]
+                    jogadores_liga = Role_2_fifth.iat[0, 3]
+                    #alvo = Role_2_fifth.iat[1, 1]
+                    #alvo_clube = Role_2_fifth.iat[1, 2]
+
+                    # Preparing the Graph
+                    params = list(Role_2_fifth.columns)
+                    params = params[4:]
+
+                    #Preparing Data
+                    ranges = []
+                    a_values = []
+                    b_values = []
+
+                    for x in params:
+                        a = min(Role_2_fifth[params][x])
+                        a = 0
+                        b = max(Role_2_fifth[params][x])
+                        b = 100
+                        ranges.append((a, b))
+
+                    for x in range(len(Role_2_fifth['Atleta'])):
+                        if Role_2_fifth['Atleta'][x] == jogadores:
+                            a_values = Role_2_fifth.iloc[x].values.tolist()
+                        if Role_2_fifth['Atleta'][x] == alvo:
+                            b_values = Role_2_fifth.iloc[x].values.tolist()
+                            
+                    a_values = a_values[4:]
+                    b_values = b_values[4:]
+
+                    values = [a_values, b_values]
+
+                    #Plotting Data
+                    title = dict(
+                        title_name = jogadores,
+                        title_color = '#B6282F',
+                        subtitle_name = jogadores_clube + "/" + jogadores_liga,
+                        subtitle_color = '#B6282F',
+                        title_name_2 = alvo,
+                        title_color_2 = '#344D94',
+                        subtitle_name_2 = alvo_clube + "/" + alvo_liga,
+                        subtitle_color_2 = '#344D94',
+                        title_fontsize = 18,
+                    ) 
+
+                    endnote = 'Viz by@JAmerico1898\ Data from Wyscout\nAll data in League percentiles'
+
+                    radar=Radar(fontfamily='Cursive', range_fontsize=8)
+                    fig,ax = radar.plot_radar(ranges=ranges,params=params,values=values,radar_color=['#B6282F', '#344D94'], dpi=600, alphas=[.8,.6], title=title, endnote=endnote, compare=True)
+                    st.pyplot(fig)
+
+                    ####################################################################################################
+                    ####################################################################################################
+                    ####################################################################################################
+                    ####################################################################################################
+
+                elif perfil_similar == ("Lateral Defensivo"):
+                    #####################################################################################################################
+                    #####################################################################################################################
+                    # LATERAL EQUILIBRADO
+                    # Texto de Abertura>
+                    markdown_amount_1 = f"<div style='text-align:center; font-size:{fontsize}px'>{jogador_similar:}</div>"
+                    st.markdown("<h4 style='text-align: center;'>Jogador Selecionado</b></h4>", unsafe_allow_html=True)
+                    st.markdown(markdown_amount_1, unsafe_allow_html=True)
+                    st.markdown("---")
+
+                    #Carregando arquivo de dados
+                    Role_3_data = pd.read_excel('3_Role_Lateral_Defensivo_Similarity.xlsx')
+                    Role_3_data = Role_3_data.drop(Role_3_data.columns[0:4], axis=1)
+                    Role_3_data.reset_index(drop=True, inplace=True)
+
+                    # Step : Defina o atleta-alvo
+                    #base_bruta_similaridade = pd.read_excel("base_bruta_similaridade.xlsx")
+                    target = Role_3_data.loc[(Role_3_data['Atleta'] == jogador_similar)]
+
+                    #Step : Definindo "ID-alvo"
+                    given_ID = target.iat[0, -1]
+
+                    # Definição da Base de Trabalho
+                    selected = Role_3_data
+
+                    # Step 9: Add columns "1", "2", "3" to Role_3_data
+
+                    selected['1'] = given_ID[0]
+                    selected['2'] = given_ID[1]
+                    selected['3'] = given_ID[2]
+
+
+                    # Assigning correct columns to 1, 2, 3
+
+                    if given_ID[0] == "A":
+                        selected['1'] = selected["A1"]
+                    elif given_ID[0] == "B":
+                        selected['1'] = selected["B1"]
+                    elif given_ID[0] == "C":
+                        selected['1'] = selected["C1"]
+                    elif given_ID[0] == "D":
+                        selected['1'] = selected["D1"]
+                    elif given_ID[0] == "E":
+                        selected['1'] = selected["E1"]
+                    elif given_ID[0] == "F":
+                        selected['1'] = selected["F1"]
+
+                    if given_ID[1] == "A":
+                        selected['2'] = selected["A1"]
+                    elif given_ID[1] == "B":
+                        selected['2'] = selected["B1"]
+                    elif given_ID[1] == "C":
+                        selected['2'] = selected["C1"]
+                    elif given_ID[1] == "D":
+                        selected['2'] = selected["D1"]
+                    elif given_ID[1] == "E":
+                        selected['2'] = selected["E1"]
+                    elif given_ID[1] == "F":
+                        selected['2'] = selected["F1"]
+                    
+                    if given_ID[2] == "A":
+                        selected['3'] = selected["A1"]
+                    elif given_ID[2] == "B":
+                        selected['3'] = selected["B1"]
+                    elif given_ID[2] == "C":
+                        selected['3'] = selected["C1"]
+                    elif given_ID[2] == "D":
+                        selected['3'] = selected["D1"]
+                    elif given_ID[2] == "E":
+                        selected['3'] = selected["E1"]
+                    elif given_ID[2] == "F":
+                        selected['3'] = selected["F1"]
+
+                    #############################################################
+                    #############################################################
+
+                    # Applying PCA for Scaled Selected Columns
+
+                    leagues = ["ARG1", "AUT", "BEL1", "BRA1", "BRA2", "BUL","CHI", "CHN", 
+                            "COL", "DEN", "ECU", "ENG1", "ENG2", "FRA1", "FRA2", "GER1", 
+                            "GER2", "GRE", "HOL", "ITA1", "ITA2", "JAP", "MEX", "PAR", 
+                            "PER", "POR1", "QAT", "RUS", "SAUD", "SCT", "SER", "SPA1", 
+                            "SPA2", "SWZ", "TUR", "UAE", "UKR", "URU", "USA"]
+
+                    # Iterate over each league
+                    for league in leagues:
+
+                        # Extract columns 46 through 50
+                        LateralDefensivo = selected.iloc[:, np.r_[-3:0]]
+
+                        # Defining Columns
+                        LateralDefensivo_columns = LateralDefensivo.columns
+
+                        # Applying PCA
+                        pca = PCA(n_components=2)
+                        principalComponents = pca.fit_transform(LateralDefensivo)
+
+                        # Create a DataFrame with loadings
+                        LoadingsLateralDefensivo = pd.DataFrame(pca.components_.T**2, index=LateralDefensivo_columns, columns=['loading factor 1', 'loading factor 2'])
+
+                        # Multiplying Matrices to obtain Pre_Variables
+                        Similarity = pd.DataFrame(np.matmul(LateralDefensivo, LoadingsLateralDefensivo['loading factor 1']) + np.matmul(LateralDefensivo, LoadingsLateralDefensivo['loading factor 2']),
+                                                columns=["Similarity"])
+
+                    # Rebuilding Full Training Set
+                    selected = selected.join(Similarity)
+
+                    ##############################################################
+                    ##############################################################
+
+                    # Lista de Similares
+                    # Initialize an empty list to store DataFrames
+                    target = selected.loc[(Role_3_data['Atleta'] == jogador_similar)]
+                    target_similarity = target.iat[0, -1]
+
+                    selected["Índice de Similaridade"] = (selected['Similarity']/target_similarity)*100
+                    selected["Índice de Similaridade"] = round(selected["Índice de Similaridade"], 2)
+
+                    target = selected.loc[(selected['Atleta'] == jogador_similar)]
+                    selected['Dif_Similarity'] = abs(selected["Índice de Similaridade"] - 100)
+
+                    selected = selected.sort_values(by='Dif_Similarity')
+
+                    lista_similares = selected.iloc[1:31, np.r_[0, 2, 23, 28, -2:0]]
+                    lista_similares = lista_similares.sort_values(by='Rating', ascending=False)
+
+                    # Lista de Jogadores Similares Ordenados segundo o Rating
+                    st.markdown("<h4 style='text-align: center;'>30 Jogadores + Similares</b></h4>", unsafe_allow_html=True)
+                    st.dataframe(lista_similares, use_container_width=True, hide_index=True)
+                    st.markdown("---")    
+
+                    # Lista de Latinos
+                    selected_latam = selected[(selected["Nacionalidade"] == "Argentina")|(selected["Nacionalidade"] == "Brazil")
+                                        |(selected["Nacionalidade"] == "Bolivia")|(selected["Nacionalidade"] == "Chile")
+                                        |(selected["Nacionalidade"] == "Colombia")|(selected["Nacionalidade"] == "Costa Rica")
+                                        |(selected["Nacionalidade"] == "Ecuador")|(selected["Nacionalidade"] == "Mexico")
+                                        |(selected["Nacionalidade"] == "Panama")|(selected["Nacionalidade"] == "Paraguay")
+                                        |(selected["Nacionalidade"] == "Peru")|(selected["Nacionalidade"] == "Uruguay")
+                                        |(selected["Nacionalidade"] == "Venezuela")]
+
+                    lista_similares_latam = selected_latam.iloc[1:31, np.r_[0, 2, 23, 28, -2:0]]
+                    lista_similares_latam = lista_similares_latam.sort_values(by="Rating", ascending = False)
+
+                    #Texto para os Gráficos
+                    st.markdown("<h4 style='text-align: center;'>5 Jogadores Latinos Similares Melhor Ranquedos</b></h4>", unsafe_allow_html=True)
+                    st.markdown("---")    
+
+                    ########################################################################################################
+                    # Gerar Gráficos com os 5 melhores
+                    # Arquivo para o Gráfico
+                    Role_3_Mean_Charts = selected_latam.iloc[:, np.r_[0, 2, 23, 29:35]]
+                    target = target.iloc[:, np.r_[0, 2, 23, 29:35]]
+                    # Renomeando Colunas
+                    Role_3_Mean_Charts = Role_3_Mean_Charts.rename(columns={'Ações_Defensivas_BemSucedidas_Percentil':'Ações_Defensivas_BemSucedidas', 
+                                                        'Duelos_Defensivos_Ganhos_Percentil':'Duelos_Defensivos_Ganhos', 
+                                                        'Duelos_Aéreos_Ganhos_Percentil':'Duelos_Aéreos_Ganhos', 
+                                                        'Passes_Longos_Certos_Percentil':'Passes_Longos_Certos', 
+                                                        'Passes_Progressivos_Certos_Percentil':'Passes_Progressivos_Certos',
+                                                        'Passes_Laterais_Certos_Percentil':'Passes_Laterais_Certos'})
+                    
+                    target = target.rename(columns={'Ações_Defensivas_BemSucedidas_Percentil':'Ações_Defensivas_BemSucedidas', 
+                                                        'Duelos_Defensivos_Ganhos_Percentil':'Duelos_Defensivos_Ganhos', 
+                                                        'Duelos_Aéreos_Ganhos_Percentil':'Duelos_Aéreos_Ganhos', 
+                                                        'Passes_Longos_Certos_Percentil':'Passes_Longos_Certos', 
+                                                        'Passes_Progressivos_Certos_Percentil':'Passes_Progressivos_Certos',
+                                                        'Passes_Laterais_Certos_Percentil':'Passes_Laterais_Certos'})
+                                            
+                    #Dropping Atleta-alvo
+                    Role_3_Mean_Charts = Role_3_Mean_Charts[Role_3_Mean_Charts['Atleta'] != jogador_similar] 
+                    #Extraindo 5 melhores
+                    Role_3_Mean_Charts = Role_3_Mean_Charts.iloc[0:5, :]
+
+                    ############################################################################################
+                    #Primeiro Gráfico
+                    Role_3_first = Role_3_Mean_Charts.iloc[0:1, :]
+                    Role_3_first = pd.concat([Role_3_first, target]).reset_index()
+
+                    # Definindo atletas para comparar
+                    jogadores = Role_3_first.iat[0, 1]
+                    jogadores_clube = Role_3_first.iat[0, 2]
+                    jogadores_liga = Role_3_first.iat[0, 3]
+                    alvo = Role_3_first.iat[1, 1]
+                    alvo_clube = Role_3_first.iat[1, 2]
+                    alvo_liga = Role_3_first.iat[1, 3]
+
+                    #Splitting Data
+                    Role_3_first_1 = Role_3_first.iloc[:, np.r_[0:3, 3:10]]
+
+                    # Preparing Graph 1
+                    params = list(Role_3_first_1.columns)
+                    params = params[4:]
+
+
+                    #Preparing Data
+                    ranges = []
+                    a_values = []
+                    b_values = []
+
+                    for x in params:
+                        a = min(Role_3_first_1[params][x])
+                        a = 0
+                        b = max(Role_3_first_1[params][x])
+                        b = 100
+                        ranges.append((a, b))
+
+                    for x in range(len(Role_3_first_1['Atleta'])):
+                        if Role_3_first_1['Atleta'][x] == jogadores:
+                            a_values = Role_3_first_1.iloc[x].values.tolist()
+                        if Role_3_first_1['Atleta'][x] == alvo:
+                            b_values = Role_3_first_1.iloc[x].values.tolist()
+                            
+                    a_values = a_values[4:]
+                    b_values = b_values[4:]
+
+                    values = [a_values, b_values]
+
+                    #Plotting Data
+                    title = dict(
+                        title_name = jogadores,
+                        title_color = '#B6282F',
+                        subtitle_name = jogadores_clube + "/" + jogadores_liga,
+                        subtitle_color = '#B6282F',
+                        title_name_2 = alvo,
+                        title_color_2 = '#344D94',
+                        subtitle_name_2 = alvo_clube + "/" + alvo_liga,
+                        subtitle_color_2 = '#344D94',
+                        title_fontsize = 18,
+                    ) 
+
+                    endnote = 'Viz by@JAmerico1898\ Data from Wyscout\nAll data in League percentiles'
+
+                    radar=Radar(fontfamily='Cursive', range_fontsize=8)
+                    fig,ax = radar.plot_radar(ranges=ranges,params=params,values=values,radar_color=['#B6282F', '#344D94'], dpi=600, alphas=[.8,.6], title=title, endnote=endnote, compare=True)
+                    st.pyplot(fig)
+
+                    ############################################################################
+                    ############################################################################
+                    #Segundo Gráfico
+                    Role_3_first = Role_3_Mean_Charts.iloc[1:2, :]
+                    Role_3_first = pd.concat([Role_3_first, target]).reset_index()
+
+                    # Definindo atletas para comparar
+                    jogadores = Role_3_first.iat[0, 1]
+                    jogadores_clube = Role_3_first.iat[0, 2]
+                    jogadores_liga = Role_3_first.iat[0, 3]
+                    alvo = Role_3_first.iat[1, 1]
+                    alvo_clube = Role_3_first.iat[1, 2]
+                    alvo_liga = Role_3_first.iat[1, 3]
+
+                    #Splitting Data
+                    Role_3_first_1 = Role_3_first.iloc[:, np.r_[0:3, 3:10]]
+
+                    # Preparing Graph 1
+                    params = list(Role_3_first_1.columns)
+                    params = params[4:]
+
+                    #Preparing Data
+                    ranges = []
+                    a_values = []
+                    b_values = []
+
+                    for x in params:
+                        a = min(Role_3_first_1[params][x])
+                        a = 0
+                        b = max(Role_3_first_1[params][x])
+                        b = 100
+                        ranges.append((a, b))
+
+                    for x in range(len(Role_3_first_1['Atleta'])):
+                        if Role_3_first_1['Atleta'][x] == jogadores:
+                            a_values = Role_3_first_1.iloc[x].values.tolist()
+                        if Role_3_first_1['Atleta'][x] == alvo:
+                            b_values = Role_3_first_1.iloc[x].values.tolist()
+                            
+                    a_values = a_values[4:]
+                    b_values = b_values[4:]
+
+                    values = [a_values, b_values]
+
+                    #Plotting Data
+                    title = dict(
+                        title_name = jogadores,
+                        title_color = '#B6282F',
+                        subtitle_name = jogadores_clube + "/" + jogadores_liga,
+                        subtitle_color = '#B6282F',
+                        title_name_2 = alvo,
+                        title_color_2 = '#344D94',
+                        subtitle_name_2 = alvo_clube + "/" + alvo_liga,
+                        subtitle_color_2 = '#344D94',
+                        title_fontsize = 18,
+                    ) 
+
+                    endnote = 'Viz by@JAmerico1898\ Data from Wyscout\nAll data in League percentiles'
+
+                    radar=Radar(fontfamily='Cursive', range_fontsize=8)
+                    fig,ax = radar.plot_radar(ranges=ranges,params=params,values=values,radar_color=['#B6282F', '#344D94'], dpi=600, alphas=[.8,.6], title=title, endnote=endnote, compare=True)
+                    st.pyplot(fig)
+
+                    ############################################################################
+                    ############################################################################
+
+                    #Terceiro Gráfico
+                    Role_3_first = Role_3_Mean_Charts.iloc[2:3, :]
+                    Role_3_first = pd.concat([Role_3_first, target]).reset_index()
+
+                    # Definindo atletas para comparar
+                    jogadores = Role_3_first.iat[0, 1]
+                    jogadores_clube = Role_3_first.iat[0, 2]
+                    jogadores_liga = Role_3_first.iat[0, 3]
+                    #alvo = Role_3_first.iat[1, 1]
+                    #alvo_clube = Role_3_first.iat[1, 2]
+                    #alvo_liga = Role_3_first.iat[1, 3]
+
+                    #Splitting Data
+                    Role_3_first_1 = Role_3_first.iloc[:, np.r_[0:3, 3:10]]
+
+                    # Preparing Graph 1
+                    params = list(Role_3_first_1.columns)
+                    params = params[4:]
+
+                    #Preparing Data
+                    ranges = []
+                    a_values = []
+                    b_values = []
+
+                    for x in params:
+                        a = min(Role_3_first_1[params][x])
+                        a = 0
+                        b = max(Role_3_first_1[params][x])
+                        b = 100
+                        ranges.append((a, b))
+
+                    for x in range(len(Role_3_first_1['Atleta'])):
+                        if Role_3_first_1['Atleta'][x] == jogadores:
+                            a_values = Role_3_first_1.iloc[x].values.tolist()
+                        if Role_3_first_1['Atleta'][x] == alvo:
+                            b_values = Role_3_first_1.iloc[x].values.tolist()
+                            
+                    a_values = a_values[4:]
+                    b_values = b_values[4:]
+
+                    values = [a_values, b_values]
+
+                    #Plotting Data
+                    title = dict(
+                        title_name = jogadores,
+                        title_color = '#B6282F',
+                        subtitle_name = jogadores_clube + "/" + jogadores_liga,
+                        subtitle_color = '#B6282F',
+                        title_name_2 = alvo,
+                        title_color_2 = '#344D94',
+                        subtitle_name_2 = alvo_clube + "/" + alvo_liga,
+                        subtitle_color_2 = '#344D94',
+                        title_fontsize = 18,
+                    ) 
+
+                    endnote = 'Viz by@JAmerico1898\ Data from Wyscout\nAll data in League percentiles'
+
+                    radar=Radar(fontfamily='Cursive', range_fontsize=8)
+                    fig,ax = radar.plot_radar(ranges=ranges,params=params,values=values,radar_color=['#B6282F', '#344D94'], dpi=600, alphas=[.8,.6], title=title, endnote=endnote, compare=True)
+                    st.pyplot(fig)
+
+                    ############################################################################
+                    ############################################################################
+
+                    #Quarto Gráfico
+                    Role_3_first = Role_3_Mean_Charts.iloc[3:4, :]
+                    Role_3_first = pd.concat([Role_3_first, target]).reset_index()
+
+                    # Definindo atletas para comparar
+                    jogadores = Role_3_first.iat[0, 1]
+                    jogadores_clube = Role_3_first.iat[0, 2]
+                    jogadores_liga = Role_3_first.iat[0, 3]
+                    #alvo = Role_3_first.iat[1, 1]
+                    #alvo_clube = Role_3_first.iat[1, 2]
+                    #alvo_liga = Role_3_first.iat[1, 3]
+
+                    #Splitting Data
+                    Role_3_first_1 = Role_3_first.iloc[:, np.r_[0:3, 3:10]]
+
+                    # Preparing Graph 1
+                    params = list(Role_3_first_1.columns)
+                    params = params[4:]
+
+                    #Preparing Data
+                    ranges = []
+                    a_values = []
+                    b_values = []
+
+                    for x in params:
+                        a = min(Role_3_first_1[params][x])
+                        a = 0
+                        b = max(Role_3_first_1[params][x])
+                        b = 100
+                        ranges.append((a, b))
+
+                    for x in range(len(Role_3_first_1['Atleta'])):
+                        if Role_3_first_1['Atleta'][x] == jogadores:
+                            a_values = Role_3_first_1.iloc[x].values.tolist()
+                        if Role_3_first_1['Atleta'][x] == alvo:
+                            b_values = Role_3_first_1.iloc[x].values.tolist()
+                            
+                    a_values = a_values[4:]
+                    b_values = b_values[4:]
+
+                    values = [a_values, b_values]
+
+                    #Plotting Data
+                    title = dict(
+                        title_name = jogadores,
+                        title_color = '#B6282F',
+                        subtitle_name = jogadores_clube + "/" + jogadores_liga,
+                        subtitle_color = '#B6282F',
+                        title_name_2 = alvo,
+                        title_color_2 = '#344D94',
+                        subtitle_name_2 = alvo_clube + "/" + alvo_liga,
+                        subtitle_color_2 = '#344D94',
+                        title_fontsize = 18,
+                    ) 
+
+                    endnote = 'Viz by@JAmerico1898\ Data from Wyscout\nAll data in League percentiles'
+
+                    radar=Radar(fontfamily='Cursive', range_fontsize=8)
+                    fig,ax = radar.plot_radar(ranges=ranges,params=params,values=values,radar_color=['#B6282F', '#344D94'], dpi=600, alphas=[.8,.6], title=title, endnote=endnote, compare=True)
+                    st.pyplot(fig)
+
+                    ##########################################################################################
+                    ############################################################################
+
+                    #Quinto Gráfico
+                    Role_3_first = Role_3_Mean_Charts.iloc[4:5, :]
+                    Role_3_first = pd.concat([Role_3_first, target]).reset_index()
+
+                    # Definindo atletas para comparar
+                    jogadores = Role_3_first.iat[0, 1]
+                    jogadores_clube = Role_3_first.iat[0, 2]
+                    jogadores_liga = Role_3_first.iat[0, 3]
+
+                    #Splitting Data
+                    Role_3_first_1 = Role_3_first.iloc[:, np.r_[0:3, 3:10]]
+
+                    # Preparing Graph 1
+                    params = list(Role_3_first_1.columns)
+                    params = params[4:]
+
+                    #Preparing Data
+                    ranges = []
+                    a_values = []
+                    b_values = []
+
+                    for x in params:
+                        a = min(Role_3_first_1[params][x])
+                        a = 0
+                        b = max(Role_3_first_1[params][x])
+                        b = 100
+                        ranges.append((a, b))
+
+                    for x in range(len(Role_3_first_1['Atleta'])):
+                        if Role_3_first_1['Atleta'][x] == jogadores:
+                            a_values = Role_3_first_1.iloc[x].values.tolist()
+                        if Role_3_first_1['Atleta'][x] == alvo:
+                            b_values = Role_3_first_1.iloc[x].values.tolist()
+                            
+                    a_values = a_values[4:]
+                    b_values = b_values[4:]
+
+                    values = [a_values, b_values]
+
+                    #Plotting Data
+                    title = dict(
+                        title_name = jogadores,
+                        title_color = '#B6282F',
+                        subtitle_name = jogadores_clube + "/" + jogadores_liga,
+                        subtitle_color = '#B6282F',
+                        title_name_2 = alvo,
+                        title_color_2 = '#344D94',
+                        subtitle_name_2 = alvo_clube + "/" + alvo_liga,
+                        subtitle_color_2 = '#344D94',
+                        title_fontsize = 18,
+                    ) 
+
+                    endnote = 'Viz by@JAmerico1898\ Data from Wyscout\nAll data in League percentiles'
+
+                    radar=Radar(fontfamily='Cursive', range_fontsize=8)
+                    fig,ax = radar.plot_radar(ranges=ranges,params=params,values=values,radar_color=['#B6282F', '#344D94'], dpi=600, alphas=[.8,.6], title=title, endnote=endnote, compare=True)
+                    st.pyplot(fig)
+
+########################################################################################################################
+########################################################################################################################
+########################################################################################################################
+########################################################################################################################
+
+                elif perfil_similar == ("Lateral Ofensivo"):
+                    #####################################################################################################################
+                    #####################################################################################################################
+                    # LATERAL EQUILIBRADO
+                    # Texto de Abertura>
+                    markdown_amount_1 = f"<div style='text-align:center; font-size:{fontsize}px'>{jogador_similar:}</div>"
+                    st.markdown("<h4 style='text-align: center;'>Jogador Selecionado</b></h4>", unsafe_allow_html=True)
+                    st.markdown(markdown_amount_1, unsafe_allow_html=True)
+                    st.markdown("---")
+
+                    #Carregando arquivo de dados
+                    Role_4_data = pd.read_excel('4_Role_Lateral_Ofensivo_Similarity.xlsx')
+                    Role_4_data = Role_4_data.drop(Role_4_data.columns[0:4], axis=1)
+                    Role_4_data.reset_index(drop=True, inplace=True)
+
+                    # Step : Defina o atleta-alvo
+                    #base_bruta_similaridade = pd.read_excel("base_bruta_similaridade.xlsx")
+                    target = Role_4_data.loc[(Role_4_data['Atleta'] == jogador_similar)]
+
+                    #Step : Definindo "ID-alvo"
+                    given_ID = target.iat[0, -1]
+
+                    # Definição da Base de Trabalho
+                    selected = Role_4_data
+
+                    # Step 9: Add columns "1", "2", "3" to Role_4_data
+
+                    selected['1'] = given_ID[0]
+                    selected['2'] = given_ID[1]
+                    selected['3'] = given_ID[2]
+                    selected['4'] = given_ID[3]
+
+
+                    # Assigning correct columns to 1, 2, 3
+
+                    if given_ID[0] == "A":
+                        selected['1'] = selected["A1"]
+                    elif given_ID[0] == "B":
+                        selected['1'] = selected["B1"]
+                    elif given_ID[0] == "C":
+                        selected['1'] = selected["C1"]
+                    elif given_ID[0] == "D":
+                        selected['1'] = selected["D1"]
+                    elif given_ID[0] == "E":
+                        selected['1'] = selected["E1"]
+                    elif given_ID[0] == "F":
+                        selected['1'] = selected["F1"]
+                    elif given_ID[0] == "G":
+                        selected['1'] = selected["G1"]
+                    elif given_ID[0] == "H":
+                        selected['1'] = selected["H1"]
+                    elif given_ID[0] == "I":
+                        selected['1'] = selected["I1"]
+                    elif given_ID[0] == "J":
+                        selected['1'] = selected["J1"]
+                    elif given_ID[0] == "K":
+                        selected['1'] = selected["K1"]
+                    elif given_ID[0] == "L":
+                        selected['1'] = selected["L1"]
+                    elif given_ID[0] == "M":
+                        selected['1'] = selected["M1"]
+                    elif given_ID[0] == "N":
+                        selected['1'] = selected["N1"]
+                    elif given_ID[0] == "O":
+                        selected['1'] = selected["O1"]
+ 
+
+                    if given_ID[1] == "A":
+                        selected['2'] = selected["A1"]
+                    elif given_ID[1] == "B":
+                        selected['2'] = selected["B1"]
+                    elif given_ID[1] == "C":
+                        selected['2'] = selected["C1"]
+                    elif given_ID[1] == "D":
+                        selected['2'] = selected["D1"]
+                    elif given_ID[1] == "E":
+                        selected['2'] = selected["E1"]
+                    elif given_ID[1] == "F":
+                        selected['2'] = selected["F1"]
+                    elif given_ID[1] == "G":
+                        selected['2'] = selected["G1"]
+                    elif given_ID[1] == "H":
+                        selected['2'] = selected["H1"]
+                    elif given_ID[1] == "I":
+                        selected['2'] = selected["I1"]
+                    elif given_ID[1] == "J":
+                        selected['2'] = selected["J1"]
+                    elif given_ID[1] == "K":
+                        selected['2'] = selected["K1"]
+                    elif given_ID[1] == "L":
+                        selected['2'] = selected["L1"]
+                    elif given_ID[1] == "M":
+                        selected['2'] = selected["M1"]
+                    elif given_ID[1] == "N":
+                        selected['2'] = selected["N1"]
+                    elif given_ID[1] == "O":
+                        selected['2'] = selected["O1"]
+                    
+                    
+                    if given_ID[2] == "A":
+                        selected['3'] = selected["A1"]
+                    elif given_ID[2] == "B":
+                        selected['3'] = selected["B1"]
+                    elif given_ID[2] == "C":
+                        selected['3'] = selected["C1"]
+                    elif given_ID[2] == "D":
+                        selected['3'] = selected["D1"]
+                    elif given_ID[2] == "E":
+                        selected['3'] = selected["E1"]
+                    elif given_ID[2] == "F":
+                        selected['3'] = selected["F1"]
+                    elif given_ID[2] == "G":
+                        selected['3'] = selected["G1"]
+                    elif given_ID[2] == "H":
+                        selected['3'] = selected["H1"]
+                    elif given_ID[2] == "I":
+                        selected['3'] = selected["I1"]
+                    elif given_ID[2] == "J":
+                        selected['3'] = selected["J1"]
+                    elif given_ID[2] == "K":
+                        selected['3'] = selected["K1"]
+                    elif given_ID[2] == "L":
+                        selected['3'] = selected["L1"]
+                    elif given_ID[2] == "M":
+                        selected['3'] = selected["M1"]
+                    elif given_ID[2] == "N":
+                        selected['3'] = selected["N1"]
+                    elif given_ID[2] == "O":
+                        selected['3'] = selected["O1"]
+
+                    if given_ID[3] == "A":
+                        selected['4'] = selected["A1"]
+                    elif given_ID[3] == "B":
+                        selected['4'] = selected["B1"]
+                    elif given_ID[3] == "C":
+                        selected['4'] = selected["C1"]
+                    elif given_ID[3] == "D":
+                        selected['4'] = selected["D1"]
+                    elif given_ID[3] == "E":
+                        selected['4'] = selected["E1"]
+                    elif given_ID[3] == "F":
+                        selected['4'] = selected["F1"]
+                    elif given_ID[3] == "G":
+                        selected['4'] = selected["G1"]
+                    elif given_ID[3] == "H":
+                        selected['4'] = selected["H1"]
+                    elif given_ID[3] == "I":
+                        selected['4'] = selected["I1"]
+                    elif given_ID[3] == "J":
+                        selected['4'] = selected["J1"]
+                    elif given_ID[3] == "K":
+                        selected['4'] = selected["K1"]
+                    elif given_ID[3] == "L":
+                        selected['4'] = selected["L1"]
+                    elif given_ID[3] == "M":
+                        selected['4'] = selected["M1"]
+                    elif given_ID[3] == "N":
+                        selected['4'] = selected["N1"]
+                    elif given_ID[3] == "O":
+                        selected['4'] = selected["O1"]
+
+
+                    #############################################################
+                    #############################################################
+
+                    # Applying PCA for Scaled Selected Columns
+
+                    leagues = ["ARG1", "AUT", "BEL1", "BRA1", "BRA2", "BUL","CHI", "CHN", 
+                            "COL", "DEN", "ECU", "ENG1", "ENG2", "FRA1", "FRA2", "GER1", 
+                            "GER2", "GRE", "HOL", "ITA1", "ITA2", "JAP", "MEX", "PAR", 
+                            "PER", "POR1", "QAT", "RUS", "SAUD", "SCT", "SER", "SPA1", 
+                            "SPA2", "SWZ", "TUR", "UAE", "UKR", "URU", "USA"]
+
+                    # Iterate over each league
+                    for league in leagues:
+
+                        # Extract columns 46 through 50
+                        LateralOfensivo = selected.iloc[:, np.r_[-4:0]]
+
+                        # Defining Columns
+                        LateralOfensivo_columns = LateralOfensivo.columns
+
+                        # Applying PCA
+                        pca = PCA(n_components=2)
+                        principalComponents = pca.fit_transform(LateralOfensivo)
+
+                        # Create a DataFrame with loadings
+                        LoadingsLateralOfensivo = pd.DataFrame(pca.components_.T**2, index=LateralOfensivo_columns, columns=['loading factor 1', 'loading factor 2'])
+
+                        # Multiplying Matrices to obtain Pre_Variables
+                        Similarity = pd.DataFrame(np.matmul(LateralOfensivo, LoadingsLateralOfensivo['loading factor 1']) + np.matmul(LateralOfensivo, LoadingsLateralOfensivo['loading factor 2']),
+                                                columns=["Similarity"])
+
+                    # Rebuilding Full Training Set
+                    selected = selected.join(Similarity)
+
+                    ##############################################################
+                    ##############################################################
+
+                    # Lista de Similares
+                    # Initialize an empty list to store DataFrames
+                    target = selected.loc[(Role_4_data['Atleta'] == jogador_similar)]
+                    target_similarity = target.iat[0, -1]
+
+                    selected["Índice de Similaridade"] = (selected['Similarity']/target_similarity)*100
+                    selected["Índice de Similaridade"] = round(selected["Índice de Similaridade"], 2)
+
+                    target = selected.loc[(selected['Atleta'] == jogador_similar)]
+                    selected['Dif_Similarity'] = abs(selected["Índice de Similaridade"] - 100)
+
+                    selected = selected.sort_values(by='Dif_Similarity')
+
+                    lista_similares = selected.iloc[1:31, np.r_[0, 2, 32, 37, -2:0]]
+                    lista_similares = lista_similares.sort_values(by='Rating', ascending=False)
+
+                    # Lista de Jogadores Similares Ordenados segundo o Rating
+                    st.markdown("<h4 style='text-align: center;'>30 Jogadores + Similares</b></h4>", unsafe_allow_html=True)
+                    st.dataframe(lista_similares, use_container_width=True, hide_index=True)
+                    st.markdown("---")    
+
+                    # Lista de Latinos
+                    selected_latam = selected[(selected["Nacionalidade"] == "Argentina")|(selected["Nacionalidade"] == "Brazil")
+                                        |(selected["Nacionalidade"] == "Bolivia")|(selected["Nacionalidade"] == "Chile")
+                                        |(selected["Nacionalidade"] == "Colombia")|(selected["Nacionalidade"] == "Costa Rica")
+                                        |(selected["Nacionalidade"] == "Ecuador")|(selected["Nacionalidade"] == "Mexico")
+                                        |(selected["Nacionalidade"] == "Panama")|(selected["Nacionalidade"] == "Paraguay")
+                                        |(selected["Nacionalidade"] == "Peru")|(selected["Nacionalidade"] == "Uruguay")
+                                        |(selected["Nacionalidade"] == "Venezuela")]
+
+                    lista_similares_latam = selected_latam.iloc[1:31, np.r_[0, 2, 32, 37, -2:0]]
+                    lista_similares_latam = lista_similares_latam.sort_values(by="Rating", ascending = False)
+
+                    #Texto para os Gráficos
+                    st.markdown("<h4 style='text-align: center;'>5 Jogadores Latinos Similares Melhor Ranquedos</b></h4>", unsafe_allow_html=True)
+                    st.markdown("---")    
+
+                    ########################################################################################################
+                    # Gerar Gráficos com os 5 melhores
+                    # Arquivo para o Gráfico
+                    Role_4_Mean_Charts = selected_latam.iloc[:, np.r_[0, 2, 32, 38:52]]
+                    target = target.iloc[:, np.r_[0, 2, 32, 38:52]]
+                    # Renomeando Colunas
+                    Role_4_Mean_Charts = Role_4_Mean_Charts.rename(columns={'Ações_Defensivas_BemSucedidas_Percentil':'Ações_Defensivas_BemSucedidas', 'Passes_Longos_Certos_Percentil':'Passes_Longos_Certos', 'Passes_Progressivos_Certos_Percentil':'Passes_Progressivos_Certos',
+                                                             'Ações_Ofensivas_BemSucedidas_Percentil':'Ações_Ofensivas_BemSucedidas', 'Duelos_Ofensivos_Ganhos_Percentil':'Duelos_Ofensivos_Ganhos', 
+                                                              'Pisadas_Área_Percentil':'Pisadas_Área', 'Dribles_BemSucedidos_Percentil':'Dribles_BemSucedidos', 'Corridas_Progressivas_Percentil':'Corridas_Progressivas', 'Acelerações_Percentil':'Acelerações', 
+                                                              'xA_Percentil':'xA', 'Assistência_Finalização_Percentil':'Assistência_Finalização', 'Passes_TerçoFinal_Certos_Percentil':'Passes_TerçoFinal_Certos', 'Deep_Completions_Percentil':'Deep_Completions',
+                                                                'Deep_Completed_Crosses_Percentil':'Deep_Completed_Crosses'})
+                    
+                    target = target.rename(columns={'Ações_Defensivas_BemSucedidas_Percentil':'Ações_Defensivas_BemSucedidas', 'Passes_Longos_Certos_Percentil':'Passes_Longos_Certos', 'Passes_Progressivos_Certos_Percentil':'Passes_Progressivos_Certos',
+                                                             'Ações_Ofensivas_BemSucedidas_Percentil':'Ações_Ofensivas_BemSucedidas', 'Duelos_Ofensivos_Ganhos_Percentil':'Duelos_Ofensivos_Ganhos', 
+                                                              'Pisadas_Área_Percentil':'Pisadas_Área', 'Dribles_BemSucedidos_Percentil':'Dribles_BemSucedidos', 'Corridas_Progressivas_Percentil':'Corridas_Progressivas', 'Acelerações_Percentil':'Acelerações', 
+                                                              'xA_Percentil':'xA', 'Assistência_Finalização_Percentil':'Assistência_Finalização', 'Passes_TerçoFinal_Certos_Percentil':'Passes_TerçoFinal_Certos', 'Deep_Completions_Percentil':'Deep_Completions',
+                                                                'Deep_Completed_Crosses_Percentil':'Deep_Completed_Crosses'})
+                                            
+                    #Dropping Atleta-alvo
+                    Role_4_Mean_Charts = Role_4_Mean_Charts[Role_4_Mean_Charts['Atleta'] != jogador_similar] 
+                    #Extraindo 5 melhores
+                    Role_4_Mean_Charts = Role_4_Mean_Charts.iloc[0:5, :]
+
+                    ############################################################################################
+                    #Primeiro Gráfico
+                    Role_4_first = Role_4_Mean_Charts.iloc[0:1, :]
+                    Role_4_first = pd.concat([Role_4_first, target]).reset_index()
+
+                    # Definindo atletas para comparar
+                    jogadores = Role_4_first.iat[0, 1]
+                    jogadores_clube = Role_4_first.iat[0, 2]
+                    jogadores_liga = Role_4_first.iat[0, 3]
+                    alvo = Role_4_first.iat[1, 1]
+                    alvo_clube = Role_4_first.iat[1, 2]
+                    alvo_liga = Role_4_first.iat[1, 3]
+
+                    #Splitting Data
+                    Role_4_first_1 = Role_4_first.iloc[:, np.r_[0:3, 3:11]]
+                    Role_4_first_2 = Role_4_first.iloc[:, np.r_[0:3, 11:18]]
+
+                    # Preparing Graph 1
+                    params = list(Role_4_first_1.columns)
+                    params = params[4:]
+
+
+                    #Preparing Data
+                    ranges = []
+                    a_values = []
+                    b_values = []
+
+                    for x in params:
+                        a = min(Role_4_first_1[params][x])
+                        a = 0
+                        b = max(Role_4_first_1[params][x])
+                        b = 100
+                        ranges.append((a, b))
+
+                    for x in range(len(Role_4_first_1['Atleta'])):
+                        if Role_4_first_1['Atleta'][x] == jogadores:
+                            a_values = Role_4_first_1.iloc[x].values.tolist()
+                        if Role_4_first_1['Atleta'][x] == alvo:
+                            b_values = Role_4_first_1.iloc[x].values.tolist()
+                            
+                    a_values = a_values[4:]
+                    b_values = b_values[4:]
+
+                    values = [a_values, b_values]
+
+                    #Plotting Data
+                    title = dict(
+                        title_name = jogadores,
+                        title_color = '#B6282F',
+                        subtitle_name = jogadores_clube + "/" + jogadores_liga,
+                        subtitle_color = '#B6282F',
+                        title_name_2 = alvo,
+                        title_color_2 = '#344D94',
+                        subtitle_name_2 = alvo_clube + "/" + alvo_liga,
+                        subtitle_color_2 = '#344D94',
+                        title_fontsize = 18,
+                    ) 
+
+                    endnote = 'Viz by@JAmerico1898\ Data from Wyscout\nAll data in League percentiles'
+
+                    radar=Radar(fontfamily='Cursive', range_fontsize=8)
+                    fig,ax = radar.plot_radar(ranges=ranges,params=params,values=values,radar_color=['#B6282F', '#344D94'], dpi=600, alphas=[.8,.6], title=title, endnote=endnote, compare=True)
+                    st.pyplot(fig)
+
+                    ############################################################################
+                    # Preparing Graph 2
+                    params = list(Role_4_first_2.columns)
+                    params = params[4:]
+
+                    #Preparing Data
+                    ranges = []
+                    a_values = []
+                    b_values = []
+
+                    for x in params:
+                        a = min(Role_4_first_2[params][x])
+                        a = 0
+                        b = max(Role_4_first_2[params][x])
+                        b = 100
+                        ranges.append((a, b))
+
+                    for x in range(len(Role_4_first_2['Atleta'])):
+                        if Role_4_first_2['Atleta'][x] == jogadores:
+                            a_values = Role_4_first_2.iloc[x].values.tolist()
+                        if Role_4_first_2['Atleta'][x] == alvo:
+                            b_values = Role_4_first_2.iloc[x].values.tolist()
+                            
+                    a_values = a_values[4:]
+                    b_values = b_values[4:]
+
+                    values = [a_values, b_values]
+
+                    #Plotting Data
+                    title = dict(
+                        title_name = jogadores,
+                        title_color = '#B6282F',
+                        subtitle_name = jogadores_clube + "/" + jogadores_liga,
+                        subtitle_color = '#B6282F',
+                        title_name_2 = alvo,
+                        title_color_2 = '#344D94',
+                        subtitle_name_2 = alvo_clube + "/" + alvo_liga,
+                        subtitle_color_2 = '#344D94',
+                        title_fontsize = 18,
+                    ) 
+
+                    endnote = 'Viz by@JAmerico1898\ Data from Wyscout\nAll data in League percentiles'
+
+                    radar=Radar(fontfamily='Cursive', range_fontsize=8)
+                    fig,ax = radar.plot_radar(ranges=ranges,params=params,values=values,radar_color=['#B6282F', '#344D94'], dpi=600, alphas=[.8,.6], title=title, endnote=endnote, compare=True)
+                    st.pyplot(fig)
+                    ############################################################################
+
+                    #Segundo Gráfico
+                    Role_4_first = Role_4_Mean_Charts.iloc[1:2, :]
+                    Role_4_first = pd.concat([Role_4_first, target]).reset_index()
+
+                    # Definindo atletas para comparar
+                    jogadores = Role_4_first.iat[0, 1]
+                    jogadores_clube = Role_4_first.iat[0, 2]
+                    jogadores_liga = Role_4_first.iat[0, 3]
+                    alvo = Role_4_first.iat[1, 1]
+                    alvo_clube = Role_4_first.iat[1, 2]
+                    alvo_liga = Role_4_first.iat[1, 3]
+
+                    #Splitting Data
+                    Role_4_first_1 = Role_4_first.iloc[:, np.r_[0:3, 3:11]]
+                    Role_4_first_2 = Role_4_first.iloc[:, np.r_[0:3, 11:18]]
+
+                    # Preparing Graph 1
+                    params = list(Role_4_first_1.columns)
+                    params = params[4:]
+
+                    #Preparing Data
+                    ranges = []
+                    a_values = []
+                    b_values = []
+
+                    for x in params:
+                        a = min(Role_4_first_1[params][x])
+                        a = 0
+                        b = max(Role_4_first_1[params][x])
+                        b = 100
+                        ranges.append((a, b))
+
+                    for x in range(len(Role_4_first_1['Atleta'])):
+                        if Role_4_first_1['Atleta'][x] == jogadores:
+                            a_values = Role_4_first_1.iloc[x].values.tolist()
+                        if Role_4_first_1['Atleta'][x] == alvo:
+                            b_values = Role_4_first_1.iloc[x].values.tolist()
+                            
+                    a_values = a_values[4:]
+                    b_values = b_values[4:]
+
+                    values = [a_values, b_values]
+
+                    #Plotting Data
+                    title = dict(
+                        title_name = jogadores,
+                        title_color = '#B6282F',
+                        subtitle_name = jogadores_clube + "/" + jogadores_liga,
+                        subtitle_color = '#B6282F',
+                        title_name_2 = alvo,
+                        title_color_2 = '#344D94',
+                        subtitle_name_2 = alvo_clube + "/" + alvo_liga,
+                        subtitle_color_2 = '#344D94',
+                        title_fontsize = 18,
+                    ) 
+
+                    endnote = 'Viz by@JAmerico1898\ Data from Wyscout\nAll data in League percentiles'
+
+                    radar=Radar(fontfamily='Cursive', range_fontsize=8)
+                    fig,ax = radar.plot_radar(ranges=ranges,params=params,values=values,radar_color=['#B6282F', '#344D94'], dpi=600, alphas=[.8,.6], title=title, endnote=endnote, compare=True)
+                    st.pyplot(fig)
+
+                    ############################################################################
+                    # Preparing Graph 2
+                    params = list(Role_4_first_2.columns)
+                    params = params[4:]
+
+                    #Preparing Data
+                    ranges = []
+                    a_values = []
+                    b_values = []
+
+                    for x in params:
+                        a = min(Role_4_first_2[params][x])
+                        a = 0
+                        b = max(Role_4_first_2[params][x])
+                        b = 100
+                        ranges.append((a, b))
+
+                    for x in range(len(Role_4_first_2['Atleta'])):
+                        if Role_4_first_2['Atleta'][x] == jogadores:
+                            a_values = Role_4_first_2.iloc[x].values.tolist()
+                        if Role_4_first_2['Atleta'][x] == alvo:
+                            b_values = Role_4_first_2.iloc[x].values.tolist()
+                            
+                    a_values = a_values[4:]
+                    b_values = b_values[4:]
+
+                    values = [a_values, b_values]
+
+                    #Plotting Data
+                    title = dict(
+                        title_name = jogadores,
+                        title_color = '#B6282F',
+                        subtitle_name = jogadores_clube + "/" + jogadores_liga,
+                        subtitle_color = '#B6282F',
+                        title_name_2 = alvo,
+                        title_color_2 = '#344D94',
+                        subtitle_name_2 = alvo_clube + "/" + alvo_liga,
+                        subtitle_color_2 = '#344D94',
+                        title_fontsize = 18,
+                    ) 
+
+                    endnote = 'Viz by@JAmerico1898\ Data from Wyscout\nAll data in League percentiles'
+
+                    radar=Radar(fontfamily='Cursive', range_fontsize=8)
+                    fig,ax = radar.plot_radar(ranges=ranges,params=params,values=values,radar_color=['#B6282F', '#344D94'], dpi=600, alphas=[.8,.6], title=title, endnote=endnote, compare=True)
+                    st.pyplot(fig)
+
+                    ##########################################################################################
+                    ############################################################################
+
+                    #Terceiro Gráfico
+                    Role_4_first = Role_4_Mean_Charts.iloc[2:3, :]
+                    Role_4_first = pd.concat([Role_4_first, target]).reset_index()
+
+                    # Definindo atletas para comparar
+                    jogadores = Role_4_first.iat[0, 1]
+                    jogadores_clube = Role_4_first.iat[0, 2]
+                    jogadores_liga = Role_4_first.iat[0, 3]
+                    #alvo = Role_4_first.iat[1, 1]
+                    #alvo_clube = Role_4_first.iat[1, 2]
+                    #alvo_liga = Role_4_first.iat[1, 3]
+
+                    #Splitting Data
+                    Role_4_first_1 = Role_4_first.iloc[:, np.r_[0:3, 3:11]]
+                    Role_4_first_2 = Role_4_first.iloc[:, np.r_[0:3, 11:18]]
+
+                    # Preparing Graph 1
+                    params = list(Role_4_first_1.columns)
+                    params = params[4:]
+
+                    #Preparing Data
+                    ranges = []
+                    a_values = []
+                    b_values = []
+
+                    for x in params:
+                        a = min(Role_4_first_1[params][x])
+                        a = 0
+                        b = max(Role_4_first_1[params][x])
+                        b = 100
+                        ranges.append((a, b))
+
+                    for x in range(len(Role_4_first_1['Atleta'])):
+                        if Role_4_first_1['Atleta'][x] == jogadores:
+                            a_values = Role_4_first_1.iloc[x].values.tolist()
+                        if Role_4_first_1['Atleta'][x] == alvo:
+                            b_values = Role_4_first_1.iloc[x].values.tolist()
+                            
+                    a_values = a_values[4:]
+                    b_values = b_values[4:]
+
+                    values = [a_values, b_values]
+
+                    #Plotting Data
+                    title = dict(
+                        title_name = jogadores,
+                        title_color = '#B6282F',
+                        subtitle_name = jogadores_clube + "/" + jogadores_liga,
+                        subtitle_color = '#B6282F',
+                        title_name_2 = alvo,
+                        title_color_2 = '#344D94',
+                        subtitle_name_2 = alvo_clube + "/" + alvo_liga,
+                        subtitle_color_2 = '#344D94',
+                        title_fontsize = 18,
+                    ) 
+
+                    endnote = 'Viz by@JAmerico1898\ Data from Wyscout\nAll data in League percentiles'
+
+                    radar=Radar(fontfamily='Cursive', range_fontsize=8)
+                    fig,ax = radar.plot_radar(ranges=ranges,params=params,values=values,radar_color=['#B6282F', '#344D94'], dpi=600, alphas=[.8,.6], title=title, endnote=endnote, compare=True)
+                    st.pyplot(fig)
+
+                    ############################################################################
+                    # Preparing Graph 2
+                    params = list(Role_4_first_2.columns)
+                    params = params[4:]
+
+                    #Preparing Data
+                    ranges = []
+                    a_values = []
+                    b_values = []
+
+                    for x in params:
+                        a = min(Role_4_first_2[params][x])
+                        a = 0
+                        b = max(Role_4_first_2[params][x])
+                        b = 100
+                        ranges.append((a, b))
+
+                    for x in range(len(Role_4_first_2['Atleta'])):
+                        if Role_4_first_2['Atleta'][x] == jogadores:
+                            a_values = Role_4_first_2.iloc[x].values.tolist()
+                        if Role_4_first_2['Atleta'][x] == alvo:
+                            b_values = Role_4_first_2.iloc[x].values.tolist()
+                            
+                    a_values = a_values[4:]
+                    b_values = b_values[4:]
+
+                    values = [a_values, b_values]
+
+                    #Plotting Data
+                    title = dict(
+                        title_name = jogadores,
+                        title_color = '#B6282F',
+                        subtitle_name = jogadores_clube + "/" + jogadores_liga,
+                        subtitle_color = '#B6282F',
+                        title_name_2 = alvo,
+                        title_color_2 = '#344D94',
+                        subtitle_name_2 = alvo_clube + "/" + alvo_liga,
+                        subtitle_color_2 = '#344D94',
+                        title_fontsize = 18,
+                    ) 
+
+                    endnote = 'Viz by@JAmerico1898\ Data from Wyscout\nAll data in League percentiles'
+
+                    radar=Radar(fontfamily='Cursive', range_fontsize=8)
+                    fig,ax = radar.plot_radar(ranges=ranges,params=params,values=values,radar_color=['#B6282F', '#344D94'], dpi=600, alphas=[.8,.6], title=title, endnote=endnote, compare=True)
+                    st.pyplot(fig)
+
+                    ##########################################################################################
+                    ############################################################################
+
+                    #Quarto Gráfico
+                    Role_4_first = Role_4_Mean_Charts.iloc[3:4, :]
+                    Role_4_first = pd.concat([Role_4_first, target]).reset_index()
+
+                    # Definindo atletas para comparar
+                    jogadores = Role_4_first.iat[0, 1]
+                    jogadores_clube = Role_4_first.iat[0, 2]
+                    jogadores_liga = Role_4_first.iat[0, 3]
+                    #alvo = Role_4_first.iat[1, 1]
+                    #alvo_clube = Role_4_first.iat[1, 2]
+                    #alvo_liga = Role_4_first.iat[1, 3]
+
+                    #Splitting Data
+                    Role_4_first_1 = Role_4_first.iloc[:, np.r_[0:3, 3:11]]
+                    Role_4_first_2 = Role_4_first.iloc[:, np.r_[0:3, 11:18]]
+
+                    # Preparing Graph 1
+                    params = list(Role_4_first_1.columns)
+                    params = params[4:]
+
+                    #Preparing Data
+                    ranges = []
+                    a_values = []
+                    b_values = []
+
+                    for x in params:
+                        a = min(Role_4_first_1[params][x])
+                        a = 0
+                        b = max(Role_4_first_1[params][x])
+                        b = 100
+                        ranges.append((a, b))
+
+                    for x in range(len(Role_4_first_1['Atleta'])):
+                        if Role_4_first_1['Atleta'][x] == jogadores:
+                            a_values = Role_4_first_1.iloc[x].values.tolist()
+                        if Role_4_first_1['Atleta'][x] == alvo:
+                            b_values = Role_4_first_1.iloc[x].values.tolist()
+                            
+                    a_values = a_values[4:]
+                    b_values = b_values[4:]
+
+                    values = [a_values, b_values]
+
+                    #Plotting Data
+                    title = dict(
+                        title_name = jogadores,
+                        title_color = '#B6282F',
+                        subtitle_name = jogadores_clube + "/" + jogadores_liga,
+                        subtitle_color = '#B6282F',
+                        title_name_2 = alvo,
+                        title_color_2 = '#344D94',
+                        subtitle_name_2 = alvo_clube + "/" + alvo_liga,
+                        subtitle_color_2 = '#344D94',
+                        title_fontsize = 18,
+                    ) 
+
+                    endnote = 'Viz by@JAmerico1898\ Data from Wyscout\nAll data in League percentiles'
+
+                    radar=Radar(fontfamily='Cursive', range_fontsize=8)
+                    fig,ax = radar.plot_radar(ranges=ranges,params=params,values=values,radar_color=['#B6282F', '#344D94'], dpi=600, alphas=[.8,.6], title=title, endnote=endnote, compare=True)
+                    st.pyplot(fig)
+
+                    ############################################################################
+                    # Preparing Graph 2
+                    params = list(Role_4_first_2.columns)
+                    params = params[4:]
+
+                    #Preparing Data
+                    ranges = []
+                    a_values = []
+                    b_values = []
+
+                    for x in params:
+                        a = min(Role_4_first_2[params][x])
+                        a = 0
+                        b = max(Role_4_first_2[params][x])
+                        b = 100
+                        ranges.append((a, b))
+
+                    for x in range(len(Role_4_first_2['Atleta'])):
+                        if Role_4_first_2['Atleta'][x] == jogadores:
+                            a_values = Role_4_first_2.iloc[x].values.tolist()
+                        if Role_4_first_2['Atleta'][x] == alvo:
+                            b_values = Role_4_first_2.iloc[x].values.tolist()
+                            
+                    a_values = a_values[4:]
+                    b_values = b_values[4:]
+
+                    values = [a_values, b_values]
+
+                    #Plotting Data
+                    title = dict(
+                        title_name = jogadores,
+                        title_color = '#B6282F',
+                        subtitle_name = jogadores_clube + "/" + jogadores_liga,
+                        subtitle_color = '#B6282F',
+                        title_name_2 = alvo,
+                        title_color_2 = '#344D94',
+                        subtitle_name_2 = alvo_clube + "/" + alvo_liga,
+                        subtitle_color_2 = '#344D94',
+                        title_fontsize = 18,
+                    ) 
+
+                    endnote = 'Viz by@JAmerico1898\ Data from Wyscout\nAll data in League percentiles'
+
+                    radar=Radar(fontfamily='Cursive', range_fontsize=8)
+                    fig,ax = radar.plot_radar(ranges=ranges,params=params,values=values,radar_color=['#B6282F', '#344D94'], dpi=600, alphas=[.8,.6], title=title, endnote=endnote, compare=True)
+                    st.pyplot(fig)
+
+                    ##########################################################################################
+                    ############################################################################
+
+                    #Quinto Gráfico
+                    Role_4_first = Role_4_Mean_Charts.iloc[4:5, :]
+                    Role_4_first = pd.concat([Role_4_first, target]).reset_index()
+
+                    # Definindo atletas para comparar
+                    jogadores = Role_4_first.iat[0, 1]
+                    jogadores_clube = Role_4_first.iat[0, 2]
+                    jogadores_liga = Role_4_first.iat[0, 3]
+                    #alvo = Role_4_first.iat[1, 1]
+                    #alvo_clube = Role_4_first.iat[1, 2]
+                    #alvo_liga = Role_4_first.iat[1, 3]
+
+                    #Splitting Data
+                    Role_4_first_1 = Role_4_first.iloc[:, np.r_[0:3, 3:11]]
+                    Role_4_first_2 = Role_4_first.iloc[:, np.r_[0:3, 11:18]]
+
+                    # Preparing Graph 1
+                    params = list(Role_4_first_1.columns)
+                    params = params[4:]
+
+                    #Preparing Data
+                    ranges = []
+                    a_values = []
+                    b_values = []
+
+                    for x in params:
+                        a = min(Role_4_first_1[params][x])
+                        a = 0
+                        b = max(Role_4_first_1[params][x])
+                        b = 100
+                        ranges.append((a, b))
+
+                    for x in range(len(Role_4_first_1['Atleta'])):
+                        if Role_4_first_1['Atleta'][x] == jogadores:
+                            a_values = Role_4_first_1.iloc[x].values.tolist()
+                        if Role_4_first_1['Atleta'][x] == alvo:
+                            b_values = Role_4_first_1.iloc[x].values.tolist()
+                            
+                    a_values = a_values[4:]
+                    b_values = b_values[4:]
+
+                    values = [a_values, b_values]
+
+                    #Plotting Data
+                    title = dict(
+                        title_name = jogadores,
+                        title_color = '#B6282F',
+                        subtitle_name = jogadores_clube + "/" + jogadores_liga,
+                        subtitle_color = '#B6282F',
+                        title_name_2 = alvo,
+                        title_color_2 = '#344D94',
+                        subtitle_name_2 = alvo_clube + "/" + alvo_liga,
+                        subtitle_color_2 = '#344D94',
+                        title_fontsize = 18,
+                    ) 
+
+                    endnote = 'Viz by@JAmerico1898\ Data from Wyscout\nAll data in League percentiles'
+
+                    radar=Radar(fontfamily='Cursive', range_fontsize=8)
+                    fig,ax = radar.plot_radar(ranges=ranges,params=params,values=values,radar_color=['#B6282F', '#344D94'], dpi=600, alphas=[.8,.6], title=title, endnote=endnote, compare=True)
+                    st.pyplot(fig)
+
+                    ############################################################################
+                    # Preparing Graph 2
+                    params = list(Role_4_first_2.columns)
+                    params = params[4:]
+
+                    #Preparing Data
+                    ranges = []
+                    a_values = []
+                    b_values = []
+
+                    for x in params:
+                        a = min(Role_4_first_2[params][x])
+                        a = 0
+                        b = max(Role_4_first_2[params][x])
+                        b = 100
+                        ranges.append((a, b))
+
+                    for x in range(len(Role_4_first_2['Atleta'])):
+                        if Role_4_first_2['Atleta'][x] == jogadores:
+                            a_values = Role_4_first_2.iloc[x].values.tolist()
+                        if Role_4_first_2['Atleta'][x] == alvo:
+                            b_values = Role_4_first_2.iloc[x].values.tolist()
+                            
+                    a_values = a_values[4:]
+                    b_values = b_values[4:]
+
+                    values = [a_values, b_values]
+
+                    #Plotting Data
+                    title = dict(
+                        title_name = jogadores,
+                        title_color = '#B6282F',
+                        subtitle_name = jogadores_clube + "/" + jogadores_liga,
+                        subtitle_color = '#B6282F',
+                        title_name_2 = alvo,
+                        title_color_2 = '#344D94',
+                        subtitle_name_2 = alvo_clube,
+                        subtitle_color_2 = '#344D94',
+                        title_fontsize = 18,
+                    ) 
+
+                    endnote = 'Viz by@JAmerico1898\ Data from Wyscout\nAll data in League percentiles'
+
+                    radar=Radar(fontfamily='Cursive', range_fontsize=8)
+                    fig,ax = radar.plot_radar(ranges=ranges,params=params,values=values,radar_color=['#B6282F', '#344D94'], dpi=600, alphas=[.8,.6], title=title, endnote=endnote, compare=True)
+                    st.pyplot(fig)
+
+########################################################################################################################
+########################################################################################################################
+########################################################################################################################
+########################################################################################################################
+
+                elif perfil_similar == ("Lateral Equilibrado"):
+                    #####################################################################################################################
+                    #####################################################################################################################
+                    # LATERAL EQUILIBRADO
+                    # Texto de Abertura>
+                    markdown_amount_1 = f"<div style='text-align:center; font-size:{fontsize}px'>{jogador_similar:}</div>"
+                    st.markdown("<h4 style='text-align: center;'>Jogador Selecionado</b></h4>", unsafe_allow_html=True)
+                    st.markdown(markdown_amount_1, unsafe_allow_html=True)
+                    st.markdown("---")
+
+                    #Carregando arquivo de dados
+                    Role_5_data = pd.read_excel('5_Role_Lateral_Equilibrado_Similarity.xlsx')
+                    Role_5_data = Role_5_data.drop(Role_5_data.columns[0:4], axis=1)
+                    Role_5_data.reset_index(drop=True, inplace=True)
+
+                    # Step : Defina o atleta-alvo
+                    #base_bruta_similaridade = pd.read_excel("base_bruta_similaridade.xlsx")
+                    target = Role_5_data.loc[(Role_5_data['Atleta'] == jogador_similar)]
+
+                    #Step : Definindo "ID-alvo"
+                    given_ID = target.iat[0, -1]
+
+                    # Definição da Base de Trabalho
+                    selected = Role_5_data
+
+                    # Step 9: Add columns "1", "2", "3" to Role_5_data
+
+                    selected['1'] = given_ID[0]
+                    selected['2'] = given_ID[1]
+                    selected['3'] = given_ID[2]
+                    selected['4'] = given_ID[3]
+                    selected['5'] = given_ID[4]
+
+
+                    # Assigning correct columns to 1, 2, 3
+
+                    if given_ID[0] == "A":
+                        selected['1'] = selected["A1"]
+                    elif given_ID[0] == "B":
+                        selected['1'] = selected["B1"]
+                    elif given_ID[0] == "C":
+                        selected['1'] = selected["C1"]
+                    elif given_ID[0] == "D":
+                        selected['1'] = selected["D1"]
+                    elif given_ID[0] == "E":
+                        selected['1'] = selected["E1"]
+                    elif given_ID[0] == "F":
+                        selected['1'] = selected["F1"]
+                    elif given_ID[0] == "G":
+                        selected['1'] = selected["G1"]
+                    elif given_ID[0] == "H":
+                        selected['1'] = selected["H1"]
+                    elif given_ID[0] == "I":
+                        selected['1'] = selected["I1"]
+                    elif given_ID[0] == "J":
+                        selected['1'] = selected["J1"]
+                    elif given_ID[0] == "K":
+                        selected['1'] = selected["K1"]
+                    elif given_ID[0] == "L":
+                        selected['1'] = selected["L1"]
+                    elif given_ID[0] == "M":
+                        selected['1'] = selected["M1"]
+                    elif given_ID[0] == "N":
+                        selected['1'] = selected["N1"]
+                    elif given_ID[0] == "O":
+                        selected['1'] = selected["O1"]
+                    elif given_ID[0] == "P":
+                        selected['1'] = selected["P1"]
+                    elif given_ID[0] == "Q":
+                        selected['1'] = selected["Q1"]
+                    elif given_ID[0] == "R":
+                        selected['1'] = selected["R1"]
+
+
+                    if given_ID[1] == "A":
+                        selected['2'] = selected["A1"]
+                    elif given_ID[1] == "B":
+                        selected['2'] = selected["B1"]
+                    elif given_ID[1] == "C":
+                        selected['2'] = selected["C1"]
+                    elif given_ID[1] == "D":
+                        selected['2'] = selected["D1"]
+                    elif given_ID[1] == "E":
+                        selected['2'] = selected["E1"]
+                    elif given_ID[1] == "F":
+                        selected['2'] = selected["F1"]
+                    elif given_ID[1] == "G":
+                        selected['2'] = selected["G1"]
+                    elif given_ID[1] == "H":
+                        selected['2'] = selected["H1"]
+                    elif given_ID[1] == "I":
+                        selected['2'] = selected["I1"]
+                    elif given_ID[1] == "J":
+                        selected['2'] = selected["J1"]
+                    elif given_ID[1] == "K":
+                        selected['2'] = selected["K1"]
+                    elif given_ID[1] == "L":
+                        selected['2'] = selected["L1"]
+                    elif given_ID[1] == "M":
+                        selected['2'] = selected["M1"]
+                    elif given_ID[1] == "N":
+                        selected['2'] = selected["N1"]
+                    elif given_ID[1] == "O":
+                        selected['2'] = selected["O1"]
+                    elif given_ID[1] == "P":
+                        selected['2'] = selected["P1"]
+                    elif given_ID[1] == "Q":
+                        selected['2'] = selected["Q1"]
+                    elif given_ID[1] == "R":
+                        selected['2'] = selected["R1"]
+                    
+                    
+                    if given_ID[2] == "A":
+                        selected['3'] = selected["A1"]
+                    elif given_ID[2] == "B":
+                        selected['3'] = selected["B1"]
+                    elif given_ID[2] == "C":
+                        selected['3'] = selected["C1"]
+                    elif given_ID[2] == "D":
+                        selected['3'] = selected["D1"]
+                    elif given_ID[2] == "E":
+                        selected['3'] = selected["E1"]
+                    elif given_ID[2] == "F":
+                        selected['3'] = selected["F1"]
+                    elif given_ID[2] == "G":
+                        selected['3'] = selected["G1"]
+                    elif given_ID[2] == "H":
+                        selected['3'] = selected["H1"]
+                    elif given_ID[2] == "I":
+                        selected['3'] = selected["I1"]
+                    elif given_ID[2] == "J":
+                        selected['3'] = selected["J1"]
+                    elif given_ID[2] == "K":
+                        selected['3'] = selected["K1"]
+                    elif given_ID[2] == "L":
+                        selected['3'] = selected["L1"]
+                    elif given_ID[2] == "M":
+                        selected['3'] = selected["M1"]
+                    elif given_ID[2] == "N":
+                        selected['3'] = selected["N1"]
+                    elif given_ID[2] == "O":
+                        selected['3'] = selected["O1"]
+                    elif given_ID[2] == "P":
+                        selected['3'] = selected["P1"]
+                    elif given_ID[2] == "Q":
+                        selected['3'] = selected["Q1"]
+                    elif given_ID[2] == "R":
+                        selected['3'] = selected["R1"]
+
+                    if given_ID[3] == "A":
+                        selected['4'] = selected["A1"]
+                    elif given_ID[3] == "B":
+                        selected['4'] = selected["B1"]
+                    elif given_ID[3] == "C":
+                        selected['4'] = selected["C1"]
+                    elif given_ID[3] == "D":
+                        selected['4'] = selected["D1"]
+                    elif given_ID[3] == "E":
+                        selected['4'] = selected["E1"]
+                    elif given_ID[3] == "F":
+                        selected['4'] = selected["F1"]
+                    elif given_ID[3] == "G":
+                        selected['4'] = selected["G1"]
+                    elif given_ID[3] == "H":
+                        selected['4'] = selected["H1"]
+                    elif given_ID[3] == "I":
+                        selected['4'] = selected["I1"]
+                    elif given_ID[3] == "J":
+                        selected['4'] = selected["J1"]
+                    elif given_ID[3] == "K":
+                        selected['4'] = selected["K1"]
+                    elif given_ID[3] == "L":
+                        selected['4'] = selected["L1"]
+                    elif given_ID[3] == "M":
+                        selected['4'] = selected["M1"]
+                    elif given_ID[3] == "N":
+                        selected['4'] = selected["N1"]
+                    elif given_ID[3] == "O":
+                        selected['4'] = selected["O1"]
+                    elif given_ID[3] == "P":
+                        selected['4'] = selected["P1"]
+                    elif given_ID[3] == "Q":
+                        selected['4'] = selected["Q1"]
+                    elif given_ID[3] == "R":
+                        selected['4'] = selected["R1"]
+
+
+                    if given_ID[4] == "A":
+                        selected['5'] = selected["A1"]
+                    elif given_ID[4] == "B":
+                        selected['5'] = selected["B1"]
+                    elif given_ID[4] == "C":
+                        selected['5'] = selected["C1"]
+                    elif given_ID[4] == "D":
+                        selected['5'] = selected["D1"]
+                    elif given_ID[4] == "E":
+                        selected['5'] = selected["E1"]
+                    elif given_ID[4] == "F":
+                        selected['5'] = selected["F1"]
+                    elif given_ID[4] == "G":
+                        selected['5'] = selected["G1"]
+                    elif given_ID[4] == "H":
+                        selected['5'] = selected["H1"]
+                    elif given_ID[4] == "I":
+                        selected['5'] = selected["I1"]
+                    elif given_ID[4] == "J":
+                        selected['5'] = selected["J1"]
+                    elif given_ID[4] == "K":
+                        selected['5'] = selected["K1"]
+                    elif given_ID[4] == "L":
+                        selected['5'] = selected["L1"]
+                    elif given_ID[4] == "M":
+                        selected['5'] = selected["M1"]
+                    elif given_ID[4] == "N":
+                        selected['5'] = selected["N1"]
+                    elif given_ID[4] == "O":
+                        selected['5'] = selected["O1"]
+                    elif given_ID[4] == "P":
+                        selected['5'] = selected["P1"]
+                    elif given_ID[4] == "Q":
+                        selected['5'] = selected["Q1"]
+                    elif given_ID[4] == "R":
+                        selected['5'] = selected["R1"]
+
+                    #############################################################
+                    #############################################################
+
+                    # Applying PCA for Scaled Selected Columns
+
+                    leagues = ["ARG1", "AUT", "BEL1", "BRA1", "BRA2", "BUL","CHI", "CHN", 
+                            "COL", "DEN", "ECU", "ENG1", "ENG2", "FRA1", "FRA2", "GER1", 
+                            "GER2", "GRE", "HOL", "ITA1", "ITA2", "JAP", "MEX", "PAR", 
+                            "PER", "POR1", "QAT", "RUS", "SAUD", "SCT", "SER", "SPA1", 
+                            "SPA2", "SWZ", "TUR", "UAE", "UKR", "URU", "USA"]
+
+                    # Iterate over each league
+                    for league in leagues:
+
+                        # Extract columns 46 through 50
+                        Lateral = selected.iloc[:, np.r_[-5:0]]
+
+                        # Defining Columns
+                        Lateral_columns = Lateral.columns
+
+                        # Applying PCA
+                        pca = PCA(n_components=2)
+                        principalComponents = pca.fit_transform(Lateral)
+
+                        # Create a DataFrame with loadings
+                        LoadingsLateral = pd.DataFrame(pca.components_.T**2, index=Lateral_columns, columns=['loading factor 1', 'loading factor 2'])
+
+                        # Multiplying Matrices to obtain Pre_Variables
+                        Similarity = pd.DataFrame(np.matmul(Lateral, LoadingsLateral['loading factor 1']) + np.matmul(Lateral, LoadingsLateral['loading factor 2']),
+                                                columns=["Similarity"])
+
+                    # Rebuilding Full Training Set
+                    #Lateral = Lateral.join(Similarity)
+                    selected = selected.join(Similarity)
+
+                    ##############################################################
+                    ##############################################################
+
+                    # Lista de Similares
+                    # Initialize an empty list to store DataFrames
+                    target = selected.loc[(Role_5_data['Atleta'] == jogador_similar)]
+                    target_similarity = target.iat[0, -1]
+
+                    selected["Índice de Similaridade"] = (selected['Similarity']/target_similarity)*100
+                    selected["Índice de Similaridade"] = round(selected["Índice de Similaridade"], 2)
+
+                    target = selected.loc[(selected['Atleta'] == jogador_similar)]
+                    selected['Dif_Similarity'] = abs(selected["Índice de Similaridade"] - 100)
+
+                    selected = selected.sort_values(by='Dif_Similarity')
+
+                    lista_similares = selected.iloc[1:31, np.r_[0, 2, 35, 40, -2:0]]
+                    lista_similares = lista_similares.sort_values(by='Rating', ascending=False)
+
+                    # Lista de Jogadores Similares Ordenados segundo o Rating
+                    st.markdown("<h4 style='text-align: center;'>30 Jogadores + Similares</b></h4>", unsafe_allow_html=True)
+                    st.dataframe(lista_similares, use_container_width=True, hide_index=True)
+                    st.markdown("---")    
+
+                    # Lista de Latinos
+                    selected_latam = selected[(selected["Nacionalidade"] == "Argentina")|(selected["Nacionalidade"] == "Brazil")
+                                        |(selected["Nacionalidade"] == "Bolivia")|(selected["Nacionalidade"] == "Chile")
+                                        |(selected["Nacionalidade"] == "Colombia")|(selected["Nacionalidade"] == "Costa Rica")
+                                        |(selected["Nacionalidade"] == "Ecuador")|(selected["Nacionalidade"] == "Mexico")
+                                        |(selected["Nacionalidade"] == "Panama")|(selected["Nacionalidade"] == "Paraguay")
+                                        |(selected["Nacionalidade"] == "Peru")|(selected["Nacionalidade"] == "Uruguay")
+                                        |(selected["Nacionalidade"] == "Venezuela")]
+
+                    lista_similares_latam = selected_latam.iloc[1:31, np.r_[0, 2, 35, 40, -2:0]]
+                    lista_similares_latam = lista_similares_latam.sort_values(by="Rating", ascending = False)
+
+                    #Texto para os Gráficos
+                    st.markdown("<h4 style='text-align: center;'>5 Jogadores Latinos Similares Melhor Ranquedos</b></h4>", unsafe_allow_html=True)
+                    st.markdown("---")    
+
+                    ########################################################################################################
+                    # Gerar Gráficos com os 5 melhores
+                    # Arquivo para o Gráfico
+                    Role_5_Mean_Charts = selected_latam.iloc[:, np.r_[0, 2, 35, 41:59]]
+                    target = target.iloc[:, np.r_[0, 2, 35, 41:59]]
+                    # Renomeando Colunas
+                    Role_5_Mean_Charts = Role_5_Mean_Charts.rename(columns={'Ações_Defensivas_BemSucedidas_Percentil':'Ações_Defensivas_BemSucedidas', 'Duelos_Defensivos_Ganhos_Percentil':'Duelos_Defensivos_Ganhos', 'Duelos_Aéreos_Ganhos_Percentil':'Duelos_Aéreos_Ganhos', 'Passes_Longos_Certos_Percentil':'Passes_Longos_Certos', 'Passes_Progressivos_Certos_Percentil':'Passes_Progressivos_Certos',
+                                                                                'Passes_Laterais_Certos_Percentil':'Passes_Laterais_Certos', 'Ações_Ofensivas_BemSucedidas_Percentil':'Ações_Ofensivas_BemSucedidas', 'Duelos_Ofensivos_Ganhos_Percentil':'Duelos_Ofensivos_Ganhos', 
+                                                                                'Pisadas_Área_Percentil':'Pisadas_Área', 'Dribles_BemSucedidos_Percentil':'Dribles_BemSucedidos', 'Corridas_Progressivas_Percentil':'Corridas_Progressivas', 'Acelerações_Percentil':'Acelerações', 
+                                                                                'xA_Percentil':'xA', 'Assistência_Finalização_Percentil':'Assistência_Finalização', 'Passes_TerçoFinal_Certos_Percentil':'Passes_TerçoFinal_Certos', 'Deep_Completions_Percentil':'Deep_Completions',
+                                                                                    'Deep_Completed_Crosses_Percentil':'Deep_Completed_Crosses', 'Passes_ÁreaPênalti_Certos_Percentil':'Passes_ÁreaPênalti_Certos'})
+                    
+                    target = target.rename(columns={'Ações_Defensivas_BemSucedidas_Percentil':'Ações_Defensivas_BemSucedidas', 'Duelos_Defensivos_Ganhos_Percentil':'Duelos_Defensivos_Ganhos', 'Duelos_Aéreos_Ganhos_Percentil':'Duelos_Aéreos_Ganhos', 'Passes_Longos_Certos_Percentil':'Passes_Longos_Certos', 'Passes_Progressivos_Certos_Percentil':'Passes_Progressivos_Certos',
+                                                                                'Passes_Laterais_Certos_Percentil':'Passes_Laterais_Certos', 'Ações_Ofensivas_BemSucedidas_Percentil':'Ações_Ofensivas_BemSucedidas', 'Duelos_Ofensivos_Ganhos_Percentil':'Duelos_Ofensivos_Ganhos', 
+                                                                                'Pisadas_Área_Percentil':'Pisadas_Área', 'Dribles_BemSucedidos_Percentil':'Dribles_BemSucedidos', 'Corridas_Progressivas_Percentil':'Corridas_Progressivas', 'Acelerações_Percentil':'Acelerações', 
+                                                                                'xA_Percentil':'xA', 'Assistência_Finalização_Percentil':'Assistência_Finalização', 'Passes_TerçoFinal_Certos_Percentil':'Passes_TerçoFinal_Certos', 'Deep_Completions_Percentil':'Deep_Completions',
+                                                                                    'Deep_Completed_Crosses_Percentil':'Deep_Completed_Crosses', 'Passes_ÁreaPênalti_Certos_Percentil':'Passes_ÁreaPênalti_Certos'})
+                                            
+                    #Dropping Atleta-alvo
+                    Role_5_Mean_Charts = Role_5_Mean_Charts[Role_5_Mean_Charts['Atleta'] != jogador_similar] 
+                    #Extraindo 5 melhores
+                    Role_5_Mean_Charts = Role_5_Mean_Charts.iloc[0:5, :]
+
+                    ############################################################################################
+                    #Primeiro Gráfico
+                    Role_5_first = Role_5_Mean_Charts.iloc[0:1, :]
+                    Role_5_first = pd.concat([Role_5_first, target]).reset_index()
+
+                    # Definindo atletas para comparar
+                    jogadores = Role_5_first.iat[0, 1]
+                    jogadores_clube = Role_5_first.iat[0, 2]
+                    jogadores_liga = Role_5_first.iat[0, 3]
+                    alvo = Role_5_first.iat[1, 1]
+                    alvo_clube = Role_5_first.iat[1, 2]
+                    alvo_liga = Role_5_first.iat[1, 3]
+
+                    #Splitting Data
+                    Role_5_first_1 = Role_5_first.iloc[:, np.r_[0:3, 3:12]]
+                    Role_5_first_2 = Role_5_first.iloc[:, np.r_[0:3, 12:22]]
+
+                    # Preparing Graph 1
+                    params = list(Role_5_first_1.columns)
+                    params = params[4:]
+
+
+                    #Preparing Data
+                    ranges = []
+                    a_values = []
+                    b_values = []
+
+                    for x in params:
+                        a = min(Role_5_first_1[params][x])
+                        a = 0
+                        b = max(Role_5_first_1[params][x])
+                        b = 100
+                        ranges.append((a, b))
+
+                    for x in range(len(Role_5_first_1['Atleta'])):
+                        if Role_5_first_1['Atleta'][x] == jogadores:
+                            a_values = Role_5_first_1.iloc[x].values.tolist()
+                        if Role_5_first_1['Atleta'][x] == alvo:
+                            b_values = Role_5_first_1.iloc[x].values.tolist()
+                            
+                    a_values = a_values[4:]
+                    b_values = b_values[4:]
+
+                    values = [a_values, b_values]
+
+                    #Plotting Data
+                    title = dict(
+                        title_name = jogadores,
+                        title_color = '#B6282F',
+                        subtitle_name = jogadores_clube + "/" + jogadores_liga,
+                        subtitle_color = '#B6282F',
+                        title_name_2 = alvo,
+                        title_color_2 = '#344D94',
+                        subtitle_name_2 = alvo_clube + "/" + alvo_liga,
+                        subtitle_color_2 = '#344D94',
+                        title_fontsize = 18,
+                    ) 
+
+                    endnote = 'Viz by@JAmerico1898\ Data from Wyscout\nAll data in League percentiles'
+
+                    radar=Radar(fontfamily='Cursive', range_fontsize=8)
+                    fig,ax = radar.plot_radar(ranges=ranges,params=params,values=values,radar_color=['#B6282F', '#344D94'], dpi=600, alphas=[.8,.6], title=title, endnote=endnote, compare=True)
+                    st.pyplot(fig)
+
+                    ############################################################################
+                    # Preparing Graph 2
+                    params = list(Role_5_first_2.columns)
+                    params = params[4:]
+
+                    #Preparing Data
+                    ranges = []
+                    a_values = []
+                    b_values = []
+
+                    for x in params:
+                        a = min(Role_5_first_2[params][x])
+                        a = 0
+                        b = max(Role_5_first_2[params][x])
+                        b = 100
+                        ranges.append((a, b))
+
+                    for x in range(len(Role_5_first_2['Atleta'])):
+                        if Role_5_first_2['Atleta'][x] == jogadores:
+                            a_values = Role_5_first_2.iloc[x].values.tolist()
+                        if Role_5_first_2['Atleta'][x] == alvo:
+                            b_values = Role_5_first_2.iloc[x].values.tolist()
+                            
+                    a_values = a_values[4:]
+                    b_values = b_values[4:]
+
+                    values = [a_values, b_values]
+
+                    #Plotting Data
+                    title = dict(
+                        title_name = jogadores,
+                        title_color = '#B6282F',
+                        subtitle_name = jogadores_clube + "/" + jogadores_liga,
+                        subtitle_color = '#B6282F',
+                        title_name_2 = alvo,
+                        title_color_2 = '#344D94',
+                        subtitle_name_2 = alvo_clube + "/" + alvo_liga,
+                        subtitle_color_2 = '#344D94',
+                        title_fontsize = 18,
+                    ) 
+
+                    endnote = 'Viz by@JAmerico1898\ Data from Wyscout\nAll data in League percentiles'
+
+                    radar=Radar(fontfamily='Cursive', range_fontsize=8)
+                    fig,ax = radar.plot_radar(ranges=ranges,params=params,values=values,radar_color=['#B6282F', '#344D94'], dpi=600, alphas=[.8,.6], title=title, endnote=endnote, compare=True)
+                    st.pyplot(fig)
+                    ############################################################################
+
+                    #Segundo Gráfico
+                    Role_5_first = Role_5_Mean_Charts.iloc[1:2, :]
+                    Role_5_first = pd.concat([Role_5_first, target]).reset_index()
+
+                    # Definindo atletas para comparar
+                    jogadores = Role_5_first.iat[0, 1]
+                    jogadores_clube = Role_5_first.iat[0, 2]
+                    jogadores_liga = Role_5_first.iat[0, 3]
+                    alvo = Role_5_first.iat[1, 1]
+                    alvo_clube = Role_5_first.iat[1, 2]
+                    alvo_liga = Role_5_first.iat[1, 3]
+
+                    #Splitting Data
+                    Role_5_first_1 = Role_5_first.iloc[:, np.r_[0:3, 3:12]]
+                    Role_5_first_2 = Role_5_first.iloc[:, np.r_[0:3, 12:22]]
+
+                    # Preparing Graph 1
+                    params = list(Role_5_first_1.columns)
+                    params = params[4:]
+
+                    #Preparing Data
+                    ranges = []
+                    a_values = []
+                    b_values = []
+
+                    for x in params:
+                        a = min(Role_5_first_1[params][x])
+                        a = 0
+                        b = max(Role_5_first_1[params][x])
+                        b = 100
+                        ranges.append((a, b))
+
+                    for x in range(len(Role_5_first_1['Atleta'])):
+                        if Role_5_first_1['Atleta'][x] == jogadores:
+                            a_values = Role_5_first_1.iloc[x].values.tolist()
+                        if Role_5_first_1['Atleta'][x] == alvo:
+                            b_values = Role_5_first_1.iloc[x].values.tolist()
+                            
+                    a_values = a_values[4:]
+                    b_values = b_values[4:]
+
+                    values = [a_values, b_values]
+
+                    #Plotting Data
+                    title = dict(
+                        title_name = jogadores,
+                        title_color = '#B6282F',
+                        subtitle_name = jogadores_clube + "/" + jogadores_liga,
+                        subtitle_color = '#B6282F',
+                        title_name_2 = alvo,
+                        title_color_2 = '#344D94',
+                        subtitle_name_2 = alvo_clube + "/" + alvo_liga,
+                        subtitle_color_2 = '#344D94',
+                        title_fontsize = 18,
+                    ) 
+
+                    endnote = 'Viz by@JAmerico1898\ Data from Wyscout\nAll data in League percentiles'
+
+                    radar=Radar(fontfamily='Cursive', range_fontsize=8)
+                    fig,ax = radar.plot_radar(ranges=ranges,params=params,values=values,radar_color=['#B6282F', '#344D94'], dpi=600, alphas=[.8,.6], title=title, endnote=endnote, compare=True)
+                    st.pyplot(fig)
+
+                    ############################################################################
+                    # Preparing Graph 2
+                    params = list(Role_5_first_2.columns)
+                    params = params[4:]
+
+                    #Preparing Data
+                    ranges = []
+                    a_values = []
+                    b_values = []
+
+                    for x in params:
+                        a = min(Role_5_first_2[params][x])
+                        a = 0
+                        b = max(Role_5_first_2[params][x])
+                        b = 100
+                        ranges.append((a, b))
+
+                    for x in range(len(Role_5_first_2['Atleta'])):
+                        if Role_5_first_2['Atleta'][x] == jogadores:
+                            a_values = Role_5_first_2.iloc[x].values.tolist()
+                        if Role_5_first_2['Atleta'][x] == alvo:
+                            b_values = Role_5_first_2.iloc[x].values.tolist()
+                            
+                    a_values = a_values[4:]
+                    b_values = b_values[4:]
+
+                    values = [a_values, b_values]
+
+                    #Plotting Data
+                    title = dict(
+                        title_name = jogadores,
+                        title_color = '#B6282F',
+                        subtitle_name = jogadores_clube + "/" + jogadores_liga,
+                        subtitle_color = '#B6282F',
+                        title_name_2 = alvo,
+                        title_color_2 = '#344D94',
+                        subtitle_name_2 = alvo_clube + "/" + alvo_liga,
+                        subtitle_color_2 = '#344D94',
+                        title_fontsize = 18,
+                    ) 
+
+                    endnote = 'Viz by@JAmerico1898\ Data from Wyscout\nAll data in League percentiles'
+
+                    radar=Radar(fontfamily='Cursive', range_fontsize=8)
+                    fig,ax = radar.plot_radar(ranges=ranges,params=params,values=values,radar_color=['#B6282F', '#344D94'], dpi=600, alphas=[.8,.6], title=title, endnote=endnote, compare=True)
+                    st.pyplot(fig)
+
+                    ##########################################################################################
+                    ############################################################################
+
+                    #Terceiro Gráfico
+                    Role_5_first = Role_5_Mean_Charts.iloc[2:3, :]
+                    Role_5_first = pd.concat([Role_5_first, target]).reset_index()
+
+                    # Definindo atletas para comparar
+                    jogadores = Role_5_first.iat[0, 1]
+                    jogadores_clube = Role_5_first.iat[0, 2]
+                    jogadores_liga = Role_5_first.iat[0, 3]
+                    #alvo = Role_5_first.iat[1, 1]
+                    #alvo_clube = Role_5_first.iat[1, 2]
+                    #alvo_liga = Role_5_first.iat[1, 3]
+
+                    #Splitting Data
+                    Role_5_first_1 = Role_5_first.iloc[:, np.r_[0:3, 3:12]]
+                    Role_5_first_2 = Role_5_first.iloc[:, np.r_[0:3, 12:22]]
+
+                    # Preparing Graph 1
+                    params = list(Role_5_first_1.columns)
+                    params = params[4:]
+
+                    #Preparing Data
+                    ranges = []
+                    a_values = []
+                    b_values = []
+
+                    for x in params:
+                        a = min(Role_5_first_1[params][x])
+                        a = 0
+                        b = max(Role_5_first_1[params][x])
+                        b = 100
+                        ranges.append((a, b))
+
+                    for x in range(len(Role_5_first_1['Atleta'])):
+                        if Role_5_first_1['Atleta'][x] == jogadores:
+                            a_values = Role_5_first_1.iloc[x].values.tolist()
+                        if Role_5_first_1['Atleta'][x] == alvo:
+                            b_values = Role_5_first_1.iloc[x].values.tolist()
+                            
+                    a_values = a_values[4:]
+                    b_values = b_values[4:]
+
+                    values = [a_values, b_values]
+
+                    #Plotting Data
+                    title = dict(
+                        title_name = jogadores,
+                        title_color = '#B6282F',
+                        subtitle_name = jogadores_clube + "/" + jogadores_liga,
+                        subtitle_color = '#B6282F',
+                        title_name_2 = alvo,
+                        title_color_2 = '#344D94',
+                        subtitle_name_2 = alvo_clube + "/" + alvo_liga,
+                        subtitle_color_2 = '#344D94',
+                        title_fontsize = 18,
+                    ) 
+
+                    endnote = 'Viz by@JAmerico1898\ Data from Wyscout\nAll data in League percentiles'
+
+                    radar=Radar(fontfamily='Cursive', range_fontsize=8)
+                    fig,ax = radar.plot_radar(ranges=ranges,params=params,values=values,radar_color=['#B6282F', '#344D94'], dpi=600, alphas=[.8,.6], title=title, endnote=endnote, compare=True)
+                    st.pyplot(fig)
+
+                    ############################################################################
+                    # Preparing Graph 2
+                    params = list(Role_5_first_2.columns)
+                    params = params[4:]
+
+                    #Preparing Data
+                    ranges = []
+                    a_values = []
+                    b_values = []
+
+                    for x in params:
+                        a = min(Role_5_first_2[params][x])
+                        a = 0
+                        b = max(Role_5_first_2[params][x])
+                        b = 100
+                        ranges.append((a, b))
+
+                    for x in range(len(Role_5_first_2['Atleta'])):
+                        if Role_5_first_2['Atleta'][x] == jogadores:
+                            a_values = Role_5_first_2.iloc[x].values.tolist()
+                        if Role_5_first_2['Atleta'][x] == alvo:
+                            b_values = Role_5_first_2.iloc[x].values.tolist()
+                            
+                    a_values = a_values[4:]
+                    b_values = b_values[4:]
+
+                    values = [a_values, b_values]
+
+                    #Plotting Data
+                    title = dict(
+                        title_name = jogadores,
+                        title_color = '#B6282F',
+                        subtitle_name = jogadores_clube + "/" + jogadores_liga,
+                        subtitle_color = '#B6282F',
+                        title_name_2 = alvo,
+                        title_color_2 = '#344D94',
+                        subtitle_name_2 = alvo_clube + "/" + alvo_liga,
+                        subtitle_color_2 = '#344D94',
+                        title_fontsize = 18,
+                    ) 
+
+                    endnote = 'Viz by@JAmerico1898\ Data from Wyscout\nAll data in League percentiles'
+
+                    radar=Radar(fontfamily='Cursive', range_fontsize=8)
+                    fig,ax = radar.plot_radar(ranges=ranges,params=params,values=values,radar_color=['#B6282F', '#344D94'], dpi=600, alphas=[.8,.6], title=title, endnote=endnote, compare=True)
+                    st.pyplot(fig)
+
+                    ##########################################################################################
+                    ############################################################################
+
+                    #Quarto Gráfico
+                    Role_5_first = Role_5_Mean_Charts.iloc[3:4, :]
+                    Role_5_first = pd.concat([Role_5_first, target]).reset_index()
+
+                    # Definindo atletas para comparar
+                    jogadores = Role_5_first.iat[0, 1]
+                    jogadores_clube = Role_5_first.iat[0, 2]
+                    jogadores_liga = Role_5_first.iat[0, 3]
+                    #alvo = Role_5_first.iat[1, 1]
+                    #alvo_clube = Role_5_first.iat[1, 2]
+                    #alvo_liga = Role_5_first.iat[1, 3]
+
+                    #Splitting Data
+                    Role_5_first_1 = Role_5_first.iloc[:, np.r_[0:3, 3:12]]
+                    Role_5_first_2 = Role_5_first.iloc[:, np.r_[0:3, 12:22]]
+
+                    # Preparing Graph 1
+                    params = list(Role_5_first_1.columns)
+                    params = params[4:]
+
+                    #Preparing Data
+                    ranges = []
+                    a_values = []
+                    b_values = []
+
+                    for x in params:
+                        a = min(Role_5_first_1[params][x])
+                        a = 0
+                        b = max(Role_5_first_1[params][x])
+                        b = 100
+                        ranges.append((a, b))
+
+                    for x in range(len(Role_5_first_1['Atleta'])):
+                        if Role_5_first_1['Atleta'][x] == jogadores:
+                            a_values = Role_5_first_1.iloc[x].values.tolist()
+                        if Role_5_first_1['Atleta'][x] == alvo:
+                            b_values = Role_5_first_1.iloc[x].values.tolist()
+                            
+                    a_values = a_values[4:]
+                    b_values = b_values[4:]
+
+                    values = [a_values, b_values]
+
+                    #Plotting Data
+                    title = dict(
+                        title_name = jogadores,
+                        title_color = '#B6282F',
+                        subtitle_name = jogadores_clube + "/" + jogadores_liga,
+                        subtitle_color = '#B6282F',
+                        title_name_2 = alvo,
+                        title_color_2 = '#344D94',
+                        subtitle_name_2 = alvo_clube + "/" + alvo_liga,
+                        subtitle_color_2 = '#344D94',
+                        title_fontsize = 18,
+                    ) 
+
+                    endnote = 'Viz by@JAmerico1898\ Data from Wyscout\nAll data in League percentiles'
+
+                    radar=Radar(fontfamily='Cursive', range_fontsize=8)
+                    fig,ax = radar.plot_radar(ranges=ranges,params=params,values=values,radar_color=['#B6282F', '#344D94'], dpi=600, alphas=[.8,.6], title=title, endnote=endnote, compare=True)
+                    st.pyplot(fig)
+
+                    ############################################################################
+                    # Preparing Graph 2
+                    params = list(Role_5_first_2.columns)
+                    params = params[4:]
+
+                    #Preparing Data
+                    ranges = []
+                    a_values = []
+                    b_values = []
+
+                    for x in params:
+                        a = min(Role_5_first_2[params][x])
+                        a = 0
+                        b = max(Role_5_first_2[params][x])
+                        b = 100
+                        ranges.append((a, b))
+
+                    for x in range(len(Role_5_first_2['Atleta'])):
+                        if Role_5_first_2['Atleta'][x] == jogadores:
+                            a_values = Role_5_first_2.iloc[x].values.tolist()
+                        if Role_5_first_2['Atleta'][x] == alvo:
+                            b_values = Role_5_first_2.iloc[x].values.tolist()
+                            
+                    a_values = a_values[4:]
+                    b_values = b_values[4:]
+
+                    values = [a_values, b_values]
+
+                    #Plotting Data
+                    title = dict(
+                        title_name = jogadores,
+                        title_color = '#B6282F',
+                        subtitle_name = jogadores_clube + "/" + jogadores_liga,
+                        subtitle_color = '#B6282F',
+                        title_name_2 = alvo,
+                        title_color_2 = '#344D94',
+                        subtitle_name_2 = alvo_clube + "/" + alvo_liga,
+                        subtitle_color_2 = '#344D94',
+                        title_fontsize = 18,
+                    ) 
+
+                    endnote = 'Viz by@JAmerico1898\ Data from Wyscout\nAll data in League percentiles'
+
+                    radar=Radar(fontfamily='Cursive', range_fontsize=8)
+                    fig,ax = radar.plot_radar(ranges=ranges,params=params,values=values,radar_color=['#B6282F', '#344D94'], dpi=600, alphas=[.8,.6], title=title, endnote=endnote, compare=True)
+                    st.pyplot(fig)
+
+                    ##########################################################################################
+                    ############################################################################
+
+                    #Quinto Gráfico
+                    Role_5_first = Role_5_Mean_Charts.iloc[4:5, :]
+                    Role_5_first = pd.concat([Role_5_first, target]).reset_index()
+
+                    # Definindo atletas para comparar
+                    jogadores = Role_5_first.iat[0, 1]
+                    jogadores_clube = Role_5_first.iat[0, 2]
+                    jogadores_liga = Role_5_first.iat[0, 3]
+                    #alvo = Role_5_first.iat[1, 1]
+                    #alvo_clube = Role_5_first.iat[1, 2]
+                    #alvo_liga = Role_5_first.iat[1, 3]
+
+                    #Splitting Data
+                    Role_5_first_1 = Role_5_first.iloc[:, np.r_[0:3, 3:12]]
+                    Role_5_first_2 = Role_5_first.iloc[:, np.r_[0:3, 12:22]]
+
+                    # Preparing Graph 1
+                    params = list(Role_5_first_1.columns)
+                    params = params[4:]
+
+                    #Preparing Data
+                    ranges = []
+                    a_values = []
+                    b_values = []
+
+                    for x in params:
+                        a = min(Role_5_first_1[params][x])
+                        a = 0
+                        b = max(Role_5_first_1[params][x])
+                        b = 100
+                        ranges.append((a, b))
+
+                    for x in range(len(Role_5_first_1['Atleta'])):
+                        if Role_5_first_1['Atleta'][x] == jogadores:
+                            a_values = Role_5_first_1.iloc[x].values.tolist()
+                        if Role_5_first_1['Atleta'][x] == alvo:
+                            b_values = Role_5_first_1.iloc[x].values.tolist()
+                            
+                    a_values = a_values[4:]
+                    b_values = b_values[4:]
+
+                    values = [a_values, b_values]
+
+                    #Plotting Data
+                    title = dict(
+                        title_name = jogadores,
+                        title_color = '#B6282F',
+                        subtitle_name = jogadores_clube + "/" + jogadores_liga,
+                        subtitle_color = '#B6282F',
+                        title_name_2 = alvo,
+                        title_color_2 = '#344D94',
+                        subtitle_name_2 = alvo_clube + "/" + alvo_liga,
+                        subtitle_color_2 = '#344D94',
+                        title_fontsize = 18,
+                    ) 
+
+                    endnote = 'Viz by@JAmerico1898\ Data from Wyscout\nAll data in League percentiles'
+
+                    radar=Radar(fontfamily='Cursive', range_fontsize=8)
+                    fig,ax = radar.plot_radar(ranges=ranges,params=params,values=values,radar_color=['#B6282F', '#344D94'], dpi=600, alphas=[.8,.6], title=title, endnote=endnote, compare=True)
+                    st.pyplot(fig)
+
+                    ############################################################################
+                    # Preparing Graph 2
+                    params = list(Role_5_first_2.columns)
+                    params = params[4:]
+
+                    #Preparing Data
+                    ranges = []
+                    a_values = []
+                    b_values = []
+
+                    for x in params:
+                        a = min(Role_5_first_2[params][x])
+                        a = 0
+                        b = max(Role_5_first_2[params][x])
+                        b = 100
+                        ranges.append((a, b))
+
+                    for x in range(len(Role_5_first_2['Atleta'])):
+                        if Role_5_first_2['Atleta'][x] == jogadores:
+                            a_values = Role_5_first_2.iloc[x].values.tolist()
+                        if Role_5_first_2['Atleta'][x] == alvo:
+                            b_values = Role_5_first_2.iloc[x].values.tolist()
+                            
+                    a_values = a_values[4:]
+                    b_values = b_values[4:]
+
+                    values = [a_values, b_values]
+
+                    #Plotting Data
+                    title = dict(
+                        title_name = jogadores,
+                        title_color = '#B6282F',
+                        subtitle_name = jogadores_clube + "/" + jogadores_liga,
+                        subtitle_color = '#B6282F',
+                        title_name_2 = alvo,
+                        title_color_2 = '#344D94',
+                        subtitle_name_2 = alvo_clube,
+                        subtitle_color_2 = '#344D94',
+                        title_fontsize = 18,
+                    ) 
+
+                    endnote = 'Viz by@JAmerico1898\ Data from Wyscout\nAll data in League percentiles'
+
+                    radar=Radar(fontfamily='Cursive', range_fontsize=8)
+                    fig,ax = radar.plot_radar(ranges=ranges,params=params,values=values,radar_color=['#B6282F', '#344D94'], dpi=600, alphas=[.8,.6], title=title, endnote=endnote, compare=True)
+                    st.pyplot(fig)
+
+########################################################################################################################
+########################################################################################################################
+########################################################################################################################
+########################################################################################################################
+
+                if perfil_similar == ("Zagueiro Defensivo"):
+                ###############################################################################
+                ###########################################################################
+                    # ZAGUEIRO EQUILIBRADO
+                    # Texto de Abertura>
+                    markdown_amount_1 = f"<div style='text-align:center; font-size:{fontsize}px'>{jogador_similar:}</div>"
+                    st.markdown("<h4 style='text-align: center;'>Jogador Selecionado</b></h4>", unsafe_allow_html=True)
+                    st.markdown(markdown_amount_1, unsafe_allow_html=True)
+                    st.markdown("---")
+
+                    #Carregando arquivo de dados
+                    Role_6_data = pd.read_excel('6_Role_Zagueiro_Defensivo_Similarity.xlsx')
+                    Role_6_data = Role_6_data.drop(Role_6_data.columns[0:4], axis=1)
+                    Role_6_data.reset_index(drop=True, inplace=True)
+
+                    # Step : Defina o atleta-alvo
+                    #base_bruta_similaridade = pd.read_excel("base_bruta_similaridade.xlsx")
+                    target = Role_6_data.loc[(Role_6_data['Atleta'] == jogador_similar)]
+
+                    #Step : Definindo "ID-alvo"
+                    given_ID = target.iat[0, -1]
+                    
+                    selected = Role_6_data
+
+                    # Step 9: Add columns "1", "2", "3" to Role_6_data
+
+                    selected['1'] = given_ID[0]
+                    selected['2'] = given_ID[1]
+                    selected['3'] = given_ID[2]
+
+                    # Assigning correct columns to 1, 2, 3
+
+                    if given_ID[0] == "A":
+                        selected['1'] = selected["A1"]
+                    elif given_ID[0] == "B":
+                        selected['1'] = selected["B1"]
+                    elif given_ID[0] == "C":
+                        selected['1'] = selected["C1"]
+                    elif given_ID[0] == "D":
+                        selected['1'] = selected["D1"]
+                    elif given_ID[0] == "E":
+                        selected['1'] = selected["E1"]
+                    elif given_ID[0] == "F":
+                        selected['1'] = selected["F1"]
+
+                    if given_ID[1] == "A":
+                        selected['2'] = selected["A1"]
+                    elif given_ID[1] == "B":
+                        selected['2'] = selected["B1"]
+                    elif given_ID[1] == "C":
+                        selected['2'] = selected["C1"]
+                    elif given_ID[1] == "D":
+                        selected['2'] = selected["D1"]
+                    elif given_ID[1] == "E":
+                        selected['2'] = selected["E1"]
+                    elif given_ID[1] == "F":
+                        selected['2'] = selected["F1"]
+                    
+                    if given_ID[2] == "A":
+                        selected['3'] = selected["A1"]
+                    elif given_ID[2] == "B":
+                        selected['3'] = selected["B1"]
+                    elif given_ID[2] == "C":
+                        selected['3'] = selected["C1"]
+                    elif given_ID[2] == "D":
+                        selected['3'] = selected["D1"]
+                    elif given_ID[2] == "E":
+                        selected['3'] = selected["E1"]
+                    elif given_ID[2] == "F":
+                        selected['3'] = selected["F1"]
+
+                    # Applying PCA for Scaled Selected Columns
+
+                    leagues = ["ARG1", "AUT", "BEL1", "BRA1", "BRA2", "BUL","CHI", "CHN", 
+                            "COL", "DEN", "ECU", "ENG1", "ENG2", "FRA1", "FRA2", "GER1", 
+                            "GER2", "GRE", "HOL", "ITA1", "ITA2", "JAP", "MEX", "PAR", 
+                            "PER", "POR1", "QAT", "RUS", "SAUD", "SCT", "SER", "SPA1", 
+                            "SPA2", "SWZ", "TUR", "UAE", "UKR", "URU", "USA"]
+
+                    # Iterate over each league
+                    for league in leagues:
+
+                        # Extract columns 46 through 50
+                        ZagueiroDefensivo = selected.iloc[:, np.r_[-3:0]]
+
+                        # Defining Columns
+                        ZagueiroDefensivo_columns = ZagueiroDefensivo.columns
+
+                        # Applying PCA
+                        pca = PCA(n_components=2)
+                        principalComponents = pca.fit_transform(ZagueiroDefensivo)
+
+                        # Create a DataFrame with loadings
+                        LoadingsZagueiroDefensivo = pd.DataFrame(pca.components_.T**2, index=ZagueiroDefensivo_columns, columns=['loading factor 1', 'loading factor 2'])
+
+                        # Multiplying Matrices to obtain Pre_Variables
+                        Similarity = pd.DataFrame(np.matmul(ZagueiroDefensivo, LoadingsZagueiroDefensivo['loading factor 1']) + np.matmul(ZagueiroDefensivo, LoadingsZagueiroDefensivo['loading factor 2']),
+                                                columns=["Similarity"])
+
+                    # Rebuilding Full Training Set
+                    selected = selected.join(Similarity)
+
+                    ##############################################################
+                    ##############################################################
+
+                    # Lista de Similares
+                    # Initialize an empty list to store DataFrames
+                    target = selected.loc[(Role_6_data['Atleta'] == jogador_similar)]
+                    target_similarity = target.iat[0, -1]
+
+                    selected["Índice de Similaridade"] = (selected['Similarity']/target_similarity)*100
+                    selected["Índice de Similaridade"] = round(selected["Índice de Similaridade"], 2)
+
+                    target = selected.loc[(selected['Atleta'] == jogador_similar)]
+                    selected['Dif_Similarity'] = abs(selected["Índice de Similaridade"] - 100)
+
+                    selected = selected.sort_values(by='Dif_Similarity')
+
+                    lista_similares = selected.iloc[1:31, np.r_[0, 2, 23, 28, -2:0]]
+                    lista_similares = lista_similares.sort_values(by='Rating', ascending=False)
+
+                    # Lista de Jogadores Similares Ordenados segundo o Rating
+                    st.markdown("<h4 style='text-align: center;'>30 Jogadores + Similares</b></h4>", unsafe_allow_html=True)
+                    st.dataframe(lista_similares, use_container_width=True, hide_index=True)
+                    st.markdown("---")
+
+                    # Lista de Latinos
+                    selected_latam = selected[(selected["Nacionalidade"] == "Argentina")|(selected["Nacionalidade"] == "Brazil")
+                                        |(selected["Nacionalidade"] == "Bolivia")|(selected["Nacionalidade"] == "Chile")
+                                        |(selected["Nacionalidade"] == "Colombia")|(selected["Nacionalidade"] == "Costa Rica")
+                                        |(selected["Nacionalidade"] == "Ecuador")|(selected["Nacionalidade"] == "Mexico")
+                                        |(selected["Nacionalidade"] == "Panama")|(selected["Nacionalidade"] == "Paraguay")
+                                        |(selected["Nacionalidade"] == "Peru")|(selected["Nacionalidade"] == "Uruguay")
+                                        |(selected["Nacionalidade"] == "Venezuela")]
+
+                    lista_similares_latam = selected_latam.iloc[1:31, np.r_[0, 2, 23, 28, -2:0]]
+                    lista_similares_latam = lista_similares_latam.sort_values(by="Rating", ascending = False)
+
+                    #Texto para os Gráficos
+                    st.markdown("<h4 style='text-align: center;'>5 Jogadores Latinos Similares Melhor Ranquedos</b></h4>", unsafe_allow_html=True)
+                    st.markdown("---")    
+
+
+                    # Gerar Gráficos com os 5 melhores
+                    # Arquivo para o Gráfico
+                    Role_6_Mean_Charts = selected_latam.iloc[:, np.r_[0, 2, 23, 29:35]]
+                    target = target.iloc[:, np.r_[0, 2, 23, 29:35]]
+                    # Renomeando Colunas
+                    Role_6_Mean_Charts = Role_6_Mean_Charts.rename(columns={'Ações_Defensivas_BemSucedidas_Percentil':'Ações_Defensivas_BemSucedidas', 'Duelos_Defensivos_Ganhos_Percentil':'Duelos_Defensivos_Ganhos', 'Duelos_Aéreos_Ganhos_Percentil':'Duelos_Aéreos_Ganhos',
+                                                            'Finalizações_Bloqueadas_Percentil':'Finalizações_Bloqueadas', 'Interceptações_Ajustadas_a_Posse_Percentil':'Interceptações_Ajustadas_a_Posse', 'Passes_Laterais_Certos_Percentil':'Passes_Laterais_Certos'})
+                    
+                    target = target.rename(columns={'Ações_Defensivas_BemSucedidas_Percentil':'Ações_Defensivas_BemSucedidas', 'Duelos_Defensivos_Ganhos_Percentil':'Duelos_Defensivos_Ganhos', 'Duelos_Aéreos_Ganhos_Percentil':'Duelos_Aéreos_Ganhos',
+                                                            'Finalizações_Bloqueadas_Percentil':'Finalizações_Bloqueadas', 'Interceptações_Ajustadas_a_Posse_Percentil':'Interceptações_Ajustadas_a_Posse', 'Passes_Laterais_Certos_Percentil':'Passes_Laterais_Certos'})
+                    
+                    #Dropping Atleta-alvo
+                    Role_6_Mean_Charts = Role_6_Mean_Charts[Role_6_Mean_Charts['Atleta'] != jogador_similar] 
+                    #Extraindo 5 melhores
+                    Role_6_Mean_Charts = Role_6_Mean_Charts.iloc[0:5, :]
+
+
+                    #Primeiro Gráfico
+                    Role_6_first = Role_6_Mean_Charts.iloc[0:1, :]
+                    Role_6_first = pd.concat([Role_6_first, target]).reset_index()
+
+                    # Definindo atletas para comparar
+                    jogadores = Role_6_first.iat[0, 1]
+                    jogadores_clube = Role_6_first.iat[0, 2]
+                    jogadores_liga = Role_6_first.iat[0, 3]
+                    alvo = Role_6_first.iat[1, 1]
+                    alvo_clube = Role_6_first.iat[1, 2]
+                    alvo_liga = Role_6_first.iat[1, 3]
+
+                    #Splitting Data
+                    Role_6_first_1 = Role_6_first.iloc[:, np.r_[0:3, 3:10]]
+
+                    # Preparing Graph 1
+                    params = list(Role_6_first_1.columns)
+                    params = params[4:]
+                    
+                    #Preparing Data
+                    ranges = []
+                    a_values = []
+                    b_values = []
+
+                    for x in params:
+                        a = min(Role_6_first_1[params][x])
+                        a = 0
+                        b = max(Role_6_first_1[params][x])
+                        b = 100
+                        ranges.append((a, b))
+
+                    for x in range(len(Role_6_first_1['Atleta'])):
+                        if Role_6_first_1['Atleta'][x] == jogadores:
+                            a_values = Role_6_first_1.iloc[x].values.tolist()
+                        if Role_6_first_1['Atleta'][x] == alvo:
+                            b_values = Role_6_first_1.iloc[x].values.tolist()
+                            
+                    a_values = a_values[4:]
+                    b_values = b_values[4:]
+
+                    values = [a_values, b_values]
+
+                    #Plotting Data
+                    title = dict(
+                        title_name = jogadores,
+                        title_color = '#B6282F',
+                        subtitle_name = jogadores_clube + "/" + jogadores_liga,
+                        subtitle_color = '#B6282F',
+                        title_name_2 = alvo,
+                        title_color_2 = '#344D94',
+                        subtitle_name_2 = alvo_clube + "/" + alvo_liga,
+                        subtitle_color_2 = '#344D94',
+                        title_fontsize = 18,
+                    ) 
+
+                    endnote = 'Viz by@JAmerico1898\ Data from Wyscout\nAll data in League percentiles'
+
+                    radar=Radar(fontfamily='Cursive', range_fontsize=8)
+                    fig,ax = radar.plot_radar(ranges=ranges,params=params,values=values,radar_color=['#B6282F', '#344D94'], dpi=600, alphas=[.8,.6], title=title, endnote=endnote, compare=True)
+                    st.pyplot(fig)
+
+                    ############################################################################
+                    ############################################################################
+
+                    #Segundo Gráfico
+                    Role_6_first = Role_6_Mean_Charts.iloc[1:2, :]
+                    Role_6_first = pd.concat([Role_6_first, target]).reset_index()
+
+                    # Definindo atletas para comparar
+                    jogadores = Role_6_first.iat[0, 1]
+                    jogadores_clube = Role_6_first.iat[0, 2]
+                    jogadores_liga = Role_6_first.iat[0, 3]
+
+                    #Splitting Data
+                    Role_6_first_1 = Role_6_first.iloc[:, np.r_[0:3, 3:10]]
+
+                    # Preparing Graph 1
+                    params = list(Role_6_first_1.columns)
+                    params = params[4:]
+                    
+                    #Preparing Data
+                    ranges = []
+                    a_values = []
+                    b_values = []
+
+                    for x in params:
+                        a = min(Role_6_first_1[params][x])
+                        a = 0
+                        b = max(Role_6_first_1[params][x])
+                        b = 100
+                        ranges.append((a, b))
+
+                    for x in range(len(Role_6_first_1['Atleta'])):
+                        if Role_6_first_1['Atleta'][x] == jogadores:
+                            a_values = Role_6_first_1.iloc[x].values.tolist()
+                        if Role_6_first_1['Atleta'][x] == alvo:
+                            b_values = Role_6_first_1.iloc[x].values.tolist()
+                            
+                    a_values = a_values[4:]
+                    b_values = b_values[4:]
+
+                    values = [a_values, b_values]
+
+                    #Plotting Data
+                    title = dict(
+                        title_name = jogadores,
+                        title_color = '#B6282F',
+                        subtitle_name = jogadores_clube + "/" + jogadores_liga,
+                        subtitle_color = '#B6282F',
+                        title_name_2 = alvo,
+                        title_color_2 = '#344D94',
+                        subtitle_name_2 = alvo_clube + "/" + alvo_liga,
+                        subtitle_color_2 = '#344D94',
+                        title_fontsize = 18,
+                    ) 
+
+                    endnote = 'Viz by@JAmerico1898\ Data from Wyscout\nAll data in League percentiles'
+
+                    radar=Radar(fontfamily='Cursive', range_fontsize=8)
+                    fig,ax = radar.plot_radar(ranges=ranges,params=params,values=values,radar_color=['#B6282F', '#344D94'], dpi=600, alphas=[.8,.6], title=title, endnote=endnote, compare=True)
+                    st.pyplot(fig)
+
+                    ############################################################################
+                    ############################################################################
+
+                    #Terceiro Gráfico
+                    Role_6_first = Role_6_Mean_Charts.iloc[2:3, :]
+                    Role_6_first = pd.concat([Role_6_first, target]).reset_index()
+
+                    # Definindo atletas para comparar
+                    jogadores = Role_6_first.iat[0, 1]
+                    jogadores_clube = Role_6_first.iat[0, 2]
+                    jogadores_liga = Role_6_first.iat[0, 3]
+
+                    #Splitting Data
+                    Role_6_first_1 = Role_6_first.iloc[:, np.r_[0:3, 3:10]]
+
+                    # Preparing Graph 1
+                    params = list(Role_6_first_1.columns)
+                    params = params[4:]
+                    
+                    #Preparing Data
+                    ranges = []
+                    a_values = []
+                    b_values = []
+
+                    for x in params:
+                        a = min(Role_6_first_1[params][x])
+                        a = 0
+                        b = max(Role_6_first_1[params][x])
+                        b = 100
+                        ranges.append((a, b))
+
+                    for x in range(len(Role_6_first_1['Atleta'])):
+                        if Role_6_first_1['Atleta'][x] == jogadores:
+                            a_values = Role_6_first_1.iloc[x].values.tolist()
+                        if Role_6_first_1['Atleta'][x] == alvo:
+                            b_values = Role_6_first_1.iloc[x].values.tolist()
+                            
+                    a_values = a_values[4:]
+                    b_values = b_values[4:]
+
+                    values = [a_values, b_values]
+
+                    #Plotting Data
+                    title = dict(
+                        title_name = jogadores,
+                        title_color = '#B6282F',
+                        subtitle_name = jogadores_clube + "/" + jogadores_liga,
+                        subtitle_color = '#B6282F',
+                        title_name_2 = alvo,
+                        title_color_2 = '#344D94',
+                        subtitle_name_2 = alvo_clube + "/" + alvo_liga,
+                        subtitle_color_2 = '#344D94',
+                        title_fontsize = 18,
+                    ) 
+
+                    endnote = 'Viz by@JAmerico1898\ Data from Wyscout\nAll data in League percentiles'
+
+                    radar=Radar(fontfamily='Cursive', range_fontsize=8)
+                    fig,ax = radar.plot_radar(ranges=ranges,params=params,values=values,radar_color=['#B6282F', '#344D94'], dpi=600, alphas=[.8,.6], title=title, endnote=endnote, compare=True)
+                    st.pyplot(fig)
+
+                    ############################################################################
+                    ############################################################################
+
+                    #Quarto Gráfico
+                    Role_6_first = Role_6_Mean_Charts.iloc[3:4, :]
+                    Role_6_first = pd.concat([Role_6_first, target]).reset_index()
+
+                    # Definindo atletas para comparar
+                    jogadores = Role_6_first.iat[0, 1]
+                    jogadores_clube = Role_6_first.iat[0, 2]
+                    jogadores_liga = Role_6_first.iat[0, 3]
+
+                    #Splitting Data
+                    Role_6_first_1 = Role_6_first.iloc[:, np.r_[0:3, 3:10]]
+
+                    # Preparing Graph 1
+                    params = list(Role_6_first_1.columns)
+                    params = params[4:]
+                    
+                    #Preparing Data
+                    ranges = []
+                    a_values = []
+                    b_values = []
+
+                    for x in params:
+                        a = min(Role_6_first_1[params][x])
+                        a = 0
+                        b = max(Role_6_first_1[params][x])
+                        b = 100
+                        ranges.append((a, b))
+
+                    for x in range(len(Role_6_first_1['Atleta'])):
+                        if Role_6_first_1['Atleta'][x] == jogadores:
+                            a_values = Role_6_first_1.iloc[x].values.tolist()
+                        if Role_6_first_1['Atleta'][x] == alvo:
+                            b_values = Role_6_first_1.iloc[x].values.tolist()
+                            
+                    a_values = a_values[4:]
+                    b_values = b_values[4:]
+
+                    values = [a_values, b_values]
+
+                    #Plotting Data
+                    title = dict(
+                        title_name = jogadores,
+                        title_color = '#B6282F',
+                        subtitle_name = jogadores_clube + "/" + jogadores_liga,
+                        subtitle_color = '#B6282F',
+                        title_name_2 = alvo,
+                        title_color_2 = '#344D94',
+                        subtitle_name_2 = alvo_clube + "/" + alvo_liga,
+                        subtitle_color_2 = '#344D94',
+                        title_fontsize = 18,
+                    ) 
+
+                    endnote = 'Viz by@JAmerico1898\ Data from Wyscout\nAll data in League percentiles'
+
+                    radar=Radar(fontfamily='Cursive', range_fontsize=8)
+                    fig,ax = radar.plot_radar(ranges=ranges,params=params,values=values,radar_color=['#B6282F', '#344D94'], dpi=600, alphas=[.8,.6], title=title, endnote=endnote, compare=True)
+                    st.pyplot(fig)
+
+                    ##########################################################################################
+                    ############################################################################
+
+                    #Quinto Gráfico
+                    Role_6_first = Role_6_Mean_Charts.iloc[4:5, :]
+                    Role_6_first = pd.concat([Role_6_first, target]).reset_index()
+
+                    # Definindo atletas para comparar
+                    jogadores = Role_6_first.iat[0, 1]
+                    jogadores_clube = Role_6_first.iat[0, 2]
+                    jogadores_liga = Role_6_first.iat[0, 3]
+
+                    #Splitting Data
+                    Role_6_first_1 = Role_6_first.iloc[:, np.r_[0:3, 3:10]]
+
+                    # Preparing Graph 1
+                    params = list(Role_6_first_1.columns)
+                    params = params[4:]
+                    
+                    #Preparing Data
+                    ranges = []
+                    a_values = []
+                    b_values = []
+
+                    for x in params:
+                        a = min(Role_6_first_1[params][x])
+                        a = 0
+                        b = max(Role_6_first_1[params][x])
+                        b = 100
+                        ranges.append((a, b))
+
+                    for x in range(len(Role_6_first_1['Atleta'])):
+                        if Role_6_first_1['Atleta'][x] == jogadores:
+                            a_values = Role_6_first_1.iloc[x].values.tolist()
+                        if Role_6_first_1['Atleta'][x] == alvo:
+                            b_values = Role_6_first_1.iloc[x].values.tolist()
+                            
+                    a_values = a_values[4:]
+                    b_values = b_values[4:]
+
+                    values = [a_values, b_values]
+
+                    #Plotting Data
+                    title = dict(
+                        title_name = jogadores,
+                        title_color = '#B6282F',
+                        subtitle_name = jogadores_clube + "/" + jogadores_liga,
+                        subtitle_color = '#B6282F',
+                        title_name_2 = alvo,
+                        title_color_2 = '#344D94',
+                        subtitle_name_2 = alvo_clube + "/" + alvo_liga,
+                        subtitle_color_2 = '#344D94',
+                        title_fontsize = 18,
+                    ) 
+
+                    endnote = 'Viz by@JAmerico1898\ Data from Wyscout\nAll data in League percentiles'
+
+                    radar=Radar(fontfamily='Cursive', range_fontsize=8)
+                    fig,ax = radar.plot_radar(ranges=ranges,params=params,values=values,radar_color=['#B6282F', '#344D94'], dpi=600, alphas=[.8,.6], title=title, endnote=endnote, compare=True)
+                    st.pyplot(fig)
+
+                    ########################################################################################################
+                    ########################################################################################################
+                    ########################################################################################################
+                    ########################################################################################################
+
+                if perfil_similar == ("Zagueiro Construtor"):
+                ###############################################################################
+                ###########################################################################
+                    # ZAGUEIRO EQUILIBRADO
+                    # Texto de Abertura>
+                    markdown_amount_1 = f"<div style='text-align:center; font-size:{fontsize}px'>{jogador_similar:}</div>"
+                    st.markdown("<h4 style='text-align: center;'>Jogador Selecionado</b></h4>", unsafe_allow_html=True)
+                    st.markdown(markdown_amount_1, unsafe_allow_html=True)
+                    st.markdown("---")
+
+                    #Carregando arquivo de dados
+                    Role_7_data = pd.read_excel('7_Role_Zagueiro_Construtor_Similarity.xlsx')
+                    Role_7_data = Role_7_data.drop(Role_7_data.columns[0:4], axis=1)
+                    Role_7_data.reset_index(drop=True, inplace=True)
+
+                    # Step : Defina o atleta-alvo
+                    #base_bruta_similaridade = pd.read_excel("base_bruta_similaridade.xlsx")
+                    target = Role_7_data.loc[(Role_7_data['Atleta'] == jogador_similar)]
+
+                    #Step : Definindo "ID-alvo"
+                    given_ID = target.iat[0, -1]
+                    
+                    selected = Role_7_data
+
+                    # Step 9: Add columns "1", "2", "3" to Role_7_data
+
+                    selected['1'] = given_ID[0]
+                    selected['2'] = given_ID[1]
+                    selected['3'] = given_ID[2]
+                    selected['4'] = given_ID[3]
+
+                    # Assigning correct columns to 1, 2, 3
+
+                    if given_ID[0] == "A":
+                        selected['1'] = selected["A1"]
+                    elif given_ID[0] == "B":
+                        selected['1'] = selected["B1"]
+                    elif given_ID[0] == "C":
+                        selected['1'] = selected["C1"]
+                    elif given_ID[0] == "D":
+                        selected['1'] = selected["D1"]
+                    elif given_ID[0] == "E":
+                        selected['1'] = selected["E1"]
+                    elif given_ID[0] == "F":
+                        selected['1'] = selected["F1"]
+                    elif given_ID[0] == "G":
+                        selected['1'] = selected["G1"]
+                    elif given_ID[0] == "H":
+                        selected['1'] = selected["H1"]
+                    elif given_ID[0] == "I":
+                        selected['1'] = selected["I1"]
+                    elif given_ID[0] == "J":
+                        selected['1'] = selected["J1"]
+
+                    if given_ID[1] == "A":
+                        selected['2'] = selected["A1"]
+                    elif given_ID[1] == "B":
+                        selected['2'] = selected["B1"]
+                    elif given_ID[1] == "C":
+                        selected['2'] = selected["C1"]
+                    elif given_ID[1] == "D":
+                        selected['2'] = selected["D1"]
+                    elif given_ID[1] == "E":
+                        selected['2'] = selected["E1"]
+                    elif given_ID[1] == "F":
+                        selected['2'] = selected["F1"]
+                    elif given_ID[1] == "G":
+                        selected['2'] = selected["G1"]
+                    elif given_ID[1] == "H":
+                        selected['2'] = selected["H1"]
+                    elif given_ID[1] == "I":
+                        selected['2'] = selected["I1"]
+                    elif given_ID[1] == "J":
+                        selected['2'] = selected["J1"]
+                    
+                    if given_ID[2] == "A":
+                        selected['3'] = selected["A1"]
+                    elif given_ID[2] == "B":
+                        selected['3'] = selected["B1"]
+                    elif given_ID[2] == "C":
+                        selected['3'] = selected["C1"]
+                    elif given_ID[2] == "D":
+                        selected['3'] = selected["D1"]
+                    elif given_ID[2] == "E":
+                        selected['3'] = selected["E1"]
+                    elif given_ID[2] == "F":
+                        selected['3'] = selected["F1"]
+                    elif given_ID[2] == "G":
+                        selected['3'] = selected["G1"]
+                    elif given_ID[2] == "H":
+                        selected['3'] = selected["H1"]
+                    elif given_ID[2] == "I":
+                        selected['3'] = selected["I1"]
+                    elif given_ID[2] == "J":
+                        selected['3'] = selected["J1"]
+
+                    if given_ID[3] == "A":
+                        selected['4'] = selected["A1"]
+                    elif given_ID[3] == "B":
+                        selected['4'] = selected["B1"]
+                    elif given_ID[3] == "C":
+                        selected['4'] = selected["C1"]
+                    elif given_ID[3] == "D":
+                        selected['4'] = selected["D1"]
+                    elif given_ID[3] == "E":
+                        selected['4'] = selected["E1"]
+                    elif given_ID[3] == "F":
+                        selected['4'] = selected["F1"]
+                    elif given_ID[3] == "G":
+                        selected['4'] = selected["G1"]
+                    elif given_ID[3] == "H":
+                        selected['4'] = selected["H1"]
+                    elif given_ID[3] == "I":
+                        selected['4'] = selected["I1"]
+                    elif given_ID[3] == "J":
+                        selected['4'] = selected["J1"]
+
+                    # Applying PCA for Scaled Selected Columns
+
+                    leagues = ["ARG1", "AUT", "BEL1", "BRA1", "BRA2", "BUL","CHI", "CHN", 
+                            "COL", "DEN", "ECU", "ENG1", "ENG2", "FRA1", "FRA2", "GER1", 
+                            "GER2", "GRE", "HOL", "ITA1", "ITA2", "JAP", "MEX", "PAR", 
+                            "PER", "POR1", "QAT", "RUS", "SAUD", "SCT", "SER", "SPA1", 
+                            "SPA2", "SWZ", "TUR", "UAE", "UKR", "URU", "USA"]
+
+                    # Iterate over each league
+                    for league in leagues:
+
+                        # Extract columns 46 through 50
+                        ZagueiroConstrutor = selected.iloc[:, np.r_[-4:0]]
+
+                        # Defining Columns
+                        ZagueiroConstrutor_columns = ZagueiroConstrutor.columns
+
+                        # Applying PCA
+                        pca = PCA(n_components=2)
+                        principalComponents = pca.fit_transform(ZagueiroConstrutor)
+
+                        # Create a DataFrame with loadings
+                        LoadingsZagueiroConstrutor = pd.DataFrame(pca.components_.T**2, index=ZagueiroConstrutor_columns, columns=['loading factor 1', 'loading factor 2'])
+
+                        # Multiplying Matrices to obtain Pre_Variables
+                        Similarity = pd.DataFrame(np.matmul(ZagueiroConstrutor, LoadingsZagueiroConstrutor['loading factor 1']) + np.matmul(ZagueiroConstrutor, LoadingsZagueiroConstrutor['loading factor 2']),
+                                                columns=["Similarity"])
+
+                    # Rebuilding Full Training Set
+                    selected = selected.join(Similarity)
+
+                    ##############################################################
+                    ##############################################################
+
+                    # Lista de Similares
+                    # Initialize an empty list to store DataFrames
+                    target = selected.loc[(Role_7_data['Atleta'] == jogador_similar)]
+                    target_similarity = target.iat[0, -1]
+
+                    selected["Índice de Similaridade"] = (selected['Similarity']/target_similarity)*100
+                    selected["Índice de Similaridade"] = round(selected["Índice de Similaridade"], 2)
+
+                    target = selected.loc[(selected['Atleta'] == jogador_similar)]
+                    selected['Dif_Similarity'] = abs(selected["Índice de Similaridade"] - 100)
+
+                    selected = selected.sort_values(by='Dif_Similarity')
+
+                    lista_similares = selected.iloc[1:31, np.r_[0, 2, 27, 32, -2:0]]
+                    lista_similares = lista_similares.sort_values(by='Rating', ascending=False)
+
+                    # Lista de Jogadores Similares Ordenados segundo o Rating
+                    st.markdown("<h4 style='text-align: center;'>30 Jogadores + Similares</b></h4>", unsafe_allow_html=True)
+                    st.dataframe(lista_similares, use_container_width=True, hide_index=True)
+                    st.markdown("---")
+
+                    # Lista de Latinos
+                    selected_latam = selected[(selected["Nacionalidade"] == "Argentina")|(selected["Nacionalidade"] == "Brazil")
+                                        |(selected["Nacionalidade"] == "Bolivia")|(selected["Nacionalidade"] == "Chile")
+                                        |(selected["Nacionalidade"] == "Colombia")|(selected["Nacionalidade"] == "Costa Rica")
+                                        |(selected["Nacionalidade"] == "Ecuador")|(selected["Nacionalidade"] == "Mexico")
+                                        |(selected["Nacionalidade"] == "Panama")|(selected["Nacionalidade"] == "Paraguay")
+                                        |(selected["Nacionalidade"] == "Peru")|(selected["Nacionalidade"] == "Uruguay")
+                                        |(selected["Nacionalidade"] == "Venezuela")]
+
+                    lista_similares_latam = selected_latam.iloc[1:31, np.r_[0, 2, 27, 32, -2:0]]
+                    lista_similares_latam = lista_similares_latam.sort_values(by="Rating", ascending = False)
+
+                    #Texto para os Gráficos
+                    st.markdown("<h4 style='text-align: center;'>5 Jogadores Latinos Similares Melhor Ranquedos</b></h4>", unsafe_allow_html=True)
+                    st.markdown("---")    
+
+
+                    # Gerar Gráficos com os 5 melhores
+                    # Arquivo para o Gráfico
+                    Role_7_Mean_Charts = selected_latam.iloc[:, np.r_[0, 2, 27, 33:43]]
+                    target = target.iloc[:, np.r_[0, 2, 27, 33:43]]
+                    # Renomeando Colunas
+                    Role_7_Mean_Charts = Role_7_Mean_Charts.rename(columns={'Ações_Defensivas_BemSucedidas_Percentil':'Ações_Defensivas_BemSucedidas', 'Duelos_Defensivos_Ganhos_Percentil':'Duelos_Defensivos_Ganhos', 'Duelos_Aéreos_Ganhos_Percentil':'Duelos_Aéreos_Ganhos',
+                                                            'Passes_Longos_Certos_Percentil':'Passes_Longos_Certos', 'Passes_Frontais_Certos_Percentil':'Passes_Frontais_Certos', 'Passes_Progressivos_Certos_Percentil':'Passes_Progressivos_Certos', 
+                                                            'Duelos_Ofensivos_Ganhos_Percentil':'Duelos_Ofensivos_Ganhos', 'Dribles_BemSucedidos_Percentil':'Dribles_BemSucedidos', 'Corridas_Progressivas_Percentil':'Corridas_Progressivas', 
+                                                            'Passes_TerçoFinal_Certos_Percentil':'Passes_TerçoFinal_Certos'})
+                    
+                    target = target.rename(columns={'Ações_Defensivas_BemSucedidas_Percentil':'Ações_Defensivas_BemSucedidas', 'Duelos_Defensivos_Ganhos_Percentil':'Duelos_Defensivos_Ganhos', 'Duelos_Aéreos_Ganhos_Percentil':'Duelos_Aéreos_Ganhos',
+                                                            'Passes_Longos_Certos_Percentil':'Passes_Longos_Certos', 'Passes_Frontais_Certos_Percentil':'Passes_Frontais_Certos', 'Passes_Progressivos_Certos_Percentil':'Passes_Progressivos_Certos', 
+                                                            'Duelos_Ofensivos_Ganhos_Percentil':'Duelos_Ofensivos_Ganhos', 'Dribles_BemSucedidos_Percentil':'Dribles_BemSucedidos', 'Corridas_Progressivas_Percentil':'Corridas_Progressivas', 
+                                                            'Passes_TerçoFinal_Certos_Percentil':'Passes_TerçoFinal_Certos'})
+                    
+                    #Dropping Atleta-alvo
+                    Role_7_Mean_Charts = Role_7_Mean_Charts[Role_7_Mean_Charts['Atleta'] != jogador_similar] 
+                    #Extraindo 5 melhores
+                    Role_7_Mean_Charts = Role_7_Mean_Charts.iloc[0:5, :]
+
+
+                    #Primeiro Gráfico
+                    Role_7_first = Role_7_Mean_Charts.iloc[0:1, :]
+                    Role_7_first = pd.concat([Role_7_first, target]).reset_index()
+
+                    # Definindo atletas para comparar
+                    jogadores = Role_7_first.iat[0, 1]
+                    jogadores_clube = Role_7_first.iat[0, 2]
+                    jogadores_liga = Role_7_first.iat[0, 3]
+                    alvo = Role_7_first.iat[1, 1]
+                    alvo_clube = Role_7_first.iat[1, 2]
+                    alvo_liga = Role_7_first.iat[1, 3]
+
+                    #Splitting Data
+                    Role_7_first_1 = Role_7_first.iloc[:, np.r_[0:3, 3:9]]
+                    Role_7_first_2 = Role_7_first.iloc[:, np.r_[0:3, 9:14]]
+
+                    # Preparing Graph 1
+                    params = list(Role_7_first_1.columns)
+                    params = params[4:]
+                    
+                    #Preparing Data
+                    ranges = []
+                    a_values = []
+                    b_values = []
+
+                    for x in params:
+                        a = min(Role_7_first_1[params][x])
+                        a = 0
+                        b = max(Role_7_first_1[params][x])
+                        b = 100
+                        ranges.append((a, b))
+
+                    for x in range(len(Role_7_first_1['Atleta'])):
+                        if Role_7_first_1['Atleta'][x] == jogadores:
+                            a_values = Role_7_first_1.iloc[x].values.tolist()
+                        if Role_7_first_1['Atleta'][x] == alvo:
+                            b_values = Role_7_first_1.iloc[x].values.tolist()
+                            
+                    a_values = a_values[4:]
+                    b_values = b_values[4:]
+
+                    values = [a_values, b_values]
+
+                    #Plotting Data
+                    title = dict(
+                        title_name = jogadores,
+                        title_color = '#B6282F',
+                        subtitle_name = jogadores_clube + "/" + jogadores_liga,
+                        subtitle_color = '#B6282F',
+                        title_name_2 = alvo,
+                        title_color_2 = '#344D94',
+                        subtitle_name_2 = alvo_clube + "/" + alvo_liga,
+                        subtitle_color_2 = '#344D94',
+                        title_fontsize = 18,
+                    ) 
+
+                    endnote = 'Viz by@JAmerico1898\ Data from Wyscout\nAll data in League percentiles'
+
+                    radar=Radar(fontfamily='Cursive', range_fontsize=8)
+                    fig,ax = radar.plot_radar(ranges=ranges,params=params,values=values,radar_color=['#B6282F', '#344D94'], dpi=600, alphas=[.8,.6], title=title, endnote=endnote, compare=True)
+                    st.pyplot(fig)
+
+                    ############################################################################
+                    # Preparing Graph 2
+                    params = list(Role_7_first_2.columns)
+                    params = params[4:]
+                    
+                    #Preparing Data
+                    ranges = []
+                    a_values = []
+                    b_values = []
+
+                    for x in params:
+                        a = min(Role_7_first_2[params][x])
+                        a = 0
+                        b = max(Role_7_first_2[params][x])
+                        b = 100
+                        ranges.append((a, b))
+
+                    for x in range(len(Role_7_first_2['Atleta'])):
+                        if Role_7_first_2['Atleta'][x] == jogadores:
+                            a_values = Role_7_first_2.iloc[x].values.tolist()
+                        if Role_7_first_2['Atleta'][x] == alvo:
+                            b_values = Role_7_first_2.iloc[x].values.tolist()
+                            
+                    a_values = a_values[4:]
+                    b_values = b_values[4:]
+
+                    values = [a_values, b_values]
+
+                    #Plotting Data
+                    title = dict(
+                        title_name = jogadores,
+                        title_color = '#B6282F',
+                        subtitle_name = jogadores_clube + "/" + jogadores_liga,
+                        subtitle_color = '#B6282F',
+                        title_name_2 = alvo,
+                        title_color_2 = '#344D94',
+                        subtitle_name_2 = alvo_clube + "/" + alvo_liga,
+                        subtitle_color_2 = '#344D94',
+                        title_fontsize = 18,
+                    ) 
+
+                    endnote = 'Viz by@JAmerico1898\ Data from Wyscout\nAll data in League percentiles'
+
+                    radar=Radar(fontfamily='Cursive', range_fontsize=8)
+                    fig,ax = radar.plot_radar(ranges=ranges,params=params,values=values,radar_color=['#B6282F', '#344D94'], dpi=600, alphas=[.8,.6], title=title, endnote=endnote, compare=True)
+                    st.pyplot(fig)
+
+                    ############################################################################
+
+                    #Segundo Gráfico
+                    Role_7_first = Role_7_Mean_Charts.iloc[1:2, :]
+                    Role_7_first = pd.concat([Role_7_first, target]).reset_index()
+
+                    # Definindo atletas para comparar
+                    jogadores = Role_7_first.iat[0, 1]
+                    jogadores_clube = Role_7_first.iat[0, 2]
+                    jogadores_liga = Role_7_first.iat[0, 3]
+
+                    #Splitting Data
+                    Role_7_first_1 = Role_7_first.iloc[:, np.r_[0:3, 3:9]]
+                    Role_7_first_2 = Role_7_first.iloc[:, np.r_[0:3, 9:14]]
+
+                    # Preparing Graph 1
+                    params = list(Role_7_first_1.columns)
+                    params = params[4:]
+                    
+                    #Preparing Data
+                    ranges = []
+                    a_values = []
+                    b_values = []
+
+                    for x in params:
+                        a = min(Role_7_first_1[params][x])
+                        a = 0
+                        b = max(Role_7_first_1[params][x])
+                        b = 100
+                        ranges.append((a, b))
+
+                    for x in range(len(Role_7_first_1['Atleta'])):
+                        if Role_7_first_1['Atleta'][x] == jogadores:
+                            a_values = Role_7_first_1.iloc[x].values.tolist()
+                        if Role_7_first_1['Atleta'][x] == alvo:
+                            b_values = Role_7_first_1.iloc[x].values.tolist()
+                            
+                    a_values = a_values[4:]
+                    b_values = b_values[4:]
+
+                    values = [a_values, b_values]
+
+                    #Plotting Data
+                    title = dict(
+                        title_name = jogadores,
+                        title_color = '#B6282F',
+                        subtitle_name = jogadores_clube + "/" + jogadores_liga,
+                        subtitle_color = '#B6282F',
+                        title_name_2 = alvo,
+                        title_color_2 = '#344D94',
+                        subtitle_name_2 = alvo_clube + "/" + alvo_liga,
+                        subtitle_color_2 = '#344D94',
+                        title_fontsize = 18,
+                    ) 
+
+                    endnote = 'Viz by@JAmerico1898\ Data from Wyscout\nAll data in League percentiles'
+
+                    radar=Radar(fontfamily='Cursive', range_fontsize=8)
+                    fig,ax = radar.plot_radar(ranges=ranges,params=params,values=values,radar_color=['#B6282F', '#344D94'], dpi=600, alphas=[.8,.6], title=title, endnote=endnote, compare=True)
+                    st.pyplot(fig)
+
+                    ############################################################################
+                    # Preparing Graph 2
+                    params = list(Role_7_first_2.columns)
+                    params = params[4:]
+                    
+                    #Preparing Data
+                    ranges = []
+                    a_values = []
+                    b_values = []
+
+                    for x in params:
+                        a = min(Role_7_first_2[params][x])
+                        a = 0
+                        b = max(Role_7_first_2[params][x])
+                        b = 100
+                        ranges.append((a, b))
+
+                    for x in range(len(Role_7_first_2['Atleta'])):
+                        if Role_7_first_2['Atleta'][x] == jogadores:
+                            a_values = Role_7_first_2.iloc[x].values.tolist()
+                        if Role_7_first_2['Atleta'][x] == alvo:
+                            b_values = Role_7_first_2.iloc[x].values.tolist()
+                            
+                    a_values = a_values[4:]
+                    b_values = b_values[4:]
+
+                    values = [a_values, b_values]
+
+                    #Plotting Data
+                    title = dict(
+                        title_name = jogadores,
+                        title_color = '#B6282F',
+                        subtitle_name = jogadores_clube + "/" + jogadores_liga,
+                        subtitle_color = '#B6282F',
+                        title_name_2 = alvo,
+                        title_color_2 = '#344D94',
+                        subtitle_name_2 = alvo_clube + "/" + alvo_liga,
+                        subtitle_color_2 = '#344D94',
+                        title_fontsize = 18,
+                    ) 
+
+                    endnote = 'Viz by@JAmerico1898\ Data from Wyscout\nAll data in League percentiles'
+
+                    radar=Radar(fontfamily='Cursive', range_fontsize=8)
+                    fig,ax = radar.plot_radar(ranges=ranges,params=params,values=values,radar_color=['#B6282F', '#344D94'], dpi=600, alphas=[.8,.6], title=title, endnote=endnote, compare=True)
+                    st.pyplot(fig)
+
+                    ##########################################################################################
+                    ############################################################################
+
+                    #Terceiro Gráfico
+                    Role_7_first = Role_7_Mean_Charts.iloc[2:3, :]
+                    Role_7_first = pd.concat([Role_7_first, target]).reset_index()
+
+                    # Definindo atletas para comparar
+                    jogadores = Role_7_first.iat[0, 1]
+                    jogadores_clube = Role_7_first.iat[0, 2]
+                    jogadores_liga = Role_7_first.iat[0, 3]
+
+                    #Splitting Data
+                    Role_7_first_1 = Role_7_first.iloc[:, np.r_[0:3, 3:9]]
+                    Role_7_first_2 = Role_7_first.iloc[:, np.r_[0:3, 9:14]]
+
+                    # Preparing Graph 1
+                    params = list(Role_7_first_1.columns)
+                    params = params[4:]
+                    
+                    #Preparing Data
+                    ranges = []
+                    a_values = []
+                    b_values = []
+
+                    for x in params:
+                        a = min(Role_7_first_1[params][x])
+                        a = 0
+                        b = max(Role_7_first_1[params][x])
+                        b = 100
+                        ranges.append((a, b))
+
+                    for x in range(len(Role_7_first_1['Atleta'])):
+                        if Role_7_first_1['Atleta'][x] == jogadores:
+                            a_values = Role_7_first_1.iloc[x].values.tolist()
+                        if Role_7_first_1['Atleta'][x] == alvo:
+                            b_values = Role_7_first_1.iloc[x].values.tolist()
+                            
+                    a_values = a_values[4:]
+                    b_values = b_values[4:]
+
+                    values = [a_values, b_values]
+
+                    #Plotting Data
+                    title = dict(
+                        title_name = jogadores,
+                        title_color = '#B6282F',
+                        subtitle_name = jogadores_clube + "/" + jogadores_liga,
+                        subtitle_color = '#B6282F',
+                        title_name_2 = alvo,
+                        title_color_2 = '#344D94',
+                        subtitle_name_2 = alvo_clube + "/" + alvo_liga,
+                        subtitle_color_2 = '#344D94',
+                        title_fontsize = 18,
+                    ) 
+
+                    endnote = 'Viz by@JAmerico1898\ Data from Wyscout\nAll data in League percentiles'
+
+                    radar=Radar(fontfamily='Cursive', range_fontsize=8)
+                    fig,ax = radar.plot_radar(ranges=ranges,params=params,values=values,radar_color=['#B6282F', '#344D94'], dpi=600, alphas=[.8,.6], title=title, endnote=endnote, compare=True)
+                    st.pyplot(fig)
+
+                    ############################################################################
+                    # Preparing Graph 2
+                    params = list(Role_7_first_2.columns)
+                    params = params[4:]
+                    
+                    #Preparing Data
+                    ranges = []
+                    a_values = []
+                    b_values = []
+
+                    for x in params:
+                        a = min(Role_7_first_2[params][x])
+                        a = 0
+                        b = max(Role_7_first_2[params][x])
+                        b = 100
+                        ranges.append((a, b))
+
+                    for x in range(len(Role_7_first_2['Atleta'])):
+                        if Role_7_first_2['Atleta'][x] == jogadores:
+                            a_values = Role_7_first_2.iloc[x].values.tolist()
+                        if Role_7_first_2['Atleta'][x] == alvo:
+                            b_values = Role_7_first_2.iloc[x].values.tolist()
+                            
+                    a_values = a_values[4:]
+                    b_values = b_values[4:]
+
+                    values = [a_values, b_values]
+
+                    #Plotting Data
+                    title = dict(
+                        title_name = jogadores,
+                        title_color = '#B6282F',
+                        subtitle_name = jogadores_clube + "/" + jogadores_liga,
+                        subtitle_color = '#B6282F',
+                        title_name_2 = alvo,
+                        title_color_2 = '#344D94',
+                        subtitle_name_2 = alvo_clube + "/" + alvo_liga,
+                        subtitle_color_2 = '#344D94',
+                        title_fontsize = 18,
+                    ) 
+
+                    endnote = 'Viz by@JAmerico1898\ Data from Wyscout\nAll data in League percentiles'
+
+                    radar=Radar(fontfamily='Cursive', range_fontsize=8)
+                    fig,ax = radar.plot_radar(ranges=ranges,params=params,values=values,radar_color=['#B6282F', '#344D94'], dpi=600, alphas=[.8,.6], title=title, endnote=endnote, compare=True)
+                    st.pyplot(fig)
+
+                    ##########################################################################################
+                    ############################################################################
+
+                    #Quarto Gráfico
+                    Role_7_first = Role_7_Mean_Charts.iloc[3:4, :]
+                    Role_7_first = pd.concat([Role_7_first, target]).reset_index()
+
+                    # Definindo atletas para comparar
+                    jogadores = Role_7_first.iat[0, 1]
+                    jogadores_clube = Role_7_first.iat[0, 2]
+                    jogadores_liga = Role_7_first.iat[0, 3]
+
+                    #Splitting Data
+                    Role_7_first_1 = Role_7_first.iloc[:, np.r_[0:3, 3:9]]
+                    Role_7_first_2 = Role_7_first.iloc[:, np.r_[0:3, 9:14]]
+
+                    # Preparing Graph 1
+                    params = list(Role_7_first_1.columns)
+                    params = params[4:]
+                    
+                    #Preparing Data
+                    ranges = []
+                    a_values = []
+                    b_values = []
+
+                    for x in params:
+                        a = min(Role_7_first_1[params][x])
+                        a = 0
+                        b = max(Role_7_first_1[params][x])
+                        b = 100
+                        ranges.append((a, b))
+
+                    for x in range(len(Role_7_first_1['Atleta'])):
+                        if Role_7_first_1['Atleta'][x] == jogadores:
+                            a_values = Role_7_first_1.iloc[x].values.tolist()
+                        if Role_7_first_1['Atleta'][x] == alvo:
+                            b_values = Role_7_first_1.iloc[x].values.tolist()
+                            
+                    a_values = a_values[4:]
+                    b_values = b_values[4:]
+
+                    values = [a_values, b_values]
+
+                    #Plotting Data
+                    title = dict(
+                        title_name = jogadores,
+                        title_color = '#B6282F',
+                        subtitle_name = jogadores_clube + "/" + jogadores_liga,
+                        subtitle_color = '#B6282F',
+                        title_name_2 = alvo,
+                        title_color_2 = '#344D94',
+                        subtitle_name_2 = alvo_clube + "/" + alvo_liga,
+                        subtitle_color_2 = '#344D94',
+                        title_fontsize = 18,
+                    ) 
+
+                    endnote = 'Viz by@JAmerico1898\ Data from Wyscout\nAll data in League percentiles'
+
+                    radar=Radar(fontfamily='Cursive', range_fontsize=8)
+                    fig,ax = radar.plot_radar(ranges=ranges,params=params,values=values,radar_color=['#B6282F', '#344D94'], dpi=600, alphas=[.8,.6], title=title, endnote=endnote, compare=True)
+                    st.pyplot(fig)
+
+                    ############################################################################
+                    # Preparing Graph 2
+                    params = list(Role_7_first_2.columns)
+                    params = params[4:]
+                    
+                    #Preparing Data
+                    ranges = []
+                    a_values = []
+                    b_values = []
+
+                    for x in params:
+                        a = min(Role_7_first_2[params][x])
+                        a = 0
+                        b = max(Role_7_first_2[params][x])
+                        b = 100
+                        ranges.append((a, b))
+
+                    for x in range(len(Role_7_first_2['Atleta'])):
+                        if Role_7_first_2['Atleta'][x] == jogadores:
+                            a_values = Role_7_first_2.iloc[x].values.tolist()
+                        if Role_7_first_2['Atleta'][x] == alvo:
+                            b_values = Role_7_first_2.iloc[x].values.tolist()
+                            
+                    a_values = a_values[4:]
+                    b_values = b_values[4:]
+
+                    values = [a_values, b_values]
+
+                    #Plotting Data
+                    title = dict(
+                        title_name = jogadores,
+                        title_color = '#B6282F',
+                        subtitle_name = jogadores_clube + "/" + jogadores_liga,
+                        subtitle_color = '#B6282F',
+                        title_name_2 = alvo,
+                        title_color_2 = '#344D94',
+                        subtitle_name_2 = alvo_clube + "/" + alvo_liga,
+                        subtitle_color_2 = '#344D94',
+                        title_fontsize = 18,
+                    ) 
+
+                    endnote = 'Viz by@JAmerico1898\ Data from Wyscout\nAll data in League percentiles'
+
+                    radar=Radar(fontfamily='Cursive', range_fontsize=8)
+                    fig,ax = radar.plot_radar(ranges=ranges,params=params,values=values,radar_color=['#B6282F', '#344D94'], dpi=600, alphas=[.8,.6], title=title, endnote=endnote, compare=True)
+                    st.pyplot(fig)
+
+                    ##########################################################################################
+                    ############################################################################
+
+                    #Quinto Gráfico
+                    Role_7_first = Role_7_Mean_Charts.iloc[4:5, :]
+                    Role_7_first = pd.concat([Role_7_first, target]).reset_index()
+
+                    # Definindo atletas para comparar
+                    jogadores = Role_7_first.iat[0, 1]
+                    jogadores_clube = Role_7_first.iat[0, 2]
+                    jogadores_liga = Role_7_first.iat[0, 3]
+
+                    #Splitting Data
+                    Role_7_first_1 = Role_7_first.iloc[:, np.r_[0:3, 3:9]]
+                    Role_7_first_2 = Role_7_first.iloc[:, np.r_[0:3, 9:14]]
+
+                    # Preparing Graph 1
+                    params = list(Role_7_first_1.columns)
+                    params = params[4:]
+                    
+                    #Preparing Data
+                    ranges = []
+                    a_values = []
+                    b_values = []
+
+                    for x in params:
+                        a = min(Role_7_first_1[params][x])
+                        a = 0
+                        b = max(Role_7_first_1[params][x])
+                        b = 100
+                        ranges.append((a, b))
+
+                    for x in range(len(Role_7_first_1['Atleta'])):
+                        if Role_7_first_1['Atleta'][x] == jogadores:
+                            a_values = Role_7_first_1.iloc[x].values.tolist()
+                        if Role_7_first_1['Atleta'][x] == alvo:
+                            b_values = Role_7_first_1.iloc[x].values.tolist()
+                            
+                    a_values = a_values[4:]
+                    b_values = b_values[4:]
+
+                    values = [a_values, b_values]
+
+                    #Plotting Data
+                    title = dict(
+                        title_name = jogadores,
+                        title_color = '#B6282F',
+                        subtitle_name = jogadores_clube + "/" + jogadores_liga,
+                        subtitle_color = '#B6282F',
+                        title_name_2 = alvo,
+                        title_color_2 = '#344D94',
+                        subtitle_name_2 = alvo_clube + "/" + alvo_liga,
+                        subtitle_color_2 = '#344D94',
+                        title_fontsize = 18,
+                    ) 
+
+                    endnote = 'Viz by@JAmerico1898\ Data from Wyscout\nAll data in League percentiles'
+
+                    radar=Radar(fontfamily='Cursive', range_fontsize=8)
+                    fig,ax = radar.plot_radar(ranges=ranges,params=params,values=values,radar_color=['#B6282F', '#344D94'], dpi=600, alphas=[.8,.6], title=title, endnote=endnote, compare=True)
+                    st.pyplot(fig)
+
+                    ############################################################################
+                    # Preparing Graph 2
+                    params = list(Role_7_first_2.columns)
+                    params = params[4:]
+                    
+                    #Preparing Data
+                    ranges = []
+                    a_values = []
+                    b_values = []
+
+                    for x in params:
+                        a = min(Role_7_first_2[params][x])
+                        a = 0
+                        b = max(Role_7_first_2[params][x])
+                        b = 100
+                        ranges.append((a, b))
+
+                    for x in range(len(Role_7_first_2['Atleta'])):
+                        if Role_7_first_2['Atleta'][x] == jogadores:
+                            a_values = Role_7_first_2.iloc[x].values.tolist()
+                        if Role_7_first_2['Atleta'][x] == alvo:
+                            b_values = Role_7_first_2.iloc[x].values.tolist()
+                            
+                    a_values = a_values[4:]
+                    b_values = b_values[4:]
+
+                    values = [a_values, b_values]
+
+                    #Plotting Data
+                    title = dict(
+                        title_name = jogadores,
+                        title_color = '#B6282F',
+                        subtitle_name = jogadores_clube + "/" + jogadores_liga,
+                        subtitle_color = '#B6282F',
+                        title_name_2 = alvo,
+                        title_color_2 = '#344D94',
+                        subtitle_name_2 = alvo_clube + "/" + alvo_liga,
+                        subtitle_color_2 = '#344D94',
+                        title_fontsize = 18,
+                    ) 
+
+                    endnote = 'Viz by@JAmerico1898\ Data from Wyscout\nAll data in League percentiles'
+
+                    radar=Radar(fontfamily='Cursive', range_fontsize=8)
+                    fig,ax = radar.plot_radar(ranges=ranges,params=params,values=values,radar_color=['#B6282F', '#344D94'], dpi=600, alphas=[.8,.6], title=title, endnote=endnote, compare=True)
+                    st.pyplot(fig)
+
+########################################################################################################################
+########################################################################################################################
+########################################################################################################################
+########################################################################################################################
+
+                if perfil_similar == ("Zagueiro Equilibrado"):
+                ###############################################################################
+                ###########################################################################
+                    # ZAGUEIRO EQUILIBRADO
+                    # Texto de Abertura>
+                    markdown_amount_1 = f"<div style='text-align:center; font-size:{fontsize}px'>{jogador_similar:}</div>"
+                    st.markdown("<h4 style='text-align: center;'>Jogador Selecionado</b></h4>", unsafe_allow_html=True)
+                    st.markdown(markdown_amount_1, unsafe_allow_html=True)
+                    st.markdown("---")
+
+                    #Carregando arquivo de dados
+                    Role_8_data = pd.read_excel('8_Role_Zagueiro_Equilibrado_Similarity.xlsx')
+                    Role_8_data = Role_8_data.drop(Role_8_data.columns[0:4], axis=1)
+                    Role_8_data.reset_index(drop=True, inplace=True)
+
+                    # Step : Defina o atleta-alvo
+                    #base_bruta_similaridade = pd.read_excel("base_bruta_similaridade.xlsx")
+                    target = Role_8_data.loc[(Role_8_data['Atleta'] == jogador_similar)]
+
+                    #Step : Definindo "ID-alvo"
+                    given_ID = target.iat[0, -1]
+                    
+                    selected = Role_8_data
+
+                    # Step 9: Add columns "1", "2", "3" to Role_8_data
+
+                    selected['1'] = given_ID[0]
+                    selected['2'] = given_ID[1]
+                    selected['3'] = given_ID[2]
+                    selected['4'] = given_ID[3]
+
+                    # Assigning correct columns to 1, 2, 3
+
+                    if given_ID[0] == "A":
+                        selected['1'] = selected["A1"]
+                    elif given_ID[0] == "B":
+                        selected['1'] = selected["B1"]
+                    elif given_ID[0] == "C":
+                        selected['1'] = selected["C1"]
+                    elif given_ID[0] == "D":
+                        selected['1'] = selected["D1"]
+                    elif given_ID[0] == "E":
+                        selected['1'] = selected["E1"]
+                    elif given_ID[0] == "F":
+                        selected['1'] = selected["F1"]
+                    elif given_ID[0] == "G":
+                        selected['1'] = selected["G1"]
+                    elif given_ID[0] == "H":
+                        selected['1'] = selected["H1"]
+                    elif given_ID[0] == "I":
+                        selected['1'] = selected["I1"]
+                    elif given_ID[0] == "J":
+                        selected['1'] = selected["J1"]
+                    elif given_ID[0] == "K":
+                        selected['1'] = selected["K1"]
+                    elif given_ID[0] == "L":
+                        selected['1'] = selected["L1"]
+                    elif given_ID[0] == "M":
+                        selected['1'] = selected["M1"]
+
+
+                    if given_ID[1] == "A":
+                        selected['2'] = selected["A1"]
+                    elif given_ID[1] == "B":
+                        selected['2'] = selected["B1"]
+                    elif given_ID[1] == "C":
+                        selected['2'] = selected["C1"]
+                    elif given_ID[1] == "D":
+                        selected['2'] = selected["D1"]
+                    elif given_ID[1] == "E":
+                        selected['2'] = selected["E1"]
+                    elif given_ID[1] == "F":
+                        selected['2'] = selected["F1"]
+                    elif given_ID[1] == "G":
+                        selected['2'] = selected["G1"]
+                    elif given_ID[1] == "H":
+                        selected['2'] = selected["H1"]
+                    elif given_ID[1] == "I":
+                        selected['2'] = selected["I1"]
+                    elif given_ID[1] == "J":
+                        selected['2'] = selected["J1"]
+                    elif given_ID[1] == "K":
+                        selected['2'] = selected["K1"]
+                    elif given_ID[1] == "L":
+                        selected['2'] = selected["L1"]
+                    elif given_ID[1] == "M":
+                        selected['2'] = selected["M1"]
+                    
+                    
+                    if given_ID[2] == "A":
+                        selected['3'] = selected["A1"]
+                    elif given_ID[2] == "B":
+                        selected['3'] = selected["B1"]
+                    elif given_ID[2] == "C":
+                        selected['3'] = selected["C1"]
+                    elif given_ID[2] == "D":
+                        selected['3'] = selected["D1"]
+                    elif given_ID[2] == "E":
+                        selected['3'] = selected["E1"]
+                    elif given_ID[2] == "F":
+                        selected['3'] = selected["F1"]
+                    elif given_ID[2] == "G":
+                        selected['3'] = selected["G1"]
+                    elif given_ID[2] == "H":
+                        selected['3'] = selected["H1"]
+                    elif given_ID[2] == "I":
+                        selected['3'] = selected["I1"]
+                    elif given_ID[2] == "J":
+                        selected['3'] = selected["J1"]
+                    elif given_ID[2] == "K":
+                        selected['3'] = selected["K1"]
+                    elif given_ID[2] == "L":
+                        selected['3'] = selected["L1"]
+                    elif given_ID[2] == "M":
+                        selected['3'] = selected["M1"]
+
+                    if given_ID[3] == "A":
+                        selected['4'] = selected["A1"]
+                    elif given_ID[3] == "B":
+                        selected['4'] = selected["B1"]
+                    elif given_ID[3] == "C":
+                        selected['4'] = selected["C1"]
+                    elif given_ID[3] == "D":
+                        selected['4'] = selected["D1"]
+                    elif given_ID[3] == "E":
+                        selected['4'] = selected["E1"]
+                    elif given_ID[3] == "F":
+                        selected['4'] = selected["F1"]
+                    elif given_ID[3] == "G":
+                        selected['4'] = selected["G1"]
+                    elif given_ID[3] == "H":
+                        selected['4'] = selected["H1"]
+                    elif given_ID[3] == "I":
+                        selected['4'] = selected["I1"]
+                    elif given_ID[3] == "J":
+                        selected['4'] = selected["J1"]
+                    elif given_ID[3] == "K":
+                        selected['4'] = selected["K1"]
+                    elif given_ID[3] == "L":
+                        selected['4'] = selected["L1"]
+                    elif given_ID[3] == "M":
+                        selected['4'] = selected["M1"]
+
+                    # Applying PCA for Scaled Selected Columns
+
+                    leagues = ["ARG1", "AUT", "BEL1", "BRA1", "BRA2", "BUL","CHI", "CHN", 
+                            "COL", "DEN", "ECU", "ENG1", "ENG2", "FRA1", "FRA2", "GER1", 
+                            "GER2", "GRE", "HOL", "ITA1", "ITA2", "JAP", "MEX", "PAR", 
+                            "PER", "POR1", "QAT", "RUS", "SAUD", "SCT", "SER", "SPA1", 
+                            "SPA2", "SWZ", "TUR", "UAE", "UKR", "URU", "USA"]
+
+                    # Iterate over each league
+                    for league in leagues:
+
+                        # Extract columns 46 through 50
+                        Zagueiro = selected.iloc[:, np.r_[-4:0]]
+
+                        # Defining Columns
+                        Zagueiro_columns = Zagueiro.columns
+
+                        # Applying PCA
+                        pca = PCA(n_components=2)
+                        principalComponents = pca.fit_transform(Zagueiro)
+
+                        # Create a DataFrame with loadings
+                        LoadingsZagueiro = pd.DataFrame(pca.components_.T**2, index=Zagueiro_columns, columns=['loading factor 1', 'loading factor 2'])
+
+                        # Multiplying Matrices to obtain Pre_Variables
+                        Similarity = pd.DataFrame(np.matmul(Zagueiro, LoadingsZagueiro['loading factor 1']) + np.matmul(Zagueiro, LoadingsZagueiro['loading factor 2']),
+                                                columns=["Similarity"])
+
+                    # Rebuilding Full Training Set
+                    selected = selected.join(Similarity)
+
+                    ##############################################################
+                    ##############################################################
+
+                    # Lista de Similares
+                    # Initialize an empty list to store DataFrames
+                    target = selected.loc[(Role_8_data['Atleta'] == jogador_similar)]
+                    target_similarity = target.iat[0, -1]
+
+                    selected["Índice de Similaridade"] = (selected['Similarity']/target_similarity)*100
+                    selected["Índice de Similaridade"] = round(selected["Índice de Similaridade"], 2)
+
+                    target = selected.loc[(selected['Atleta'] == jogador_similar)]
+                    selected['Dif_Similarity'] = abs(selected["Índice de Similaridade"] - 100)
+
+                    selected = selected.sort_values(by='Dif_Similarity')
+
+                    lista_similares = selected.iloc[1:31, np.r_[0, 2, 30, 35, -2:0]]
+                    lista_similares = lista_similares.sort_values(by='Rating', ascending=False)
+
+                    # Lista de Jogadores Similares Ordenados segundo o Rating
+                    st.markdown("<h4 style='text-align: center;'>30 Jogadores + Similares</b></h4>", unsafe_allow_html=True)
+                    st.dataframe(lista_similares, use_container_width=True, hide_index=True)
+                    st.markdown("---")
+
+                    # Lista de Latinos
+                    selected_latam = selected[(selected["Nacionalidade"] == "Argentina")|(selected["Nacionalidade"] == "Brazil")
+                                        |(selected["Nacionalidade"] == "Bolivia")|(selected["Nacionalidade"] == "Chile")
+                                        |(selected["Nacionalidade"] == "Colombia")|(selected["Nacionalidade"] == "Costa Rica")
+                                        |(selected["Nacionalidade"] == "Ecuador")|(selected["Nacionalidade"] == "Mexico")
+                                        |(selected["Nacionalidade"] == "Panama")|(selected["Nacionalidade"] == "Paraguay")
+                                        |(selected["Nacionalidade"] == "Peru")|(selected["Nacionalidade"] == "Uruguay")
+                                        |(selected["Nacionalidade"] == "Venezuela")]
+
+                    lista_similares_latam = selected_latam.iloc[1:31, np.r_[0, 2, 30, 35, -2:0]]
+                    lista_similares_latam = lista_similares_latam.sort_values(by="Rating", ascending = False)
+
+                    #Texto para os Gráficos
+                    st.markdown("<h4 style='text-align: center;'>5 Jogadores Latinos Similares Melhor Ranquedos</b></h4>", unsafe_allow_html=True)
+                    st.markdown("---")    
+
+
+                    # Gerar Gráficos com os 5 melhores
+                    # Arquivo para o Gráfico
+                    Role_8_Mean_Charts = selected_latam.iloc[:, np.r_[0, 2, 30, 36:49]]
+                    target = target.iloc[:, np.r_[0, 2, 30, 36:49]]
+                    # Renomeando Colunas
+                    Role_8_Mean_Charts = Role_8_Mean_Charts.rename(columns={'Ações_Defensivas_BemSucedidas_Percentil':'Ações_Defensivas_BemSucedidas', 'Duelos_Defensivos_Ganhos_Percentil':'Duelos_Defensivos_Ganhos', 'Duelos_Aéreos_Ganhos_Percentil':'Duelos_Aéreos_Ganhos',
+                                                                                'Finalizações_Bloqueadas_Percentil':'Finalizações_Bloqueadas', 'Interceptações_Ajustadas_a_Posse_Percentil':'Interceptações_Ajustadas_a_Posse', 'Passes_Longos_Certos_Percentil':'Passes_Longos_Certos', 
+                                                                                'Passes_Frontais_Certos_Percentil':'Passes_Frontais_Certos', 'Passes_Progressivos_Certos_Percentil':'Passes_Progressivos_Certos', 'Passes_Laterais_Certos_Percentil':'Passes_Laterais_Certos', 'Duelos_Ofensivos_Ganhos_Percentil':'Duelos_Ofensivos_Ganhos', 
+                                                                                'Dribles_BemSucedidos_Percentil':'Dribles_BemSucedidos', 'Corridas_Progressivas_Percentil':'Corridas_Progressivas', 'Passes_TerçoFinal_Certos_Percentil':'Passes_TerçoFinal_Certos'})
+                    
+                    target = target.rename(columns={'Ações_Defensivas_BemSucedidas_Percentil':'Ações_Defensivas_BemSucedidas', 'Duelos_Defensivos_Ganhos_Percentil':'Duelos_Defensivos_Ganhos', 'Duelos_Aéreos_Ganhos_Percentil':'Duelos_Aéreos_Ganhos',
+                                                                                'Finalizações_Bloqueadas_Percentil':'Finalizações_Bloqueadas', 'Interceptações_Ajustadas_a_Posse_Percentil':'Interceptações_Ajustadas_a_Posse', 'Passes_Longos_Certos_Percentil':'Passes_Longos_Certos', 
+                                                                                'Passes_Frontais_Certos_Percentil':'Passes_Frontais_Certos', 'Passes_Progressivos_Certos_Percentil':'Passes_Progressivos_Certos', 'Passes_Laterais_Certos_Percentil':'Passes_Laterais_Certos', 'Duelos_Ofensivos_Ganhos_Percentil':'Duelos_Ofensivos_Ganhos', 
+                                                                                'Dribles_BemSucedidos_Percentil':'Dribles_BemSucedidos', 'Corridas_Progressivas_Percentil':'Corridas_Progressivas', 'Passes_TerçoFinal_Certos_Percentil':'Passes_TerçoFinal_Certos'})
+                    
+                    #Dropping Atleta-alvo
+                    Role_8_Mean_Charts = Role_8_Mean_Charts[Role_8_Mean_Charts['Atleta'] != jogador_similar] 
+                    #Extraindo 5 melhores
+                    Role_8_Mean_Charts = Role_8_Mean_Charts.iloc[0:5, :]
+
+
+                    #Primeiro Gráfico
+                    Role_8_first = Role_8_Mean_Charts.iloc[0:1, :]
+                    Role_8_first = pd.concat([Role_8_first, target]).reset_index()
+
+                    # Definindo atletas para comparar
+                    jogadores = Role_8_first.iat[0, 1]
+                    jogadores_clube = Role_8_first.iat[0, 2]
+                    jogadores_liga = Role_8_first.iat[0, 3]
+                    alvo = Role_8_first.iat[1, 1]
+                    alvo_clube = Role_8_first.iat[1, 2]
+                    alvo_liga = Role_8_first.iat[1, 3]
+
+                    #Splitting Data
+                    Role_8_first_1 = Role_8_first.iloc[:, np.r_[0:3, 3:10]]
+                    Role_8_first_2 = Role_8_first.iloc[:, np.r_[0:3, 10:16]]
+
+                    # Preparing Graph 1
+                    params = list(Role_8_first_1.columns)
+                    params = params[4:]
+                    
+                    #Preparing Data
+                    ranges = []
+                    a_values = []
+                    b_values = []
+
+                    for x in params:
+                        a = min(Role_8_first_1[params][x])
+                        a = 0
+                        b = max(Role_8_first_1[params][x])
+                        b = 100
+                        ranges.append((a, b))
+
+                    for x in range(len(Role_8_first_1['Atleta'])):
+                        if Role_8_first_1['Atleta'][x] == jogadores:
+                            a_values = Role_8_first_1.iloc[x].values.tolist()
+                        if Role_8_first_1['Atleta'][x] == alvo:
+                            b_values = Role_8_first_1.iloc[x].values.tolist()
+                            
+                    a_values = a_values[4:]
+                    b_values = b_values[4:]
+
+                    values = [a_values, b_values]
+
+                    #Plotting Data
+                    title = dict(
+                        title_name = jogadores,
+                        title_color = '#B6282F',
+                        subtitle_name = jogadores_clube + "/" + jogadores_liga,
+                        subtitle_color = '#B6282F',
+                        title_name_2 = alvo,
+                        title_color_2 = '#344D94',
+                        subtitle_name_2 = alvo_clube + "/" + alvo_liga,
+                        subtitle_color_2 = '#344D94',
+                        title_fontsize = 18,
+                    ) 
+
+                    endnote = 'Viz by@JAmerico1898\ Data from Wyscout\nAll data in League percentiles'
+
+                    radar=Radar(fontfamily='Cursive', range_fontsize=8)
+                    fig,ax = radar.plot_radar(ranges=ranges,params=params,values=values,radar_color=['#B6282F', '#344D94'], dpi=600, alphas=[.8,.6], title=title, endnote=endnote, compare=True)
+                    st.pyplot(fig)
+
+                    ############################################################################
+                    # Preparing Graph 2
+                    params = list(Role_8_first_2.columns)
+                    params = params[4:]
+                    
+                    #Preparing Data
+                    ranges = []
+                    a_values = []
+                    b_values = []
+
+                    for x in params:
+                        a = min(Role_8_first_2[params][x])
+                        a = 0
+                        b = max(Role_8_first_2[params][x])
+                        b = 100
+                        ranges.append((a, b))
+
+                    for x in range(len(Role_8_first_2['Atleta'])):
+                        if Role_8_first_2['Atleta'][x] == jogadores:
+                            a_values = Role_8_first_2.iloc[x].values.tolist()
+                        if Role_8_first_2['Atleta'][x] == alvo:
+                            b_values = Role_8_first_2.iloc[x].values.tolist()
+                            
+                    a_values = a_values[4:]
+                    b_values = b_values[4:]
+
+                    values = [a_values, b_values]
+
+                    #Plotting Data
+                    title = dict(
+                        title_name = jogadores,
+                        title_color = '#B6282F',
+                        subtitle_name = jogadores_clube + "/" + jogadores_liga,
+                        subtitle_color = '#B6282F',
+                        title_name_2 = alvo,
+                        title_color_2 = '#344D94',
+                        subtitle_name_2 = alvo_clube + "/" + alvo_liga,
+                        subtitle_color_2 = '#344D94',
+                        title_fontsize = 18,
+                    ) 
+
+                    endnote = 'Viz by@JAmerico1898\ Data from Wyscout\nAll data in League percentiles'
+
+                    radar=Radar(fontfamily='Cursive', range_fontsize=8)
+                    fig,ax = radar.plot_radar(ranges=ranges,params=params,values=values,radar_color=['#B6282F', '#344D94'], dpi=600, alphas=[.8,.6], title=title, endnote=endnote, compare=True)
+                    st.pyplot(fig)
+
+                    ############################################################################
+
+                    #Segundo Gráfico
+                    Role_8_first = Role_8_Mean_Charts.iloc[1:2, :]
+                    Role_8_first = pd.concat([Role_8_first, target]).reset_index()
+
+                    # Definindo atletas para comparar
+                    jogadores = Role_8_first.iat[0, 1]
+                    jogadores_clube = Role_8_first.iat[0, 2]
+                    jogadores_liga = Role_8_first.iat[0, 3]
+                    #alvo = Role_8_first.iat[1, 1]
+                    #alvo_clube = Role_8_first.iat[1, 2]
+                    #alvo_liga = Role_8_first.iat[1, 3]
+
+                    #Splitting Data
+                    Role_8_first_1 = Role_8_first.iloc[:, np.r_[0:3, 3:10]]
+                    Role_8_first_2 = Role_8_first.iloc[:, np.r_[0:3, 10:16]]
+
+                    # Preparing Graph 1
+                    params = list(Role_8_first_1.columns)
+                    params = params[4:]
+                    
+                    #Preparing Data
+                    ranges = []
+                    a_values = []
+                    b_values = []
+
+                    for x in params:
+                        a = min(Role_8_first_1[params][x])
+                        a = 0
+                        b = max(Role_8_first_1[params][x])
+                        b = 100
+                        ranges.append((a, b))
+
+                    for x in range(len(Role_8_first_1['Atleta'])):
+                        if Role_8_first_1['Atleta'][x] == jogadores:
+                            a_values = Role_8_first_1.iloc[x].values.tolist()
+                        if Role_8_first_1['Atleta'][x] == alvo:
+                            b_values = Role_8_first_1.iloc[x].values.tolist()
+                            
+                    a_values = a_values[4:]
+                    b_values = b_values[4:]
+
+                    values = [a_values, b_values]
+
+                    #Plotting Data
+                    title = dict(
+                        title_name = jogadores,
+                        title_color = '#B6282F',
+                        subtitle_name = jogadores_clube + "/" + jogadores_liga,
+                        subtitle_color = '#B6282F',
+                        title_name_2 = alvo,
+                        title_color_2 = '#344D94',
+                        subtitle_name_2 = alvo_clube + "/" + alvo_liga,
+                        subtitle_color_2 = '#344D94',
+                        title_fontsize = 18,
+                    ) 
+
+                    endnote = 'Viz by@JAmerico1898\ Data from Wyscout\nAll data in League percentiles'
+
+                    radar=Radar(fontfamily='Cursive', range_fontsize=8)
+                    fig,ax = radar.plot_radar(ranges=ranges,params=params,values=values,radar_color=['#B6282F', '#344D94'], dpi=600, alphas=[.8,.6], title=title, endnote=endnote, compare=True)
+                    st.pyplot(fig)
+
+                    ############################################################################
+                    # Preparing Graph 2
+                    params = list(Role_8_first_2.columns)
+                    params = params[4:]
+                    
+                    #Preparing Data
+                    ranges = []
+                    a_values = []
+                    b_values = []
+
+                    for x in params:
+                        a = min(Role_8_first_2[params][x])
+                        a = 0
+                        b = max(Role_8_first_2[params][x])
+                        b = 100
+                        ranges.append((a, b))
+
+                    for x in range(len(Role_8_first_2['Atleta'])):
+                        if Role_8_first_2['Atleta'][x] == jogadores:
+                            a_values = Role_8_first_2.iloc[x].values.tolist()
+                        if Role_8_first_2['Atleta'][x] == alvo:
+                            b_values = Role_8_first_2.iloc[x].values.tolist()
+                            
+                    a_values = a_values[4:]
+                    b_values = b_values[4:]
+
+                    values = [a_values, b_values]
+
+                    #Plotting Data
+                    title = dict(
+                        title_name = jogadores,
+                        title_color = '#B6282F',
+                        subtitle_name = jogadores_clube + "/" + jogadores_liga,
+                        subtitle_color = '#B6282F',
+                        title_name_2 = alvo,
+                        title_color_2 = '#344D94',
+                        subtitle_name_2 = alvo_clube + "/" + alvo_liga,
+                        subtitle_color_2 = '#344D94',
+                        title_fontsize = 18,
+                    ) 
+
+                    endnote = 'Viz by@JAmerico1898\ Data from Wyscout\nAll data in League percentiles'
+
+                    radar=Radar(fontfamily='Cursive', range_fontsize=8)
+                    fig,ax = radar.plot_radar(ranges=ranges,params=params,values=values,radar_color=['#B6282F', '#344D94'], dpi=600, alphas=[.8,.6], title=title, endnote=endnote, compare=True)
+                    st.pyplot(fig)
+
+                    ##########################################################################################
+                    ############################################################################
+
+                    #Terceiro Gráfico
+                    Role_8_first = Role_8_Mean_Charts.iloc[2:3, :]
+                    Role_8_first = pd.concat([Role_8_first, target]).reset_index()
+
+                    # Definindo atletas para comparar
+                    jogadores = Role_8_first.iat[0, 1]
+                    jogadores_clube = Role_8_first.iat[0, 2]
+                    jogadores_liga = Role_8_first.iat[0, 3]
+                    #alvo = Role_8_first.iat[1, 1]
+                    #alvo_clube = Role_8_first.iat[1, 2]
+                    #alvo_liga = Role_8_first.iat[1, 3]
+
+                    #Splitting Data
+                    Role_8_first_1 = Role_8_first.iloc[:, np.r_[0:3, 3:10]]
+                    Role_8_first_2 = Role_8_first.iloc[:, np.r_[0:3, 10:16]]
+
+                    # Preparing Graph 1
+                    params = list(Role_8_first_1.columns)
+                    params = params[4:]
+                    
+                    #Preparing Data
+                    ranges = []
+                    a_values = []
+                    b_values = []
+
+                    for x in params:
+                        a = min(Role_8_first_1[params][x])
+                        a = 0
+                        b = max(Role_8_first_1[params][x])
+                        b = 100
+                        ranges.append((a, b))
+
+                    for x in range(len(Role_8_first_1['Atleta'])):
+                        if Role_8_first_1['Atleta'][x] == jogadores:
+                            a_values = Role_8_first_1.iloc[x].values.tolist()
+                        if Role_8_first_1['Atleta'][x] == alvo:
+                            b_values = Role_8_first_1.iloc[x].values.tolist()
+                            
+                    a_values = a_values[4:]
+                    b_values = b_values[4:]
+
+                    values = [a_values, b_values]
+
+                    #Plotting Data
+                    title = dict(
+                        title_name = jogadores,
+                        title_color = '#B6282F',
+                        subtitle_name = jogadores_clube + "/" + jogadores_liga,
+                        subtitle_color = '#B6282F',
+                        title_name_2 = alvo,
+                        title_color_2 = '#344D94',
+                        subtitle_name_2 = alvo_clube + "/" + alvo_liga,
+                        subtitle_color_2 = '#344D94',
+                        title_fontsize = 18,
+                    ) 
+
+                    endnote = 'Viz by@JAmerico1898\ Data from Wyscout\nAll data in League percentiles'
+
+                    radar=Radar(fontfamily='Cursive', range_fontsize=8)
+                    fig,ax = radar.plot_radar(ranges=ranges,params=params,values=values,radar_color=['#B6282F', '#344D94'], dpi=600, alphas=[.8,.6], title=title, endnote=endnote, compare=True)
+                    st.pyplot(fig)
+
+                    ############################################################################
+                    # Preparing Graph 2
+                    params = list(Role_8_first_2.columns)
+                    params = params[4:]
+                    
+                    #Preparing Data
+                    ranges = []
+                    a_values = []
+                    b_values = []
+
+                    for x in params:
+                        a = min(Role_8_first_2[params][x])
+                        a = 0
+                        b = max(Role_8_first_2[params][x])
+                        b = 100
+                        ranges.append((a, b))
+
+                    for x in range(len(Role_8_first_2['Atleta'])):
+                        if Role_8_first_2['Atleta'][x] == jogadores:
+                            a_values = Role_8_first_2.iloc[x].values.tolist()
+                        if Role_8_first_2['Atleta'][x] == alvo:
+                            b_values = Role_8_first_2.iloc[x].values.tolist()
+                            
+                    a_values = a_values[4:]
+                    b_values = b_values[4:]
+
+                    values = [a_values, b_values]
+
+                    #Plotting Data
+                    title = dict(
+                        title_name = jogadores,
+                        title_color = '#B6282F',
+                        subtitle_name = jogadores_clube + "/" + jogadores_liga,
+                        subtitle_color = '#B6282F',
+                        title_name_2 = alvo,
+                        title_color_2 = '#344D94',
+                        subtitle_name_2 = alvo_clube + "/" + alvo_liga,
+                        subtitle_color_2 = '#344D94',
+                        title_fontsize = 18,
+                    ) 
+
+                    endnote = 'Viz by@JAmerico1898\ Data from Wyscout\nAll data in League percentiles'
+
+                    radar=Radar(fontfamily='Cursive', range_fontsize=8)
+                    fig,ax = radar.plot_radar(ranges=ranges,params=params,values=values,radar_color=['#B6282F', '#344D94'], dpi=600, alphas=[.8,.6], title=title, endnote=endnote, compare=True)
+                    st.pyplot(fig)
+
+                    ##########################################################################################
+                    ############################################################################
+
+                    #Quarto Gráfico
+                    Role_8_first = Role_8_Mean_Charts.iloc[3:4, :]
+                    Role_8_first = pd.concat([Role_8_first, target]).reset_index()
+
+                    # Definindo atletas para comparar
+                    jogadores = Role_8_first.iat[0, 1]
+                    jogadores_clube = Role_8_first.iat[0, 2]
+                    jogadores_liga = Role_8_first.iat[0, 3]
+                    #alvo = Role_8_first.iat[1, 1]
+                    #alvo_clube = Role_8_first.iat[1, 2]
+                    #alvo_liga = Role_8_first.iat[1, 3]
+
+                    #Splitting Data
+                    Role_8_first_1 = Role_8_first.iloc[:, np.r_[0:3, 3:10]]
+                    Role_8_first_2 = Role_8_first.iloc[:, np.r_[0:3, 10:16]]
+
+                    # Preparing Graph 1
+                    params = list(Role_8_first_1.columns)
+                    params = params[4:]
+                    
+                    #Preparing Data
+                    ranges = []
+                    a_values = []
+                    b_values = []
+
+                    for x in params:
+                        a = min(Role_8_first_1[params][x])
+                        a = 0
+                        b = max(Role_8_first_1[params][x])
+                        b = 100
+                        ranges.append((a, b))
+
+                    for x in range(len(Role_8_first_1['Atleta'])):
+                        if Role_8_first_1['Atleta'][x] == jogadores:
+                            a_values = Role_8_first_1.iloc[x].values.tolist()
+                        if Role_8_first_1['Atleta'][x] == alvo:
+                            b_values = Role_8_first_1.iloc[x].values.tolist()
+                            
+                    a_values = a_values[4:]
+                    b_values = b_values[4:]
+
+                    values = [a_values, b_values]
+
+                    #Plotting Data
+                    title = dict(
+                        title_name = jogadores,
+                        title_color = '#B6282F',
+                        subtitle_name = jogadores_clube + "/" + jogadores_liga,
+                        subtitle_color = '#B6282F',
+                        title_name_2 = alvo,
+                        title_color_2 = '#344D94',
+                        subtitle_name_2 = alvo_clube + "/" + alvo_liga,
+                        subtitle_color_2 = '#344D94',
+                        title_fontsize = 18,
+                    ) 
+
+                    endnote = 'Viz by@JAmerico1898\ Data from Wyscout\nAll data in League percentiles'
+
+                    radar=Radar(fontfamily='Cursive', range_fontsize=8)
+                    fig,ax = radar.plot_radar(ranges=ranges,params=params,values=values,radar_color=['#B6282F', '#344D94'], dpi=600, alphas=[.8,.6], title=title, endnote=endnote, compare=True)
+                    st.pyplot(fig)
+
+                    ############################################################################
+                    # Preparing Graph 2
+                    params = list(Role_8_first_2.columns)
+                    params = params[4:]
+                    
+                    #Preparing Data
+                    ranges = []
+                    a_values = []
+                    b_values = []
+
+                    for x in params:
+                        a = min(Role_8_first_2[params][x])
+                        a = 0
+                        b = max(Role_8_first_2[params][x])
+                        b = 100
+                        ranges.append((a, b))
+
+                    for x in range(len(Role_8_first_2['Atleta'])):
+                        if Role_8_first_2['Atleta'][x] == jogadores:
+                            a_values = Role_8_first_2.iloc[x].values.tolist()
+                        if Role_8_first_2['Atleta'][x] == alvo:
+                            b_values = Role_8_first_2.iloc[x].values.tolist()
+                            
+                    a_values = a_values[4:]
+                    b_values = b_values[4:]
+
+                    values = [a_values, b_values]
+
+                    #Plotting Data
+                    title = dict(
+                        title_name = jogadores,
+                        title_color = '#B6282F',
+                        subtitle_name = jogadores_clube + "/" + jogadores_liga,
+                        subtitle_color = '#B6282F',
+                        title_name_2 = alvo,
+                        title_color_2 = '#344D94',
+                        subtitle_name_2 = alvo_clube + "/" + alvo_liga,
+                        subtitle_color_2 = '#344D94',
+                        title_fontsize = 18,
+                    ) 
+
+                    endnote = 'Viz by@JAmerico1898\ Data from Wyscout\nAll data in League percentiles'
+
+                    radar=Radar(fontfamily='Cursive', range_fontsize=8)
+                    fig,ax = radar.plot_radar(ranges=ranges,params=params,values=values,radar_color=['#B6282F', '#344D94'], dpi=600, alphas=[.8,.6], title=title, endnote=endnote, compare=True)
+                    st.pyplot(fig)
+
+                    ##########################################################################################
+                    ############################################################################
+
+                    #Quinto Gráfico
+                    Role_8_first = Role_8_Mean_Charts.iloc[4:5, :]
+                    Role_8_first = pd.concat([Role_8_first, target]).reset_index()
+
+                    # Definindo atletas para comparar
+                    jogadores = Role_8_first.iat[0, 1]
+                    jogadores_clube = Role_8_first.iat[0, 2]
+                    jogadores_liga = Role_8_first.iat[0, 3]
+                    #alvo = Role_8_first.iat[1, 1]
+                    #alvo_clube = Role_8_first.iat[1, 2]
+                    #alvo_liga = Role_8_first.iat[1, 3]
+
+                    #Splitting Data
+                    Role_8_first_1 = Role_8_first.iloc[:, np.r_[0:3, 3:10]]
+                    Role_8_first_2 = Role_8_first.iloc[:, np.r_[0:3, 10:16]]
+
+                    # Preparing Graph 1
+                    params = list(Role_8_first_1.columns)
+                    params = params[4:]
+                    
+                    #Preparing Data
+                    ranges = []
+                    a_values = []
+                    b_values = []
+
+                    for x in params:
+                        a = min(Role_8_first_1[params][x])
+                        a = 0
+                        b = max(Role_8_first_1[params][x])
+                        b = 100
+                        ranges.append((a, b))
+
+                    for x in range(len(Role_8_first_1['Atleta'])):
+                        if Role_8_first_1['Atleta'][x] == jogadores:
+                            a_values = Role_8_first_1.iloc[x].values.tolist()
+                        if Role_8_first_1['Atleta'][x] == alvo:
+                            b_values = Role_8_first_1.iloc[x].values.tolist()
+                            
+                    a_values = a_values[4:]
+                    b_values = b_values[4:]
+
+                    values = [a_values, b_values]
+
+                    #Plotting Data
+                    title = dict(
+                        title_name = jogadores,
+                        title_color = '#B6282F',
+                        subtitle_name = jogadores_clube + "/" + jogadores_liga,
+                        subtitle_color = '#B6282F',
+                        title_name_2 = alvo,
+                        title_color_2 = '#344D94',
+                        subtitle_name_2 = alvo_clube + "/" + alvo_liga,
+                        subtitle_color_2 = '#344D94',
+                        title_fontsize = 18,
+                    ) 
+
+                    endnote = 'Viz by@JAmerico1898\ Data from Wyscout\nAll data in League percentiles'
+
+                    radar=Radar(fontfamily='Cursive', range_fontsize=8)
+                    fig,ax = radar.plot_radar(ranges=ranges,params=params,values=values,radar_color=['#B6282F', '#344D94'], dpi=600, alphas=[.8,.6], title=title, endnote=endnote, compare=True)
+                    st.pyplot(fig)
+
+                    ############################################################################
+                    # Preparing Graph 2
+                    params = list(Role_8_first_2.columns)
+                    params = params[4:]
+                    
+                    #Preparing Data
+                    ranges = []
+                    a_values = []
+                    b_values = []
+
+                    for x in params:
+                        a = min(Role_8_first_2[params][x])
+                        a = 0
+                        b = max(Role_8_first_2[params][x])
+                        b = 100
+                        ranges.append((a, b))
+
+                    for x in range(len(Role_8_first_2['Atleta'])):
+                        if Role_8_first_2['Atleta'][x] == jogadores:
+                            a_values = Role_8_first_2.iloc[x].values.tolist()
+                        if Role_8_first_2['Atleta'][x] == alvo:
+                            b_values = Role_8_first_2.iloc[x].values.tolist()
+                            
+                    a_values = a_values[4:]
+                    b_values = b_values[4:]
+
+                    values = [a_values, b_values]
+
+                    #Plotting Data
+                    title = dict(
+                        title_name = jogadores,
+                        title_color = '#B6282F',
+                        subtitle_name = jogadores_clube + "/" + jogadores_liga,
+                        subtitle_color = '#B6282F',
+                        title_name_2 = alvo,
+                        title_color_2 = '#344D94',
+                        subtitle_name_2 = alvo_clube + "/" + alvo_liga,
+                        subtitle_color_2 = '#344D94',
+                        title_fontsize = 18,
+                    ) 
+
+                    endnote = 'Viz by@JAmerico1898\ Data from Wyscout\nAll data in League percentiles'
+
+                    radar=Radar(fontfamily='Cursive', range_fontsize=8)
+                    fig,ax = radar.plot_radar(ranges=ranges,params=params,values=values,radar_color=['#B6282F', '#344D94'], dpi=600, alphas=[.8,.6], title=title, endnote=endnote, compare=True)
+                    st.pyplot(fig)
+
+########################################################################################################################
+########################################################################################################################
+########################################################################################################################
+########################################################################################################################
+
+                if perfil_similar == ("Primeiro Volante Defensivo"):
+                ###############################################################################
+                ###########################################################################
+                    # PRIMEIRO VOLANTE DEFENSIVO
+                    # Texto de Abertura>
+                    markdown_amount_1 = f"<div style='text-align:center; font-size:{fontsize}px'>{jogador_similar:}</div>"
+                    st.markdown("<h4 style='text-align: center;'>Jogador Selecionado</b></h4>", unsafe_allow_html=True)
+                    st.markdown(markdown_amount_1, unsafe_allow_html=True)
+                    st.markdown("---")
+
+                    #Carregando arquivo de dados
+                    Role_9_data = pd.read_excel('9_Role_Volante_Defensivo_Similarity.xlsx')
+                    Role_9_data = Role_9_data.drop(Role_9_data.columns[0:4], axis=1)
+                    Role_9_data.reset_index(drop=True, inplace=True)
+
+                    # Step : Defina o atleta-alvo
+                    #base_bruta_similaridade = pd.read_excel("base_bruta_similaridade.xlsx")
+                    target = Role_9_data.loc[(Role_9_data['Atleta'] == jogador_similar)]
+
+                    #Step : Definindo "ID-alvo"
+                    given_ID = target.iat[0, -1]
+                    
+                    selected = Role_9_data
+
+                    # Step 9: Add columns "1", "2", "3" to Role_9_data
+
+                    selected['1'] = given_ID[0]
+                    selected['2'] = given_ID[1]
+                    selected['3'] = given_ID[2]
+
+                    # Assigning correct columns to 1, 2, 3
+
+                    if given_ID[0] == "A":
+                        selected['1'] = selected["A1"]
+                    elif given_ID[0] == "B":
+                        selected['1'] = selected["B1"]
+                    elif given_ID[0] == "C":
+                        selected['1'] = selected["C1"]
+                    elif given_ID[0] == "D":
+                        selected['1'] = selected["D1"]
+
+
+                    if given_ID[1] == "A":
+                        selected['2'] = selected["A1"]
+                    elif given_ID[1] == "B":
+                        selected['2'] = selected["B1"]
+                    elif given_ID[1] == "C":
+                        selected['2'] = selected["C1"]
+                    elif given_ID[1] == "D":
+                        selected['2'] = selected["D1"]
+                    
+                    
+                    if given_ID[2] == "A":
+                        selected['3'] = selected["A1"]
+                    elif given_ID[2] == "B":
+                        selected['3'] = selected["B1"]
+                    elif given_ID[2] == "C":
+                        selected['3'] = selected["C1"]
+                    elif given_ID[2] == "D":
+                        selected['3'] = selected["D1"]
+
+                   # Applying PCA for Scaled Selected Columns
+
+                    leagues = ["ARG1", "AUT", "BEL1", "BRA1", "BRA2", "BUL","CHI", "CHN", 
+                            "COL", "DEN", "ECU", "ENG1", "ENG2", "FRA1", "FRA2", "GER1", 
+                            "GER2", "GRE", "HOL", "ITA1", "ITA2", "JAP", "MEX", "PAR", 
+                            "PER", "POR1", "QAT", "RUS", "SAUD", "SCT", "SER", "SPA1", 
+                            "SPA2", "SWZ", "TUR", "UAE", "UKR", "URU", "USA"]
+
+                    # Iterate over each league
+                    for league in leagues:
+
+                        # Extract columns 46 through 50
+                        VolanteDefensivo = selected.iloc[:, np.r_[-3:0]]
+
+                        # Defining Columns
+                        VolanteDefensivo_columns = VolanteDefensivo.columns
+
+                        # Applying PCA
+                        pca = PCA(n_components=2)
+                        principalComponents = pca.fit_transform(VolanteDefensivo)
+
+                        # Create a DataFrame with loadings
+                        LoadingsVolanteDefensivo = pd.DataFrame(pca.components_.T**2, index=VolanteDefensivo_columns, columns=['loading factor 1', 'loading factor 2'])
+
+                        # Multiplying Matrices to obtain Pre_Variables
+                        Similarity = pd.DataFrame(np.matmul(VolanteDefensivo, LoadingsVolanteDefensivo['loading factor 1']) + np.matmul(VolanteDefensivo, LoadingsVolanteDefensivo['loading factor 2']),
+                                                columns=["Similarity"])
+
+                    # Rebuilding Full Training Set
+                    selected = selected.join(Similarity)
+
+                    ##############################################################
+                    ##############################################################
+
+                    # Lista de Similares
+                    # Initialize an empty list to store DataFrames
+                    target = selected.loc[(Role_9_data['Atleta'] == jogador_similar)]
+                    target_similarity = target.iat[0, -1]
+
+                    selected["Índice de Similaridade"] = (selected['Similarity']/target_similarity)*100
+                    selected["Índice de Similaridade"] = round(selected["Índice de Similaridade"], 2)
+
+                    target = selected.loc[(selected['Atleta'] == jogador_similar)]
+                    selected['Dif_Similarity'] = abs(selected["Índice de Similaridade"] - 100)
+
+                    selected = selected.sort_values(by='Dif_Similarity')
+
+                    lista_similares = selected.iloc[1:31, np.r_[0, 2, 21, 26, -2:0]]
+                    lista_similares = lista_similares.sort_values(by='Rating', ascending=False)
+
+                    # Lista de Jogadores Similares Ordenados segundo o Rating
+                    st.markdown("<h4 style='text-align: center;'>30 Jogadores + Similares</b></h4>", unsafe_allow_html=True)
+                    st.dataframe(lista_similares, use_container_width=True, hide_index=True)
+                    st.markdown("---")
+
+                    # Lista de Latinos
+                    selected_latam = selected[(selected["Nacionalidade"] == "Argentina")|(selected["Nacionalidade"] == "Brazil")
+                                        |(selected["Nacionalidade"] == "Bolivia")|(selected["Nacionalidade"] == "Chile")
+                                        |(selected["Nacionalidade"] == "Colombia")|(selected["Nacionalidade"] == "Costa Rica")
+                                        |(selected["Nacionalidade"] == "Ecuador")|(selected["Nacionalidade"] == "Mexico")
+                                        |(selected["Nacionalidade"] == "Panama")|(selected["Nacionalidade"] == "Paraguay")
+                                        |(selected["Nacionalidade"] == "Peru")|(selected["Nacionalidade"] == "Uruguay")
+                                        |(selected["Nacionalidade"] == "Venezuela")]
+
+                    lista_similares_latam = selected_latam.iloc[1:31, np.r_[0, 2, 21, 26, -2:0]]
+                    lista_similares_latam = lista_similares_latam.sort_values(by="Rating", ascending = False)
+
+                    #Texto para os Gráficos
+                    st.markdown("<h4 style='text-align: center;'>5 Jogadores Latinos Similares Melhor Ranquedos</b></h4>", unsafe_allow_html=True)
+                    st.markdown("---")    
+
+
+                    # Gerar Gráficos com os 5 melhores
+                    # Arquivo para o Gráfico
+                    Role_9_Mean_Charts = selected_latam.iloc[:, np.r_[0, 2, 21, 27:31]]
+                    target = target.iloc[:, np.r_[0, 2, 21, 27:31]]
+                    # Renomeando Colunas
+                    Role_9_Mean_Charts = Role_9_Mean_Charts.rename(columns={'Ações_Defensivas_BemSucedidas_Percentil':'Ações_Defensivas_BemSucedidas', 
+                                                                            'Duelos_Defensivos_Ganhos_Percentil':'Duelos_Defensivos_Ganhos', 
+                                                                            'Duelos_Aéreos_Ganhos_Percentil':'Duelos_Aéreos_Ganhos',
+                                                                            'Passes_Progressivos_Certos_Percentil':'Passes_Progressivos_Certos'})
+                    
+                    target = target.rename(columns={'Ações_Defensivas_BemSucedidas_Percentil':'Ações_Defensivas_BemSucedidas', 
+                                                                            'Duelos_Defensivos_Ganhos_Percentil':'Duelos_Defensivos_Ganhos', 
+                                                                            'Duelos_Aéreos_Ganhos_Percentil':'Duelos_Aéreos_Ganhos',
+                                                                            'Passes_Progressivos_Certos_Percentil':'Passes_Progressivos_Certos'})
+                    
+                    #Dropping Atleta-alvo
+                    Role_9_Mean_Charts = Role_9_Mean_Charts[Role_9_Mean_Charts['Atleta'] != jogador_similar] 
+                    #Extraindo 5 melhores
+                    Role_9_Mean_Charts = Role_9_Mean_Charts.iloc[0:5, :]
+
+
+                    #Primeiro Gráfico
+                    Role_9_first = Role_9_Mean_Charts.iloc[0:1, :]
+                    Role_9_first = pd.concat([Role_9_first, target]).reset_index()
+
+                    # Definindo atletas para comparar
+                    jogadores = Role_9_first.iat[0, 1]
+                    jogadores_clube = Role_9_first.iat[0, 2]
+                    jogadores_liga = Role_9_first.iat[0, 3]
+                    alvo = Role_9_first.iat[1, 1]
+                    alvo_clube = Role_9_first.iat[1, 2]
+                    alvo_liga = Role_9_first.iat[1, 3]
+
+                    #Splitting Data
+                    Role_9_first_1 = Role_9_first.iloc[:, np.r_[0:3, 3:8]]
+
+                    # Preparing Graph 1
+                    params = list(Role_9_first_1.columns)
+                    params = params[4:]
+                    
+                    #Preparing Data
+                    ranges = []
+                    a_values = []
+                    b_values = []
+
+                    for x in params:
+                        a = min(Role_9_first_1[params][x])
+                        a = 0
+                        b = max(Role_9_first_1[params][x])
+                        b = 100
+                        ranges.append((a, b))
+
+                    for x in range(len(Role_9_first_1['Atleta'])):
+                        if Role_9_first_1['Atleta'][x] == jogadores:
+                            a_values = Role_9_first_1.iloc[x].values.tolist()
+                        if Role_9_first_1['Atleta'][x] == alvo:
+                            b_values = Role_9_first_1.iloc[x].values.tolist()
+                            
+                    a_values = a_values[4:]
+                    b_values = b_values[4:]
+
+                    values = [a_values, b_values]
+
+                    #Plotting Data
+                    title = dict(
+                        title_name = jogadores,
+                        title_color = '#B6282F',
+                        subtitle_name = jogadores_clube + "/" + jogadores_liga,
+                        subtitle_color = '#B6282F',
+                        title_name_2 = alvo,
+                        title_color_2 = '#344D94',
+                        subtitle_name_2 = alvo_clube + "/" + alvo_liga,
+                        subtitle_color_2 = '#344D94',
+                        title_fontsize = 18,
+                    ) 
+
+                    endnote = 'Viz by@JAmerico1898\ Data from Wyscout\nAll data in League percentiles'
+
+                    radar=Radar(fontfamily='Cursive', range_fontsize=8)
+                    fig,ax = radar.plot_radar(ranges=ranges,params=params,values=values,radar_color=['#B6282F', '#344D94'], dpi=600, alphas=[.8,.6], title=title, endnote=endnote, compare=True)
+                    st.pyplot(fig)
+
+                    ############################################################################
+                    ############################################################################
+
+                    #Segundo Gráfico
+                    Role_9_first = Role_9_Mean_Charts.iloc[1:2, :]
+                    Role_9_first = pd.concat([Role_9_first, target]).reset_index()
+
+                    # Definindo atletas para comparar
+                    jogadores = Role_9_first.iat[0, 1]
+                    jogadores_clube = Role_9_first.iat[0, 2]
+                    jogadores_liga = Role_9_first.iat[0, 3]
+
+                    #Splitting Data
+                    Role_9_first_1 = Role_9_first.iloc[:, np.r_[0:3, 3:8]]
+
+                    # Preparing Graph 1
+                    params = list(Role_9_first_1.columns)
+                    params = params[4:]
+                    
+                    #Preparing Data
+                    ranges = []
+                    a_values = []
+                    b_values = []
+
+                    for x in params:
+                        a = min(Role_9_first_1[params][x])
+                        a = 0
+                        b = max(Role_9_first_1[params][x])
+                        b = 100
+                        ranges.append((a, b))
+
+                    for x in range(len(Role_9_first_1['Atleta'])):
+                        if Role_9_first_1['Atleta'][x] == jogadores:
+                            a_values = Role_9_first_1.iloc[x].values.tolist()
+                        if Role_9_first_1['Atleta'][x] == alvo:
+                            b_values = Role_9_first_1.iloc[x].values.tolist()
+                            
+                    a_values = a_values[4:]
+                    b_values = b_values[4:]
+
+                    values = [a_values, b_values]
+
+                    #Plotting Data
+                    title = dict(
+                        title_name = jogadores,
+                        title_color = '#B6282F',
+                        subtitle_name = jogadores_clube + "/" + jogadores_liga,
+                        subtitle_color = '#B6282F',
+                        title_name_2 = alvo,
+                        title_color_2 = '#344D94',
+                        subtitle_name_2 = alvo_clube + "/" + alvo_liga,
+                        subtitle_color_2 = '#344D94',
+                        title_fontsize = 18,
+                    ) 
+
+                    endnote = 'Viz by@JAmerico1898\ Data from Wyscout\nAll data in League percentiles'
+
+                    radar=Radar(fontfamily='Cursive', range_fontsize=8)
+                    fig,ax = radar.plot_radar(ranges=ranges,params=params,values=values,radar_color=['#B6282F', '#344D94'], dpi=600, alphas=[.8,.6], title=title, endnote=endnote, compare=True)
+                    st.pyplot(fig)
+
+                    ############################################################################
+                    ############################################################################
+
+                    #Terceiro Gráfico
+                    Role_9_first = Role_9_Mean_Charts.iloc[2:3, :]
+                    Role_9_first = pd.concat([Role_9_first, target]).reset_index()
+
+                    # Definindo atletas para comparar
+                    jogadores = Role_9_first.iat[0, 1]
+                    jogadores_clube = Role_9_first.iat[0, 2]
+                    jogadores_liga = Role_9_first.iat[0, 3]
+
+                    #Splitting Data
+                    Role_9_first_1 = Role_9_first.iloc[:, np.r_[0:3, 3:8]]
+
+                    # Preparing Graph 1
+                    params = list(Role_9_first_1.columns)
+                    params = params[4:]
+                    
+                    #Preparing Data
+                    ranges = []
+                    a_values = []
+                    b_values = []
+
+                    for x in params:
+                        a = min(Role_9_first_1[params][x])
+                        a = 0
+                        b = max(Role_9_first_1[params][x])
+                        b = 100
+                        ranges.append((a, b))
+
+                    for x in range(len(Role_9_first_1['Atleta'])):
+                        if Role_9_first_1['Atleta'][x] == jogadores:
+                            a_values = Role_9_first_1.iloc[x].values.tolist()
+                        if Role_9_first_1['Atleta'][x] == alvo:
+                            b_values = Role_9_first_1.iloc[x].values.tolist()
+                            
+                    a_values = a_values[4:]
+                    b_values = b_values[4:]
+
+                    values = [a_values, b_values]
+
+                    #Plotting Data
+                    title = dict(
+                        title_name = jogadores,
+                        title_color = '#B6282F',
+                        subtitle_name = jogadores_clube + "/" + jogadores_liga,
+                        subtitle_color = '#B6282F',
+                        title_name_2 = alvo,
+                        title_color_2 = '#344D94',
+                        subtitle_name_2 = alvo_clube + "/" + alvo_liga,
+                        subtitle_color_2 = '#344D94',
+                        title_fontsize = 18,
+                    ) 
+
+                    endnote = 'Viz by@JAmerico1898\ Data from Wyscout\nAll data in League percentiles'
+
+                    radar=Radar(fontfamily='Cursive', range_fontsize=8)
+                    fig,ax = radar.plot_radar(ranges=ranges,params=params,values=values,radar_color=['#B6282F', '#344D94'], dpi=600, alphas=[.8,.6], title=title, endnote=endnote, compare=True)
+                    st.pyplot(fig)
+
+                    ##########################################################################################
+                    ############################################################################
+
+                    #Quarto Gráfico
+                    Role_9_first = Role_9_Mean_Charts.iloc[3:4, :]
+                    Role_9_first = pd.concat([Role_9_first, target]).reset_index()
+
+                    # Definindo atletas para comparar
+                    jogadores = Role_9_first.iat[0, 1]
+                    jogadores_clube = Role_9_first.iat[0, 2]
+                    jogadores_liga = Role_9_first.iat[0, 3]
+ 
+                    #Splitting Data
+                    Role_9_first_1 = Role_9_first.iloc[:, np.r_[0:3, 3:8]]
+
+                    # Preparing Graph 1
+                    params = list(Role_9_first_1.columns)
+                    params = params[4:]
+                    
+                    #Preparing Data
+                    ranges = []
+                    a_values = []
+                    b_values = []
+
+                    for x in params:
+                        a = min(Role_9_first_1[params][x])
+                        a = 0
+                        b = max(Role_9_first_1[params][x])
+                        b = 100
+                        ranges.append((a, b))
+
+                    for x in range(len(Role_9_first_1['Atleta'])):
+                        if Role_9_first_1['Atleta'][x] == jogadores:
+                            a_values = Role_9_first_1.iloc[x].values.tolist()
+                        if Role_9_first_1['Atleta'][x] == alvo:
+                            b_values = Role_9_first_1.iloc[x].values.tolist()
+                            
+                    a_values = a_values[4:]
+                    b_values = b_values[4:]
+
+                    values = [a_values, b_values]
+
+                    #Plotting Data
+                    title = dict(
+                        title_name = jogadores,
+                        title_color = '#B6282F',
+                        subtitle_name = jogadores_clube + "/" + jogadores_liga,
+                        subtitle_color = '#B6282F',
+                        title_name_2 = alvo,
+                        title_color_2 = '#344D94',
+                        subtitle_name_2 = alvo_clube + "/" + alvo_liga,
+                        subtitle_color_2 = '#344D94',
+                        title_fontsize = 18,
+                    ) 
+
+                    endnote = 'Viz by@JAmerico1898\ Data from Wyscout\nAll data in League percentiles'
+
+                    radar=Radar(fontfamily='Cursive', range_fontsize=8)
+                    fig,ax = radar.plot_radar(ranges=ranges,params=params,values=values,radar_color=['#B6282F', '#344D94'], dpi=600, alphas=[.8,.6], title=title, endnote=endnote, compare=True)
+                    st.pyplot(fig)
+
+                    ##########################################################################################
+                    ############################################################################
+
+                    #Quinto Gráfico
+                    Role_9_first = Role_9_Mean_Charts.iloc[4:5, :]
+                    Role_9_first = pd.concat([Role_9_first, target]).reset_index()
+
+                    # Definindo atletas para comparar
+                    jogadores = Role_9_first.iat[0, 1]
+                    jogadores_clube = Role_9_first.iat[0, 2]
+                    jogadores_liga = Role_9_first.iat[0, 3]
+
+                    #Splitting Data
+                    Role_9_first_1 = Role_9_first.iloc[:, np.r_[0:3, 3:8]]
+
+                    # Preparing Graph 1
+                    params = list(Role_9_first_1.columns)
+                    params = params[4:]
+                    
+                    #Preparing Data
+                    ranges = []
+                    a_values = []
+                    b_values = []
+
+                    for x in params:
+                        a = min(Role_9_first_1[params][x])
+                        a = 0
+                        b = max(Role_9_first_1[params][x])
+                        b = 100
+                        ranges.append((a, b))
+
+                    for x in range(len(Role_9_first_1['Atleta'])):
+                        if Role_9_first_1['Atleta'][x] == jogadores:
+                            a_values = Role_9_first_1.iloc[x].values.tolist()
+                        if Role_9_first_1['Atleta'][x] == alvo:
+                            b_values = Role_9_first_1.iloc[x].values.tolist()
+                            
+                    a_values = a_values[4:]
+                    b_values = b_values[4:]
+
+                    values = [a_values, b_values]
+
+                    #Plotting Data
+                    title = dict(
+                        title_name = jogadores,
+                        title_color = '#B6282F',
+                        subtitle_name = jogadores_clube + "/" + jogadores_liga,
+                        subtitle_color = '#B6282F',
+                        title_name_2 = alvo,
+                        title_color_2 = '#344D94',
+                        subtitle_name_2 = alvo_clube + "/" + alvo_liga,
+                        subtitle_color_2 = '#344D94',
+                        title_fontsize = 18,
+                    ) 
+
+                    endnote = 'Viz by@JAmerico1898\ Data from Wyscout\nAll data in League percentiles'
+
+                    radar=Radar(fontfamily='Cursive', range_fontsize=8)
+                    fig,ax = radar.plot_radar(ranges=ranges,params=params,values=values,radar_color=['#B6282F', '#344D94'], dpi=600, alphas=[.8,.6], title=title, endnote=endnote, compare=True)
+                    st.pyplot(fig)
+
+                    ########################################################################################################
+                    ########################################################################################################
+                    ########################################################################################################
+                    ########################################################################################################
+
+                if perfil_similar == ("Primeiro Volante Construtor"):
+                ###############################################################################
+                ###########################################################################
+                    # PRIMEIRO VOLANTE CONSTRUTOR
+                    # Texto de Abertura>
+                    markdown_amount_1 = f"<div style='text-align:center; font-size:{fontsize}px'>{jogador_similar:}</div>"
+                    st.markdown("<h4 style='text-align: center;'>Jogador Selecionado</b></h4>", unsafe_allow_html=True)
+                    st.markdown(markdown_amount_1, unsafe_allow_html=True)
+                    st.markdown("---")
+
+                    #Carregando arquivo de dados
+                    Role_10_data = pd.read_excel('10_Role_Volante_Construtor_Similarity.xlsx')
+                    Role_10_data = Role_10_data.drop(Role_10_data.columns[0:4], axis=1)
+                    Role_10_data.reset_index(drop=True, inplace=True)
+
+                    # Step : Defina o atleta-alvo
+                    #base_bruta_similaridade = pd.read_excel("base_bruta_similaridade.xlsx")
+                    target = Role_10_data.loc[(Role_10_data['Atleta'] == jogador_similar)]
+
+                    #Step : Definindo "ID-alvo"
+                    given_ID = target.iat[0, -1]
+                    
+                    selected = Role_10_data
+
+                    # Step 9: Add columns "1", "2", "3" to Role_10_data
+
+                    selected['1'] = given_ID[0]
+                    selected['2'] = given_ID[1]
+                    selected['3'] = given_ID[2]
+                    selected['4'] = given_ID[3]
+
+                    # Assigning correct columns to 1, 2, 3
+
+                    if given_ID[0] == "A":
+                        selected['1'] = selected["A1"]
+                    elif given_ID[0] == "B":
+                        selected['1'] = selected["B1"]
+                    elif given_ID[0] == "C":
+                        selected['1'] = selected["C1"]
+                    elif given_ID[0] == "D":
+                        selected['1'] = selected["D1"]
+                    elif given_ID[0] == "E":
+                        selected['1'] = selected["E1"]
+                    elif given_ID[0] == "F":
+                        selected['1'] = selected["F1"]
+                    elif given_ID[0] == "G":
+                        selected['1'] = selected["G1"]
+                    elif given_ID[0] == "H":
+                        selected['1'] = selected["H1"]
+                    elif given_ID[0] == "I":
+                        selected['1'] = selected["I1"]
+
+
+                    if given_ID[1] == "A":
+                        selected['2'] = selected["A1"]
+                    elif given_ID[1] == "B":
+                        selected['2'] = selected["B1"]
+                    elif given_ID[1] == "C":
+                        selected['2'] = selected["C1"]
+                    elif given_ID[1] == "D":
+                        selected['2'] = selected["D1"]
+                    elif given_ID[1] == "E":
+                        selected['2'] = selected["E1"]
+                    elif given_ID[1] == "F":
+                        selected['2'] = selected["F1"]
+                    elif given_ID[1] == "G":
+                        selected['2'] = selected["G1"]
+                    elif given_ID[1] == "H":
+                        selected['2'] = selected["H1"]
+                    elif given_ID[1] == "I":
+                        selected['2'] = selected["I1"]
+                    
+                    if given_ID[2] == "A":
+                        selected['3'] = selected["A1"]
+                    elif given_ID[2] == "B":
+                        selected['3'] = selected["B1"]
+                    elif given_ID[2] == "C":
+                        selected['3'] = selected["C1"]
+                    elif given_ID[2] == "D":
+                        selected['3'] = selected["D1"]
+                    elif given_ID[2] == "E":
+                        selected['3'] = selected["E1"]
+                    elif given_ID[2] == "F":
+                        selected['3'] = selected["F1"]
+                    elif given_ID[2] == "G":
+                        selected['3'] = selected["G1"]
+                    elif given_ID[2] == "H":
+                        selected['3'] = selected["H1"]
+                    elif given_ID[2] == "I":
+                        selected['3'] = selected["I1"]
+
+                    if given_ID[3] == "A":
+                        selected['4'] = selected["A1"]
+                    elif given_ID[3] == "B":
+                        selected['4'] = selected["B1"]
+                    elif given_ID[3] == "C":
+                        selected['4'] = selected["C1"]
+                    elif given_ID[3] == "D":
+                        selected['4'] = selected["D1"]
+                    elif given_ID[3] == "E":
+                        selected['4'] = selected["E1"]
+                    elif given_ID[3] == "F":
+                        selected['4'] = selected["F1"]
+                    elif given_ID[3] == "G":
+                        selected['4'] = selected["G1"]
+                    elif given_ID[3] == "H":
+                        selected['4'] = selected["H1"]
+                    elif given_ID[3] == "I":
+                        selected['4'] = selected["I1"]
+
+                    # Applying PCA for Scaled Selected Columns
+
+                    leagues = ["ARG1", "AUT", "BEL1", "BRA1", "BRA2", "BUL","CHI", "CHN", 
+                            "COL", "DEN", "ECU", "ENG1", "ENG2", "FRA1", "FRA2", "GER1", 
+                            "GER2", "GRE", "HOL", "ITA1", "ITA2", "JAP", "MEX", "PAR", 
+                            "PER", "POR1", "QAT", "RUS", "SAUD", "SCT", "SER", "SPA1", 
+                            "SPA2", "SWZ", "TUR", "UAE", "UKR", "URU", "USA"]
+
+                    # Iterate over each league
+                    for league in leagues:
+
+                        # Extract columns 46 through 50
+                        VolanteConstrutor = selected.iloc[:, np.r_[-4:0]]
+
+                        # Defining Columns
+                        VolanteConstrutor_columns = VolanteConstrutor.columns
+
+                        # Applying PCA
+                        pca = PCA(n_components=2)
+                        principalComponents = pca.fit_transform(VolanteConstrutor)
+
+                        # Create a DataFrame with loadings
+                        LoadingsVolanteConstrutor = pd.DataFrame(pca.components_.T**2, index=VolanteConstrutor_columns, columns=['loading factor 1', 'loading factor 2'])
+
+                        # Multiplying Matrices to obtain Pre_Variables
+                        Similarity = pd.DataFrame(np.matmul(VolanteConstrutor, LoadingsVolanteConstrutor['loading factor 1']) + np.matmul(VolanteConstrutor, LoadingsVolanteConstrutor['loading factor 2']),
+                                                columns=["Similarity"])
+
+                    # Rebuilding Full Training Set
+                    selected = selected.join(Similarity)
+
+                    ##############################################################
+                    ##############################################################
+
+                    # Lista de Similares
+                    # Initialize an empty list to store DataFrames
+                    target = selected.loc[(Role_10_data['Atleta'] == jogador_similar)]
+                    target_similarity = target.iat[0, -1]
+
+                    selected["Índice de Similaridade"] = (selected['Similarity']/target_similarity)*100
+                    selected["Índice de Similaridade"] = round(selected["Índice de Similaridade"], 2)
+
+                    target = selected.loc[(selected['Atleta'] == jogador_similar)]
+                    selected['Dif_Similarity'] = abs(selected["Índice de Similaridade"] - 100)
+
+                    selected = selected.sort_values(by='Dif_Similarity')
+
+                    lista_similares = selected.iloc[1:31, np.r_[0, 2, 26, 31, -2:0]]
+                    lista_similares = lista_similares.sort_values(by='Rating', ascending=False)
+
+                    # Lista de Jogadores Similares Ordenados segundo o Rating
+                    st.markdown("<h4 style='text-align: center;'>30 Jogadores + Similares</b></h4>", unsafe_allow_html=True)
+                    st.dataframe(lista_similares, use_container_width=True, hide_index=True)
+                    st.markdown("---")
+
+                    # Lista de Latinos
+                    selected_latam = selected[(selected["Nacionalidade"] == "Argentina")|(selected["Nacionalidade"] == "Brazil")
+                                        |(selected["Nacionalidade"] == "Bolivia")|(selected["Nacionalidade"] == "Chile")
+                                        |(selected["Nacionalidade"] == "Colombia")|(selected["Nacionalidade"] == "Costa Rica")
+                                        |(selected["Nacionalidade"] == "Ecuador")|(selected["Nacionalidade"] == "Mexico")
+                                        |(selected["Nacionalidade"] == "Panama")|(selected["Nacionalidade"] == "Paraguay")
+                                        |(selected["Nacionalidade"] == "Peru")|(selected["Nacionalidade"] == "Uruguay")
+                                        |(selected["Nacionalidade"] == "Venezuela")]
+
+                    lista_similares_latam = selected_latam.iloc[1:31, np.r_[0, 2, 26, 31, -2:0]]
+                    lista_similares_latam = lista_similares_latam.sort_values(by="Rating", ascending = False)
+
+                    #Texto para os Gráficos
+                    st.markdown("<h4 style='text-align: center;'>5 Jogadores Latinos Similares Melhor Ranquedos</b></h4>", unsafe_allow_html=True)
+                    st.markdown("---")    
+
+
+                    # Gerar Gráficos com os 5 melhores
+                    # Arquivo para o Gráfico
+                    Role_10_Mean_Charts = selected_latam.iloc[:, np.r_[0, 2, 26, 32:41]]
+                    target = target.iloc[:, np.r_[0, 2, 26, 32:41]]
+                    # Renomeando Colunas
+                    Role_10_Mean_Charts = Role_10_Mean_Charts.rename(columns={'Ações_Defensivas_BemSucedidas_Percentil':'Ações_Defensivas_BemSucedidas', 
+                                                            'Passes_Longos_Certos_Percentil':'Passes_Longos_Certos', 
+                                                            'Passes_Frontais_Certos_Percentil':'Passes_Frontais_Certos', 
+                                                            'Passes_Progressivos_Certos_Percentil':'Passes_Progressivos_Certos',
+                                                            'Ações_Ofensivas_BemSucedidas_Percentil':'Ações_Ofensivas_BemSucedidas', 
+                                                            'Duelos_Ofensivos_Ganhos_Percentil':'Duelos_Ofensivos_Ganhos', 
+                                                            'Dribles_BemSucedidos_Percentil':'Dribles_BemSucedidos',
+                                                            'Corridas_Progressivas_Percentil':'Corridas_Progressivas', 
+                                                            'Passes_TerçoFinal_Certos_Percentil':'Passes_TerçoFinal_Certos'})
+                    
+                    target = target.rename(columns={'Ações_Defensivas_BemSucedidas_Percentil':'Ações_Defensivas_BemSucedidas', 
+                                                            'Passes_Longos_Certos_Percentil':'Passes_Longos_Certos', 
+                                                            'Passes_Frontais_Certos_Percentil':'Passes_Frontais_Certos', 
+                                                            'Passes_Progressivos_Certos_Percentil':'Passes_Progressivos_Certos',
+                                                            'Ações_Ofensivas_BemSucedidas_Percentil':'Ações_Ofensivas_BemSucedidas', 
+                                                            'Duelos_Ofensivos_Ganhos_Percentil':'Duelos_Ofensivos_Ganhos', 
+                                                            'Dribles_BemSucedidos_Percentil':'Dribles_BemSucedidos',
+                                                            'Corridas_Progressivas_Percentil':'Corridas_Progressivas', 
+                                                            'Passes_TerçoFinal_Certos_Percentil':'Passes_TerçoFinal_Certos'})
+                    
+                    #Dropping Atleta-alvo
+                    Role_10_Mean_Charts = Role_10_Mean_Charts[Role_10_Mean_Charts['Atleta'] != jogador_similar] 
+                    #Extraindo 5 melhores
+                    Role_10_Mean_Charts = Role_10_Mean_Charts.iloc[0:5, :]
+
+
+                    #Primeiro Gráfico
+                    Role_10_first = Role_10_Mean_Charts.iloc[0:1, :]
+                    Role_10_first = pd.concat([Role_10_first, target]).reset_index()
+
+                    # Definindo atletas para comparar
+                    jogadores = Role_10_first.iat[0, 1]
+                    jogadores_clube = Role_10_first.iat[0, 2]
+                    jogadores_liga = Role_10_first.iat[0, 3]
+                    alvo = Role_10_first.iat[1, 1]
+                    alvo_clube = Role_10_first.iat[1, 2]
+                    alvo_liga = Role_10_first.iat[1, 3]
+
+                    #Splitting Data
+                    Role_10_first_1 = Role_10_first.iloc[:, np.r_[0:3, 3:13]]
+
+                    # Preparing Graph 1
+                    params = list(Role_10_first_1.columns)
+                    params = params[4:]
+                    
+                    #Preparing Data
+                    ranges = []
+                    a_values = []
+                    b_values = []
+
+                    for x in params:
+                        a = min(Role_10_first_1[params][x])
+                        a = 0
+                        b = max(Role_10_first_1[params][x])
+                        b = 100
+                        ranges.append((a, b))
+
+                    for x in range(len(Role_10_first_1['Atleta'])):
+                        if Role_10_first_1['Atleta'][x] == jogadores:
+                            a_values = Role_10_first_1.iloc[x].values.tolist()
+                        if Role_10_first_1['Atleta'][x] == alvo:
+                            b_values = Role_10_first_1.iloc[x].values.tolist()
+                            
+                    a_values = a_values[4:]
+                    b_values = b_values[4:]
+
+                    values = [a_values, b_values]
+
+                    #Plotting Data
+                    title = dict(
+                        title_name = jogadores,
+                        title_color = '#B6282F',
+                        subtitle_name = jogadores_clube + "/" + jogadores_liga,
+                        subtitle_color = '#B6282F',
+                        title_name_2 = alvo,
+                        title_color_2 = '#344D94',
+                        subtitle_name_2 = alvo_clube + "/" + alvo_liga,
+                        subtitle_color_2 = '#344D94',
+                        title_fontsize = 18,
+                    ) 
+
+                    endnote = 'Viz by@JAmerico1898\ Data from Wyscout\nAll data in League percentiles'
+
+                    radar=Radar(fontfamily='Cursive', range_fontsize=8)
+                    fig,ax = radar.plot_radar(ranges=ranges,params=params,values=values,radar_color=['#B6282F', '#344D94'], dpi=600, alphas=[.8,.6], title=title, endnote=endnote, compare=True)
+                    st.pyplot(fig)
+
+                    ############################################################################
+                    ############################################################################
+
+                    #Segundo Gráfico
+                    Role_10_first = Role_10_Mean_Charts.iloc[1:2, :]
+                    Role_10_first = pd.concat([Role_10_first, target]).reset_index()
+
+                    # Definindo atletas para comparar
+                    jogadores = Role_10_first.iat[0, 1]
+                    jogadores_clube = Role_10_first.iat[0, 2]
+                    jogadores_liga = Role_10_first.iat[0, 3]
+
+                    #Splitting Data
+                    Role_10_first_1 = Role_10_first.iloc[:, np.r_[0:3, 3:13]]
+
+                    # Preparing Graph 1
+                    params = list(Role_10_first_1.columns)
+                    params = params[4:]
+                    
+                    #Preparing Data
+                    ranges = []
+                    a_values = []
+                    b_values = []
+
+                    for x in params:
+                        a = min(Role_10_first_1[params][x])
+                        a = 0
+                        b = max(Role_10_first_1[params][x])
+                        b = 100
+                        ranges.append((a, b))
+
+                    for x in range(len(Role_10_first_1['Atleta'])):
+                        if Role_10_first_1['Atleta'][x] == jogadores:
+                            a_values = Role_10_first_1.iloc[x].values.tolist()
+                        if Role_10_first_1['Atleta'][x] == alvo:
+                            b_values = Role_10_first_1.iloc[x].values.tolist()
+                            
+                    a_values = a_values[4:]
+                    b_values = b_values[4:]
+
+                    values = [a_values, b_values]
+
+                    #Plotting Data
+                    title = dict(
+                        title_name = jogadores,
+                        title_color = '#B6282F',
+                        subtitle_name = jogadores_clube + "/" + jogadores_liga,
+                        subtitle_color = '#B6282F',
+                        title_name_2 = alvo,
+                        title_color_2 = '#344D94',
+                        subtitle_name_2 = alvo_clube + "/" + alvo_liga,
+                        subtitle_color_2 = '#344D94',
+                        title_fontsize = 18,
+                    ) 
+
+                    endnote = 'Viz by@JAmerico1898\ Data from Wyscout\nAll data in League percentiles'
+
+                    radar=Radar(fontfamily='Cursive', range_fontsize=8)
+                    fig,ax = radar.plot_radar(ranges=ranges,params=params,values=values,radar_color=['#B6282F', '#344D94'], dpi=600, alphas=[.8,.6], title=title, endnote=endnote, compare=True)
+                    st.pyplot(fig)
+
+                    ############################################################################
+                    ############################################################################
+
+                    #Terceiro Gráfico
+                    Role_10_first = Role_10_Mean_Charts.iloc[2:3, :]
+                    Role_10_first = pd.concat([Role_10_first, target]).reset_index()
+
+                    # Definindo atletas para comparar
+                    jogadores = Role_10_first.iat[0, 1]
+                    jogadores_clube = Role_10_first.iat[0, 2]
+                    jogadores_liga = Role_10_first.iat[0, 3]
+
+                    #Splitting Data
+                    Role_10_first_1 = Role_10_first.iloc[:, np.r_[0:3, 3:13]]
+
+                    # Preparing Graph 1
+                    params = list(Role_10_first_1.columns)
+                    params = params[4:]
+                    
+                    #Preparing Data
+                    ranges = []
+                    a_values = []
+                    b_values = []
+
+                    for x in params:
+                        a = min(Role_10_first_1[params][x])
+                        a = 0
+                        b = max(Role_10_first_1[params][x])
+                        b = 100
+                        ranges.append((a, b))
+
+                    for x in range(len(Role_10_first_1['Atleta'])):
+                        if Role_10_first_1['Atleta'][x] == jogadores:
+                            a_values = Role_10_first_1.iloc[x].values.tolist()
+                        if Role_10_first_1['Atleta'][x] == alvo:
+                            b_values = Role_10_first_1.iloc[x].values.tolist()
+                            
+                    a_values = a_values[4:]
+                    b_values = b_values[4:]
+
+                    values = [a_values, b_values]
+
+                    #Plotting Data
+                    title = dict(
+                        title_name = jogadores,
+                        title_color = '#B6282F',
+                        subtitle_name = jogadores_clube + "/" + jogadores_liga,
+                        subtitle_color = '#B6282F',
+                        title_name_2 = alvo,
+                        title_color_2 = '#344D94',
+                        subtitle_name_2 = alvo_clube + "/" + alvo_liga,
+                        subtitle_color_2 = '#344D94',
+                        title_fontsize = 18,
+                    ) 
+
+                    endnote = 'Viz by@JAmerico1898\ Data from Wyscout\nAll data in League percentiles'
+
+                    radar=Radar(fontfamily='Cursive', range_fontsize=8)
+                    fig,ax = radar.plot_radar(ranges=ranges,params=params,values=values,radar_color=['#B6282F', '#344D94'], dpi=600, alphas=[.8,.6], title=title, endnote=endnote, compare=True)
+                    st.pyplot(fig)
+
+                    ############################################################################
+                    ############################################################################
+
+                    #Quarto Gráfico
+                    Role_10_first = Role_10_Mean_Charts.iloc[3:4, :]
+                    Role_10_first = pd.concat([Role_10_first, target]).reset_index()
+
+                    # Definindo atletas para comparar
+                    jogadores = Role_10_first.iat[0, 1]
+                    jogadores_clube = Role_10_first.iat[0, 2]
+                    jogadores_liga = Role_10_first.iat[0, 3]
+
+                    #Splitting Data
+                    Role_10_first_1 = Role_10_first.iloc[:, np.r_[0:3, 3:13]]
+
+                    # Preparing Graph 1
+                    params = list(Role_10_first_1.columns)
+                    params = params[4:]
+                    
+                    #Preparing Data
+                    ranges = []
+                    a_values = []
+                    b_values = []
+
+                    for x in params:
+                        a = min(Role_10_first_1[params][x])
+                        a = 0
+                        b = max(Role_10_first_1[params][x])
+                        b = 100
+                        ranges.append((a, b))
+
+                    for x in range(len(Role_10_first_1['Atleta'])):
+                        if Role_10_first_1['Atleta'][x] == jogadores:
+                            a_values = Role_10_first_1.iloc[x].values.tolist()
+                        if Role_10_first_1['Atleta'][x] == alvo:
+                            b_values = Role_10_first_1.iloc[x].values.tolist()
+                            
+                    a_values = a_values[4:]
+                    b_values = b_values[4:]
+
+                    values = [a_values, b_values]
+
+                    #Plotting Data
+                    title = dict(
+                        title_name = jogadores,
+                        title_color = '#B6282F',
+                        subtitle_name = jogadores_clube + "/" + jogadores_liga,
+                        subtitle_color = '#B6282F',
+                        title_name_2 = alvo,
+                        title_color_2 = '#344D94',
+                        subtitle_name_2 = alvo_clube + "/" + alvo_liga,
+                        subtitle_color_2 = '#344D94',
+                        title_fontsize = 18,
+                    ) 
+
+                    endnote = 'Viz by@JAmerico1898\ Data from Wyscout\nAll data in League percentiles'
+
+                    radar=Radar(fontfamily='Cursive', range_fontsize=8)
+                    fig,ax = radar.plot_radar(ranges=ranges,params=params,values=values,radar_color=['#B6282F', '#344D94'], dpi=600, alphas=[.8,.6], title=title, endnote=endnote, compare=True)
+                    st.pyplot(fig)
+
+                    ############################################################################
+                    ############################################################################
+
+                    #Quinto Gráfico
+                    Role_10_first = Role_10_Mean_Charts.iloc[4:5, :]
+                    Role_10_first = pd.concat([Role_10_first, target]).reset_index()
+
+                    # Definindo atletas para comparar
+                    jogadores = Role_10_first.iat[0, 1]
+                    jogadores_clube = Role_10_first.iat[0, 2]
+                    jogadores_liga = Role_10_first.iat[0, 3]
+
+                    #Splitting Data
+                    Role_10_first_1 = Role_10_first.iloc[:, np.r_[0:3, 3:13]]
+
+                    # Preparing Graph 1
+                    params = list(Role_10_first_1.columns)
+                    params = params[4:]
+                    
+                    #Preparing Data
+                    ranges = []
+                    a_values = []
+                    b_values = []
+
+                    for x in params:
+                        a = min(Role_10_first_1[params][x])
+                        a = 0
+                        b = max(Role_10_first_1[params][x])
+                        b = 100
+                        ranges.append((a, b))
+
+                    for x in range(len(Role_10_first_1['Atleta'])):
+                        if Role_10_first_1['Atleta'][x] == jogadores:
+                            a_values = Role_10_first_1.iloc[x].values.tolist()
+                        if Role_10_first_1['Atleta'][x] == alvo:
+                            b_values = Role_10_first_1.iloc[x].values.tolist()
+                            
+                    a_values = a_values[4:]
+                    b_values = b_values[4:]
+
+                    values = [a_values, b_values]
+
+                    #Plotting Data
+                    title = dict(
+                        title_name = jogadores,
+                        title_color = '#B6282F',
+                        subtitle_name = jogadores_clube + "/" + jogadores_liga,
+                        subtitle_color = '#B6282F',
+                        title_name_2 = alvo,
+                        title_color_2 = '#344D94',
+                        subtitle_name_2 = alvo_clube + "/" + alvo_liga,
+                        subtitle_color_2 = '#344D94',
+                        title_fontsize = 18,
+                    ) 
+
+                    endnote = 'Viz by@JAmerico1898\ Data from Wyscout\nAll data in League percentiles'
+
+                    radar=Radar(fontfamily='Cursive', range_fontsize=8)
+                    fig,ax = radar.plot_radar(ranges=ranges,params=params,values=values,radar_color=['#B6282F', '#344D94'], dpi=600, alphas=[.8,.6], title=title, endnote=endnote, compare=True)
+                    st.pyplot(fig)
+
+                    ########################################################################################################
+                    ########################################################################################################
+                    ########################################################################################################
+                    ########################################################################################################
+
+                if perfil_similar == ("Primeiro Volante Equilibrado"):
+                ###############################################################################
+                ###########################################################################
+                    # PRIMEIRO VOLANTE EQUILIBRADO
+                    # Texto de Abertura>
+                    markdown_amount_1 = f"<div style='text-align:center; font-size:{fontsize}px'>{jogador_similar:}</div>"
+                    st.markdown("<h4 style='text-align: center;'>Jogador Selecionado</b></h4>", unsafe_allow_html=True)
+                    st.markdown(markdown_amount_1, unsafe_allow_html=True)
+                    st.markdown("---")
+
+                    #Carregando arquivo de dados
+                    Role_11_data = pd.read_excel('11_Role_Volante_Equilibrado_Similarity.xlsx')
+                    Role_11_data = Role_11_data.drop(Role_11_data.columns[0:4], axis=1)
+                    Role_11_data.reset_index(drop=True, inplace=True)
+
+                    # Step : Defina o atleta-alvo
+                    #base_bruta_similaridade = pd.read_excel("base_bruta_similaridade.xlsx")
+                    target = Role_11_data.loc[(Role_11_data['Atleta'] == jogador_similar)]
+
+                    #Step : Definindo "ID-alvo"
+                    given_ID = target.iat[0, -1]
+                    
+                    selected = Role_11_data
+
+                    # Step 9: Add columns "1", "2", "3" to Role_11_data
+
+                    selected['1'] = given_ID[0]
+                    selected['2'] = given_ID[1]
+                    selected['3'] = given_ID[2]
+                    selected['4'] = given_ID[3]
+                    selected['5'] = given_ID[4]
+
+
+                    # Assigning correct columns to 1, 2, 3
+
+                    if given_ID[0] == "A":
+                        selected['1'] = selected["A1"]
+                    elif given_ID[0] == "B":
+                        selected['1'] = selected["B1"]
+                    elif given_ID[0] == "C":
+                        selected['1'] = selected["C1"]
+                    elif given_ID[0] == "D":
+                        selected['1'] = selected["D1"]
+                    elif given_ID[0] == "E":
+                        selected['1'] = selected["E1"]
+                    elif given_ID[0] == "F":
+                        selected['1'] = selected["F1"]
+                    elif given_ID[0] == "G":
+                        selected['1'] = selected["G1"]
+                    elif given_ID[0] == "H":
+                        selected['1'] = selected["H1"]
+                    elif given_ID[0] == "I":
+                        selected['1'] = selected["I1"]
+                    elif given_ID[0] == "J":
+                        selected['1'] = selected["J1"]
+                    elif given_ID[0] == "K":
+                        selected['1'] = selected["K1"]
+
+
+                    if given_ID[1] == "A":
+                        selected['2'] = selected["A1"]
+                    elif given_ID[1] == "B":
+                        selected['2'] = selected["B1"]
+                    elif given_ID[1] == "C":
+                        selected['2'] = selected["C1"]
+                    elif given_ID[1] == "D":
+                        selected['2'] = selected["D1"]
+                    elif given_ID[1] == "E":
+                        selected['2'] = selected["E1"]
+                    elif given_ID[1] == "F":
+                        selected['2'] = selected["F1"]
+                    elif given_ID[1] == "G":
+                        selected['2'] = selected["G1"]
+                    elif given_ID[1] == "H":
+                        selected['2'] = selected["H1"]
+                    elif given_ID[1] == "I":
+                        selected['2'] = selected["I1"]
+                    elif given_ID[1] == "J":
+                        selected['2'] = selected["J1"]
+                    elif given_ID[1] == "K":
+                        selected['2'] = selected["K1"]
+                    
+                    
+                    if given_ID[2] == "A":
+                        selected['3'] = selected["A1"]
+                    elif given_ID[2] == "B":
+                        selected['3'] = selected["B1"]
+                    elif given_ID[2] == "C":
+                        selected['3'] = selected["C1"]
+                    elif given_ID[2] == "D":
+                        selected['3'] = selected["D1"]
+                    elif given_ID[2] == "E":
+                        selected['3'] = selected["E1"]
+                    elif given_ID[2] == "F":
+                        selected['3'] = selected["F1"]
+                    elif given_ID[2] == "G":
+                        selected['3'] = selected["G1"]
+                    elif given_ID[2] == "H":
+                        selected['3'] = selected["H1"]
+                    elif given_ID[2] == "I":
+                        selected['3'] = selected["I1"]
+                    elif given_ID[2] == "J":
+                        selected['3'] = selected["J1"]
+                    elif given_ID[2] == "K":
+                        selected['3'] = selected["K1"]
+
+
+                    if given_ID[3] == "A":
+                        selected['4'] = selected["A1"]
+                    elif given_ID[3] == "B":
+                        selected['4'] = selected["B1"]
+                    elif given_ID[3] == "C":
+                        selected['4'] = selected["C1"]
+                    elif given_ID[3] == "D":
+                        selected['4'] = selected["D1"]
+                    elif given_ID[3] == "E":
+                        selected['4'] = selected["E1"]
+                    elif given_ID[3] == "F":
+                        selected['4'] = selected["F1"]
+                    elif given_ID[3] == "G":
+                        selected['4'] = selected["G1"]
+                    elif given_ID[3] == "H":
+                        selected['4'] = selected["H1"]
+                    elif given_ID[3] == "I":
+                        selected['4'] = selected["I1"]
+                    elif given_ID[3] == "J":
+                        selected['4'] = selected["J1"]
+                    elif given_ID[3] == "K":
+                        selected['4'] = selected["K1"]
+
+
+                    if given_ID[4] == "A":
+                        selected['5'] = selected["A1"]
+                    elif given_ID[4] == "B":
+                        selected['5'] = selected["B1"]
+                    elif given_ID[4] == "C":
+                        selected['5'] = selected["C1"]
+                    elif given_ID[4] == "D":
+                        selected['5'] = selected["D1"]
+                    elif given_ID[4] == "E":
+                        selected['5'] = selected["E1"]
+                    elif given_ID[4] == "F":
+                        selected['5'] = selected["F1"]
+                    elif given_ID[4] == "G":
+                        selected['5'] = selected["G1"]
+                    elif given_ID[4] == "H":
+                        selected['5'] = selected["H1"]
+                    elif given_ID[4] == "I":
+                        selected['5'] = selected["I1"]
+                    elif given_ID[4] == "J":
+                        selected['5'] = selected["J1"]
+                    elif given_ID[4] == "K":
+                        selected['5'] = selected["K1"]
+
+
+                    # Applying PCA for Scaled Selected Columns
+
+                    leagues = ["ARG1", "AUT", "BEL1", "BRA1", "BRA2", "BUL","CHI", "CHN", 
+                            "COL", "DEN", "ECU", "ENG1", "ENG2", "FRA1", "FRA2", "GER1", 
+                            "GER2", "GRE", "HOL", "ITA1", "ITA2", "JAP", "MEX", "PAR", 
+                            "PER", "POR1", "QAT", "RUS", "SAUD", "SCT", "SER", "SPA1", 
+                            "SPA2", "SWZ", "TUR", "UAE", "UKR", "URU", "USA"]
+
+                    # Iterate over each league
+                    for league in leagues:
+
+                        # Extract columns 46 through 50
+                        Volante = selected.iloc[:, np.r_[-5:0]]
+
+                        # Defining Columns
+                        Volante_columns = Volante.columns
+
+                        # Applying PCA
+                        pca = PCA(n_components=2)
+                        principalComponents = pca.fit_transform(Volante)
+
+                        # Create a DataFrame with loadings
+                        LoadingsVolante = pd.DataFrame(pca.components_.T**2, index=Volante_columns, columns=['loading factor 1', 'loading factor 2'])
+
+                        # Multiplying Matrices to obtain Pre_Variables
+                        Similarity = pd.DataFrame(np.matmul(Volante, LoadingsVolante['loading factor 1']) + np.matmul(Volante, LoadingsVolante['loading factor 2']),
+                                                columns=["Similarity"])
+
+                    # Rebuilding Full Training Set
+                    selected = selected.join(Similarity)
+
+                    ##############################################################
+                    ##############################################################
+
+                    # Lista de Similares
+                    # Initialize an empty list to store DataFrames
+                    target = selected.loc[(Role_11_data['Atleta'] == jogador_similar)]
+                    target_similarity = target.iat[0, -1]
+
+                    selected["Índice de Similaridade"] = (selected['Similarity']/target_similarity)*100
+                    selected["Índice de Similaridade"] = round(selected["Índice de Similaridade"], 2)
+
+                    target = selected.loc[(selected['Atleta'] == jogador_similar)]
+                    selected['Dif_Similarity'] = abs(selected["Índice de Similaridade"] - 100)
+
+                    selected = selected.sort_values(by='Dif_Similarity')
+
+                    lista_similares = selected.iloc[1:31, np.r_[0, 2, 28, 33, -2:0]]
+                    lista_similares = lista_similares.sort_values(by='Rating', ascending=False)
+
+                    # Lista de Jogadores Similares Ordenados segundo o Rating
+                    st.markdown("<h4 style='text-align: center;'>30 Jogadores + Similares</b></h4>", unsafe_allow_html=True)
+                    st.dataframe(lista_similares, use_container_width=True, hide_index=True)
+                    st.markdown("---")
+
+                    # Lista de Latinos
+                    selected_latam = selected[(selected["Nacionalidade"] == "Argentina")|(selected["Nacionalidade"] == "Brazil")
+                                        |(selected["Nacionalidade"] == "Bolivia")|(selected["Nacionalidade"] == "Chile")
+                                        |(selected["Nacionalidade"] == "Colombia")|(selected["Nacionalidade"] == "Costa Rica")
+                                        |(selected["Nacionalidade"] == "Ecuador")|(selected["Nacionalidade"] == "Mexico")
+                                        |(selected["Nacionalidade"] == "Panama")|(selected["Nacionalidade"] == "Paraguay")
+                                        |(selected["Nacionalidade"] == "Peru")|(selected["Nacionalidade"] == "Uruguay")
+                                        |(selected["Nacionalidade"] == "Venezuela")]
+
+                    lista_similares_latam = selected_latam.iloc[1:31, np.r_[0, 2, 28, 33, -2:0]]
+                    lista_similares_latam = lista_similares_latam.sort_values(by="Rating", ascending = False)
+
+                    #Texto para os Gráficos
+                    st.markdown("<h4 style='text-align: center;'>5 Jogadores Latinos Similares Melhor Ranquedos</b></h4>", unsafe_allow_html=True)
+                    st.markdown("---")    
+
+
+                    # Gerar Gráficos com os 5 melhores
+                    # Arquivo para o Gráfico
+                    Role_11_Mean_Charts = selected_latam.iloc[:, np.r_[0, 2, 28, 34:45]]
+                    target = target.iloc[:, np.r_[0, 2, 28, 34:45]]
+                    # Renomeando Colunas
+                    Role_11_Mean_Charts = Role_11_Mean_Charts.rename(columns={'Ações_Defensivas_BemSucedidas_Percentil':'Ações_Defensivas_BemSucedidas', 'Duelos_Defensivos_Ganhos_Percentil':'Duelos_Defensivos_Ganhos', 'Duelos_Aéreos_Ganhos_Percentil':'Duelos_Aéreos_Ganhos',
+                                                                                'Finalizações_Bloqueadas_Percentil':'Finalizações_Bloqueadas', 'Interceptações_Ajustadas_a_Posse_Percentil':'Interceptações_Ajustadas_a_Posse', 'Passes_Longos_Certos_Percentil':'Passes_Longos_Certos', 
+                                                                                'Passes_Frontais_Certos_Percentil':'Passes_Frontais_Certos', 'Passes_Progressivos_Certos_Percentil':'Passes_Progressivos_Certos', 'Passes_Laterais_Certos_Percentil':'Passes_Laterais_Certos', 'Duelos_Ofensivos_Ganhos_Percentil':'Duelos_Ofensivos_Ganhos', 
+                                                                                'Dribles_BemSucedidos_Percentil':'Dribles_BemSucedidos', 'Corridas_Progressivas_Percentil':'Corridas_Progressivas', 'Passes_TerçoFinal_Certos_Percentil':'Passes_TerçoFinal_Certos'})
+                    
+                    target = target.rename(columns={'Ações_Defensivas_BemSucedidas_Percentil':'Ações_Defensivas_BemSucedidas', 'Duelos_Defensivos_Ganhos_Percentil':'Duelos_Defensivos_Ganhos', 'Duelos_Aéreos_Ganhos_Percentil':'Duelos_Aéreos_Ganhos',
+                                                                                'Finalizações_Bloqueadas_Percentil':'Finalizações_Bloqueadas', 'Interceptações_Ajustadas_a_Posse_Percentil':'Interceptações_Ajustadas_a_Posse', 'Passes_Longos_Certos_Percentil':'Passes_Longos_Certos', 
+                                                                                'Passes_Frontais_Certos_Percentil':'Passes_Frontais_Certos', 'Passes_Progressivos_Certos_Percentil':'Passes_Progressivos_Certos', 'Passes_Laterais_Certos_Percentil':'Passes_Laterais_Certos', 'Duelos_Ofensivos_Ganhos_Percentil':'Duelos_Ofensivos_Ganhos', 
+                                                                                'Dribles_BemSucedidos_Percentil':'Dribles_BemSucedidos', 'Corridas_Progressivas_Percentil':'Corridas_Progressivas', 'Passes_TerçoFinal_Certos_Percentil':'Passes_TerçoFinal_Certos'})
+                    
+                    #Dropping Atleta-alvo
+                    Role_11_Mean_Charts = Role_11_Mean_Charts[Role_11_Mean_Charts['Atleta'] != jogador_similar] 
+                    #Extraindo 5 melhores
+                    Role_11_Mean_Charts = Role_11_Mean_Charts.iloc[0:5, :]
+
+
+                    #Primeiro Gráfico
+                    Role_11_first = Role_11_Mean_Charts.iloc[0:1, :]
+                    Role_11_first = pd.concat([Role_11_first, target]).reset_index()
+
+                    # Definindo atletas para comparar
+                    jogadores = Role_11_first.iat[0, 1]
+                    jogadores_clube = Role_11_first.iat[0, 2]
+                    jogadores_liga = Role_11_first.iat[0, 3]
+                    alvo = Role_11_first.iat[1, 1]
+                    alvo_clube = Role_11_first.iat[1, 2]
+                    alvo_liga = Role_11_first.iat[1, 3]
+
+                    #Splitting Data
+                    Role_11_first_1 = Role_11_first.iloc[:, np.r_[0:3, 3:9]]
+                    Role_11_first_2 = Role_11_first.iloc[:, np.r_[0:3, 9:15]]
+
+                    # Preparing Graph 1
+                    params = list(Role_11_first_1.columns)
+                    params = params[4:]
+                    
+                    #Preparing Data
+                    ranges = []
+                    a_values = []
+                    b_values = []
+
+                    for x in params:
+                        a = min(Role_11_first_1[params][x])
+                        a = 0
+                        b = max(Role_11_first_1[params][x])
+                        b = 100
+                        ranges.append((a, b))
+
+                    for x in range(len(Role_11_first_1['Atleta'])):
+                        if Role_11_first_1['Atleta'][x] == jogadores:
+                            a_values = Role_11_first_1.iloc[x].values.tolist()
+                        if Role_11_first_1['Atleta'][x] == alvo:
+                            b_values = Role_11_first_1.iloc[x].values.tolist()
+                            
+                    a_values = a_values[4:]
+                    b_values = b_values[4:]
+
+                    values = [a_values, b_values]
+
+                    #Plotting Data
+                    title = dict(
+                        title_name = jogadores,
+                        title_color = '#B6282F',
+                        subtitle_name = jogadores_clube + "/" + jogadores_liga,
+                        subtitle_color = '#B6282F',
+                        title_name_2 = alvo,
+                        title_color_2 = '#344D94',
+                        subtitle_name_2 = alvo_clube + "/" + alvo_liga,
+                        subtitle_color_2 = '#344D94',
+                        title_fontsize = 18,
+                    ) 
+
+                    endnote = 'Viz by@JAmerico1898\ Data from Wyscout\nAll data in League percentiles'
+
+                    radar=Radar(fontfamily='Cursive', range_fontsize=8)
+                    fig,ax = radar.plot_radar(ranges=ranges,params=params,values=values,radar_color=['#B6282F', '#344D94'], dpi=600, alphas=[.8,.6], title=title, endnote=endnote, compare=True)
+                    st.pyplot(fig)
+
+                    ############################################################################
+                    # Preparing Graph 2
+                    params = list(Role_11_first_2.columns)
+                    params = params[4:]
+                    
+                    #Preparing Data
+                    ranges = []
+                    a_values = []
+                    b_values = []
+
+                    for x in params:
+                        a = min(Role_11_first_2[params][x])
+                        a = 0
+                        b = max(Role_11_first_2[params][x])
+                        b = 100
+                        ranges.append((a, b))
+
+                    for x in range(len(Role_11_first_2['Atleta'])):
+                        if Role_11_first_2['Atleta'][x] == jogadores:
+                            a_values = Role_11_first_2.iloc[x].values.tolist()
+                        if Role_11_first_2['Atleta'][x] == alvo:
+                            b_values = Role_11_first_2.iloc[x].values.tolist()
+                            
+                    a_values = a_values[4:]
+                    b_values = b_values[4:]
+
+                    values = [a_values, b_values]
+
+                    #Plotting Data
+                    title = dict(
+                        title_name = jogadores,
+                        title_color = '#B6282F',
+                        subtitle_name = jogadores_clube + "/" + jogadores_liga,
+                        subtitle_color = '#B6282F',
+                        title_name_2 = alvo,
+                        title_color_2 = '#344D94',
+                        subtitle_name_2 = alvo_clube + "/" + alvo_liga,
+                        subtitle_color_2 = '#344D94',
+                        title_fontsize = 18,
+                    ) 
+
+                    endnote = 'Viz by@JAmerico1898\ Data from Wyscout\nAll data in League percentiles'
+
+                    radar=Radar(fontfamily='Cursive', range_fontsize=8)
+                    fig,ax = radar.plot_radar(ranges=ranges,params=params,values=values,radar_color=['#B6282F', '#344D94'], dpi=600, alphas=[.8,.6], title=title, endnote=endnote, compare=True)
+                    st.pyplot(fig)
+
+                    ############################################################################
+
+                    #Segundo Gráfico
+                    Role_11_first = Role_11_Mean_Charts.iloc[1:2, :]
+                    Role_11_first = pd.concat([Role_11_first, target]).reset_index()
+
+                    # Definindo atletas para comparar
+                    jogadores = Role_11_first.iat[0, 1]
+                    jogadores_clube = Role_11_first.iat[0, 2]
+                    jogadores_liga = Role_11_first.iat[0, 3]
+                    #alvo = Role_11_first.iat[1, 1]
+                    #alvo_clube = Role_11_first.iat[1, 2]
+                    #alvo_liga = Role_11_first.iat[1, 3]
+
+                    #Splitting Data
+                    Role_11_first_1 = Role_11_first.iloc[:, np.r_[0:3, 3:9]]
+                    Role_11_first_2 = Role_11_first.iloc[:, np.r_[0:3, 9:15]]
+
+                    # Preparing Graph 1
+                    params = list(Role_11_first_1.columns)
+                    params = params[4:]
+                    
+                    #Preparing Data
+                    ranges = []
+                    a_values = []
+                    b_values = []
+
+                    for x in params:
+                        a = min(Role_11_first_1[params][x])
+                        a = 0
+                        b = max(Role_11_first_1[params][x])
+                        b = 100
+                        ranges.append((a, b))
+
+                    for x in range(len(Role_11_first_1['Atleta'])):
+                        if Role_11_first_1['Atleta'][x] == jogadores:
+                            a_values = Role_11_first_1.iloc[x].values.tolist()
+                        if Role_11_first_1['Atleta'][x] == alvo:
+                            b_values = Role_11_first_1.iloc[x].values.tolist()
+                            
+                    a_values = a_values[4:]
+                    b_values = b_values[4:]
+
+                    values = [a_values, b_values]
+
+                    #Plotting Data
+                    title = dict(
+                        title_name = jogadores,
+                        title_color = '#B6282F',
+                        subtitle_name = jogadores_clube + "/" + jogadores_liga,
+                        subtitle_color = '#B6282F',
+                        title_name_2 = alvo,
+                        title_color_2 = '#344D94',
+                        subtitle_name_2 = alvo_clube + "/" + alvo_liga,
+                        subtitle_color_2 = '#344D94',
+                        title_fontsize = 18,
+                    ) 
+
+                    endnote = 'Viz by@JAmerico1898\ Data from Wyscout\nAll data in League percentiles'
+
+                    radar=Radar(fontfamily='Cursive', range_fontsize=8)
+                    fig,ax = radar.plot_radar(ranges=ranges,params=params,values=values,radar_color=['#B6282F', '#344D94'], dpi=600, alphas=[.8,.6], title=title, endnote=endnote, compare=True)
+                    st.pyplot(fig)
+
+                    ############################################################################
+                    # Preparing Graph 2
+                    params = list(Role_11_first_2.columns)
+                    params = params[4:]
+                    
+                    #Preparing Data
+                    ranges = []
+                    a_values = []
+                    b_values = []
+
+                    for x in params:
+                        a = min(Role_11_first_2[params][x])
+                        a = 0
+                        b = max(Role_11_first_2[params][x])
+                        b = 100
+                        ranges.append((a, b))
+
+                    for x in range(len(Role_11_first_2['Atleta'])):
+                        if Role_11_first_2['Atleta'][x] == jogadores:
+                            a_values = Role_11_first_2.iloc[x].values.tolist()
+                        if Role_11_first_2['Atleta'][x] == alvo:
+                            b_values = Role_11_first_2.iloc[x].values.tolist()
+                            
+                    a_values = a_values[4:]
+                    b_values = b_values[4:]
+
+                    values = [a_values, b_values]
+
+                    #Plotting Data
+                    title = dict(
+                        title_name = jogadores,
+                        title_color = '#B6282F',
+                        subtitle_name = jogadores_clube + "/" + jogadores_liga,
+                        subtitle_color = '#B6282F',
+                        title_name_2 = alvo,
+                        title_color_2 = '#344D94',
+                        subtitle_name_2 = alvo_clube + "/" + alvo_liga,
+                        subtitle_color_2 = '#344D94',
+                        title_fontsize = 18,
+                    ) 
+
+                    endnote = 'Viz by@JAmerico1898\ Data from Wyscout\nAll data in League percentiles'
+
+                    radar=Radar(fontfamily='Cursive', range_fontsize=8)
+                    fig,ax = radar.plot_radar(ranges=ranges,params=params,values=values,radar_color=['#B6282F', '#344D94'], dpi=600, alphas=[.8,.6], title=title, endnote=endnote, compare=True)
+                    st.pyplot(fig)
+
+                    ##########################################################################################
+                    ############################################################################
+
+                    #Terceiro Gráfico
+                    Role_11_first = Role_11_Mean_Charts.iloc[2:3, :]
+                    Role_11_first = pd.concat([Role_11_first, target]).reset_index()
+
+                    # Definindo atletas para comparar
+                    jogadores = Role_11_first.iat[0, 1]
+                    jogadores_clube = Role_11_first.iat[0, 2]
+                    jogadores_liga = Role_11_first.iat[0, 3]
+                    #alvo = Role_11_first.iat[1, 1]
+                    #alvo_clube = Role_11_first.iat[1, 2]
+                    #alvo_liga = Role_11_first.iat[1, 3]
+
+                    #Splitting Data
+                    Role_11_first_1 = Role_11_first.iloc[:, np.r_[0:3, 3:9]]
+                    Role_11_first_2 = Role_11_first.iloc[:, np.r_[0:3, 9:15]]
+
+                    # Preparing Graph 1
+                    params = list(Role_11_first_1.columns)
+                    params = params[4:]
+                    
+                    #Preparing Data
+                    ranges = []
+                    a_values = []
+                    b_values = []
+
+                    for x in params:
+                        a = min(Role_11_first_1[params][x])
+                        a = 0
+                        b = max(Role_11_first_1[params][x])
+                        b = 100
+                        ranges.append((a, b))
+
+                    for x in range(len(Role_11_first_1['Atleta'])):
+                        if Role_11_first_1['Atleta'][x] == jogadores:
+                            a_values = Role_11_first_1.iloc[x].values.tolist()
+                        if Role_11_first_1['Atleta'][x] == alvo:
+                            b_values = Role_11_first_1.iloc[x].values.tolist()
+                            
+                    a_values = a_values[4:]
+                    b_values = b_values[4:]
+
+                    values = [a_values, b_values]
+
+                    #Plotting Data
+                    title = dict(
+                        title_name = jogadores,
+                        title_color = '#B6282F',
+                        subtitle_name = jogadores_clube + "/" + jogadores_liga,
+                        subtitle_color = '#B6282F',
+                        title_name_2 = alvo,
+                        title_color_2 = '#344D94',
+                        subtitle_name_2 = alvo_clube + "/" + alvo_liga,
+                        subtitle_color_2 = '#344D94',
+                        title_fontsize = 18,
+                    ) 
+
+                    endnote = 'Viz by@JAmerico1898\ Data from Wyscout\nAll data in League percentiles'
+
+                    radar=Radar(fontfamily='Cursive', range_fontsize=8)
+                    fig,ax = radar.plot_radar(ranges=ranges,params=params,values=values,radar_color=['#B6282F', '#344D94'], dpi=600, alphas=[.8,.6], title=title, endnote=endnote, compare=True)
+                    st.pyplot(fig)
+
+                    ############################################################################
+                    # Preparing Graph 2
+                    params = list(Role_11_first_2.columns)
+                    params = params[4:]
+                    
+                    #Preparing Data
+                    ranges = []
+                    a_values = []
+                    b_values = []
+
+                    for x in params:
+                        a = min(Role_11_first_2[params][x])
+                        a = 0
+                        b = max(Role_11_first_2[params][x])
+                        b = 100
+                        ranges.append((a, b))
+
+                    for x in range(len(Role_11_first_2['Atleta'])):
+                        if Role_11_first_2['Atleta'][x] == jogadores:
+                            a_values = Role_11_first_2.iloc[x].values.tolist()
+                        if Role_11_first_2['Atleta'][x] == alvo:
+                            b_values = Role_11_first_2.iloc[x].values.tolist()
+                            
+                    a_values = a_values[4:]
+                    b_values = b_values[4:]
+
+                    values = [a_values, b_values]
+
+                    #Plotting Data
+                    title = dict(
+                        title_name = jogadores,
+                        title_color = '#B6282F',
+                        subtitle_name = jogadores_clube + "/" + jogadores_liga,
+                        subtitle_color = '#B6282F',
+                        title_name_2 = alvo,
+                        title_color_2 = '#344D94',
+                        subtitle_name_2 = alvo_clube + "/" + alvo_liga,
+                        subtitle_color_2 = '#344D94',
+                        title_fontsize = 18,
+                    ) 
+
+                    endnote = 'Viz by@JAmerico1898\ Data from Wyscout\nAll data in League percentiles'
+
+                    radar=Radar(fontfamily='Cursive', range_fontsize=8)
+                    fig,ax = radar.plot_radar(ranges=ranges,params=params,values=values,radar_color=['#B6282F', '#344D94'], dpi=600, alphas=[.8,.6], title=title, endnote=endnote, compare=True)
+                    st.pyplot(fig)
+
+                    ##########################################################################################
+                    ############################################################################
+
+                    #Quarto Gráfico
+                    Role_11_first = Role_11_Mean_Charts.iloc[3:4, :]
+                    Role_11_first = pd.concat([Role_11_first, target]).reset_index()
+
+                    # Definindo atletas para comparar
+                    jogadores = Role_11_first.iat[0, 1]
+                    jogadores_clube = Role_11_first.iat[0, 2]
+                    jogadores_liga = Role_11_first.iat[0, 3]
+                    #alvo = Role_11_first.iat[1, 1]
+                    #alvo_clube = Role_11_first.iat[1, 2]
+                    #alvo_liga = Role_11_first.iat[1, 3]
+
+                    #Splitting Data
+                    Role_11_first_1 = Role_11_first.iloc[:, np.r_[0:3, 3:9]]
+                    Role_11_first_2 = Role_11_first.iloc[:, np.r_[0:3, 9:15]]
+
+                    # Preparing Graph 1
+                    params = list(Role_11_first_1.columns)
+                    params = params[4:]
+                    
+                    #Preparing Data
+                    ranges = []
+                    a_values = []
+                    b_values = []
+
+                    for x in params:
+                        a = min(Role_11_first_1[params][x])
+                        a = 0
+                        b = max(Role_11_first_1[params][x])
+                        b = 100
+                        ranges.append((a, b))
+
+                    for x in range(len(Role_11_first_1['Atleta'])):
+                        if Role_11_first_1['Atleta'][x] == jogadores:
+                            a_values = Role_11_first_1.iloc[x].values.tolist()
+                        if Role_11_first_1['Atleta'][x] == alvo:
+                            b_values = Role_11_first_1.iloc[x].values.tolist()
+                            
+                    a_values = a_values[4:]
+                    b_values = b_values[4:]
+
+                    values = [a_values, b_values]
+
+                    #Plotting Data
+                    title = dict(
+                        title_name = jogadores,
+                        title_color = '#B6282F',
+                        subtitle_name = jogadores_clube + "/" + jogadores_liga,
+                        subtitle_color = '#B6282F',
+                        title_name_2 = alvo,
+                        title_color_2 = '#344D94',
+                        subtitle_name_2 = alvo_clube + "/" + alvo_liga,
+                        subtitle_color_2 = '#344D94',
+                        title_fontsize = 18,
+                    ) 
+
+                    endnote = 'Viz by@JAmerico1898\ Data from Wyscout\nAll data in League percentiles'
+
+                    radar=Radar(fontfamily='Cursive', range_fontsize=8)
+                    fig,ax = radar.plot_radar(ranges=ranges,params=params,values=values,radar_color=['#B6282F', '#344D94'], dpi=600, alphas=[.8,.6], title=title, endnote=endnote, compare=True)
+                    st.pyplot(fig)
+
+                    ############################################################################
+                    # Preparing Graph 2
+                    params = list(Role_11_first_2.columns)
+                    params = params[4:]
+                    
+                    #Preparing Data
+                    ranges = []
+                    a_values = []
+                    b_values = []
+
+                    for x in params:
+                        a = min(Role_11_first_2[params][x])
+                        a = 0
+                        b = max(Role_11_first_2[params][x])
+                        b = 100
+                        ranges.append((a, b))
+
+                    for x in range(len(Role_11_first_2['Atleta'])):
+                        if Role_11_first_2['Atleta'][x] == jogadores:
+                            a_values = Role_11_first_2.iloc[x].values.tolist()
+                        if Role_11_first_2['Atleta'][x] == alvo:
+                            b_values = Role_11_first_2.iloc[x].values.tolist()
+                            
+                    a_values = a_values[4:]
+                    b_values = b_values[4:]
+
+                    values = [a_values, b_values]
+
+                    #Plotting Data
+                    title = dict(
+                        title_name = jogadores,
+                        title_color = '#B6282F',
+                        subtitle_name = jogadores_clube + "/" + jogadores_liga,
+                        subtitle_color = '#B6282F',
+                        title_name_2 = alvo,
+                        title_color_2 = '#344D94',
+                        subtitle_name_2 = alvo_clube + "/" + alvo_liga,
+                        subtitle_color_2 = '#344D94',
+                        title_fontsize = 18,
+                    ) 
+
+                    endnote = 'Viz by@JAmerico1898\ Data from Wyscout\nAll data in League percentiles'
+
+                    radar=Radar(fontfamily='Cursive', range_fontsize=8)
+                    fig,ax = radar.plot_radar(ranges=ranges,params=params,values=values,radar_color=['#B6282F', '#344D94'], dpi=600, alphas=[.8,.6], title=title, endnote=endnote, compare=True)
+                    st.pyplot(fig)
+
+                    ##########################################################################################
+                    ############################################################################
+
+                    #Quinto Gráfico
+                    Role_11_first = Role_11_Mean_Charts.iloc[4:5, :]
+                    Role_11_first = pd.concat([Role_11_first, target]).reset_index()
+
+                    # Definindo atletas para comparar
+                    jogadores = Role_11_first.iat[0, 1]
+                    jogadores_clube = Role_11_first.iat[0, 2]
+                    jogadores_liga = Role_11_first.iat[0, 3]
+                    #alvo = Role_11_first.iat[1, 1]
+                    #alvo_clube = Role_11_first.iat[1, 2]
+                    #alvo_liga = Role_11_first.iat[1, 3]
+
+                    #Splitting Data
+                    Role_11_first_1 = Role_11_first.iloc[:, np.r_[0:3, 3:9]]
+                    Role_11_first_2 = Role_11_first.iloc[:, np.r_[0:3, 9:15]]
+
+                    # Preparing Graph 1
+                    params = list(Role_11_first_1.columns)
+                    params = params[4:]
+                    
+                    #Preparing Data
+                    ranges = []
+                    a_values = []
+                    b_values = []
+
+                    for x in params:
+                        a = min(Role_11_first_1[params][x])
+                        a = 0
+                        b = max(Role_11_first_1[params][x])
+                        b = 100
+                        ranges.append((a, b))
+
+                    for x in range(len(Role_11_first_1['Atleta'])):
+                        if Role_11_first_1['Atleta'][x] == jogadores:
+                            a_values = Role_11_first_1.iloc[x].values.tolist()
+                        if Role_11_first_1['Atleta'][x] == alvo:
+                            b_values = Role_11_first_1.iloc[x].values.tolist()
+                            
+                    a_values = a_values[4:]
+                    b_values = b_values[4:]
+
+                    values = [a_values, b_values]
+
+                    #Plotting Data
+                    title = dict(
+                        title_name = jogadores,
+                        title_color = '#B6282F',
+                        subtitle_name = jogadores_clube + "/" + jogadores_liga,
+                        subtitle_color = '#B6282F',
+                        title_name_2 = alvo,
+                        title_color_2 = '#344D94',
+                        subtitle_name_2 = alvo_clube + "/" + alvo_liga,
+                        subtitle_color_2 = '#344D94',
+                        title_fontsize = 18,
+                    ) 
+
+                    endnote = 'Viz by@JAmerico1898\ Data from Wyscout\nAll data in League percentiles'
+
+                    radar=Radar(fontfamily='Cursive', range_fontsize=8)
+                    fig,ax = radar.plot_radar(ranges=ranges,params=params,values=values,radar_color=['#B6282F', '#344D94'], dpi=600, alphas=[.8,.6], title=title, endnote=endnote, compare=True)
+                    st.pyplot(fig)
+
+                    ############################################################################
+                    # Preparing Graph 2
+                    params = list(Role_11_first_2.columns)
+                    params = params[4:]
+                    
+                    #Preparing Data
+                    ranges = []
+                    a_values = []
+                    b_values = []
+
+                    for x in params:
+                        a = min(Role_11_first_2[params][x])
+                        a = 0
+                        b = max(Role_11_first_2[params][x])
+                        b = 100
+                        ranges.append((a, b))
+
+                    for x in range(len(Role_11_first_2['Atleta'])):
+                        if Role_11_first_2['Atleta'][x] == jogadores:
+                            a_values = Role_11_first_2.iloc[x].values.tolist()
+                        if Role_11_first_2['Atleta'][x] == alvo:
+                            b_values = Role_11_first_2.iloc[x].values.tolist()
+                            
+                    a_values = a_values[4:]
+                    b_values = b_values[4:]
+
+                    values = [a_values, b_values]
+
+                    #Plotting Data
+                    title = dict(
+                        title_name = jogadores,
+                        title_color = '#B6282F',
+                        subtitle_name = jogadores_clube + "/" + jogadores_liga,
+                        subtitle_color = '#B6282F',
+                        title_name_2 = alvo,
+                        title_color_2 = '#344D94',
+                        subtitle_name_2 = alvo_clube + "/" + alvo_liga,
+                        subtitle_color_2 = '#344D94',
+                        title_fontsize = 18,
+                    ) 
+
+                    endnote = 'Viz by@JAmerico1898\ Data from Wyscout\nAll data in League percentiles'
+
+                    radar=Radar(fontfamily='Cursive', range_fontsize=8)
+                    fig,ax = radar.plot_radar(ranges=ranges,params=params,values=values,radar_color=['#B6282F', '#344D94'], dpi=600, alphas=[.8,.6], title=title, endnote=endnote, compare=True)
+                    st.pyplot(fig)
+
+                    ########################################################################################################
+                    ########################################################################################################
+                    ########################################################################################################
+                    ########################################################################################################
+
+                if perfil_similar == ("Segundo Volante Box to Box"):
+                ###############################################################################
+                ###########################################################################
+                    # PRIMEIRO VOLANTE EQUILIBRADO
+                    # Texto de Abertura>
+                    markdown_amount_1 = f"<div style='text-align:center; font-size:{fontsize}px'>{jogador_similar:}</div>"
+                    st.markdown("<h4 style='text-align: center;'>Jogador Selecionado</b></h4>", unsafe_allow_html=True)
+                    st.markdown(markdown_amount_1, unsafe_allow_html=True)
+                    st.markdown("---")
+
+                    #Carregando arquivo de dados
+                    Role_12_data = pd.read_excel('12_Role_Segundo_Volante_Box_to_Box_Similarity.xlsx')
+                    Role_12_data = Role_12_data.drop(Role_12_data.columns[0:4], axis=1)
+                    Role_12_data.reset_index(drop=True, inplace=True)
+
+                    # Step : Defina o atleta-alvo
+                    #base_bruta_similaridade = pd.read_excel("base_bruta_similaridade.xlsx")
+                    target = Role_12_data.loc[(Role_12_data['Atleta'] == jogador_similar)]
+
+                    #Step : Definindo "ID-alvo"
+                    given_ID = target.iat[0, -1]
+                    
+                    selected = Role_12_data
+
+                    # Step 9: Add columns "1", "2", "3" to Role_12_data
+
+                    selected['1'] = given_ID[0]
+                    selected['2'] = given_ID[1]
+                    selected['3'] = given_ID[2]
+                    selected['4'] = given_ID[3]
+                    selected['5'] = given_ID[4]
+                    
+                    # Assigning correct columns to 1, 2, 3
+
+                    if given_ID[0] == "A":
+                        selected['1'] = selected["A1"]
+                    elif given_ID[0] == "B":
+                        selected['1'] = selected["B1"]
+                    elif given_ID[0] == "C":
+                        selected['1'] = selected["C1"]
+                    elif given_ID[0] == "D":
+                        selected['1'] = selected["D1"]
+                    elif given_ID[0] == "E":
+                        selected['1'] = selected["E1"]
+                    elif given_ID[0] == "F":
+                        selected['1'] = selected["F1"]
+                    elif given_ID[0] == "G":
+                        selected['1'] = selected["G1"]
+                    elif given_ID[0] == "H":
+                        selected['1'] = selected["H1"]
+                    elif given_ID[0] == "I":
+                        selected['1'] = selected["I1"]
+                    elif given_ID[0] == "J":
+                        selected['1'] = selected["J1"]
+                    elif given_ID[0] == "K":
+                        selected['1'] = selected["K1"]
+                    elif given_ID[0] == "L":
+                        selected['1'] = selected["L1"]
+                    elif given_ID[0] == "M":
+                        selected['1'] = selected["M1"]
+
+
+                    if given_ID[1] == "A":
+                        selected['2'] = selected["A1"]
+                    elif given_ID[1] == "B":
+                        selected['2'] = selected["B1"]
+                    elif given_ID[1] == "C":
+                        selected['2'] = selected["C1"]
+                    elif given_ID[1] == "D":
+                        selected['2'] = selected["D1"]
+                    elif given_ID[1] == "E":
+                        selected['2'] = selected["E1"]
+                    elif given_ID[1] == "F":
+                        selected['2'] = selected["F1"]
+                    elif given_ID[1] == "G":
+                        selected['2'] = selected["G1"]
+                    elif given_ID[1] == "H":
+                        selected['2'] = selected["H1"]
+                    elif given_ID[1] == "I":
+                        selected['2'] = selected["I1"]
+                    elif given_ID[1] == "J":
+                        selected['2'] = selected["J1"]
+                    elif given_ID[1] == "K":
+                        selected['2'] = selected["K1"]
+                    elif given_ID[1] == "L":
+                        selected['2'] = selected["L1"]
+                    elif given_ID[1] == "M":
+                        selected['2'] = selected["M1"]
+                    
+                    
+                    if given_ID[2] == "A":
+                        selected['3'] = selected["A1"]
+                    elif given_ID[2] == "B":
+                        selected['3'] = selected["B1"]
+                    elif given_ID[2] == "C":
+                        selected['3'] = selected["C1"]
+                    elif given_ID[2] == "D":
+                        selected['3'] = selected["D1"]
+                    elif given_ID[2] == "E":
+                        selected['3'] = selected["E1"]
+                    elif given_ID[2] == "F":
+                        selected['3'] = selected["F1"]
+                    elif given_ID[2] == "G":
+                        selected['3'] = selected["G1"]
+                    elif given_ID[2] == "H":
+                        selected['3'] = selected["H1"]
+                    elif given_ID[2] == "I":
+                        selected['3'] = selected["I1"]
+                    elif given_ID[2] == "J":
+                        selected['3'] = selected["J1"]
+                    elif given_ID[2] == "K":
+                        selected['3'] = selected["K1"]
+                    elif given_ID[2] == "L":
+                        selected['3'] = selected["L1"]
+                    elif given_ID[2] == "M":
+                        selected['3'] = selected["M1"]
+
+                    if given_ID[3] == "A":
+                        selected['4'] = selected["A1"]
+                    elif given_ID[3] == "B":
+                        selected['4'] = selected["B1"]
+                    elif given_ID[3] == "C":
+                        selected['4'] = selected["C1"]
+                    elif given_ID[3] == "D":
+                        selected['4'] = selected["D1"]
+                    elif given_ID[3] == "E":
+                        selected['4'] = selected["E1"]
+                    elif given_ID[3] == "F":
+                        selected['4'] = selected["F1"]
+                    elif given_ID[3] == "G":
+                        selected['4'] = selected["G1"]
+                    elif given_ID[3] == "H":
+                        selected['4'] = selected["H1"]
+                    elif given_ID[3] == "I":
+                        selected['4'] = selected["I1"]
+                    elif given_ID[3] == "J":
+                        selected['4'] = selected["J1"]
+                    elif given_ID[3] == "K":
+                        selected['4'] = selected["K1"]
+                    elif given_ID[3] == "L":
+                        selected['4'] = selected["L1"]
+                    elif given_ID[3] == "M":
+                        selected['4'] = selected["M1"]
+
+                    if given_ID[4] == "A":
+                        selected['5'] = selected["A1"]
+                    elif given_ID[4] == "B":
+                        selected['5'] = selected["B1"]
+                    elif given_ID[4] == "C":
+                        selected['5'] = selected["C1"]
+                    elif given_ID[4] == "D":
+                        selected['5'] = selected["D1"]
+                    elif given_ID[4] == "E":
+                        selected['5'] = selected["E1"]
+                    elif given_ID[4] == "F":
+                        selected['5'] = selected["F1"]
+                    elif given_ID[4] == "G":
+                        selected['5'] = selected["G1"]
+                    elif given_ID[4] == "H":
+                        selected['5'] = selected["H1"]
+                    elif given_ID[4] == "I":
+                        selected['5'] = selected["I1"]
+                    elif given_ID[4] == "J":
+                        selected['5'] = selected["J1"]
+                    elif given_ID[4] == "K":
+                        selected['5'] = selected["K1"]
+                    elif given_ID[4] == "L":
+                        selected['5'] = selected["L1"]
+                    elif given_ID[4] == "M":
+                        selected['5'] = selected["M1"]
+
+
+                    # Applying PCA for Scaled Selected Columns
+
+                    leagues = ["ARG1", "AUT", "BEL1", "BRA1", "BRA2", "BUL","CHI", "CHN", 
+                            "COL", "DEN", "ECU", "ENG1", "ENG2", "FRA1", "FRA2", "GER1", 
+                            "GER2", "GRE", "HOL", "ITA1", "ITA2", "JAP", "MEX", "PAR", 
+                            "PER", "POR1", "QAT", "RUS", "SAUD", "SCT", "SER", "SPA1", 
+                            "SPA2", "SWZ", "TUR", "UAE", "UKR", "URU", "USA"]
+
+                    # Iterate over each league
+                    for league in leagues:
+
+                        # Extract columns 46 through 50
+                        SegundoVolanteBoxtoBox = selected.iloc[:, np.r_[-5:0]]
+
+                        # Defining Columns
+                        SegundoVolanteBoxtoBox_columns = SegundoVolanteBoxtoBox.columns
+
+                        # Applying PCA
+                        pca = PCA(n_components=2)
+                        principalComponents = pca.fit_transform(SegundoVolanteBoxtoBox)
+
+                        # Create a DataFrame with loadings
+                        LoadingsSegundoVolanteBoxtoBox = pd.DataFrame(pca.components_.T**2, index=SegundoVolanteBoxtoBox_columns, columns=['loading factor 1', 'loading factor 2'])
+
+                        # Multiplying Matrices to obtain Pre_Variables
+                        Similarity = pd.DataFrame(np.matmul(SegundoVolanteBoxtoBox, LoadingsSegundoVolanteBoxtoBox['loading factor 1']) + np.matmul(SegundoVolanteBoxtoBox, LoadingsSegundoVolanteBoxtoBox['loading factor 2']),
+                                                columns=["Similarity"])
+
+                    # Rebuilding Full Training Set
+                    selected = selected.join(Similarity)
+
+                    ##############################################################
+                    ##############################################################
+
+                    # Lista de Similares
+                    # Initialize an empty list to store DataFrames
+                    target = selected.loc[(Role_12_data['Atleta'] == jogador_similar)]
+                    target_similarity = target.iat[0, -1]
+
+                    selected["Índice de Similaridade"] = (selected['Similarity']/target_similarity)*100
+                    selected["Índice de Similaridade"] = round(selected["Índice de Similaridade"], 2)
+
+                    target = selected.loc[(selected['Atleta'] == jogador_similar)]
+                    selected['Dif_Similarity'] = abs(selected["Índice de Similaridade"] - 100)
+
+                    selected = selected.sort_values(by='Dif_Similarity')
+
+                    lista_similares = selected.iloc[1:31, np.r_[0, 2, 30, 35, -2:0]]
+                    lista_similares = lista_similares.sort_values(by='Rating', ascending=False)
+
+                    # Lista de Jogadores Similares Ordenados segundo o Rating
+                    st.markdown("<h4 style='text-align: center;'>30 Jogadores + Similares</b></h4>", unsafe_allow_html=True)
+                    st.dataframe(lista_similares, use_container_width=True, hide_index=True)
+                    st.markdown("---")
+
+                    # Lista de Latinos
+                    selected_latam = selected[(selected["Nacionalidade"] == "Argentina")|(selected["Nacionalidade"] == "Brazil")
+                                        |(selected["Nacionalidade"] == "Bolivia")|(selected["Nacionalidade"] == "Chile")
+                                        |(selected["Nacionalidade"] == "Colombia")|(selected["Nacionalidade"] == "Costa Rica")
+                                        |(selected["Nacionalidade"] == "Ecuador")|(selected["Nacionalidade"] == "Mexico")
+                                        |(selected["Nacionalidade"] == "Panama")|(selected["Nacionalidade"] == "Paraguay")
+                                        |(selected["Nacionalidade"] == "Peru")|(selected["Nacionalidade"] == "Uruguay")
+                                        |(selected["Nacionalidade"] == "Venezuela")]
+
+                    lista_similares_latam = selected_latam.iloc[1:31, np.r_[0, 2, 30, 35, -2:0]]
+                    lista_similares_latam = lista_similares_latam.sort_values(by="Rating", ascending = False)
+
+                    #Texto para os Gráficos
+                    st.markdown("<h4 style='text-align: center;'>5 Jogadores Latinos Similares Melhor Ranquedos</b></h4>", unsafe_allow_html=True)
+                    st.markdown("---")    
+
+
+                    # Gerar Gráficos com os 5 melhores
+                    # Arquivo para o Gráfico
+                    Role_12_Mean_Charts = selected_latam.iloc[:, np.r_[0, 2, 30, 36:49]]
+                    target = target.iloc[:, np.r_[0, 2, 30, 36:49]]
+                    # Renomeando Colunas
+                    Role_12_Mean_Charts = Role_12_Mean_Charts.rename(columns={'Ações_Defensivas_BemSucedidas_Percentil':'Ações_Defensivas_BemSucedidas', 
+                                                            'Passes_Longos_Certos_Percentil':'Passes_Longos_Certos', 
+                                                            'Passes_Progressivos_Certos_Percentil':'Passes_Progressivos_Certos',
+                                                            'Pisadas_Área_Percentil':'Pisadas_Área', 
+                                                            'Dribles_BemSucedidos_Percentil':'Dribles_BemSucedidos', 
+                                                            'Corridas_Progressivas_Percentil':'Corridas_Progressivas', 
+                                                            'xG_Percentil':'xG', 'xA_Percentil':'xA', 
+                                                            'Assistência_Finalização_Percentil':'Assistência_Finalização', 
+                                                            'Passes_TerçoFinal_Certos_Percentil':'Passes_TerçoFinal_Certos',
+                                                            'Deep_Completions_Percentil':'Deep_Completions', 
+                                                            'Passes_Chave_Percentil':'Passes_Chave', 
+                                                            'Passes_ÁreaPênalti_Certos_Percentil':'Passes_ÁreaPênalti_Certos'})
+                    
+                    target = target.rename(columns={'Ações_Defensivas_BemSucedidas_Percentil':'Ações_Defensivas_BemSucedidas', 
+                                                            'Passes_Longos_Certos_Percentil':'Passes_Longos_Certos', 
+                                                            'Passes_Progressivos_Certos_Percentil':'Passes_Progressivos_Certos',
+                                                            'Pisadas_Área_Percentil':'Pisadas_Área', 
+                                                            'Dribles_BemSucedidos_Percentil':'Dribles_BemSucedidos', 
+                                                            'Corridas_Progressivas_Percentil':'Corridas_Progressivas', 
+                                                            'xG_Percentil':'xG', 'xA_Percentil':'xA', 
+                                                            'Assistência_Finalização_Percentil':'Assistência_Finalização', 
+                                                            'Passes_TerçoFinal_Certos_Percentil':'Passes_TerçoFinal_Certos',
+                                                            'Deep_Completions_Percentil':'Deep_Completions', 
+                                                            'Passes_Chave_Percentil':'Passes_Chave', 
+                                                            'Passes_ÁreaPênalti_Certos_Percentil':'Passes_ÁreaPênalti_Certos'})
+                    #Dropping Atleta-alvo
+                    Role_12_Mean_Charts = Role_12_Mean_Charts[Role_12_Mean_Charts['Atleta'] != jogador_similar] 
+                    #Extraindo 5 melhores
+                    Role_12_Mean_Charts = Role_12_Mean_Charts.iloc[0:5, :]
+
+
+                    #Primeiro Gráfico
+                    Role_12_first = Role_12_Mean_Charts.iloc[0:1, :]
+                    Role_12_first = pd.concat([Role_12_first, target]).reset_index()
+
+                    # Definindo atletas para comparar
+                    jogadores = Role_12_first.iat[0, 1]
+                    jogadores_clube = Role_12_first.iat[0, 2]
+                    jogadores_liga = Role_12_first.iat[0, 3]
+                    alvo = Role_12_first.iat[1, 1]
+                    alvo_clube = Role_12_first.iat[1, 2]
+                    alvo_liga = Role_12_first.iat[1, 3]
+
+                    #Splitting Data
+                    Role_12_first_1 = Role_12_first.iloc[:, np.r_[0:3, 3:11]]
+                    Role_12_first_2 = Role_12_first.iloc[:, np.r_[0:3, 11:17]]
+
+                    # Preparing Graph 1
+                    params = list(Role_12_first_1.columns)
+                    params = params[4:]
+                    
+                    #Preparing Data
+                    ranges = []
+                    a_values = []
+                    b_values = []
+
+                    for x in params:
+                        a = min(Role_12_first_1[params][x])
+                        a = 0
+                        b = max(Role_12_first_1[params][x])
+                        b = 100
+                        ranges.append((a, b))
+
+                    for x in range(len(Role_12_first_1['Atleta'])):
+                        if Role_12_first_1['Atleta'][x] == jogadores:
+                            a_values = Role_12_first_1.iloc[x].values.tolist()
+                        if Role_12_first_1['Atleta'][x] == alvo:
+                            b_values = Role_12_first_1.iloc[x].values.tolist()
+                            
+                    a_values = a_values[4:]
+                    b_values = b_values[4:]
+
+                    values = [a_values, b_values]
+
+                    #Plotting Data
+                    title = dict(
+                        title_name = jogadores,
+                        title_color = '#B6282F',
+                        subtitle_name = jogadores_clube + "/" + jogadores_liga,
+                        subtitle_color = '#B6282F',
+                        title_name_2 = alvo,
+                        title_color_2 = '#344D94',
+                        subtitle_name_2 = alvo_clube + "/" + alvo_liga,
+                        subtitle_color_2 = '#344D94',
+                        title_fontsize = 18,
+                    ) 
+
+                    endnote = 'Viz by@JAmerico1898\ Data from Wyscout\nAll data in League percentiles'
+
+                    radar=Radar(fontfamily='Cursive', range_fontsize=8)
+                    fig,ax = radar.plot_radar(ranges=ranges,params=params,values=values,radar_color=['#B6282F', '#344D94'], dpi=600, alphas=[.8,.6], title=title, endnote=endnote, compare=True)
+                    st.pyplot(fig)
+
+                    ############################################################################
+                    # Preparing Graph 2
+                    params = list(Role_12_first_2.columns)
+                    params = params[4:]
+                    
+                    #Preparing Data
+                    ranges = []
+                    a_values = []
+                    b_values = []
+
+                    for x in params:
+                        a = min(Role_12_first_2[params][x])
+                        a = 0
+                        b = max(Role_12_first_2[params][x])
+                        b = 100
+                        ranges.append((a, b))
+
+                    for x in range(len(Role_12_first_2['Atleta'])):
+                        if Role_12_first_2['Atleta'][x] == jogadores:
+                            a_values = Role_12_first_2.iloc[x].values.tolist()
+                        if Role_12_first_2['Atleta'][x] == alvo:
+                            b_values = Role_12_first_2.iloc[x].values.tolist()
+                            
+                    a_values = a_values[4:]
+                    b_values = b_values[4:]
+
+                    values = [a_values, b_values]
+
+                    #Plotting Data
+                    title = dict(
+                        title_name = jogadores,
+                        title_color = '#B6282F',
+                        subtitle_name = jogadores_clube + "/" + jogadores_liga,
+                        subtitle_color = '#B6282F',
+                        title_name_2 = alvo,
+                        title_color_2 = '#344D94',
+                        subtitle_name_2 = alvo_clube + "/" + alvo_liga,
+                        subtitle_color_2 = '#344D94',
+                        title_fontsize = 18,
+                    ) 
+
+                    endnote = 'Viz by@JAmerico1898\ Data from Wyscout\nAll data in League percentiles'
+
+                    radar=Radar(fontfamily='Cursive', range_fontsize=8)
+                    fig,ax = radar.plot_radar(ranges=ranges,params=params,values=values,radar_color=['#B6282F', '#344D94'], dpi=600, alphas=[.8,.6], title=title, endnote=endnote, compare=True)
+                    st.pyplot(fig)
+
+                    ############################################################################
+
+                    #Segundo Gráfico
+                    Role_12_first = Role_12_Mean_Charts.iloc[1:2, :]
+                    Role_12_first = pd.concat([Role_12_first, target]).reset_index()
+
+                    # Definindo atletas para comparar
+                    jogadores = Role_12_first.iat[0, 1]
+                    jogadores_clube = Role_12_first.iat[0, 2]
+                    jogadores_liga = Role_12_first.iat[0, 3]
+                    #alvo = Role_12_first.iat[1, 1]
+                    #alvo_clube = Role_12_first.iat[1, 2]
+                    #alvo_liga = Role_12_first.iat[1, 3]
+
+                    #Splitting Data
+                    Role_12_first_1 = Role_12_first.iloc[:, np.r_[0:3, 3:11]]
+                    Role_12_first_2 = Role_12_first.iloc[:, np.r_[0:3, 11:17]]
+
+                    # Preparing Graph 1
+                    params = list(Role_12_first_1.columns)
+                    params = params[4:]
+                    
+                    #Preparing Data
+                    ranges = []
+                    a_values = []
+                    b_values = []
+
+                    for x in params:
+                        a = min(Role_12_first_1[params][x])
+                        a = 0
+                        b = max(Role_12_first_1[params][x])
+                        b = 100
+                        ranges.append((a, b))
+
+                    for x in range(len(Role_12_first_1['Atleta'])):
+                        if Role_12_first_1['Atleta'][x] == jogadores:
+                            a_values = Role_12_first_1.iloc[x].values.tolist()
+                        if Role_12_first_1['Atleta'][x] == alvo:
+                            b_values = Role_12_first_1.iloc[x].values.tolist()
+                            
+                    a_values = a_values[4:]
+                    b_values = b_values[4:]
+
+                    values = [a_values, b_values]
+
+                    #Plotting Data
+                    title = dict(
+                        title_name = jogadores,
+                        title_color = '#B6282F',
+                        subtitle_name = jogadores_clube + "/" + jogadores_liga,
+                        subtitle_color = '#B6282F',
+                        title_name_2 = alvo,
+                        title_color_2 = '#344D94',
+                        subtitle_name_2 = alvo_clube + "/" + alvo_liga,
+                        subtitle_color_2 = '#344D94',
+                        title_fontsize = 18,
+                    ) 
+
+                    endnote = 'Viz by@JAmerico1898\ Data from Wyscout\nAll data in League percentiles'
+
+                    radar=Radar(fontfamily='Cursive', range_fontsize=8)
+                    fig,ax = radar.plot_radar(ranges=ranges,params=params,values=values,radar_color=['#B6282F', '#344D94'], dpi=600, alphas=[.8,.6], title=title, endnote=endnote, compare=True)
+                    st.pyplot(fig)
+
+                    ############################################################################
+                    # Preparing Graph 2
+                    params = list(Role_12_first_2.columns)
+                    params = params[4:]
+                    
+                    #Preparing Data
+                    ranges = []
+                    a_values = []
+                    b_values = []
+
+                    for x in params:
+                        a = min(Role_12_first_2[params][x])
+                        a = 0
+                        b = max(Role_12_first_2[params][x])
+                        b = 100
+                        ranges.append((a, b))
+
+                    for x in range(len(Role_12_first_2['Atleta'])):
+                        if Role_12_first_2['Atleta'][x] == jogadores:
+                            a_values = Role_12_first_2.iloc[x].values.tolist()
+                        if Role_12_first_2['Atleta'][x] == alvo:
+                            b_values = Role_12_first_2.iloc[x].values.tolist()
+                            
+                    a_values = a_values[4:]
+                    b_values = b_values[4:]
+
+                    values = [a_values, b_values]
+
+                    #Plotting Data
+                    title = dict(
+                        title_name = jogadores,
+                        title_color = '#B6282F',
+                        subtitle_name = jogadores_clube + "/" + jogadores_liga,
+                        subtitle_color = '#B6282F',
+                        title_name_2 = alvo,
+                        title_color_2 = '#344D94',
+                        subtitle_name_2 = alvo_clube + "/" + alvo_liga,
+                        subtitle_color_2 = '#344D94',
+                        title_fontsize = 18,
+                    ) 
+
+                    endnote = 'Viz by@JAmerico1898\ Data from Wyscout\nAll data in League percentiles'
+
+                    radar=Radar(fontfamily='Cursive', range_fontsize=8)
+                    fig,ax = radar.plot_radar(ranges=ranges,params=params,values=values,radar_color=['#B6282F', '#344D94'], dpi=600, alphas=[.8,.6], title=title, endnote=endnote, compare=True)
+                    st.pyplot(fig)
+
+                    ##########################################################################################
+                    ############################################################################
+
+                    #Terceiro Gráfico
+                    Role_12_first = Role_12_Mean_Charts.iloc[2:3, :]
+                    Role_12_first = pd.concat([Role_12_first, target]).reset_index()
+
+                    # Definindo atletas para comparar
+                    jogadores = Role_12_first.iat[0, 1]
+                    jogadores_clube = Role_12_first.iat[0, 2]
+                    jogadores_liga = Role_12_first.iat[0, 3]
+                    #alvo = Role_12_first.iat[1, 1]
+                    #alvo_clube = Role_12_first.iat[1, 2]
+                    #alvo_liga = Role_12_first.iat[1, 3]
+
+                    #Splitting Data
+                    Role_12_first_1 = Role_12_first.iloc[:, np.r_[0:3, 3:11]]
+                    Role_12_first_2 = Role_12_first.iloc[:, np.r_[0:3, 11:17]]
+
+                    # Preparing Graph 1
+                    params = list(Role_12_first_1.columns)
+                    params = params[4:]
+                    
+                    #Preparing Data
+                    ranges = []
+                    a_values = []
+                    b_values = []
+
+                    for x in params:
+                        a = min(Role_12_first_1[params][x])
+                        a = 0
+                        b = max(Role_12_first_1[params][x])
+                        b = 100
+                        ranges.append((a, b))
+
+                    for x in range(len(Role_12_first_1['Atleta'])):
+                        if Role_12_first_1['Atleta'][x] == jogadores:
+                            a_values = Role_12_first_1.iloc[x].values.tolist()
+                        if Role_12_first_1['Atleta'][x] == alvo:
+                            b_values = Role_12_first_1.iloc[x].values.tolist()
+                            
+                    a_values = a_values[4:]
+                    b_values = b_values[4:]
+
+                    values = [a_values, b_values]
+
+                    #Plotting Data
+                    title = dict(
+                        title_name = jogadores,
+                        title_color = '#B6282F',
+                        subtitle_name = jogadores_clube + "/" + jogadores_liga,
+                        subtitle_color = '#B6282F',
+                        title_name_2 = alvo,
+                        title_color_2 = '#344D94',
+                        subtitle_name_2 = alvo_clube + "/" + alvo_liga,
+                        subtitle_color_2 = '#344D94',
+                        title_fontsize = 18,
+                    ) 
+
+                    endnote = 'Viz by@JAmerico1898\ Data from Wyscout\nAll data in League percentiles'
+
+                    radar=Radar(fontfamily='Cursive', range_fontsize=8)
+                    fig,ax = radar.plot_radar(ranges=ranges,params=params,values=values,radar_color=['#B6282F', '#344D94'], dpi=600, alphas=[.8,.6], title=title, endnote=endnote, compare=True)
+                    st.pyplot(fig)
+
+                    ############################################################################
+                    # Preparing Graph 2
+                    params = list(Role_12_first_2.columns)
+                    params = params[4:]
+                    
+                    #Preparing Data
+                    ranges = []
+                    a_values = []
+                    b_values = []
+
+                    for x in params:
+                        a = min(Role_12_first_2[params][x])
+                        a = 0
+                        b = max(Role_12_first_2[params][x])
+                        b = 100
+                        ranges.append((a, b))
+
+                    for x in range(len(Role_12_first_2['Atleta'])):
+                        if Role_12_first_2['Atleta'][x] == jogadores:
+                            a_values = Role_12_first_2.iloc[x].values.tolist()
+                        if Role_12_first_2['Atleta'][x] == alvo:
+                            b_values = Role_12_first_2.iloc[x].values.tolist()
+                            
+                    a_values = a_values[4:]
+                    b_values = b_values[4:]
+
+                    values = [a_values, b_values]
+
+                    #Plotting Data
+                    title = dict(
+                        title_name = jogadores,
+                        title_color = '#B6282F',
+                        subtitle_name = jogadores_clube + "/" + jogadores_liga,
+                        subtitle_color = '#B6282F',
+                        title_name_2 = alvo,
+                        title_color_2 = '#344D94',
+                        subtitle_name_2 = alvo_clube + "/" + alvo_liga,
+                        subtitle_color_2 = '#344D94',
+                        title_fontsize = 18,
+                    ) 
+
+                    endnote = 'Viz by@JAmerico1898\ Data from Wyscout\nAll data in League percentiles'
+
+                    radar=Radar(fontfamily='Cursive', range_fontsize=8)
+                    fig,ax = radar.plot_radar(ranges=ranges,params=params,values=values,radar_color=['#B6282F', '#344D94'], dpi=600, alphas=[.8,.6], title=title, endnote=endnote, compare=True)
+                    st.pyplot(fig)
+
+                    ##########################################################################################
+                    ############################################################################
+
+                    #Quarto Gráfico
+                    Role_12_first = Role_12_Mean_Charts.iloc[3:4, :]
+                    Role_12_first = pd.concat([Role_12_first, target]).reset_index()
+
+                    # Definindo atletas para comparar
+                    jogadores = Role_12_first.iat[0, 1]
+                    jogadores_clube = Role_12_first.iat[0, 2]
+                    jogadores_liga = Role_12_first.iat[0, 3]
+                    #alvo = Role_12_first.iat[1, 1]
+                    #alvo_clube = Role_12_first.iat[1, 2]
+                    #alvo_liga = Role_12_first.iat[1, 3]
+
+                    #Splitting Data
+                    Role_12_first_1 = Role_12_first.iloc[:, np.r_[0:3, 3:11]]
+                    Role_12_first_2 = Role_12_first.iloc[:, np.r_[0:3, 11:17]]
+
+                    # Preparing Graph 1
+                    params = list(Role_12_first_1.columns)
+                    params = params[4:]
+                    
+                    #Preparing Data
+                    ranges = []
+                    a_values = []
+                    b_values = []
+
+                    for x in params:
+                        a = min(Role_12_first_1[params][x])
+                        a = 0
+                        b = max(Role_12_first_1[params][x])
+                        b = 100
+                        ranges.append((a, b))
+
+                    for x in range(len(Role_12_first_1['Atleta'])):
+                        if Role_12_first_1['Atleta'][x] == jogadores:
+                            a_values = Role_12_first_1.iloc[x].values.tolist()
+                        if Role_12_first_1['Atleta'][x] == alvo:
+                            b_values = Role_12_first_1.iloc[x].values.tolist()
+                            
+                    a_values = a_values[4:]
+                    b_values = b_values[4:]
+
+                    values = [a_values, b_values]
+
+                    #Plotting Data
+                    title = dict(
+                        title_name = jogadores,
+                        title_color = '#B6282F',
+                        subtitle_name = jogadores_clube + "/" + jogadores_liga,
+                        subtitle_color = '#B6282F',
+                        title_name_2 = alvo,
+                        title_color_2 = '#344D94',
+                        subtitle_name_2 = alvo_clube + "/" + alvo_liga,
+                        subtitle_color_2 = '#344D94',
+                        title_fontsize = 18,
+                    ) 
+
+                    endnote = 'Viz by@JAmerico1898\ Data from Wyscout\nAll data in League percentiles'
+
+                    radar=Radar(fontfamily='Cursive', range_fontsize=8)
+                    fig,ax = radar.plot_radar(ranges=ranges,params=params,values=values,radar_color=['#B6282F', '#344D94'], dpi=600, alphas=[.8,.6], title=title, endnote=endnote, compare=True)
+                    st.pyplot(fig)
+
+                    ############################################################################
+                    # Preparing Graph 2
+                    params = list(Role_12_first_2.columns)
+                    params = params[4:]
+                    
+                    #Preparing Data
+                    ranges = []
+                    a_values = []
+                    b_values = []
+
+                    for x in params:
+                        a = min(Role_12_first_2[params][x])
+                        a = 0
+                        b = max(Role_12_first_2[params][x])
+                        b = 100
+                        ranges.append((a, b))
+
+                    for x in range(len(Role_12_first_2['Atleta'])):
+                        if Role_12_first_2['Atleta'][x] == jogadores:
+                            a_values = Role_12_first_2.iloc[x].values.tolist()
+                        if Role_12_first_2['Atleta'][x] == alvo:
+                            b_values = Role_12_first_2.iloc[x].values.tolist()
+                            
+                    a_values = a_values[4:]
+                    b_values = b_values[4:]
+
+                    values = [a_values, b_values]
+
+                    #Plotting Data
+                    title = dict(
+                        title_name = jogadores,
+                        title_color = '#B6282F',
+                        subtitle_name = jogadores_clube + "/" + jogadores_liga,
+                        subtitle_color = '#B6282F',
+                        title_name_2 = alvo,
+                        title_color_2 = '#344D94',
+                        subtitle_name_2 = alvo_clube + "/" + alvo_liga,
+                        subtitle_color_2 = '#344D94',
+                        title_fontsize = 18,
+                    ) 
+
+                    endnote = 'Viz by@JAmerico1898\ Data from Wyscout\nAll data in League percentiles'
+
+                    radar=Radar(fontfamily='Cursive', range_fontsize=8)
+                    fig,ax = radar.plot_radar(ranges=ranges,params=params,values=values,radar_color=['#B6282F', '#344D94'], dpi=600, alphas=[.8,.6], title=title, endnote=endnote, compare=True)
+                    st.pyplot(fig)
+
+                    ##########################################################################################
+                    ############################################################################
+
+                    #Quinto Gráfico
+                    Role_12_first = Role_12_Mean_Charts.iloc[4:5, :]
+                    Role_12_first = pd.concat([Role_12_first, target]).reset_index()
+
+                    # Definindo atletas para comparar
+                    jogadores = Role_12_first.iat[0, 1]
+                    jogadores_clube = Role_12_first.iat[0, 2]
+                    jogadores_liga = Role_12_first.iat[0, 3]
+                    #alvo = Role_12_first.iat[1, 1]
+                    #alvo_clube = Role_12_first.iat[1, 2]
+                    #alvo_liga = Role_12_first.iat[1, 3]
+
+                    #Splitting Data
+                    Role_12_first_1 = Role_12_first.iloc[:, np.r_[0:3, 3:11]]
+                    Role_12_first_2 = Role_12_first.iloc[:, np.r_[0:3, 11:17]]
+
+                    # Preparing Graph 1
+                    params = list(Role_12_first_1.columns)
+                    params = params[4:]
+                    
+                    #Preparing Data
+                    ranges = []
+                    a_values = []
+                    b_values = []
+
+                    for x in params:
+                        a = min(Role_12_first_1[params][x])
+                        a = 0
+                        b = max(Role_12_first_1[params][x])
+                        b = 100
+                        ranges.append((a, b))
+
+                    for x in range(len(Role_12_first_1['Atleta'])):
+                        if Role_12_first_1['Atleta'][x] == jogadores:
+                            a_values = Role_12_first_1.iloc[x].values.tolist()
+                        if Role_12_first_1['Atleta'][x] == alvo:
+                            b_values = Role_12_first_1.iloc[x].values.tolist()
+                            
+                    a_values = a_values[4:]
+                    b_values = b_values[4:]
+
+                    values = [a_values, b_values]
+
+                    #Plotting Data
+                    title = dict(
+                        title_name = jogadores,
+                        title_color = '#B6282F',
+                        subtitle_name = jogadores_clube + "/" + jogadores_liga,
+                        subtitle_color = '#B6282F',
+                        title_name_2 = alvo,
+                        title_color_2 = '#344D94',
+                        subtitle_name_2 = alvo_clube + "/" + alvo_liga,
+                        subtitle_color_2 = '#344D94',
+                        title_fontsize = 18,
+                    ) 
+
+                    endnote = 'Viz by@JAmerico1898\ Data from Wyscout\nAll data in League percentiles'
+
+                    radar=Radar(fontfamily='Cursive', range_fontsize=8)
+                    fig,ax = radar.plot_radar(ranges=ranges,params=params,values=values,radar_color=['#B6282F', '#344D94'], dpi=600, alphas=[.8,.6], title=title, endnote=endnote, compare=True)
+                    st.pyplot(fig)
+
+                    ############################################################################
+                    # Preparing Graph 2
+                    params = list(Role_12_first_2.columns)
+                    params = params[4:]
+                    
+                    #Preparing Data
+                    ranges = []
+                    a_values = []
+                    b_values = []
+
+                    for x in params:
+                        a = min(Role_12_first_2[params][x])
+                        a = 0
+                        b = max(Role_12_first_2[params][x])
+                        b = 100
+                        ranges.append((a, b))
+
+                    for x in range(len(Role_12_first_2['Atleta'])):
+                        if Role_12_first_2['Atleta'][x] == jogadores:
+                            a_values = Role_12_first_2.iloc[x].values.tolist()
+                        if Role_12_first_2['Atleta'][x] == alvo:
+                            b_values = Role_12_first_2.iloc[x].values.tolist()
+                            
+                    a_values = a_values[4:]
+                    b_values = b_values[4:]
+
+                    values = [a_values, b_values]
+
+                    #Plotting Data
+                    title = dict(
+                        title_name = jogadores,
+                        title_color = '#B6282F',
+                        subtitle_name = jogadores_clube + "/" + jogadores_liga,
+                        subtitle_color = '#B6282F',
+                        title_name_2 = alvo,
+                        title_color_2 = '#344D94',
+                        subtitle_name_2 = alvo_clube + "/" + alvo_liga,
+                        subtitle_color_2 = '#344D94',
+                        title_fontsize = 18,
+                    ) 
+
+                    endnote = 'Viz by@JAmerico1898\ Data from Wyscout\nAll data in League percentiles'
+
+                    radar=Radar(fontfamily='Cursive', range_fontsize=8)
+                    fig,ax = radar.plot_radar(ranges=ranges,params=params,values=values,radar_color=['#B6282F', '#344D94'], dpi=600, alphas=[.8,.6], title=title, endnote=endnote, compare=True)
+                    st.pyplot(fig)
+                    #####################################################################################################################
+                    #####################################################################################################################
+                    #####################################################################################################################
+                    #####################################################################################################################
+                    #####################################################################################################################
+                    #####################################################################################################################
+
+                if perfil_similar == ("Segundo Volante Organizador"):
+                ###############################################################################
+                ###########################################################################
+                    # PRIMEIRO VOLANTE EQUILIBRADO
+                    # Texto de Abertura>
+                    markdown_amount_1 = f"<div style='text-align:center; font-size:{fontsize}px'>{jogador_similar:}</div>"
+                    st.markdown("<h4 style='text-align: center;'>Jogador Selecionado</b></h4>", unsafe_allow_html=True)
+                    st.markdown(markdown_amount_1, unsafe_allow_html=True)
+                    st.markdown("---")
+
+                    #Carregando arquivo de dados
+                    Role_13_data = pd.read_excel('13_Role_Segundo_Volante_Organizador_Similarity.xlsx')
+                    Role_13_data = Role_13_data.drop(Role_13_data.columns[0:4], axis=1)
+                    Role_13_data.reset_index(drop=True, inplace=True)
+
+                    # Step : Defina o atleta-alvo
+                    #base_bruta_similaridade = pd.read_excel("base_bruta_similaridade.xlsx")
+                    target = Role_13_data.loc[(Role_13_data['Atleta'] == jogador_similar)]
+
+                    #Step : Definindo "ID-alvo"
+                    given_ID = target.iat[0, -1]
+                    
+                    selected = Role_13_data
+
+                    # Step 9: Add columns "1", "2", "3" to Role_13_data
+
+                    selected['1'] = given_ID[0]
+                    selected['2'] = given_ID[1]
+                    selected['3'] = given_ID[2]
+                    selected['4'] = given_ID[3]
+
+                    # Assigning correct columns to 1, 2, 3
+
+                    if given_ID[0] == "A":
+                        selected['1'] = selected["A1"]
+                    elif given_ID[0] == "B":
+                        selected['1'] = selected["B1"]
+                    elif given_ID[0] == "C":
+                        selected['1'] = selected["C1"]
+                    elif given_ID[0] == "D":
+                        selected['1'] = selected["D1"]
+                    elif given_ID[0] == "E":
+                        selected['1'] = selected["E1"]
+                    elif given_ID[0] == "F":
+                        selected['1'] = selected["F1"]
+                    elif given_ID[0] == "G":
+                        selected['1'] = selected["G1"]
+                    elif given_ID[0] == "H":
+                        selected['1'] = selected["H1"]
+                    elif given_ID[0] == "I":
+                        selected['1'] = selected["I1"]
+                    elif given_ID[0] == "J":
+                        selected['1'] = selected["J1"]
+
+
+                    if given_ID[1] == "A":
+                        selected['2'] = selected["A1"]
+                    elif given_ID[1] == "B":
+                        selected['2'] = selected["B1"]
+                    elif given_ID[1] == "C":
+                        selected['2'] = selected["C1"]
+                    elif given_ID[1] == "D":
+                        selected['2'] = selected["D1"]
+                    elif given_ID[1] == "E":
+                        selected['2'] = selected["E1"]
+                    elif given_ID[1] == "F":
+                        selected['2'] = selected["F1"]
+                    elif given_ID[1] == "G":
+                        selected['2'] = selected["G1"]
+                    elif given_ID[1] == "H":
+                        selected['2'] = selected["H1"]
+                    elif given_ID[1] == "I":
+                        selected['2'] = selected["I1"]
+                    elif given_ID[1] == "J":
+                        selected['2'] = selected["J1"]
+                    
+                    
+                    if given_ID[2] == "A":
+                        selected['3'] = selected["A1"]
+                    elif given_ID[2] == "B":
+                        selected['3'] = selected["B1"]
+                    elif given_ID[2] == "C":
+                        selected['3'] = selected["C1"]
+                    elif given_ID[2] == "D":
+                        selected['3'] = selected["D1"]
+                    elif given_ID[2] == "E":
+                        selected['3'] = selected["E1"]
+                    elif given_ID[2] == "F":
+                        selected['3'] = selected["F1"]
+                    elif given_ID[2] == "G":
+                        selected['3'] = selected["G1"]
+                    elif given_ID[2] == "H":
+                        selected['3'] = selected["H1"]
+                    elif given_ID[2] == "I":
+                        selected['3'] = selected["I1"]
+                    elif given_ID[2] == "J":
+                        selected['3'] = selected["J1"]
+
+                    if given_ID[3] == "A":
+                        selected['4'] = selected["A1"]
+                    elif given_ID[3] == "B":
+                        selected['4'] = selected["B1"]
+                    elif given_ID[3] == "C":
+                        selected['4'] = selected["C1"]
+                    elif given_ID[3] == "D":
+                        selected['4'] = selected["D1"]
+                    elif given_ID[3] == "E":
+                        selected['4'] = selected["E1"]
+                    elif given_ID[3] == "F":
+                        selected['4'] = selected["F1"]
+                    elif given_ID[3] == "G":
+                        selected['4'] = selected["G1"]
+                    elif given_ID[3] == "H":
+                        selected['4'] = selected["H1"]
+                    elif given_ID[3] == "I":
+                        selected['4'] = selected["I1"]
+                    elif given_ID[3] == "J":
+                        selected['4'] = selected["J1"]
+
+                    # Applying PCA for Scaled Selected Columns
+
+                    leagues = ["ARG1", "AUT", "BEL1", "BRA1", "BRA2", "BUL","CHI", "CHN", 
+                            "COL", "DEN", "ECU", "ENG1", "ENG2", "FRA1", "FRA2", "GER1", 
+                            "GER2", "GRE", "HOL", "ITA1", "ITA2", "JAP", "MEX", "PAR", 
+                            "PER", "POR1", "QAT", "RUS", "SAUD", "SCT", "SER", "SPA1", 
+                            "SPA2", "SWZ", "TUR", "UAE", "UKR", "URU", "USA"]
+
+                    # Iterate over each league
+                    for league in leagues:
+
+                        # Extract columns 46 through 50
+                        SegundoVolanteOrganizador = selected.iloc[:, np.r_[-4:0]]
+
+                        # Defining Columns
+                        SegundoVolanteOrganizador_columns = SegundoVolanteOrganizador.columns
+
+                        # Applying PCA
+                        pca = PCA(n_components=2)
+                        principalComponents = pca.fit_transform(SegundoVolanteOrganizador)
+
+                        # Create a DataFrame with loadings
+                        LoadingsSegundoVolanteOrganizador = pd.DataFrame(pca.components_.T**2, index=SegundoVolanteOrganizador_columns, columns=['loading factor 1', 'loading factor 2'])
+
+                        # Multiplying Matrices to obtain Pre_Variables
+                        Similarity = pd.DataFrame(np.matmul(SegundoVolanteOrganizador, LoadingsSegundoVolanteOrganizador['loading factor 1']) + np.matmul(SegundoVolanteOrganizador, LoadingsSegundoVolanteOrganizador['loading factor 2']),
+                                                columns=["Similarity"])
+
+                    # Rebuilding Full Training Set
+                    selected = selected.join(Similarity)
+
+                    ##############################################################
+                    ##############################################################
+
+                    # Lista de Similares
+                    # Initialize an empty list to store DataFrames
+                    target = selected.loc[(Role_13_data['Atleta'] == jogador_similar)]
+                    target_similarity = target.iat[0, -1]
+
+                    selected["Índice de Similaridade"] = (selected['Similarity']/target_similarity)*100
+                    selected["Índice de Similaridade"] = round(selected["Índice de Similaridade"], 2)
+
+                    target = selected.loc[(selected['Atleta'] == jogador_similar)]
+                    selected['Dif_Similarity'] = abs(selected["Índice de Similaridade"] - 100)
+
+                    selected = selected.sort_values(by='Dif_Similarity')
+
+                    lista_similares = selected.iloc[1:31, np.r_[0, 2, 27, 32, -2:0]]
+                    lista_similares = lista_similares.sort_values(by='Rating', ascending=False)
+
+                    # Lista de Jogadores Similares Ordenados segundo o Rating
+                    st.markdown("<h4 style='text-align: center;'>30 Jogadores + Similares</b></h4>", unsafe_allow_html=True)
+                    st.dataframe(lista_similares, use_container_width=True, hide_index=True)
+                    st.markdown("---")
+
+                    # Lista de Latinos
+                    selected_latam = selected[(selected["Nacionalidade"] == "Argentina")|(selected["Nacionalidade"] == "Brazil")
+                                        |(selected["Nacionalidade"] == "Bolivia")|(selected["Nacionalidade"] == "Chile")
+                                        |(selected["Nacionalidade"] == "Colombia")|(selected["Nacionalidade"] == "Costa Rica")
+                                        |(selected["Nacionalidade"] == "Ecuador")|(selected["Nacionalidade"] == "Mexico")
+                                        |(selected["Nacionalidade"] == "Panama")|(selected["Nacionalidade"] == "Paraguay")
+                                        |(selected["Nacionalidade"] == "Peru")|(selected["Nacionalidade"] == "Uruguay")
+                                        |(selected["Nacionalidade"] == "Venezuela")]
+
+                    lista_similares_latam = selected_latam.iloc[1:31, np.r_[0, 2, 27, 32, -2:0]]
+                    lista_similares_latam = lista_similares_latam.sort_values(by="Rating", ascending = False)
+
+                    #Texto para os Gráficos
+                    st.markdown("<h4 style='text-align: center;'>5 Jogadores Latinos Similares Melhor Ranquedos</b></h4>", unsafe_allow_html=True)
+                    st.markdown("---")    
+
+
+                    # Gerar Gráficos com os 5 melhores
+                    # Arquivo para o Gráfico
+                    Role_13_Mean_Charts = selected_latam.iloc[:, np.r_[0, 2, 27, 33:43]]
+                    target = target.iloc[:, np.r_[0, 2, 27, 33:43]]
+                    # Renomeando Colunas
+                    Role_13_Mean_Charts = Role_13_Mean_Charts.rename(columns={'Ações_Defensivas_BemSucedidas_Percentil':'Ações_Defensivas_BemSucedidas', 
+                                                            'Passes_Longos_Certos_Percentil':'Passes_Longos_Certos', 
+                                                            'Passes_Progressivos_Certos_Percentil':'Passes_Progressivos_Certos',
+                                                            'Pisadas_Área_Percentil':'Pisadas_Área', 
+                                                            'Dribles_BemSucedidos_Percentil':'Dribles_BemSucedidos', 
+                                                            'xA_Percentil':'xA', 
+                                                            'Assistência_Finalização_Percentil':'Assistência_Finalização', 
+                                                            'Passes_TerçoFinal_Certos_Percentil':'Passes_TerçoFinal_Certos',
+                                                            'Deep_Completions_Percentil':'Deep_Completions', 
+                                                            'Passes_ÁreaPênalti_Certos_Percentil':'Passes_ÁreaPênalti_Certos'})
+                    
+                    target = target.rename(columns={'Ações_Defensivas_BemSucedidas_Percentil':'Ações_Defensivas_BemSucedidas', 
+                                                            'Passes_Longos_Certos_Percentil':'Passes_Longos_Certos', 
+                                                            'Passes_Progressivos_Certos_Percentil':'Passes_Progressivos_Certos',
+                                                            'Pisadas_Área_Percentil':'Pisadas_Área', 
+                                                            'Dribles_BemSucedidos_Percentil':'Dribles_BemSucedidos', 
+                                                            'xA_Percentil':'xA', 
+                                                            'Assistência_Finalização_Percentil':'Assistência_Finalização', 
+                                                            'Passes_TerçoFinal_Certos_Percentil':'Passes_TerçoFinal_Certos',
+                                                            'Deep_Completions_Percentil':'Deep_Completions', 
+                                                            'Passes_ÁreaPênalti_Certos_Percentil':'Passes_ÁreaPênalti_Certos'})
+                    #Dropping Atleta-alvo
+                    Role_13_Mean_Charts = Role_13_Mean_Charts[Role_13_Mean_Charts['Atleta'] != jogador_similar] 
+                    #Extraindo 5 melhores
+                    Role_13_Mean_Charts = Role_13_Mean_Charts.iloc[0:5, :]
+
+
+                    #Primeiro Gráfico
+                    Role_13_first = Role_13_Mean_Charts.iloc[0:1, :]
+                    Role_13_first = pd.concat([Role_13_first, target]).reset_index()
+
+                    # Definindo atletas para comparar
+                    jogadores = Role_13_first.iat[0, 1]
+                    jogadores_clube = Role_13_first.iat[0, 2]
+                    jogadores_liga = Role_13_first.iat[0, 3]
+                    alvo = Role_13_first.iat[1, 1]
+                    alvo_clube = Role_13_first.iat[1, 2]
+                    alvo_liga = Role_13_first.iat[1, 3]
+
+                    #Splitting Data
+                    Role_13_first_1 = Role_13_first.iloc[:, np.r_[0:3, 3:9]]
+                    Role_13_first_2 = Role_13_first.iloc[:, np.r_[0:3, 8:14]]
+
+                    # Preparing Graph 1
+                    params = list(Role_13_first_1.columns)
+                    params = params[4:]
+                    
+                    #Preparing Data
+                    ranges = []
+                    a_values = []
+                    b_values = []
+
+                    for x in params:
+                        a = min(Role_13_first_1[params][x])
+                        a = 0
+                        b = max(Role_13_first_1[params][x])
+                        b = 100
+                        ranges.append((a, b))
+
+                    for x in range(len(Role_13_first_1['Atleta'])):
+                        if Role_13_first_1['Atleta'][x] == jogadores:
+                            a_values = Role_13_first_1.iloc[x].values.tolist()
+                        if Role_13_first_1['Atleta'][x] == alvo:
+                            b_values = Role_13_first_1.iloc[x].values.tolist()
+                            
+                    a_values = a_values[4:]
+                    b_values = b_values[4:]
+
+                    values = [a_values, b_values]
+
+                    #Plotting Data
+                    title = dict(
+                        title_name = jogadores,
+                        title_color = '#B6282F',
+                        subtitle_name = jogadores_clube + "/" + jogadores_liga,
+                        subtitle_color = '#B6282F',
+                        title_name_2 = alvo,
+                        title_color_2 = '#344D94',
+                        subtitle_name_2 = alvo_clube + "/" + alvo_liga,
+                        subtitle_color_2 = '#344D94',
+                        title_fontsize = 18,
+                    ) 
+
+                    endnote = 'Viz by@JAmerico1898\ Data from Wyscout\nAll data in League percentiles'
+
+                    radar=Radar(fontfamily='Cursive', range_fontsize=8)
+                    fig,ax = radar.plot_radar(ranges=ranges,params=params,values=values,radar_color=['#B6282F', '#344D94'], dpi=600, alphas=[.8,.6], title=title, endnote=endnote, compare=True)
+                    st.pyplot(fig)
+
+                    ############################################################################
+                    # Preparing Graph 2
+                    params = list(Role_13_first_2.columns)
+                    params = params[4:]
+                    
+                    #Preparing Data
+                    ranges = []
+                    a_values = []
+                    b_values = []
+
+                    for x in params:
+                        a = min(Role_13_first_2[params][x])
+                        a = 0
+                        b = max(Role_13_first_2[params][x])
+                        b = 100
+                        ranges.append((a, b))
+
+                    for x in range(len(Role_13_first_2['Atleta'])):
+                        if Role_13_first_2['Atleta'][x] == jogadores:
+                            a_values = Role_13_first_2.iloc[x].values.tolist()
+                        if Role_13_first_2['Atleta'][x] == alvo:
+                            b_values = Role_13_first_2.iloc[x].values.tolist()
+                            
+                    a_values = a_values[4:]
+                    b_values = b_values[4:]
+
+                    values = [a_values, b_values]
+
+                    #Plotting Data
+                    title = dict(
+                        title_name = jogadores,
+                        title_color = '#B6282F',
+                        subtitle_name = jogadores_clube + "/" + jogadores_liga,
+                        subtitle_color = '#B6282F',
+                        title_name_2 = alvo,
+                        title_color_2 = '#344D94',
+                        subtitle_name_2 = alvo_clube + "/" + alvo_liga,
+                        subtitle_color_2 = '#344D94',
+                        title_fontsize = 18,
+                    ) 
+
+                    endnote = 'Viz by@JAmerico1898\ Data from Wyscout\nAll data in League percentiles'
+
+                    radar=Radar(fontfamily='Cursive', range_fontsize=8)
+                    fig,ax = radar.plot_radar(ranges=ranges,params=params,values=values,radar_color=['#B6282F', '#344D94'], dpi=600, alphas=[.8,.6], title=title, endnote=endnote, compare=True)
+                    st.pyplot(fig)
+
+                    ############################################################################
+
+                    #Segundo Gráfico
+                    Role_13_first = Role_13_Mean_Charts.iloc[1:2, :]
+                    Role_13_first = pd.concat([Role_13_first, target]).reset_index()
+
+                    # Definindo atletas para comparar
+                    jogadores = Role_13_first.iat[0, 1]
+                    jogadores_clube = Role_13_first.iat[0, 2]
+                    jogadores_liga = Role_13_first.iat[0, 3]
+
+                    #Splitting Data
+                    Role_13_first_1 = Role_13_first.iloc[:, np.r_[0:3, 3:9]]
+                    Role_13_first_2 = Role_13_first.iloc[:, np.r_[0:3, 8:14]]
+
+                    # Preparing Graph 1
+                    params = list(Role_13_first_1.columns)
+                    params = params[4:]
+                    
+                    #Preparing Data
+                    ranges = []
+                    a_values = []
+                    b_values = []
+
+                    for x in params:
+                        a = min(Role_13_first_1[params][x])
+                        a = 0
+                        b = max(Role_13_first_1[params][x])
+                        b = 100
+                        ranges.append((a, b))
+
+                    for x in range(len(Role_13_first_1['Atleta'])):
+                        if Role_13_first_1['Atleta'][x] == jogadores:
+                            a_values = Role_13_first_1.iloc[x].values.tolist()
+                        if Role_13_first_1['Atleta'][x] == alvo:
+                            b_values = Role_13_first_1.iloc[x].values.tolist()
+                            
+                    a_values = a_values[4:]
+                    b_values = b_values[4:]
+
+                    values = [a_values, b_values]
+
+                    #Plotting Data
+                    title = dict(
+                        title_name = jogadores,
+                        title_color = '#B6282F',
+                        subtitle_name = jogadores_clube + "/" + jogadores_liga,
+                        subtitle_color = '#B6282F',
+                        title_name_2 = alvo,
+                        title_color_2 = '#344D94',
+                        subtitle_name_2 = alvo_clube + "/" + alvo_liga,
+                        subtitle_color_2 = '#344D94',
+                        title_fontsize = 18,
+                    ) 
+
+                    endnote = 'Viz by@JAmerico1898\ Data from Wyscout\nAll data in League percentiles'
+
+                    radar=Radar(fontfamily='Cursive', range_fontsize=8)
+                    fig,ax = radar.plot_radar(ranges=ranges,params=params,values=values,radar_color=['#B6282F', '#344D94'], dpi=600, alphas=[.8,.6], title=title, endnote=endnote, compare=True)
+                    st.pyplot(fig)
+
+                    ############################################################################
+                    # Preparing Graph 2
+                    params = list(Role_13_first_2.columns)
+                    params = params[4:]
+                    
+                    #Preparing Data
+                    ranges = []
+                    a_values = []
+                    b_values = []
+
+                    for x in params:
+                        a = min(Role_13_first_2[params][x])
+                        a = 0
+                        b = max(Role_13_first_2[params][x])
+                        b = 100
+                        ranges.append((a, b))
+
+                    for x in range(len(Role_13_first_2['Atleta'])):
+                        if Role_13_first_2['Atleta'][x] == jogadores:
+                            a_values = Role_13_first_2.iloc[x].values.tolist()
+                        if Role_13_first_2['Atleta'][x] == alvo:
+                            b_values = Role_13_first_2.iloc[x].values.tolist()
+                            
+                    a_values = a_values[4:]
+                    b_values = b_values[4:]
+
+                    values = [a_values, b_values]
+
+                    #Plotting Data
+                    title = dict(
+                        title_name = jogadores,
+                        title_color = '#B6282F',
+                        subtitle_name = jogadores_clube + "/" + jogadores_liga,
+                        subtitle_color = '#B6282F',
+                        title_name_2 = alvo,
+                        title_color_2 = '#344D94',
+                        subtitle_name_2 = alvo_clube + "/" + alvo_liga,
+                        subtitle_color_2 = '#344D94',
+                        title_fontsize = 18,
+                    ) 
+
+                    endnote = 'Viz by@JAmerico1898\ Data from Wyscout\nAll data in League percentiles'
+
+                    radar=Radar(fontfamily='Cursive', range_fontsize=8)
+                    fig,ax = radar.plot_radar(ranges=ranges,params=params,values=values,radar_color=['#B6282F', '#344D94'], dpi=600, alphas=[.8,.6], title=title, endnote=endnote, compare=True)
+                    st.pyplot(fig)
+
+                    ##########################################################################################
+                    ############################################################################
+
+                    #Terceiro Gráfico
+                    Role_13_first = Role_13_Mean_Charts.iloc[2:3, :]
+                    Role_13_first = pd.concat([Role_13_first, target]).reset_index()
+
+                    # Definindo atletas para comparar
+                    jogadores = Role_13_first.iat[0, 1]
+                    jogadores_clube = Role_13_first.iat[0, 2]
+                    jogadores_liga = Role_13_first.iat[0, 3]
+
+                    #Splitting Data
+                    Role_13_first_1 = Role_13_first.iloc[:, np.r_[0:3, 3:9]]
+                    Role_13_first_2 = Role_13_first.iloc[:, np.r_[0:3, 8:14]]
+
+                    # Preparing Graph 1
+                    params = list(Role_13_first_1.columns)
+                    params = params[4:]
+                    
+                    #Preparing Data
+                    ranges = []
+                    a_values = []
+                    b_values = []
+
+                    for x in params:
+                        a = min(Role_13_first_1[params][x])
+                        a = 0
+                        b = max(Role_13_first_1[params][x])
+                        b = 100
+                        ranges.append((a, b))
+
+                    for x in range(len(Role_13_first_1['Atleta'])):
+                        if Role_13_first_1['Atleta'][x] == jogadores:
+                            a_values = Role_13_first_1.iloc[x].values.tolist()
+                        if Role_13_first_1['Atleta'][x] == alvo:
+                            b_values = Role_13_first_1.iloc[x].values.tolist()
+                            
+                    a_values = a_values[4:]
+                    b_values = b_values[4:]
+
+                    values = [a_values, b_values]
+
+                    #Plotting Data
+                    title = dict(
+                        title_name = jogadores,
+                        title_color = '#B6282F',
+                        subtitle_name = jogadores_clube + "/" + jogadores_liga,
+                        subtitle_color = '#B6282F',
+                        title_name_2 = alvo,
+                        title_color_2 = '#344D94',
+                        subtitle_name_2 = alvo_clube + "/" + alvo_liga,
+                        subtitle_color_2 = '#344D94',
+                        title_fontsize = 18,
+                    ) 
+
+                    endnote = 'Viz by@JAmerico1898\ Data from Wyscout\nAll data in League percentiles'
+
+                    radar=Radar(fontfamily='Cursive', range_fontsize=8)
+                    fig,ax = radar.plot_radar(ranges=ranges,params=params,values=values,radar_color=['#B6282F', '#344D94'], dpi=600, alphas=[.8,.6], title=title, endnote=endnote, compare=True)
+                    st.pyplot(fig)
+
+                    ############################################################################
+                    # Preparing Graph 2
+                    params = list(Role_13_first_2.columns)
+                    params = params[4:]
+                    
+                    #Preparing Data
+                    ranges = []
+                    a_values = []
+                    b_values = []
+
+                    for x in params:
+                        a = min(Role_13_first_2[params][x])
+                        a = 0
+                        b = max(Role_13_first_2[params][x])
+                        b = 100
+                        ranges.append((a, b))
+
+                    for x in range(len(Role_13_first_2['Atleta'])):
+                        if Role_13_first_2['Atleta'][x] == jogadores:
+                            a_values = Role_13_first_2.iloc[x].values.tolist()
+                        if Role_13_first_2['Atleta'][x] == alvo:
+                            b_values = Role_13_first_2.iloc[x].values.tolist()
+                            
+                    a_values = a_values[4:]
+                    b_values = b_values[4:]
+
+                    values = [a_values, b_values]
+
+                    #Plotting Data
+                    title = dict(
+                        title_name = jogadores,
+                        title_color = '#B6282F',
+                        subtitle_name = jogadores_clube + "/" + jogadores_liga,
+                        subtitle_color = '#B6282F',
+                        title_name_2 = alvo,
+                        title_color_2 = '#344D94',
+                        subtitle_name_2 = alvo_clube + "/" + alvo_liga,
+                        subtitle_color_2 = '#344D94',
+                        title_fontsize = 18,
+                    ) 
+
+                    endnote = 'Viz by@JAmerico1898\ Data from Wyscout\nAll data in League percentiles'
+
+                    radar=Radar(fontfamily='Cursive', range_fontsize=8)
+                    fig,ax = radar.plot_radar(ranges=ranges,params=params,values=values,radar_color=['#B6282F', '#344D94'], dpi=600, alphas=[.8,.6], title=title, endnote=endnote, compare=True)
+                    st.pyplot(fig)
+
+                    ##########################################################################################
+                    ############################################################################
+
+                    #Quarto Gráfico
+                    Role_13_first = Role_13_Mean_Charts.iloc[3:4, :]
+                    Role_13_first = pd.concat([Role_13_first, target]).reset_index()
+
+                    # Definindo atletas para comparar
+                    jogadores = Role_13_first.iat[0, 1]
+                    jogadores_clube = Role_13_first.iat[0, 2]
+                    jogadores_liga = Role_13_first.iat[0, 3]
+
+                    #Splitting Data
+                    Role_13_first_1 = Role_13_first.iloc[:, np.r_[0:3, 3:9]]
+                    Role_13_first_2 = Role_13_first.iloc[:, np.r_[0:3, 8:14]]
+
+                    # Preparing Graph 1
+                    params = list(Role_13_first_1.columns)
+                    params = params[4:]
+                    
+                    #Preparing Data
+                    ranges = []
+                    a_values = []
+                    b_values = []
+
+                    for x in params:
+                        a = min(Role_13_first_1[params][x])
+                        a = 0
+                        b = max(Role_13_first_1[params][x])
+                        b = 100
+                        ranges.append((a, b))
+
+                    for x in range(len(Role_13_first_1['Atleta'])):
+                        if Role_13_first_1['Atleta'][x] == jogadores:
+                            a_values = Role_13_first_1.iloc[x].values.tolist()
+                        if Role_13_first_1['Atleta'][x] == alvo:
+                            b_values = Role_13_first_1.iloc[x].values.tolist()
+                            
+                    a_values = a_values[4:]
+                    b_values = b_values[4:]
+
+                    values = [a_values, b_values]
+
+                    #Plotting Data
+                    title = dict(
+                        title_name = jogadores,
+                        title_color = '#B6282F',
+                        subtitle_name = jogadores_clube + "/" + jogadores_liga,
+                        subtitle_color = '#B6282F',
+                        title_name_2 = alvo,
+                        title_color_2 = '#344D94',
+                        subtitle_name_2 = alvo_clube + "/" + alvo_liga,
+                        subtitle_color_2 = '#344D94',
+                        title_fontsize = 18,
+                    ) 
+
+                    endnote = 'Viz by@JAmerico1898\ Data from Wyscout\nAll data in League percentiles'
+
+                    radar=Radar(fontfamily='Cursive', range_fontsize=8)
+                    fig,ax = radar.plot_radar(ranges=ranges,params=params,values=values,radar_color=['#B6282F', '#344D94'], dpi=600, alphas=[.8,.6], title=title, endnote=endnote, compare=True)
+                    st.pyplot(fig)
+
+                    ############################################################################
+                    # Preparing Graph 2
+                    params = list(Role_13_first_2.columns)
+                    params = params[4:]
+                    
+                    #Preparing Data
+                    ranges = []
+                    a_values = []
+                    b_values = []
+
+                    for x in params:
+                        a = min(Role_13_first_2[params][x])
+                        a = 0
+                        b = max(Role_13_first_2[params][x])
+                        b = 100
+                        ranges.append((a, b))
+
+                    for x in range(len(Role_13_first_2['Atleta'])):
+                        if Role_13_first_2['Atleta'][x] == jogadores:
+                            a_values = Role_13_first_2.iloc[x].values.tolist()
+                        if Role_13_first_2['Atleta'][x] == alvo:
+                            b_values = Role_13_first_2.iloc[x].values.tolist()
+                            
+                    a_values = a_values[4:]
+                    b_values = b_values[4:]
+
+                    values = [a_values, b_values]
+
+                    #Plotting Data
+                    title = dict(
+                        title_name = jogadores,
+                        title_color = '#B6282F',
+                        subtitle_name = jogadores_clube + "/" + jogadores_liga,
+                        subtitle_color = '#B6282F',
+                        title_name_2 = alvo,
+                        title_color_2 = '#344D94',
+                        subtitle_name_2 = alvo_clube + "/" + alvo_liga,
+                        subtitle_color_2 = '#344D94',
+                        title_fontsize = 18,
+                    ) 
+
+                    endnote = 'Viz by@JAmerico1898\ Data from Wyscout\nAll data in League percentiles'
+
+                    radar=Radar(fontfamily='Cursive', range_fontsize=8)
+                    fig,ax = radar.plot_radar(ranges=ranges,params=params,values=values,radar_color=['#B6282F', '#344D94'], dpi=600, alphas=[.8,.6], title=title, endnote=endnote, compare=True)
+                    st.pyplot(fig)
+
+                    ##########################################################################################
+                    ############################################################################
+
+                    #Quinto Gráfico
+                    Role_13_first = Role_13_Mean_Charts.iloc[4:5, :]
+                    Role_13_first = pd.concat([Role_13_first, target]).reset_index()
+
+                    # Definindo atletas para comparar
+                    jogadores = Role_13_first.iat[0, 1]
+                    jogadores_clube = Role_13_first.iat[0, 2]
+                    jogadores_liga = Role_13_first.iat[0, 3]
+
+                    #Splitting Data
+                    Role_13_first_1 = Role_13_first.iloc[:, np.r_[0:3, 3:9]]
+                    Role_13_first_2 = Role_13_first.iloc[:, np.r_[0:3, 8:14]]
+
+                    # Preparing Graph 1
+                    params = list(Role_13_first_1.columns)
+                    params = params[4:]
+                    
+                    #Preparing Data
+                    ranges = []
+                    a_values = []
+                    b_values = []
+
+                    for x in params:
+                        a = min(Role_13_first_1[params][x])
+                        a = 0
+                        b = max(Role_13_first_1[params][x])
+                        b = 100
+                        ranges.append((a, b))
+
+                    for x in range(len(Role_13_first_1['Atleta'])):
+                        if Role_13_first_1['Atleta'][x] == jogadores:
+                            a_values = Role_13_first_1.iloc[x].values.tolist()
+                        if Role_13_first_1['Atleta'][x] == alvo:
+                            b_values = Role_13_first_1.iloc[x].values.tolist()
+                            
+                    a_values = a_values[4:]
+                    b_values = b_values[4:]
+
+                    values = [a_values, b_values]
+
+                    #Plotting Data
+                    title = dict(
+                        title_name = jogadores,
+                        title_color = '#B6282F',
+                        subtitle_name = jogadores_clube + "/" + jogadores_liga,
+                        subtitle_color = '#B6282F',
+                        title_name_2 = alvo,
+                        title_color_2 = '#344D94',
+                        subtitle_name_2 = alvo_clube + "/" + alvo_liga,
+                        subtitle_color_2 = '#344D94',
+                        title_fontsize = 18,
+                    ) 
+
+                    endnote = 'Viz by@JAmerico1898\ Data from Wyscout\nAll data in League percentiles'
+
+                    radar=Radar(fontfamily='Cursive', range_fontsize=8)
+                    fig,ax = radar.plot_radar(ranges=ranges,params=params,values=values,radar_color=['#B6282F', '#344D94'], dpi=600, alphas=[.8,.6], title=title, endnote=endnote, compare=True)
+                    st.pyplot(fig)
+
+                    ############################################################################
+                    # Preparing Graph 2
+                    params = list(Role_13_first_2.columns)
+                    params = params[4:]
+                    
+                    #Preparing Data
+                    ranges = []
+                    a_values = []
+                    b_values = []
+
+                    for x in params:
+                        a = min(Role_13_first_2[params][x])
+                        a = 0
+                        b = max(Role_13_first_2[params][x])
+                        b = 100
+                        ranges.append((a, b))
+
+                    for x in range(len(Role_13_first_2['Atleta'])):
+                        if Role_13_first_2['Atleta'][x] == jogadores:
+                            a_values = Role_13_first_2.iloc[x].values.tolist()
+                        if Role_13_first_2['Atleta'][x] == alvo:
+                            b_values = Role_13_first_2.iloc[x].values.tolist()
+                            
+                    a_values = a_values[4:]
+                    b_values = b_values[4:]
+
+                    values = [a_values, b_values]
+
+                    #Plotting Data
+                    title = dict(
+                        title_name = jogadores,
+                        title_color = '#B6282F',
+                        subtitle_name = jogadores_clube + "/" + jogadores_liga,
+                        subtitle_color = '#B6282F',
+                        title_name_2 = alvo,
+                        title_color_2 = '#344D94',
+                        subtitle_name_2 = alvo_clube + "/" + alvo_liga,
+                        subtitle_color_2 = '#344D94',
+                        title_fontsize = 18,
+                    ) 
+
+                    endnote = 'Viz by@JAmerico1898\ Data from Wyscout\nAll data in League percentiles'
+
+                    radar=Radar(fontfamily='Cursive', range_fontsize=8)
+                    fig,ax = radar.plot_radar(ranges=ranges,params=params,values=values,radar_color=['#B6282F', '#344D94'], dpi=600, alphas=[.8,.6], title=title, endnote=endnote, compare=True)
+                    st.pyplot(fig)
+                    #####################################################################################################################
+                    #####################################################################################################################
+                    #####################################################################################################################
+                    #####################################################################################################################
+                    #####################################################################################################################
+                    #####################################################################################################################
+
+                if perfil_similar == ("Segundo Volante Equilibrado"):
+                ###############################################################################
+                ###########################################################################
+                    # PRIMEIRO VOLANTE EQUILIBRADO
+                    # Texto de Abertura>
+                    markdown_amount_1 = f"<div style='text-align:center; font-size:{fontsize}px'>{jogador_similar:}</div>"
+                    st.markdown("<h4 style='text-align: center;'>Jogador Selecionado</b></h4>", unsafe_allow_html=True)
+                    st.markdown(markdown_amount_1, unsafe_allow_html=True)
+                    st.markdown("---")
+
+                    #Carregando arquivo de dados
+                    Role_14_data = pd.read_excel('14_Role_Segundo_Volante_Equilibrado_Similarity.xlsx')
+                    Role_14_data = Role_14_data.drop(Role_14_data.columns[0:4], axis=1)
+                    Role_14_data.reset_index(drop=True, inplace=True)
+
+                    # Step : Defina o atleta-alvo
+                    #base_bruta_similaridade = pd.read_excel("base_bruta_similaridade.xlsx")
+                    target = Role_14_data.loc[(Role_14_data['Atleta'] == jogador_similar)]
+
+                    #Step : Definindo "ID-alvo"
+                    given_ID = target.iat[0, -1]
+                    
+                    selected = Role_14_data
+
+                    # Step 9: Add columns "1", "2", "3" to Role_14_data
+
+                    selected['1'] = given_ID[0]
+                    selected['2'] = given_ID[1]
+                    selected['3'] = given_ID[2]
+                    selected['4'] = given_ID[3]
+
+                    # Assigning correct columns to 1, 2, 3
+
+                    if given_ID[0] == "A":
+                        selected['1'] = selected["A1"]
+                    elif given_ID[0] == "B":
+                        selected['1'] = selected["B1"]
+                    elif given_ID[0] == "C":
+                        selected['1'] = selected["C1"]
+                    elif given_ID[0] == "D":
+                        selected['1'] = selected["D1"]
+                    elif given_ID[0] == "E":
+                        selected['1'] = selected["E1"]
+                    elif given_ID[0] == "F":
+                        selected['1'] = selected["F1"]
+                    elif given_ID[0] == "G":
+                        selected['1'] = selected["G1"]
+                    elif given_ID[0] == "H":
+                        selected['1'] = selected["H1"]
+                    elif given_ID[0] == "I":
+                        selected['1'] = selected["I1"]
+                    elif given_ID[0] == "J":
+                        selected['1'] = selected["J1"]
+                    elif given_ID[0] == "K":
+                        selected['1'] = selected["K1"]
+                    elif given_ID[0] == "L":
+                        selected['1'] = selected["L1"]
+                    elif given_ID[0] == "M":
+                        selected['1'] = selected["M1"]
+
+
+                    if given_ID[1] == "A":
+                        selected['2'] = selected["A1"]
+                    elif given_ID[1] == "B":
+                        selected['2'] = selected["B1"]
+                    elif given_ID[1] == "C":
+                        selected['2'] = selected["C1"]
+                    elif given_ID[1] == "D":
+                        selected['2'] = selected["D1"]
+                    elif given_ID[1] == "E":
+                        selected['2'] = selected["E1"]
+                    elif given_ID[1] == "F":
+                        selected['2'] = selected["F1"]
+                    elif given_ID[1] == "G":
+                        selected['2'] = selected["G1"]
+                    elif given_ID[1] == "H":
+                        selected['2'] = selected["H1"]
+                    elif given_ID[1] == "I":
+                        selected['2'] = selected["I1"]
+                    elif given_ID[1] == "J":
+                        selected['2'] = selected["J1"]
+                    elif given_ID[1] == "K":
+                        selected['2'] = selected["K1"]
+                    elif given_ID[1] == "L":
+                        selected['2'] = selected["L1"]
+                    elif given_ID[1] == "M":
+                        selected['2'] = selected["M1"]
+                    
+                    
+                    if given_ID[2] == "A":
+                        selected['3'] = selected["A1"]
+                    elif given_ID[2] == "B":
+                        selected['3'] = selected["B1"]
+                    elif given_ID[2] == "C":
+                        selected['3'] = selected["C1"]
+                    elif given_ID[2] == "D":
+                        selected['3'] = selected["D1"]
+                    elif given_ID[2] == "E":
+                        selected['3'] = selected["E1"]
+                    elif given_ID[2] == "F":
+                        selected['3'] = selected["F1"]
+                    elif given_ID[2] == "G":
+                        selected['3'] = selected["G1"]
+                    elif given_ID[2] == "H":
+                        selected['3'] = selected["H1"]
+                    elif given_ID[2] == "I":
+                        selected['3'] = selected["I1"]
+                    elif given_ID[2] == "J":
+                        selected['3'] = selected["J1"]
+                    elif given_ID[2] == "K":
+                        selected['3'] = selected["K1"]
+                    elif given_ID[2] == "L":
+                        selected['3'] = selected["L1"]
+                    elif given_ID[2] == "M":
+                        selected['3'] = selected["M1"]
+
+                    if given_ID[3] == "A":
+                        selected['4'] = selected["A1"]
+                    elif given_ID[3] == "B":
+                        selected['4'] = selected["B1"]
+                    elif given_ID[3] == "C":
+                        selected['4'] = selected["C1"]
+                    elif given_ID[3] == "D":
+                        selected['4'] = selected["D1"]
+                    elif given_ID[3] == "E":
+                        selected['4'] = selected["E1"]
+                    elif given_ID[3] == "F":
+                        selected['4'] = selected["F1"]
+                    elif given_ID[3] == "G":
+                        selected['4'] = selected["G1"]
+                    elif given_ID[3] == "H":
+                        selected['4'] = selected["H1"]
+                    elif given_ID[3] == "I":
+                        selected['4'] = selected["I1"]
+                    elif given_ID[3] == "J":
+                        selected['4'] = selected["J1"]
+                    elif given_ID[3] == "K":
+                        selected['4'] = selected["K1"]
+                    elif given_ID[3] == "L":
+                        selected['4'] = selected["L1"]
+                    elif given_ID[3] == "M":
+                        selected['4'] = selected["M1"]
+
+                    # Applying PCA for Scaled Selected Columns
+
+                    leagues = ["ARG1", "AUT", "BEL1", "BRA1", "BRA2", "BUL","CHI", "CHN", 
+                            "COL", "DEN", "ECU", "ENG1", "ENG2", "FRA1", "FRA2", "GER1", 
+                            "GER2", "GRE", "HOL", "ITA1", "ITA2", "JAP", "MEX", "PAR", 
+                            "PER", "POR1", "QAT", "RUS", "SAUD", "SCT", "SER", "SPA1", 
+                            "SPA2", "SWZ", "TUR", "UAE", "UKR", "URU", "USA"]
+
+                    # Iterate over each league
+                    for league in leagues:
+
+                        # Extract columns 46 through 50
+                        SegundoVolante = selected.iloc[:, np.r_[-4:0]]
+
+                        # Defining Columns
+                        SegundoVolante_columns = SegundoVolante.columns
+
+                        # Applying PCA
+                        pca = PCA(n_components=2)
+                        principalComponents = pca.fit_transform(SegundoVolante)
+
+                        # Create a DataFrame with loadings
+                        LoadingsSegundoVolante = pd.DataFrame(pca.components_.T**2, index=SegundoVolante_columns, columns=['loading factor 1', 'loading factor 2'])
+
+                        # Multiplying Matrices to obtain Pre_Variables
+                        Similarity = pd.DataFrame(np.matmul(SegundoVolante, LoadingsSegundoVolante['loading factor 1']) + np.matmul(SegundoVolante, LoadingsSegundoVolante['loading factor 2']),
+                                                columns=["Similarity"])
+
+                    # Rebuilding Full Training Set
+                    selected = selected.join(Similarity)
+
+                    ##############################################################
+                    ##############################################################
+
+                    # Lista de Similares
+                    # Initialize an empty list to store DataFrames
+                    target = selected.loc[(Role_14_data['Atleta'] == jogador_similar)]
+                    target_similarity = target.iat[0, -1]
+
+                    selected["Índice de Similaridade"] = (selected['Similarity']/target_similarity)*100
+                    selected["Índice de Similaridade"] = round(selected["Índice de Similaridade"], 2)
+
+                    target = selected.loc[(selected['Atleta'] == jogador_similar)]
+                    selected['Dif_Similarity'] = abs(selected["Índice de Similaridade"] - 100)
+
+                    selected = selected.sort_values(by='Dif_Similarity')
+
+                    lista_similares = selected.iloc[1:31, np.r_[0, 2, 30, 35, -2:0]]
+                    lista_similares = lista_similares.sort_values(by='Rating', ascending=False)
+
+                    # Lista de Jogadores Similares Ordenados segundo o Rating
+                    st.markdown("<h4 style='text-align: center;'>30 Jogadores + Similares</b></h4>", unsafe_allow_html=True)
+                    st.dataframe(lista_similares, use_container_width=True, hide_index=True)
+                    st.markdown("---")
+
+                    # Lista de Latinos
+                    selected_latam = selected[(selected["Nacionalidade"] == "Argentina")|(selected["Nacionalidade"] == "Brazil")
+                                        |(selected["Nacionalidade"] == "Bolivia")|(selected["Nacionalidade"] == "Chile")
+                                        |(selected["Nacionalidade"] == "Colombia")|(selected["Nacionalidade"] == "Costa Rica")
+                                        |(selected["Nacionalidade"] == "Ecuador")|(selected["Nacionalidade"] == "Mexico")
+                                        |(selected["Nacionalidade"] == "Panama")|(selected["Nacionalidade"] == "Paraguay")
+                                        |(selected["Nacionalidade"] == "Peru")|(selected["Nacionalidade"] == "Uruguay")
+                                        |(selected["Nacionalidade"] == "Venezuela")]
+
+                    lista_similares_latam = selected_latam.iloc[1:31, np.r_[0, 2, 30, 35, -2:0]]
+                    lista_similares_latam = lista_similares_latam.sort_values(by="Rating", ascending = False)
+
+                    #Texto para os Gráficos
+                    st.markdown("<h4 style='text-align: center;'>5 Jogadores Latinos Similares Melhor Ranquedos</b></h4>", unsafe_allow_html=True)
+                    st.markdown("---")    
+
+
+                    # Gerar Gráficos com os 5 melhores
+                    # Arquivo para o Gráfico
+                    Role_14_Mean_Charts = selected_latam.iloc[:, np.r_[0, 2, 30, 36:49]]
+                    target = target.iloc[:, np.r_[0, 2, 30, 36:49]]
+                    # Renomeando Colunas
+                    Role_14_Mean_Charts = Role_14_Mean_Charts.rename(columns={'Ações_Defensivas_BemSucedidas_Percentil':'Ações_Defensivas_BemSucedidas', 'Duelos_Defensivos_Ganhos_Percentil':'Duelos_Defensivos_Ganhos', 'Duelos_Aéreos_Ganhos_Percentil':'Duelos_Aéreos_Ganhos',
+                                                                                'Finalizações_Bloqueadas_Percentil':'Finalizações_Bloqueadas', 'Interceptações_Ajustadas_a_Posse_Percentil':'Interceptações_Ajustadas_a_Posse', 'Passes_Longos_Certos_Percentil':'Passes_Longos_Certos', 
+                                                                                'Passes_Frontais_Certos_Percentil':'Passes_Frontais_Certos', 'Passes_Progressivos_Certos_Percentil':'Passes_Progressivos_Certos', 'Passes_Laterais_Certos_Percentil':'Passes_Laterais_Certos', 'Duelos_Ofensivos_Ganhos_Percentil':'Duelos_Ofensivos_Ganhos', 
+                                                                                'Dribles_BemSucedidos_Percentil':'Dribles_BemSucedidos', 'Corridas_Progressivas_Percentil':'Corridas_Progressivas', 'Passes_TerçoFinal_Certos_Percentil':'Passes_TerçoFinal_Certos'})
+                    
+                    target = target.rename(columns={'Ações_Defensivas_BemSucedidas_Percentil':'Ações_Defensivas_BemSucedidas', 'Duelos_Defensivos_Ganhos_Percentil':'Duelos_Defensivos_Ganhos', 'Duelos_Aéreos_Ganhos_Percentil':'Duelos_Aéreos_Ganhos',
+                                                                                'Finalizações_Bloqueadas_Percentil':'Finalizações_Bloqueadas', 'Interceptações_Ajustadas_a_Posse_Percentil':'Interceptações_Ajustadas_a_Posse', 'Passes_Longos_Certos_Percentil':'Passes_Longos_Certos', 
+                                                                                'Passes_Frontais_Certos_Percentil':'Passes_Frontais_Certos', 'Passes_Progressivos_Certos_Percentil':'Passes_Progressivos_Certos', 'Passes_Laterais_Certos_Percentil':'Passes_Laterais_Certos', 'Duelos_Ofensivos_Ganhos_Percentil':'Duelos_Ofensivos_Ganhos', 
+                                                                                'Dribles_BemSucedidos_Percentil':'Dribles_BemSucedidos', 'Corridas_Progressivas_Percentil':'Corridas_Progressivas', 'Passes_TerçoFinal_Certos_Percentil':'Passes_TerçoFinal_Certos'})
+                    #Dropping Atleta-alvo
+                    Role_14_Mean_Charts = Role_14_Mean_Charts[Role_14_Mean_Charts['Atleta'] != jogador_similar] 
+                    #Extraindo 5 melhores
+                    Role_14_Mean_Charts = Role_14_Mean_Charts.iloc[0:5, :]
+
+
+                    #Primeiro Gráfico
+                    Role_14_first = Role_14_Mean_Charts.iloc[0:1, :]
+                    Role_14_first = pd.concat([Role_14_first, target]).reset_index()
+
+                    # Definindo atletas para comparar
+                    jogadores = Role_14_first.iat[0, 1]
+                    jogadores_clube = Role_14_first.iat[0, 2]
+                    jogadores_liga = Role_14_first.iat[0, 3]
+                    alvo = Role_14_first.iat[1, 1]
+                    alvo_clube = Role_14_first.iat[1, 2]
+                    alvo_liga = Role_14_first.iat[1, 3]
+
+                    #Splitting Data
+                    Role_14_first_1 = Role_14_first.iloc[:, np.r_[0:3, 3:11]]
+                    Role_14_first_2 = Role_14_first.iloc[:, np.r_[0:3, 11:17]]
+
+                    # Preparing Graph 1
+                    params = list(Role_14_first_1.columns)
+                    params = params[4:]
+                    
+                    #Preparing Data
+                    ranges = []
+                    a_values = []
+                    b_values = []
+
+                    for x in params:
+                        a = min(Role_14_first_1[params][x])
+                        a = 0
+                        b = max(Role_14_first_1[params][x])
+                        b = 100
+                        ranges.append((a, b))
+
+                    for x in range(len(Role_14_first_1['Atleta'])):
+                        if Role_14_first_1['Atleta'][x] == jogadores:
+                            a_values = Role_14_first_1.iloc[x].values.tolist()
+                        if Role_14_first_1['Atleta'][x] == alvo:
+                            b_values = Role_14_first_1.iloc[x].values.tolist()
+                            
+                    a_values = a_values[4:]
+                    b_values = b_values[4:]
+
+                    values = [a_values, b_values]
+
+                    #Plotting Data
+                    title = dict(
+                        title_name = jogadores,
+                        title_color = '#B6282F',
+                        subtitle_name = jogadores_clube + "/" + jogadores_liga,
+                        subtitle_color = '#B6282F',
+                        title_name_2 = alvo,
+                        title_color_2 = '#344D94',
+                        subtitle_name_2 = alvo_clube + "/" + alvo_liga,
+                        subtitle_color_2 = '#344D94',
+                        title_fontsize = 18,
+                    ) 
+
+                    endnote = 'Viz by@JAmerico1898\ Data from Wyscout\nAll data in League percentiles'
+
+                    radar=Radar(fontfamily='Cursive', range_fontsize=8)
+                    fig,ax = radar.plot_radar(ranges=ranges,params=params,values=values,radar_color=['#B6282F', '#344D94'], dpi=600, alphas=[.8,.6], title=title, endnote=endnote, compare=True)
+                    st.pyplot(fig)
+
+                    ############################################################################
+                    # Preparing Graph 2
+                    params = list(Role_14_first_2.columns)
+                    params = params[4:]
+                    
+                    #Preparing Data
+                    ranges = []
+                    a_values = []
+                    b_values = []
+
+                    for x in params:
+                        a = min(Role_14_first_2[params][x])
+                        a = 0
+                        b = max(Role_14_first_2[params][x])
+                        b = 100
+                        ranges.append((a, b))
+
+                    for x in range(len(Role_14_first_2['Atleta'])):
+                        if Role_14_first_2['Atleta'][x] == jogadores:
+                            a_values = Role_14_first_2.iloc[x].values.tolist()
+                        if Role_14_first_2['Atleta'][x] == alvo:
+                            b_values = Role_14_first_2.iloc[x].values.tolist()
+                            
+                    a_values = a_values[4:]
+                    b_values = b_values[4:]
+
+                    values = [a_values, b_values]
+
+                    #Plotting Data
+                    title = dict(
+                        title_name = jogadores,
+                        title_color = '#B6282F',
+                        subtitle_name = jogadores_clube + "/" + jogadores_liga,
+                        subtitle_color = '#B6282F',
+                        title_name_2 = alvo,
+                        title_color_2 = '#344D94',
+                        subtitle_name_2 = alvo_clube + "/" + alvo_liga,
+                        subtitle_color_2 = '#344D94',
+                        title_fontsize = 18,
+                    ) 
+
+                    endnote = 'Viz by@JAmerico1898\ Data from Wyscout\nAll data in League percentiles'
+
+                    radar=Radar(fontfamily='Cursive', range_fontsize=8)
+                    fig,ax = radar.plot_radar(ranges=ranges,params=params,values=values,radar_color=['#B6282F', '#344D94'], dpi=600, alphas=[.8,.6], title=title, endnote=endnote, compare=True)
+                    st.pyplot(fig)
+
+                    ############################################################################
+
+                    #Segundo Gráfico
+                    Role_14_first = Role_14_Mean_Charts.iloc[1:2, :]
+                    Role_14_first = pd.concat([Role_14_first, target]).reset_index()
+
+                    # Definindo atletas para comparar
+                    jogadores = Role_14_first.iat[0, 1]
+                    jogadores_clube = Role_14_first.iat[0, 2]
+                    jogadores_liga = Role_14_first.iat[0, 3]
+                    #alvo = Role_14_first.iat[1, 1]
+                    #alvo_clube = Role_14_first.iat[1, 2]
+                    #alvo_liga = Role_14_first.iat[1, 3]
+
+                    #Splitting Data
+                    Role_14_first_1 = Role_14_first.iloc[:, np.r_[0:3, 3:11]]
+                    Role_14_first_2 = Role_14_first.iloc[:, np.r_[0:3, 11:17]]
+
+                    # Preparing Graph 1
+                    params = list(Role_14_first_1.columns)
+                    params = params[4:]
+                    
+                    #Preparing Data
+                    ranges = []
+                    a_values = []
+                    b_values = []
+
+                    for x in params:
+                        a = min(Role_14_first_1[params][x])
+                        a = 0
+                        b = max(Role_14_first_1[params][x])
+                        b = 100
+                        ranges.append((a, b))
+
+                    for x in range(len(Role_14_first_1['Atleta'])):
+                        if Role_14_first_1['Atleta'][x] == jogadores:
+                            a_values = Role_14_first_1.iloc[x].values.tolist()
+                        if Role_14_first_1['Atleta'][x] == alvo:
+                            b_values = Role_14_first_1.iloc[x].values.tolist()
+                            
+                    a_values = a_values[4:]
+                    b_values = b_values[4:]
+
+                    values = [a_values, b_values]
+
+                    #Plotting Data
+                    title = dict(
+                        title_name = jogadores,
+                        title_color = '#B6282F',
+                        subtitle_name = jogadores_clube + "/" + jogadores_liga,
+                        subtitle_color = '#B6282F',
+                        title_name_2 = alvo,
+                        title_color_2 = '#344D94',
+                        subtitle_name_2 = alvo_clube + "/" + alvo_liga,
+                        subtitle_color_2 = '#344D94',
+                        title_fontsize = 18,
+                    ) 
+
+                    endnote = 'Viz by@JAmerico1898\ Data from Wyscout\nAll data in League percentiles'
+
+                    radar=Radar(fontfamily='Cursive', range_fontsize=8)
+                    fig,ax = radar.plot_radar(ranges=ranges,params=params,values=values,radar_color=['#B6282F', '#344D94'], dpi=600, alphas=[.8,.6], title=title, endnote=endnote, compare=True)
+                    st.pyplot(fig)
+
+                    ############################################################################
+                    # Preparing Graph 2
+                    params = list(Role_14_first_2.columns)
+                    params = params[4:]
+                    
+                    #Preparing Data
+                    ranges = []
+                    a_values = []
+                    b_values = []
+
+                    for x in params:
+                        a = min(Role_14_first_2[params][x])
+                        a = 0
+                        b = max(Role_14_first_2[params][x])
+                        b = 100
+                        ranges.append((a, b))
+
+                    for x in range(len(Role_14_first_2['Atleta'])):
+                        if Role_14_first_2['Atleta'][x] == jogadores:
+                            a_values = Role_14_first_2.iloc[x].values.tolist()
+                        if Role_14_first_2['Atleta'][x] == alvo:
+                            b_values = Role_14_first_2.iloc[x].values.tolist()
+                            
+                    a_values = a_values[4:]
+                    b_values = b_values[4:]
+
+                    values = [a_values, b_values]
+
+                    #Plotting Data
+                    title = dict(
+                        title_name = jogadores,
+                        title_color = '#B6282F',
+                        subtitle_name = jogadores_clube + "/" + jogadores_liga,
+                        subtitle_color = '#B6282F',
+                        title_name_2 = alvo,
+                        title_color_2 = '#344D94',
+                        subtitle_name_2 = alvo_clube + "/" + alvo_liga,
+                        subtitle_color_2 = '#344D94',
+                        title_fontsize = 18,
+                    ) 
+
+                    endnote = 'Viz by@JAmerico1898\ Data from Wyscout\nAll data in League percentiles'
+
+                    radar=Radar(fontfamily='Cursive', range_fontsize=8)
+                    fig,ax = radar.plot_radar(ranges=ranges,params=params,values=values,radar_color=['#B6282F', '#344D94'], dpi=600, alphas=[.8,.6], title=title, endnote=endnote, compare=True)
+                    st.pyplot(fig)
+
+                    ##########################################################################################
+                    ############################################################################
+
+                    #Terceiro Gráfico
+                    Role_14_first = Role_14_Mean_Charts.iloc[2:3, :]
+                    Role_14_first = pd.concat([Role_14_first, target]).reset_index()
+
+                    # Definindo atletas para comparar
+                    jogadores = Role_14_first.iat[0, 1]
+                    jogadores_clube = Role_14_first.iat[0, 2]
+                    jogadores_liga = Role_14_first.iat[0, 3]
+                    #alvo = Role_14_first.iat[1, 1]
+                    #alvo_clube = Role_14_first.iat[1, 2]
+                    #alvo_liga = Role_14_first.iat[1, 3]
+
+                    #Splitting Data
+                    Role_14_first_1 = Role_14_first.iloc[:, np.r_[0:3, 3:11]]
+                    Role_14_first_2 = Role_14_first.iloc[:, np.r_[0:3, 11:17]]
+
+                    # Preparing Graph 1
+                    params = list(Role_14_first_1.columns)
+                    params = params[4:]
+                    
+                    #Preparing Data
+                    ranges = []
+                    a_values = []
+                    b_values = []
+
+                    for x in params:
+                        a = min(Role_14_first_1[params][x])
+                        a = 0
+                        b = max(Role_14_first_1[params][x])
+                        b = 100
+                        ranges.append((a, b))
+
+                    for x in range(len(Role_14_first_1['Atleta'])):
+                        if Role_14_first_1['Atleta'][x] == jogadores:
+                            a_values = Role_14_first_1.iloc[x].values.tolist()
+                        if Role_14_first_1['Atleta'][x] == alvo:
+                            b_values = Role_14_first_1.iloc[x].values.tolist()
+                            
+                    a_values = a_values[4:]
+                    b_values = b_values[4:]
+
+                    values = [a_values, b_values]
+
+                    #Plotting Data
+                    title = dict(
+                        title_name = jogadores,
+                        title_color = '#B6282F',
+                        subtitle_name = jogadores_clube + "/" + jogadores_liga,
+                        subtitle_color = '#B6282F',
+                        title_name_2 = alvo,
+                        title_color_2 = '#344D94',
+                        subtitle_name_2 = alvo_clube + "/" + alvo_liga,
+                        subtitle_color_2 = '#344D94',
+                        title_fontsize = 18,
+                    ) 
+
+                    endnote = 'Viz by@JAmerico1898\ Data from Wyscout\nAll data in League percentiles'
+
+                    radar=Radar(fontfamily='Cursive', range_fontsize=8)
+                    fig,ax = radar.plot_radar(ranges=ranges,params=params,values=values,radar_color=['#B6282F', '#344D94'], dpi=600, alphas=[.8,.6], title=title, endnote=endnote, compare=True)
+                    st.pyplot(fig)
+
+                    ############################################################################
+                    # Preparing Graph 2
+                    params = list(Role_14_first_2.columns)
+                    params = params[4:]
+                    
+                    #Preparing Data
+                    ranges = []
+                    a_values = []
+                    b_values = []
+
+                    for x in params:
+                        a = min(Role_14_first_2[params][x])
+                        a = 0
+                        b = max(Role_14_first_2[params][x])
+                        b = 100
+                        ranges.append((a, b))
+
+                    for x in range(len(Role_14_first_2['Atleta'])):
+                        if Role_14_first_2['Atleta'][x] == jogadores:
+                            a_values = Role_14_first_2.iloc[x].values.tolist()
+                        if Role_14_first_2['Atleta'][x] == alvo:
+                            b_values = Role_14_first_2.iloc[x].values.tolist()
+                            
+                    a_values = a_values[4:]
+                    b_values = b_values[4:]
+
+                    values = [a_values, b_values]
+
+                    #Plotting Data
+                    title = dict(
+                        title_name = jogadores,
+                        title_color = '#B6282F',
+                        subtitle_name = jogadores_clube + "/" + jogadores_liga,
+                        subtitle_color = '#B6282F',
+                        title_name_2 = alvo,
+                        title_color_2 = '#344D94',
+                        subtitle_name_2 = alvo_clube + "/" + alvo_liga,
+                        subtitle_color_2 = '#344D94',
+                        title_fontsize = 18,
+                    ) 
+
+                    endnote = 'Viz by@JAmerico1898\ Data from Wyscout\nAll data in League percentiles'
+
+                    radar=Radar(fontfamily='Cursive', range_fontsize=8)
+                    fig,ax = radar.plot_radar(ranges=ranges,params=params,values=values,radar_color=['#B6282F', '#344D94'], dpi=600, alphas=[.8,.6], title=title, endnote=endnote, compare=True)
+                    st.pyplot(fig)
+
+                    ##########################################################################################
+                    ############################################################################
+
+                    #Quarto Gráfico
+                    Role_14_first = Role_14_Mean_Charts.iloc[3:4, :]
+                    Role_14_first = pd.concat([Role_14_first, target]).reset_index()
+
+                    # Definindo atletas para comparar
+                    jogadores = Role_14_first.iat[0, 1]
+                    jogadores_clube = Role_14_first.iat[0, 2]
+                    jogadores_liga = Role_14_first.iat[0, 3]
+                    #alvo = Role_14_first.iat[1, 1]
+                    #alvo_clube = Role_14_first.iat[1, 2]
+                    #alvo_liga = Role_14_first.iat[1, 3]
+
+                    #Splitting Data
+                    Role_14_first_1 = Role_14_first.iloc[:, np.r_[0:3, 3:11]]
+                    Role_14_first_2 = Role_14_first.iloc[:, np.r_[0:3, 11:17]]
+
+                    # Preparing Graph 1
+                    params = list(Role_14_first_1.columns)
+                    params = params[4:]
+                    
+                    #Preparing Data
+                    ranges = []
+                    a_values = []
+                    b_values = []
+
+                    for x in params:
+                        a = min(Role_14_first_1[params][x])
+                        a = 0
+                        b = max(Role_14_first_1[params][x])
+                        b = 100
+                        ranges.append((a, b))
+
+                    for x in range(len(Role_14_first_1['Atleta'])):
+                        if Role_14_first_1['Atleta'][x] == jogadores:
+                            a_values = Role_14_first_1.iloc[x].values.tolist()
+                        if Role_14_first_1['Atleta'][x] == alvo:
+                            b_values = Role_14_first_1.iloc[x].values.tolist()
+                            
+                    a_values = a_values[4:]
+                    b_values = b_values[4:]
+
+                    values = [a_values, b_values]
+
+                    #Plotting Data
+                    title = dict(
+                        title_name = jogadores,
+                        title_color = '#B6282F',
+                        subtitle_name = jogadores_clube + "/" + jogadores_liga,
+                        subtitle_color = '#B6282F',
+                        title_name_2 = alvo,
+                        title_color_2 = '#344D94',
+                        subtitle_name_2 = alvo_clube + "/" + alvo_liga,
+                        subtitle_color_2 = '#344D94',
+                        title_fontsize = 18,
+                    ) 
+
+                    endnote = 'Viz by@JAmerico1898\ Data from Wyscout\nAll data in League percentiles'
+
+                    radar=Radar(fontfamily='Cursive', range_fontsize=8)
+                    fig,ax = radar.plot_radar(ranges=ranges,params=params,values=values,radar_color=['#B6282F', '#344D94'], dpi=600, alphas=[.8,.6], title=title, endnote=endnote, compare=True)
+                    st.pyplot(fig)
+
+                    ############################################################################
+                    # Preparing Graph 2
+                    params = list(Role_14_first_2.columns)
+                    params = params[4:]
+                    
+                    #Preparing Data
+                    ranges = []
+                    a_values = []
+                    b_values = []
+
+                    for x in params:
+                        a = min(Role_14_first_2[params][x])
+                        a = 0
+                        b = max(Role_14_first_2[params][x])
+                        b = 100
+                        ranges.append((a, b))
+
+                    for x in range(len(Role_14_first_2['Atleta'])):
+                        if Role_14_first_2['Atleta'][x] == jogadores:
+                            a_values = Role_14_first_2.iloc[x].values.tolist()
+                        if Role_14_first_2['Atleta'][x] == alvo:
+                            b_values = Role_14_first_2.iloc[x].values.tolist()
+                            
+                    a_values = a_values[4:]
+                    b_values = b_values[4:]
+
+                    values = [a_values, b_values]
+
+                    #Plotting Data
+                    title = dict(
+                        title_name = jogadores,
+                        title_color = '#B6282F',
+                        subtitle_name = jogadores_clube + "/" + jogadores_liga,
+                        subtitle_color = '#B6282F',
+                        title_name_2 = alvo,
+                        title_color_2 = '#344D94',
+                        subtitle_name_2 = alvo_clube + "/" + alvo_liga,
+                        subtitle_color_2 = '#344D94',
+                        title_fontsize = 18,
+                    ) 
+
+                    endnote = 'Viz by@JAmerico1898\ Data from Wyscout\nAll data in League percentiles'
+
+                    radar=Radar(fontfamily='Cursive', range_fontsize=8)
+                    fig,ax = radar.plot_radar(ranges=ranges,params=params,values=values,radar_color=['#B6282F', '#344D94'], dpi=600, alphas=[.8,.6], title=title, endnote=endnote, compare=True)
+                    st.pyplot(fig)
+
+                    ##########################################################################################
+                    ############################################################################
+
+                    #Quinto Gráfico
+                    Role_14_first = Role_14_Mean_Charts.iloc[4:5, :]
+                    Role_14_first = pd.concat([Role_14_first, target]).reset_index()
+
+                    # Definindo atletas para comparar
+                    jogadores = Role_14_first.iat[0, 1]
+                    jogadores_clube = Role_14_first.iat[0, 2]
+                    jogadores_liga = Role_14_first.iat[0, 3]
+                    #alvo = Role_14_first.iat[1, 1]
+                    #alvo_clube = Role_14_first.iat[1, 2]
+                    #alvo_liga = Role_14_first.iat[1, 3]
+
+                    #Splitting Data
+                    Role_14_first_1 = Role_14_first.iloc[:, np.r_[0:3, 3:11]]
+                    Role_14_first_2 = Role_14_first.iloc[:, np.r_[0:3, 11:17]]
+
+                    # Preparing Graph 1
+                    params = list(Role_14_first_1.columns)
+                    params = params[4:]
+                    
+                    #Preparing Data
+                    ranges = []
+                    a_values = []
+                    b_values = []
+
+                    for x in params:
+                        a = min(Role_14_first_1[params][x])
+                        a = 0
+                        b = max(Role_14_first_1[params][x])
+                        b = 100
+                        ranges.append((a, b))
+
+                    for x in range(len(Role_14_first_1['Atleta'])):
+                        if Role_14_first_1['Atleta'][x] == jogadores:
+                            a_values = Role_14_first_1.iloc[x].values.tolist()
+                        if Role_14_first_1['Atleta'][x] == alvo:
+                            b_values = Role_14_first_1.iloc[x].values.tolist()
+                            
+                    a_values = a_values[4:]
+                    b_values = b_values[4:]
+
+                    values = [a_values, b_values]
+
+                    #Plotting Data
+                    title = dict(
+                        title_name = jogadores,
+                        title_color = '#B6282F',
+                        subtitle_name = jogadores_clube + "/" + jogadores_liga,
+                        subtitle_color = '#B6282F',
+                        title_name_2 = alvo,
+                        title_color_2 = '#344D94',
+                        subtitle_name_2 = alvo_clube + "/" + alvo_liga,
+                        subtitle_color_2 = '#344D94',
+                        title_fontsize = 18,
+                    ) 
+
+                    endnote = 'Viz by@JAmerico1898\ Data from Wyscout\nAll data in League percentiles'
+
+                    radar=Radar(fontfamily='Cursive', range_fontsize=8)
+                    fig,ax = radar.plot_radar(ranges=ranges,params=params,values=values,radar_color=['#B6282F', '#344D94'], dpi=600, alphas=[.8,.6], title=title, endnote=endnote, compare=True)
+                    st.pyplot(fig)
+
+                    ############################################################################
+                    # Preparing Graph 2
+                    params = list(Role_14_first_2.columns)
+                    params = params[4:]
+                    
+                    #Preparing Data
+                    ranges = []
+                    a_values = []
+                    b_values = []
+
+                    for x in params:
+                        a = min(Role_14_first_2[params][x])
+                        a = 0
+                        b = max(Role_14_first_2[params][x])
+                        b = 100
+                        ranges.append((a, b))
+
+                    for x in range(len(Role_14_first_2['Atleta'])):
+                        if Role_14_first_2['Atleta'][x] == jogadores:
+                            a_values = Role_14_first_2.iloc[x].values.tolist()
+                        if Role_14_first_2['Atleta'][x] == alvo:
+                            b_values = Role_14_first_2.iloc[x].values.tolist()
+                            
+                    a_values = a_values[4:]
+                    b_values = b_values[4:]
+
+                    values = [a_values, b_values]
+
+                    #Plotting Data
+                    title = dict(
+                        title_name = jogadores,
+                        title_color = '#B6282F',
+                        subtitle_name = jogadores_clube + "/" + jogadores_liga,
+                        subtitle_color = '#B6282F',
+                        title_name_2 = alvo,
+                        title_color_2 = '#344D94',
+                        subtitle_name_2 = alvo_clube + "/" + alvo_liga,
+                        subtitle_color_2 = '#344D94',
+                        title_fontsize = 18,
+                    ) 
+
+                    endnote = 'Viz by@JAmerico1898\ Data from Wyscout\nAll data in League percentiles'
+
+                    radar=Radar(fontfamily='Cursive', range_fontsize=8)
+                    fig,ax = radar.plot_radar(ranges=ranges,params=params,values=values,radar_color=['#B6282F', '#344D94'], dpi=600, alphas=[.8,.6], title=title, endnote=endnote, compare=True)
+                    st.pyplot(fig)
+                    #####################################################################################################################
+                    #####################################################################################################################
+                    #####################################################################################################################
+                    #####################################################################################################################
+                    #####################################################################################################################
+                    #####################################################################################################################
+                    
+                elif perfil_similar == ("Meia Organizador"):
+                    #####################################################################################################################
+                    #####################################################################################################################
+                    # MeiaAtacante EQUILIBRADO
+                    # Texto de Abertura>
+                    markdown_amount_1 = f"<div style='text-align:center; font-size:{fontsize}px'>{jogador_similar:}</div>"
+                    st.markdown("<h4 style='text-align: center;'>Jogador Selecionado</b></h4>", unsafe_allow_html=True)
+                    st.markdown(markdown_amount_1, unsafe_allow_html=True)
+                    st.markdown("---")
+
+                    #Carregando arquivo de dados
+                    Role_15_data = pd.read_excel('15_Role_Meia_Organizador_Similarity.xlsx')
+                    Role_15_data = Role_15_data.drop(Role_15_data.columns[0:4], axis=1)
+                    Role_15_data.reset_index(drop=True, inplace=True)
+
+                    # Step : Defina o atleta-alvo
+                    #base_bruta_similaridade = pd.read_excel("base_bruta_similaridade.xlsx")
+                    target = Role_15_data.loc[(Role_15_data['Atleta'] == jogador_similar)]
+
+                    #Step : Definindo "ID-alvo"
+                    given_ID = target.iat[0, -1]
+
+                    # Definição da Base de Trabalho
+                    selected = Role_15_data
+
+                    # Step 9: Add columns "1", "2", "3" to Role_15_data
+
+                    selected['1'] = given_ID[0]
+                    selected['2'] = given_ID[1]
+                    selected['3'] = given_ID[2]
+                    selected['4'] = given_ID[3]
+
+
+                    # Assigning correct columns to 1, 2, 3
+
+                    if given_ID[0] == "A":
+                        selected['1'] = selected["A1"]
+                    elif given_ID[0] == "B":
+                        selected['1'] = selected["B1"]
+                    elif given_ID[0] == "C":
+                        selected['1'] = selected["C1"]
+                    elif given_ID[0] == "D":
+                        selected['1'] = selected["D1"]
+                    elif given_ID[0] == "E":
+                        selected['1'] = selected["E1"]
+                    elif given_ID[0] == "F":
+                        selected['1'] = selected["F1"]
+                    elif given_ID[0] == "G":
+                        selected['1'] = selected["G1"]
+                    elif given_ID[0] == "H":
+                        selected['1'] = selected["H1"]
+                    elif given_ID[0] == "I":
+                        selected['1'] = selected["I1"]
+                    elif given_ID[0] == "J":
+                        selected['1'] = selected["J1"]
+
+
+                    if given_ID[1] == "A":
+                        selected['2'] = selected["A1"]
+                    elif given_ID[1] == "B":
+                        selected['2'] = selected["B1"]
+                    elif given_ID[1] == "C":
+                        selected['2'] = selected["C1"]
+                    elif given_ID[1] == "D":
+                        selected['2'] = selected["D1"]
+                    elif given_ID[1] == "E":
+                        selected['2'] = selected["E1"]
+                    elif given_ID[1] == "F":
+                        selected['2'] = selected["F1"]
+                    elif given_ID[1] == "G":
+                        selected['2'] = selected["G1"]
+                    elif given_ID[1] == "H":
+                        selected['2'] = selected["H1"]
+                    elif given_ID[1] == "I":
+                        selected['2'] = selected["I1"]
+                    elif given_ID[1] == "J":
+                        selected['2'] = selected["J1"]
+                    
+                    
+                    if given_ID[2] == "A":
+                        selected['3'] = selected["A1"]
+                    elif given_ID[2] == "B":
+                        selected['3'] = selected["B1"]
+                    elif given_ID[2] == "C":
+                        selected['3'] = selected["C1"]
+                    elif given_ID[2] == "D":
+                        selected['3'] = selected["D1"]
+                    elif given_ID[2] == "E":
+                        selected['3'] = selected["E1"]
+                    elif given_ID[2] == "F":
+                        selected['3'] = selected["F1"]
+                    elif given_ID[2] == "G":
+                        selected['3'] = selected["G1"]
+                    elif given_ID[2] == "H":
+                        selected['3'] = selected["H1"]
+                    elif given_ID[2] == "I":
+                        selected['3'] = selected["I1"]
+                    elif given_ID[2] == "J":
+                        selected['3'] = selected["J1"]
+
+
+                    if given_ID[3] == "A":
+                        selected['4'] = selected["A1"]
+                    elif given_ID[3] == "B":
+                        selected['4'] = selected["B1"]
+                    elif given_ID[3] == "C":
+                        selected['4'] = selected["C1"]
+                    elif given_ID[3] == "D":
+                        selected['4'] = selected["D1"]
+                    elif given_ID[3] == "E":
+                        selected['4'] = selected["E1"]
+                    elif given_ID[3] == "F":
+                        selected['4'] = selected["F1"]
+                    elif given_ID[3] == "G":
+                        selected['4'] = selected["G1"]
+                    elif given_ID[3] == "H":
+                        selected['4'] = selected["H1"]
+                    elif given_ID[3] == "I":
+                        selected['4'] = selected["I1"]
+                    elif given_ID[3] == "J":
+                        selected['4'] = selected["J1"]
+
+
+                    #############################################################
+                    #############################################################
+
+                    # Applying PCA for Scaled Selected Columns
+
+                    leagues = ["ARG1", "AUT", "BEL1", "BRA1", "BRA2", "BUL","CHI", "CHN", 
+                            "COL", "DEN", "ECU", "ENG1", "ENG2", "FRA1", "FRA2", "GER1", 
+                            "GER2", "GRE", "HOL", "ITA1", "ITA2", "JAP", "MEX", "PAR", 
+                            "PER", "POR1", "QAT", "RUS", "SAUD", "SCT", "SER", "SPA1", 
+                            "SPA2", "SWZ", "TUR", "UAE", "UKR", "URU", "USA"]
+
+                    # Iterate over each league
+                    for league in leagues:
+
+                        # Extract columns 46 through 50
+                        MeiaOrganizador = selected.iloc[:, np.r_[-4:0]]
+
+                        # Defining Columns
+                        MeiaOrganizador_columns = MeiaOrganizador.columns
+
+                        # Applying PCA
+                        pca = PCA(n_components=2)
+                        principalComponents = pca.fit_transform(MeiaOrganizador)
+
+                        # Create a DataFrame with loadings
+                        LoadingsMeiaOrganizador = pd.DataFrame(pca.components_.T**2, index=MeiaOrganizador_columns, columns=['loading factor 1', 'loading factor 2'])
+
+                        # Multiplying Matrices to obtain Pre_Variables
+                        Similarity = pd.DataFrame(np.matmul(MeiaOrganizador, LoadingsMeiaOrganizador['loading factor 1']) + np.matmul(MeiaOrganizador, LoadingsMeiaOrganizador['loading factor 2']),
+                                                columns=["Similarity"])
+
+                    # Rebuilding Full Training Set
+                    selected = selected.join(Similarity)
+
+                    ##############################################################
+                    ##############################################################
+
+                    # Lista de Similares
+                    # Initialize an empty list to store DataFrames
+                    target = selected.loc[(Role_15_data['Atleta'] == jogador_similar)]
+                    target_similarity = target.iat[0, -1]
+
+                    selected["Índice de Similaridade"] = (selected['Similarity']/target_similarity)*100
+                    selected["Índice de Similaridade"] = round(selected["Índice de Similaridade"], 2)
+
+                    target = selected.loc[(selected['Atleta'] == jogador_similar)]
+                    selected['Dif_Similarity'] = abs(selected["Índice de Similaridade"] - 100)
+
+                    selected = selected.sort_values(by='Dif_Similarity')
+
+                    lista_similares = selected.iloc[1:31, np.r_[0, 2, 27, 32, -2:0]]
+                    lista_similares = lista_similares.sort_values(by='Rating', ascending=False)
+
+                    # Lista de Jogadores Similares Ordenados segundo o Rating
+                    st.markdown("<h4 style='text-align: center;'>30 Jogadores + Similares</b></h4>", unsafe_allow_html=True)
+                    st.dataframe(lista_similares, use_container_width=True, hide_index=True)
+                    st.markdown("---")    
+
+                    # Lista de Latinos
+                    selected_latam = selected[(selected["Nacionalidade"] == "Argentina")|(selected["Nacionalidade"] == "Brazil")
+                                        |(selected["Nacionalidade"] == "Bolivia")|(selected["Nacionalidade"] == "Chile")
+                                        |(selected["Nacionalidade"] == "Colombia")|(selected["Nacionalidade"] == "Costa Rica")
+                                        |(selected["Nacionalidade"] == "Ecuador")|(selected["Nacionalidade"] == "Mexico")
+                                        |(selected["Nacionalidade"] == "Panama")|(selected["Nacionalidade"] == "Paraguay")
+                                        |(selected["Nacionalidade"] == "Peru")|(selected["Nacionalidade"] == "Uruguay")
+                                        |(selected["Nacionalidade"] == "Venezuela")]
+
+                    lista_similares_latam = selected_latam.iloc[1:31, np.r_[0, 2, 27, 32, -2:0]]
+                    lista_similares_latam = lista_similares_latam.sort_values(by="Rating", ascending = False)
+
+                    #Texto para os Gráficos
+                    st.markdown("<h4 style='text-align: center;'>5 Jogadores Latinos Similares Melhor Ranquedos</b></h4>", unsafe_allow_html=True)
+                    st.markdown("---")    
+
+                    ########################################################################################################
+                    # Gerar Gráficos com os 5 melhores
+                    # Arquivo para o Gráfico
+                    Role_15_Mean_Charts = selected_latam.iloc[:, np.r_[0, 2, 27, 33:43]]
+                    target = target.iloc[:, np.r_[0, 2, 27, 33:43]]
+                                        # Renomeando Colunas
+                    Role_15_Mean_Charts = Role_15_Mean_Charts.rename(columns={'Passes_Longos_Certos_Percentil':'Passes_Longos_Certos', 
+                                                          'Passes_Frontais_Certos_Percentil':'Passes_Frontais_Certos',
+                                                            'Passes_Progressivos_Certos_Percentil': 'Passes_Progressivos_Certos', 
+                                                            'Duelos_Ofensivos_Ganhos_Percentil':'Duelos_Ofensivos_Ganhos', 
+                                                            'Dribles_BemSucedidos_Percentil':'Dribles_BemSucedidos', 
+                                                            'xA_Percentil':'xA', 
+                                                            'Assistência_Finalização_Percentil':'Assistência_Finalização', 
+                                                            'Passes_TerçoFinal_Certos_Percentil':'Passes_TerçoFinal_Certos', 
+                                                            'Passes_EntreLinhas_Certos_Percentil':'Passes_EntreLinhas_Certos', 
+                                                            'Passes_Chave_Percentil':'Passes_Chave'})
+
+                    target = target.rename(columns={'Passes_Longos_Certos_Percentil':'Passes_Longos_Certos', 
+                                                          'Passes_Frontais_Certos_Percentil':'Passes_Frontais_Certos',
+                                                            'Passes_Progressivos_Certos_Percentil': 'Passes_Progressivos_Certos', 
+                                                            'Duelos_Ofensivos_Ganhos_Percentil':'Duelos_Ofensivos_Ganhos', 
+                                                            'Dribles_BemSucedidos_Percentil':'Dribles_BemSucedidos', 
+                                                            'xA_Percentil':'xA', 
+                                                            'Assistência_Finalização_Percentil':'Assistência_Finalização', 
+                                                            'Passes_TerçoFinal_Certos_Percentil':'Passes_TerçoFinal_Certos', 
+                                                            'Passes_EntreLinhas_Certos_Percentil':'Passes_EntreLinhas_Certos', 
+                                                            'Passes_Chave_Percentil':'Passes_Chave'})                        
+                    #Dropping Atleta-alvo
+                    Role_15_Mean_Charts = Role_15_Mean_Charts[Role_15_Mean_Charts['Atleta'] != jogador_similar] 
+                    #Extraindo 5 melhores
+                    Role_15_Mean_Charts = Role_15_Mean_Charts.iloc[0:5, :]
+
+                    ############################################################################################
+                    #Primeiro Gráfico
+                    Role_15_first = Role_15_Mean_Charts.iloc[0:1, :]
+                    Role_15_first = pd.concat([Role_15_first, target]).reset_index()
+
+                    # Definindo atletas para comparar
+                    jogadores = Role_15_first.iat[0, 1]
+                    jogadores_clube = Role_15_first.iat[0, 2]
+                    jogadores_liga = Role_15_first.iat[0, 3]
+                    alvo = Role_15_first.iat[1, 1]
+                    alvo_clube = Role_15_first.iat[1, 2]
+                    alvo_liga = Role_15_first.iat[1, 3]
+
+                    #Splitting Data
+                    Role_15_first_1 = Role_15_first.iloc[:, np.r_[0:3, 3:9]]
+                    Role_15_first_2 = Role_15_first.iloc[:, np.r_[0:3, 8:14]]
+
+                    # Preparing Graph 1
+                    params = list(Role_15_first_1.columns)
+                    params = params[4:]
+
+
+                    #Preparing Data
+                    ranges = []
+                    a_values = []
+                    b_values = []
+
+                    for x in params:
+                        a = min(Role_15_first_1[params][x])
+                        a = 0
+                        b = max(Role_15_first_1[params][x])
+                        b = 100
+                        ranges.append((a, b))
+
+                    for x in range(len(Role_15_first_1['Atleta'])):
+                        if Role_15_first_1['Atleta'][x] == jogadores:
+                            a_values = Role_15_first_1.iloc[x].values.tolist()
+                        if Role_15_first_1['Atleta'][x] == alvo:
+                            b_values = Role_15_first_1.iloc[x].values.tolist()
+                            
+                    a_values = a_values[4:]
+                    b_values = b_values[4:]
+
+                    values = [a_values, b_values]
+
+                    #Plotting Data
+                    title = dict(
+                        title_name = jogadores,
+                        title_color = '#B6282F',
+                        subtitle_name = jogadores_clube + "/" + jogadores_liga,
+                        subtitle_color = '#B6282F',
+                        title_name_2 = alvo,
+                        title_color_2 = '#344D94',
+                        subtitle_name_2 = alvo_clube + "/" + alvo_liga,
+                        subtitle_color_2 = '#344D94',
+                        title_fontsize = 18,
+                    ) 
+
+                    endnote = 'Viz by@JAmerico1898\ Data from Wyscout\nAll data in League percentiles'
+
+                    radar=Radar(fontfamily='Cursive', range_fontsize=8)
+                    fig,ax = radar.plot_radar(ranges=ranges,params=params,values=values,radar_color=['#B6282F', '#344D94'], dpi=600, alphas=[.8,.6], title=title, endnote=endnote, compare=True)
+                    st.pyplot(fig)
+
+                    ############################################################################
+                    # Preparing Graph 2
+                    params = list(Role_15_first_2.columns)
+                    params = params[4:]
+
+                    #Preparing Data
+                    ranges = []
+                    a_values = []
+                    b_values = []
+
+                    for x in params:
+                        a = min(Role_15_first_2[params][x])
+                        a = 0
+                        b = max(Role_15_first_2[params][x])
+                        b = 100
+                        ranges.append((a, b))
+
+                    for x in range(len(Role_15_first_2['Atleta'])):
+                        if Role_15_first_2['Atleta'][x] == jogadores:
+                            a_values = Role_15_first_2.iloc[x].values.tolist()
+                        if Role_15_first_2['Atleta'][x] == alvo:
+                            b_values = Role_15_first_2.iloc[x].values.tolist()
+                            
+                    a_values = a_values[4:]
+                    b_values = b_values[4:]
+
+                    values = [a_values, b_values]
+
+                    #Plotting Data
+                    title = dict(
+                        title_name = jogadores,
+                        title_color = '#B6282F',
+                        subtitle_name = jogadores_clube + "/" + jogadores_liga,
+                        subtitle_color = '#B6282F',
+                        title_name_2 = alvo,
+                        title_color_2 = '#344D94',
+                        subtitle_name_2 = alvo_clube + "/" + alvo_liga,
+                        subtitle_color_2 = '#344D94',
+                        title_fontsize = 18,
+                    ) 
+
+                    endnote = 'Viz by@JAmerico1898\ Data from Wyscout\nAll data in League percentiles'
+
+                    radar=Radar(fontfamily='Cursive', range_fontsize=8)
+                    fig,ax = radar.plot_radar(ranges=ranges,params=params,values=values,radar_color=['#B6282F', '#344D94'], dpi=600, alphas=[.8,.6], title=title, endnote=endnote, compare=True)
+                    st.pyplot(fig)
+                    ############################################################################
+
+                    #Segundo Gráfico
+                    Role_15_first = Role_15_Mean_Charts.iloc[1:2, :]
+                    Role_15_first = pd.concat([Role_15_first, target]).reset_index()
+
+                    # Definindo atletas para comparar
+                    jogadores = Role_15_first.iat[0, 1]
+                    jogadores_clube = Role_15_first.iat[0, 2]
+                    jogadores_liga = Role_15_first.iat[0, 3]
+
+                    #Splitting Data
+                    Role_15_first_1 = Role_15_first.iloc[:, np.r_[0:3, 3:9]]
+                    Role_15_first_2 = Role_15_first.iloc[:, np.r_[0:3, 8:14]]
+
+                    # Preparing Graph 1
+                    params = list(Role_15_first_1.columns)
+                    params = params[4:]
+
+                    #Preparing Data
+                    ranges = []
+                    a_values = []
+                    b_values = []
+
+                    for x in params:
+                        a = min(Role_15_first_1[params][x])
+                        a = 0
+                        b = max(Role_15_first_1[params][x])
+                        b = 100
+                        ranges.append((a, b))
+
+                    for x in range(len(Role_15_first_1['Atleta'])):
+                        if Role_15_first_1['Atleta'][x] == jogadores:
+                            a_values = Role_15_first_1.iloc[x].values.tolist()
+                        if Role_15_first_1['Atleta'][x] == alvo:
+                            b_values = Role_15_first_1.iloc[x].values.tolist()
+                            
+                    a_values = a_values[4:]
+                    b_values = b_values[4:]
+
+                    values = [a_values, b_values]
+
+                    #Plotting Data
+                    title = dict(
+                        title_name = jogadores,
+                        title_color = '#B6282F',
+                        subtitle_name = jogadores_clube + "/" + jogadores_liga,
+                        subtitle_color = '#B6282F',
+                        title_name_2 = alvo,
+                        title_color_2 = '#344D94',
+                        subtitle_name_2 = alvo_clube + "/" + alvo_liga,
+                        subtitle_color_2 = '#344D94',
+                        title_fontsize = 18,
+                    ) 
+
+                    endnote = 'Viz by@JAmerico1898\ Data from Wyscout\nAll data in League percentiles'
+
+                    radar=Radar(fontfamily='Cursive', range_fontsize=8)
+                    fig,ax = radar.plot_radar(ranges=ranges,params=params,values=values,radar_color=['#B6282F', '#344D94'], dpi=600, alphas=[.8,.6], title=title, endnote=endnote, compare=True)
+                    st.pyplot(fig)
+
+                    ############################################################################
+                    # Preparing Graph 2
+                    params = list(Role_15_first_2.columns)
+                    params = params[4:]
+
+                    #Preparing Data
+                    ranges = []
+                    a_values = []
+                    b_values = []
+
+                    for x in params:
+                        a = min(Role_15_first_2[params][x])
+                        a = 0
+                        b = max(Role_15_first_2[params][x])
+                        b = 100
+                        ranges.append((a, b))
+
+                    for x in range(len(Role_15_first_2['Atleta'])):
+                        if Role_15_first_2['Atleta'][x] == jogadores:
+                            a_values = Role_15_first_2.iloc[x].values.tolist()
+                        if Role_15_first_2['Atleta'][x] == alvo:
+                            b_values = Role_15_first_2.iloc[x].values.tolist()
+                            
+                    a_values = a_values[4:]
+                    b_values = b_values[4:]
+
+                    values = [a_values, b_values]
+
+                    #Plotting Data
+                    title = dict(
+                        title_name = jogadores,
+                        title_color = '#B6282F',
+                        subtitle_name = jogadores_clube + "/" + jogadores_liga,
+                        subtitle_color = '#B6282F',
+                        title_name_2 = alvo,
+                        title_color_2 = '#344D94',
+                        subtitle_name_2 = alvo_clube + "/" + alvo_liga,
+                        subtitle_color_2 = '#344D94',
+                        title_fontsize = 18,
+                    ) 
+
+                    endnote = 'Viz by@JAmerico1898\ Data from Wyscout\nAll data in League percentiles'
+
+                    radar=Radar(fontfamily='Cursive', range_fontsize=8)
+                    fig,ax = radar.plot_radar(ranges=ranges,params=params,values=values,radar_color=['#B6282F', '#344D94'], dpi=600, alphas=[.8,.6], title=title, endnote=endnote, compare=True)
+                    st.pyplot(fig)
+
+                    ##########################################################################################
+                    ############################################################################
+
+                    #Terceiro Gráfico
+                    Role_15_first = Role_15_Mean_Charts.iloc[2:3, :]
+                    Role_15_first = pd.concat([Role_15_first, target]).reset_index()
+
+                    # Definindo atletas para comparar
+                    jogadores = Role_15_first.iat[0, 1]
+                    jogadores_clube = Role_15_first.iat[0, 2]
+                    jogadores_liga = Role_15_first.iat[0, 3]
+
+                    #Splitting Data
+                    Role_15_first_1 = Role_15_first.iloc[:, np.r_[0:3, 3:9]]
+                    Role_15_first_2 = Role_15_first.iloc[:, np.r_[0:3, 8:14]]
+
+                    # Preparing Graph 1
+                    params = list(Role_15_first_1.columns)
+                    params = params[4:]
+
+                    #Preparing Data
+                    ranges = []
+                    a_values = []
+                    b_values = []
+
+                    for x in params:
+                        a = min(Role_15_first_1[params][x])
+                        a = 0
+                        b = max(Role_15_first_1[params][x])
+                        b = 100
+                        ranges.append((a, b))
+
+                    for x in range(len(Role_15_first_1['Atleta'])):
+                        if Role_15_first_1['Atleta'][x] == jogadores:
+                            a_values = Role_15_first_1.iloc[x].values.tolist()
+                        if Role_15_first_1['Atleta'][x] == alvo:
+                            b_values = Role_15_first_1.iloc[x].values.tolist()
+                            
+                    a_values = a_values[4:]
+                    b_values = b_values[4:]
+
+                    values = [a_values, b_values]
+
+                    #Plotting Data
+                    title = dict(
+                        title_name = jogadores,
+                        title_color = '#B6282F',
+                        subtitle_name = jogadores_clube + "/" + jogadores_liga,
+                        subtitle_color = '#B6282F',
+                        title_name_2 = alvo,
+                        title_color_2 = '#344D94',
+                        subtitle_name_2 = alvo_clube + "/" + alvo_liga,
+                        subtitle_color_2 = '#344D94',
+                        title_fontsize = 18,
+                    ) 
+
+                    endnote = 'Viz by@JAmerico1898\ Data from Wyscout\nAll data in League percentiles'
+
+                    radar=Radar(fontfamily='Cursive', range_fontsize=8)
+                    fig,ax = radar.plot_radar(ranges=ranges,params=params,values=values,radar_color=['#B6282F', '#344D94'], dpi=600, alphas=[.8,.6], title=title, endnote=endnote, compare=True)
+                    st.pyplot(fig)
+
+                    ############################################################################
+                    # Preparing Graph 2
+                    params = list(Role_15_first_2.columns)
+                    params = params[4:]
+
+                    #Preparing Data
+                    ranges = []
+                    a_values = []
+                    b_values = []
+
+                    for x in params:
+                        a = min(Role_15_first_2[params][x])
+                        a = 0
+                        b = max(Role_15_first_2[params][x])
+                        b = 100
+                        ranges.append((a, b))
+
+                    for x in range(len(Role_15_first_2['Atleta'])):
+                        if Role_15_first_2['Atleta'][x] == jogadores:
+                            a_values = Role_15_first_2.iloc[x].values.tolist()
+                        if Role_15_first_2['Atleta'][x] == alvo:
+                            b_values = Role_15_first_2.iloc[x].values.tolist()
+                            
+                    a_values = a_values[4:]
+                    b_values = b_values[4:]
+
+                    values = [a_values, b_values]
+
+                    #Plotting Data
+                    title = dict(
+                        title_name = jogadores,
+                        title_color = '#B6282F',
+                        subtitle_name = jogadores_clube + "/" + jogadores_liga,
+                        subtitle_color = '#B6282F',
+                        title_name_2 = alvo,
+                        title_color_2 = '#344D94',
+                        subtitle_name_2 = alvo_clube + "/" + alvo_liga,
+                        subtitle_color_2 = '#344D94',
+                        title_fontsize = 18,
+                    ) 
+
+                    endnote = 'Viz by@JAmerico1898\ Data from Wyscout\nAll data in League percentiles'
+
+                    radar=Radar(fontfamily='Cursive', range_fontsize=8)
+                    fig,ax = radar.plot_radar(ranges=ranges,params=params,values=values,radar_color=['#B6282F', '#344D94'], dpi=600, alphas=[.8,.6], title=title, endnote=endnote, compare=True)
+                    st.pyplot(fig)
+
+                    ##########################################################################################
+                    ############################################################################
+
+                    #Quarto Gráfico
+                    Role_15_first = Role_15_Mean_Charts.iloc[3:4, :]
+                    Role_15_first = pd.concat([Role_15_first, target]).reset_index()
+
+                    # Definindo atletas para comparar
+                    jogadores = Role_15_first.iat[0, 1]
+                    jogadores_clube = Role_15_first.iat[0, 2]
+                    jogadores_liga = Role_15_first.iat[0, 3]
+
+                    #Splitting Data
+                    Role_15_first_1 = Role_15_first.iloc[:, np.r_[0:3, 3:9]]
+                    Role_15_first_2 = Role_15_first.iloc[:, np.r_[0:3, 8:14]]
+
+                    # Preparing Graph 1
+                    params = list(Role_15_first_1.columns)
+                    params = params[4:]
+
+                    #Preparing Data
+                    ranges = []
+                    a_values = []
+                    b_values = []
+
+                    for x in params:
+                        a = min(Role_15_first_1[params][x])
+                        a = 0
+                        b = max(Role_15_first_1[params][x])
+                        b = 100
+                        ranges.append((a, b))
+
+                    for x in range(len(Role_15_first_1['Atleta'])):
+                        if Role_15_first_1['Atleta'][x] == jogadores:
+                            a_values = Role_15_first_1.iloc[x].values.tolist()
+                        if Role_15_first_1['Atleta'][x] == alvo:
+                            b_values = Role_15_first_1.iloc[x].values.tolist()
+                            
+                    a_values = a_values[4:]
+                    b_values = b_values[4:]
+
+                    values = [a_values, b_values]
+
+                    #Plotting Data
+                    title = dict(
+                        title_name = jogadores,
+                        title_color = '#B6282F',
+                        subtitle_name = jogadores_clube + "/" + jogadores_liga,
+                        subtitle_color = '#B6282F',
+                        title_name_2 = alvo,
+                        title_color_2 = '#344D94',
+                        subtitle_name_2 = alvo_clube + "/" + alvo_liga,
+                        subtitle_color_2 = '#344D94',
+                        title_fontsize = 18,
+                    ) 
+
+                    endnote = 'Viz by@JAmerico1898\ Data from Wyscout\nAll data in League percentiles'
+
+                    radar=Radar(fontfamily='Cursive', range_fontsize=8)
+                    fig,ax = radar.plot_radar(ranges=ranges,params=params,values=values,radar_color=['#B6282F', '#344D94'], dpi=600, alphas=[.8,.6], title=title, endnote=endnote, compare=True)
+                    st.pyplot(fig)
+
+                    ############################################################################
+                    # Preparing Graph 2
+                    params = list(Role_15_first_2.columns)
+                    params = params[4:]
+
+                    #Preparing Data
+                    ranges = []
+                    a_values = []
+                    b_values = []
+
+                    for x in params:
+                        a = min(Role_15_first_2[params][x])
+                        a = 0
+                        b = max(Role_15_first_2[params][x])
+                        b = 100
+                        ranges.append((a, b))
+
+                    for x in range(len(Role_15_first_2['Atleta'])):
+                        if Role_15_first_2['Atleta'][x] == jogadores:
+                            a_values = Role_15_first_2.iloc[x].values.tolist()
+                        if Role_15_first_2['Atleta'][x] == alvo:
+                            b_values = Role_15_first_2.iloc[x].values.tolist()
+                            
+                    a_values = a_values[4:]
+                    b_values = b_values[4:]
+
+                    values = [a_values, b_values]
+
+                    #Plotting Data
+                    title = dict(
+                        title_name = jogadores,
+                        title_color = '#B6282F',
+                        subtitle_name = jogadores_clube + "/" + jogadores_liga,
+                        subtitle_color = '#B6282F',
+                        title_name_2 = alvo,
+                        title_color_2 = '#344D94',
+                        subtitle_name_2 = alvo_clube + "/" + alvo_liga,
+                        subtitle_color_2 = '#344D94',
+                        title_fontsize = 18,
+                    ) 
+
+                    endnote = 'Viz by@JAmerico1898\ Data from Wyscout\nAll data in League percentiles'
+
+                    radar=Radar(fontfamily='Cursive', range_fontsize=8)
+                    fig,ax = radar.plot_radar(ranges=ranges,params=params,values=values,radar_color=['#B6282F', '#344D94'], dpi=600, alphas=[.8,.6], title=title, endnote=endnote, compare=True)
+                    st.pyplot(fig)
+
+                    ##########################################################################################
+                    ############################################################################
+
+                    #Quinto Gráfico
+                    Role_15_first = Role_15_Mean_Charts.iloc[4:5, :]
+                    Role_15_first = pd.concat([Role_15_first, target]).reset_index()
+
+                    # Definindo atletas para comparar
+                    jogadores = Role_15_first.iat[0, 1]
+                    jogadores_clube = Role_15_first.iat[0, 2]
+                    jogadores_liga = Role_15_first.iat[0, 3]
+
+                    #Splitting Data
+                    Role_15_first_1 = Role_15_first.iloc[:, np.r_[0:3, 3:9]]
+                    Role_15_first_2 = Role_15_first.iloc[:, np.r_[0:3, 8:14]]
+
+                    # Preparing Graph 1
+                    params = list(Role_15_first_1.columns)
+                    params = params[4:]
+
+                    #Preparing Data
+                    ranges = []
+                    a_values = []
+                    b_values = []
+
+                    for x in params:
+                        a = min(Role_15_first_1[params][x])
+                        a = 0
+                        b = max(Role_15_first_1[params][x])
+                        b = 100
+                        ranges.append((a, b))
+
+                    for x in range(len(Role_15_first_1['Atleta'])):
+                        if Role_15_first_1['Atleta'][x] == jogadores:
+                            a_values = Role_15_first_1.iloc[x].values.tolist()
+                        if Role_15_first_1['Atleta'][x] == alvo:
+                            b_values = Role_15_first_1.iloc[x].values.tolist()
+                            
+                    a_values = a_values[4:]
+                    b_values = b_values[4:]
+
+                    values = [a_values, b_values]
+
+                    #Plotting Data
+                    title = dict(
+                        title_name = jogadores,
+                        title_color = '#B6282F',
+                        subtitle_name = jogadores_clube + "/" + jogadores_liga,
+                        subtitle_color = '#B6282F',
+                        title_name_2 = alvo,
+                        title_color_2 = '#344D94',
+                        subtitle_name_2 = alvo_clube + "/" + alvo_liga,
+                        subtitle_color_2 = '#344D94',
+                        title_fontsize = 18,
+                    ) 
+
+                    endnote = 'Viz by@JAmerico1898\ Data from Wyscout\nAll data in League percentiles'
+
+                    radar=Radar(fontfamily='Cursive', range_fontsize=8)
+                    fig,ax = radar.plot_radar(ranges=ranges,params=params,values=values,radar_color=['#B6282F', '#344D94'], dpi=600, alphas=[.8,.6], title=title, endnote=endnote, compare=True)
+                    st.pyplot(fig)
+
+                    ############################################################################
+                    # Preparing Graph 2
+                    params = list(Role_15_first_2.columns)
+                    params = params[4:]
+
+                    #Preparing Data
+                    ranges = []
+                    a_values = []
+                    b_values = []
+
+                    for x in params:
+                        a = min(Role_15_first_2[params][x])
+                        a = 0
+                        b = max(Role_15_first_2[params][x])
+                        b = 100
+                        ranges.append((a, b))
+
+                    for x in range(len(Role_15_first_2['Atleta'])):
+                        if Role_15_first_2['Atleta'][x] == jogadores:
+                            a_values = Role_15_first_2.iloc[x].values.tolist()
+                        if Role_15_first_2['Atleta'][x] == alvo:
+                            b_values = Role_15_first_2.iloc[x].values.tolist()
+                            
+                    a_values = a_values[4:]
+                    b_values = b_values[4:]
+
+                    values = [a_values, b_values]
+
+                    #Plotting Data
+                    title = dict(
+                        title_name = jogadores,
+                        title_color = '#B6282F',
+                        subtitle_name = jogadores_clube + "/" + jogadores_liga,
+                        subtitle_color = '#B6282F',
+                        title_name_2 = alvo,
+                        title_color_2 = '#344D94',
+                        subtitle_name_2 = alvo_clube,
+                        subtitle_color_2 = '#344D94',
+                        title_fontsize = 18,
+                    ) 
+
+                    endnote = 'Viz by@JAmerico1898\ Data from Wyscout\nAll data in League percentiles'
+
+                    radar=Radar(fontfamily='Cursive', range_fontsize=8)
+                    fig,ax = radar.plot_radar(ranges=ranges,params=params,values=values,radar_color=['#B6282F', '#344D94'], dpi=600, alphas=[.8,.6], title=title, endnote=endnote, compare=True)
+                    st.pyplot(fig)
+
+########################################################################################################################
+########################################################################################################################
+########################################################################################################################
+########################################################################################################################
+
+                elif perfil_similar == ("Meia Atacante"):
+                    #####################################################################################################################
+                    #####################################################################################################################
+                    # MeiaAtacante EQUILIBRADO
+                    # Texto de Abertura>
+                    markdown_amount_1 = f"<div style='text-align:center; font-size:{fontsize}px'>{jogador_similar:}</div>"
+                    st.markdown("<h4 style='text-align: center;'>Jogador Selecionado</b></h4>", unsafe_allow_html=True)
+                    st.markdown(markdown_amount_1, unsafe_allow_html=True)
+                    st.markdown("---")
+
+                    #Carregando arquivo de dados
+                    Role_16_data = pd.read_excel('16_Role_Meia_Atacante_Similarity.xlsx')
+                    Role_16_data = Role_16_data.drop(Role_16_data.columns[0:4], axis=1)
+                    Role_16_data.reset_index(drop=True, inplace=True)
+
+                    # Step : Defina o atleta-alvo
+                    #base_bruta_similaridade = pd.read_excel("base_bruta_similaridade.xlsx")
+                    target = Role_16_data.loc[(Role_16_data['Atleta'] == jogador_similar)]
+
+                    #Step : Definindo "ID-alvo"
+                    given_ID = target.iat[0, -1]
+
+                    # Definição da Base de Trabalho
+                    selected = Role_16_data
+
+                    # Step 9: Add columns "1", "2", "3" to Role_16_data
+
+                    selected['1'] = given_ID[0]
+                    selected['2'] = given_ID[1]
+                    selected['3'] = given_ID[2]
+                    selected['4'] = given_ID[3]
+                    selected['5'] = given_ID[4]
+
+
+                    # Assigning correct columns to 1, 2, 3
+
+                    if given_ID[0] == "A":
+                        selected['1'] = selected["A1"]
+                    elif given_ID[0] == "B":
+                        selected['1'] = selected["B1"]
+                    elif given_ID[0] == "C":
+                        selected['1'] = selected["C1"]
+                    elif given_ID[0] == "D":
+                        selected['1'] = selected["D1"]
+                    elif given_ID[0] == "E":
+                        selected['1'] = selected["E1"]
+                    elif given_ID[0] == "F":
+                        selected['1'] = selected["F1"]
+                    elif given_ID[0] == "G":
+                        selected['1'] = selected["G1"]
+                    elif given_ID[0] == "H":
+                        selected['1'] = selected["H1"]
+                    elif given_ID[0] == "I":
+                        selected['1'] = selected["I1"]
+                    elif given_ID[0] == "J":
+                        selected['1'] = selected["J1"]
+                    elif given_ID[0] == "K":
+                        selected['1'] = selected["K1"]
+                    elif given_ID[0] == "L":
+                        selected['1'] = selected["L1"]
+                    elif given_ID[0] == "M":
+                        selected['1'] = selected["M1"]
+                    elif given_ID[0] == "N":
+                        selected['1'] = selected["N1"]
+                    elif given_ID[0] == "O":
+                        selected['1'] = selected["O1"]
+                    elif given_ID[0] == "P":
+                        selected['1'] = selected["P1"]
+                    elif given_ID[0] == "Q":
+                        selected['1'] = selected["Q1"]
+                    elif given_ID[0] == "R":
+                        selected['1'] = selected["R1"]
+
+
+                    if given_ID[1] == "A":
+                        selected['2'] = selected["A1"]
+                    elif given_ID[1] == "B":
+                        selected['2'] = selected["B1"]
+                    elif given_ID[1] == "C":
+                        selected['2'] = selected["C1"]
+                    elif given_ID[1] == "D":
+                        selected['2'] = selected["D1"]
+                    elif given_ID[1] == "E":
+                        selected['2'] = selected["E1"]
+                    elif given_ID[1] == "F":
+                        selected['2'] = selected["F1"]
+                    elif given_ID[1] == "G":
+                        selected['2'] = selected["G1"]
+                    elif given_ID[1] == "H":
+                        selected['2'] = selected["H1"]
+                    elif given_ID[1] == "I":
+                        selected['2'] = selected["I1"]
+                    elif given_ID[1] == "J":
+                        selected['2'] = selected["J1"]
+                    elif given_ID[1] == "K":
+                        selected['2'] = selected["K1"]
+                    elif given_ID[1] == "L":
+                        selected['2'] = selected["L1"]
+                    elif given_ID[1] == "M":
+                        selected['2'] = selected["M1"]
+                    elif given_ID[1] == "N":
+                        selected['2'] = selected["N1"]
+                    elif given_ID[1] == "O":
+                        selected['2'] = selected["O1"]
+                    elif given_ID[1] == "P":
+                        selected['2'] = selected["P1"]
+                    elif given_ID[1] == "Q":
+                        selected['2'] = selected["Q1"]
+                    elif given_ID[1] == "R":
+                        selected['2'] = selected["R1"]
+                    
+                    
+                    if given_ID[2] == "A":
+                        selected['3'] = selected["A1"]
+                    elif given_ID[2] == "B":
+                        selected['3'] = selected["B1"]
+                    elif given_ID[2] == "C":
+                        selected['3'] = selected["C1"]
+                    elif given_ID[2] == "D":
+                        selected['3'] = selected["D1"]
+                    elif given_ID[2] == "E":
+                        selected['3'] = selected["E1"]
+                    elif given_ID[2] == "F":
+                        selected['3'] = selected["F1"]
+                    elif given_ID[2] == "G":
+                        selected['3'] = selected["G1"]
+                    elif given_ID[2] == "H":
+                        selected['3'] = selected["H1"]
+                    elif given_ID[2] == "I":
+                        selected['3'] = selected["I1"]
+                    elif given_ID[2] == "J":
+                        selected['3'] = selected["J1"]
+                    elif given_ID[2] == "K":
+                        selected['3'] = selected["K1"]
+                    elif given_ID[2] == "L":
+                        selected['3'] = selected["L1"]
+                    elif given_ID[2] == "M":
+                        selected['3'] = selected["M1"]
+                    elif given_ID[2] == "N":
+                        selected['3'] = selected["N1"]
+                    elif given_ID[2] == "O":
+                        selected['3'] = selected["O1"]
+                    elif given_ID[2] == "P":
+                        selected['3'] = selected["P1"]
+                    elif given_ID[2] == "Q":
+                        selected['3'] = selected["Q1"]
+                    elif given_ID[2] == "R":
+                        selected['3'] = selected["R1"]
+
+                    if given_ID[3] == "A":
+                        selected['4'] = selected["A1"]
+                    elif given_ID[3] == "B":
+                        selected['4'] = selected["B1"]
+                    elif given_ID[3] == "C":
+                        selected['4'] = selected["C1"]
+                    elif given_ID[3] == "D":
+                        selected['4'] = selected["D1"]
+                    elif given_ID[3] == "E":
+                        selected['4'] = selected["E1"]
+                    elif given_ID[3] == "F":
+                        selected['4'] = selected["F1"]
+                    elif given_ID[3] == "G":
+                        selected['4'] = selected["G1"]
+                    elif given_ID[3] == "H":
+                        selected['4'] = selected["H1"]
+                    elif given_ID[3] == "I":
+                        selected['4'] = selected["I1"]
+                    elif given_ID[3] == "J":
+                        selected['4'] = selected["J1"]
+                    elif given_ID[3] == "K":
+                        selected['4'] = selected["K1"]
+                    elif given_ID[3] == "L":
+                        selected['4'] = selected["L1"]
+                    elif given_ID[3] == "M":
+                        selected['4'] = selected["M1"]
+                    elif given_ID[3] == "N":
+                        selected['4'] = selected["N1"]
+                    elif given_ID[3] == "O":
+                        selected['4'] = selected["O1"]
+                    elif given_ID[3] == "P":
+                        selected['4'] = selected["P1"]
+                    elif given_ID[3] == "Q":
+                        selected['4'] = selected["Q1"]
+                    elif given_ID[3] == "R":
+                        selected['4'] = selected["R1"]
+
+
+                    if given_ID[4] == "A":
+                        selected['5'] = selected["A1"]
+                    elif given_ID[4] == "B":
+                        selected['5'] = selected["B1"]
+                    elif given_ID[4] == "C":
+                        selected['5'] = selected["C1"]
+                    elif given_ID[4] == "D":
+                        selected['5'] = selected["D1"]
+                    elif given_ID[4] == "E":
+                        selected['5'] = selected["E1"]
+                    elif given_ID[4] == "F":
+                        selected['5'] = selected["F1"]
+                    elif given_ID[4] == "G":
+                        selected['5'] = selected["G1"]
+                    elif given_ID[4] == "H":
+                        selected['5'] = selected["H1"]
+                    elif given_ID[4] == "I":
+                        selected['5'] = selected["I1"]
+                    elif given_ID[4] == "J":
+                        selected['5'] = selected["J1"]
+                    elif given_ID[4] == "K":
+                        selected['5'] = selected["K1"]
+                    elif given_ID[4] == "L":
+                        selected['5'] = selected["L1"]
+                    elif given_ID[4] == "M":
+                        selected['5'] = selected["M1"]
+                    elif given_ID[4] == "N":
+                        selected['5'] = selected["N1"]
+                    elif given_ID[4] == "O":
+                        selected['5'] = selected["O1"]
+                    elif given_ID[4] == "P":
+                        selected['5'] = selected["P1"]
+                    elif given_ID[4] == "Q":
+                        selected['5'] = selected["Q1"]
+                    elif given_ID[4] == "R":
+                        selected['5'] = selected["R1"]
+
+                    #############################################################
+                    #############################################################
+
+                    # Applying PCA for Scaled Selected Columns
+
+                    leagues = ["ARG1", "AUT", "BEL1", "BRA1", "BRA2", "BUL","CHI", "CHN", 
+                            "COL", "DEN", "ECU", "ENG1", "ENG2", "FRA1", "FRA2", "GER1", 
+                            "GER2", "GRE", "HOL", "ITA1", "ITA2", "JAP", "MEX", "PAR", 
+                            "PER", "POR1", "QAT", "RUS", "SAUD", "SCT", "SER", "SPA1", 
+                            "SPA2", "SWZ", "TUR", "UAE", "UKR", "URU", "USA"]
+
+                    # Iterate over each league
+                    for league in leagues:
+
+                        # Extract columns 46 through 50
+                        MeiaAtacante = selected.iloc[:, np.r_[-5:0]]
+
+                        # Defining Columns
+                        MeiaAtacante_columns = MeiaAtacante.columns
+
+                        # Applying PCA
+                        pca = PCA(n_components=2)
+                        principalComponents = pca.fit_transform(MeiaAtacante)
+
+                        # Create a DataFrame with loadings
+                        LoadingsMeiaAtacante = pd.DataFrame(pca.components_.T**2, index=MeiaAtacante_columns, columns=['loading factor 1', 'loading factor 2'])
+
+                        # Multiplying Matrices to obtain Pre_Variables
+                        Similarity = pd.DataFrame(np.matmul(MeiaAtacante, LoadingsMeiaAtacante['loading factor 1']) + np.matmul(MeiaAtacante, LoadingsMeiaAtacante['loading factor 2']),
+                                                columns=["Similarity"])
+
+                    # Rebuilding Full Training Set
+                    #MeiaAtacante = MeiaAtacante.join(Similarity)
+                    selected = selected.join(Similarity)
+
+                    ##############################################################
+                    ##############################################################
+
+                    # Lista de Similares
+                    # Initialize an empty list to store DataFrames
+                    target = selected.loc[(Role_16_data['Atleta'] == jogador_similar)]
+                    target_similarity = target.iat[0, -1]
+
+                    selected["Índice de Similaridade"] = (selected['Similarity']/target_similarity)*100
+                    selected["Índice de Similaridade"] = round(selected["Índice de Similaridade"], 2)
+
+                    target = selected.loc[(selected['Atleta'] == jogador_similar)]
+                    selected['Dif_Similarity'] = abs(selected["Índice de Similaridade"] - 100)
+
+                    selected = selected.sort_values(by='Dif_Similarity')
+
+                    lista_similares = selected.iloc[1:31, np.r_[0, 2, 34, 39, -2:0]]
+                    lista_similares = lista_similares.sort_values(by='Rating', ascending=False)
+
+                    # Lista de Jogadores Similares Ordenados segundo o Rating
+                    st.markdown("<h4 style='text-align: center;'>30 Jogadores + Similares</b></h4>", unsafe_allow_html=True)
+                    st.dataframe(lista_similares, use_container_width=True, hide_index=True)
+                    st.markdown("---")    
+
+                    # Lista de Latinos
+                    selected_latam = selected[(selected["Nacionalidade"] == "Argentina")|(selected["Nacionalidade"] == "Brazil")
+                                        |(selected["Nacionalidade"] == "Bolivia")|(selected["Nacionalidade"] == "Chile")
+                                        |(selected["Nacionalidade"] == "Colombia")|(selected["Nacionalidade"] == "Costa Rica")
+                                        |(selected["Nacionalidade"] == "Ecuador")|(selected["Nacionalidade"] == "Mexico")
+                                        |(selected["Nacionalidade"] == "Panama")|(selected["Nacionalidade"] == "Paraguay")
+                                        |(selected["Nacionalidade"] == "Peru")|(selected["Nacionalidade"] == "Uruguay")
+                                        |(selected["Nacionalidade"] == "Venezuela")]
+
+                    lista_similares_latam = selected_latam.iloc[1:31, np.r_[0, 2, 34, 39, -2:0]]
+                    lista_similares_latam = lista_similares_latam.sort_values(by="Rating", ascending = False)
+
+                    #Texto para os Gráficos
+                    st.markdown("<h4 style='text-align: center;'>5 Jogadores Latinos Similares Melhor Ranquedos</b></h4>", unsafe_allow_html=True)
+                    st.markdown("---")    
+
+                    ########################################################################################################
+                    # Gerar Gráficos com os 5 melhores
+                    # Arquivo para o Gráfico
+                    Role_16_Mean_Charts = selected_latam.iloc[:, np.r_[0, 2, 34, 40:57]]
+                    target = target.iloc[:, np.r_[0, 2, 34, 40:57]]
+                                        # Renomeando Colunas
+                    Role_16_Mean_Charts = Role_16_Mean_Charts.rename(columns={'Ações_Defensivas_BemSucedidas_Percentil':'Ações_Defensivas_BemSucedidas', 'Duelos_Defensivos_Ganhos_Percentil':'Duelos_Defensivos_Ganhos', 'Duelos_Aéreos_Ganhos_Percentil':'Duelos_Aéreos_Ganhos', 'Passes_Longos_Certos_Percentil':'Passes_Longos_Certos', 'Passes_Progressivos_Certos_Percentil':'Passes_Progressivos_Certos',
+                                                                                'Passes_Laterais_Certos_Percentil':'Passes_Laterais_Certos', 'Ações_Ofensivas_BemSucedidas_Percentil':'Ações_Ofensivas_BemSucedidas', 'Duelos_Ofensivos_Ganhos_Percentil':'Duelos_Ofensivos_Ganhos', 
+                                                                                'Pisadas_Área_Percentil':'Pisadas_Área', 'Dribles_BemSucedidos_Percentil':'Dribles_BemSucedidos', 'Corridas_Progressivas_Percentil':'Corridas_Progressivas', 'Acelerações_Percentil':'Acelerações', 
+                                                                                'xA_Percentil':'xA', 'Assistência_Finalização_Percentil':'Assistência_Finalização', 'Passes_TerçoFinal_Certos_Percentil':'Passes_TerçoFinal_Certos', 'Deep_Completions_Percentil':'Deep_Completions',
+                                                                                    'Deep_Completed_Crosses_Percentil':'Deep_Completed_Crosses', 'Passes_ÁreaPênalti_Certos_Percentil':'Passes_ÁreaPênalti_Certos'})
+
+                    target = target.rename(columns={'Ações_Defensivas_BemSucedidas_Percentil':'Ações_Defensivas_BemSucedidas', 'Duelos_Defensivos_Ganhos_Percentil':'Duelos_Defensivos_Ganhos', 'Duelos_Aéreos_Ganhos_Percentil':'Duelos_Aéreos_Ganhos', 'Passes_Longos_Certos_Percentil':'Passes_Longos_Certos', 'Passes_Progressivos_Certos_Percentil':'Passes_Progressivos_Certos',
+                                                                                'Passes_Laterais_Certos_Percentil':'Passes_Laterais_Certos', 'Ações_Ofensivas_BemSucedidas_Percentil':'Ações_Ofensivas_BemSucedidas', 'Duelos_Ofensivos_Ganhos_Percentil':'Duelos_Ofensivos_Ganhos', 
+                                                                                'Pisadas_Área_Percentil':'Pisadas_Área', 'Dribles_BemSucedidos_Percentil':'Dribles_BemSucedidos', 'Corridas_Progressivas_Percentil':'Corridas_Progressivas', 'Acelerações_Percentil':'Acelerações', 
+                                                                                'xA_Percentil':'xA', 'Assistência_Finalização_Percentil':'Assistência_Finalização', 'Passes_TerçoFinal_Certos_Percentil':'Passes_TerçoFinal_Certos', 'Deep_Completions_Percentil':'Deep_Completions',
+                                                                                    'Deep_Completed_Crosses_Percentil':'Deep_Completed_Crosses', 'Passes_ÁreaPênalti_Certos_Percentil':'Passes_ÁreaPênalti_Certos'})                        
+                    #Dropping Atleta-alvo
+                    Role_16_Mean_Charts = Role_16_Mean_Charts[Role_16_Mean_Charts['Atleta'] != jogador_similar] 
+                    #Extraindo 5 melhores
+                    Role_16_Mean_Charts = Role_16_Mean_Charts.iloc[0:5, :]
+
+                    ############################################################################################
+                    #Primeiro Gráfico
+                    Role_16_first = Role_16_Mean_Charts.iloc[0:1, :]
+                    Role_16_first = pd.concat([Role_16_first, target]).reset_index()
+
+                    # Definindo atletas para comparar
+                    jogadores = Role_16_first.iat[0, 1]
+                    jogadores_clube = Role_16_first.iat[0, 2]
+                    jogadores_liga = Role_16_first.iat[0, 3]
+                    alvo = Role_16_first.iat[1, 1]
+                    alvo_clube = Role_16_first.iat[1, 2]
+                    alvo_liga = Role_16_first.iat[1, 3]
+
+                    #Splitting Data
+                    Role_16_first_1 = Role_16_first.iloc[:, np.r_[0:3, 3:13]]
+                    Role_16_first_2 = Role_16_first.iloc[:, np.r_[0:3, 13:21]]
+
+                    # Preparing Graph 1
+                    params = list(Role_16_first_1.columns)
+                    params = params[4:]
+
+
+                    #Preparing Data
+                    ranges = []
+                    a_values = []
+                    b_values = []
+
+                    for x in params:
+                        a = min(Role_16_first_1[params][x])
+                        a = 0
+                        b = max(Role_16_first_1[params][x])
+                        b = 100
+                        ranges.append((a, b))
+
+                    for x in range(len(Role_16_first_1['Atleta'])):
+                        if Role_16_first_1['Atleta'][x] == jogadores:
+                            a_values = Role_16_first_1.iloc[x].values.tolist()
+                        if Role_16_first_1['Atleta'][x] == alvo:
+                            b_values = Role_16_first_1.iloc[x].values.tolist()
+                            
+                    a_values = a_values[4:]
+                    b_values = b_values[4:]
+
+                    values = [a_values, b_values]
+
+                    #Plotting Data
+                    title = dict(
+                        title_name = jogadores,
+                        title_color = '#B6282F',
+                        subtitle_name = jogadores_clube + "/" + jogadores_liga,
+                        subtitle_color = '#B6282F',
+                        title_name_2 = alvo,
+                        title_color_2 = '#344D94',
+                        subtitle_name_2 = alvo_clube + "/" + alvo_liga,
+                        subtitle_color_2 = '#344D94',
+                        title_fontsize = 18,
+                    ) 
+
+                    endnote = 'Viz by@JAmerico1898\ Data from Wyscout\nAll data in League percentiles'
+
+                    radar=Radar(fontfamily='Cursive', range_fontsize=8)
+                    fig,ax = radar.plot_radar(ranges=ranges,params=params,values=values,radar_color=['#B6282F', '#344D94'], dpi=600, alphas=[.8,.6], title=title, endnote=endnote, compare=True)
+                    st.pyplot(fig)
+
+                    ############################################################################
+                    # Preparing Graph 2
+                    params = list(Role_16_first_2.columns)
+                    params = params[4:]
+
+                    #Preparing Data
+                    ranges = []
+                    a_values = []
+                    b_values = []
+
+                    for x in params:
+                        a = min(Role_16_first_2[params][x])
+                        a = 0
+                        b = max(Role_16_first_2[params][x])
+                        b = 100
+                        ranges.append((a, b))
+
+                    for x in range(len(Role_16_first_2['Atleta'])):
+                        if Role_16_first_2['Atleta'][x] == jogadores:
+                            a_values = Role_16_first_2.iloc[x].values.tolist()
+                        if Role_16_first_2['Atleta'][x] == alvo:
+                            b_values = Role_16_first_2.iloc[x].values.tolist()
+                            
+                    a_values = a_values[4:]
+                    b_values = b_values[4:]
+
+                    values = [a_values, b_values]
+
+                    #Plotting Data
+                    title = dict(
+                        title_name = jogadores,
+                        title_color = '#B6282F',
+                        subtitle_name = jogadores_clube + "/" + jogadores_liga,
+                        subtitle_color = '#B6282F',
+                        title_name_2 = alvo,
+                        title_color_2 = '#344D94',
+                        subtitle_name_2 = alvo_clube + "/" + alvo_liga,
+                        subtitle_color_2 = '#344D94',
+                        title_fontsize = 18,
+                    ) 
+
+                    endnote = 'Viz by@JAmerico1898\ Data from Wyscout\nAll data in League percentiles'
+
+                    radar=Radar(fontfamily='Cursive', range_fontsize=8)
+                    fig,ax = radar.plot_radar(ranges=ranges,params=params,values=values,radar_color=['#B6282F', '#344D94'], dpi=600, alphas=[.8,.6], title=title, endnote=endnote, compare=True)
+                    st.pyplot(fig)
+                    ############################################################################
+
+                    #Segundo Gráfico
+                    Role_16_first = Role_16_Mean_Charts.iloc[1:2, :]
+                    Role_16_first = pd.concat([Role_16_first, target]).reset_index()
+
+                    # Definindo atletas para comparar
+                    jogadores = Role_16_first.iat[0, 1]
+                    jogadores_clube = Role_16_first.iat[0, 2]
+                    jogadores_liga = Role_16_first.iat[0, 3]
+                    alvo = Role_16_first.iat[1, 1]
+                    alvo_clube = Role_16_first.iat[1, 2]
+                    alvo_liga = Role_16_first.iat[1, 3]
+
+                    #Splitting Data
+                    Role_16_first_1 = Role_16_first.iloc[:, np.r_[0:3, 3:13]]
+                    Role_16_first_2 = Role_16_first.iloc[:, np.r_[0:3, 13:21]]
+
+                    # Preparing Graph 1
+                    params = list(Role_16_first_1.columns)
+                    params = params[4:]
+
+                    #Preparing Data
+                    ranges = []
+                    a_values = []
+                    b_values = []
+
+                    for x in params:
+                        a = min(Role_16_first_1[params][x])
+                        a = 0
+                        b = max(Role_16_first_1[params][x])
+                        b = 100
+                        ranges.append((a, b))
+
+                    for x in range(len(Role_16_first_1['Atleta'])):
+                        if Role_16_first_1['Atleta'][x] == jogadores:
+                            a_values = Role_16_first_1.iloc[x].values.tolist()
+                        if Role_16_first_1['Atleta'][x] == alvo:
+                            b_values = Role_16_first_1.iloc[x].values.tolist()
+                            
+                    a_values = a_values[4:]
+                    b_values = b_values[4:]
+
+                    values = [a_values, b_values]
+
+                    #Plotting Data
+                    title = dict(
+                        title_name = jogadores,
+                        title_color = '#B6282F',
+                        subtitle_name = jogadores_clube + "/" + jogadores_liga,
+                        subtitle_color = '#B6282F',
+                        title_name_2 = alvo,
+                        title_color_2 = '#344D94',
+                        subtitle_name_2 = alvo_clube + "/" + alvo_liga,
+                        subtitle_color_2 = '#344D94',
+                        title_fontsize = 18,
+                    ) 
+
+                    endnote = 'Viz by@JAmerico1898\ Data from Wyscout\nAll data in League percentiles'
+
+                    radar=Radar(fontfamily='Cursive', range_fontsize=8)
+                    fig,ax = radar.plot_radar(ranges=ranges,params=params,values=values,radar_color=['#B6282F', '#344D94'], dpi=600, alphas=[.8,.6], title=title, endnote=endnote, compare=True)
+                    st.pyplot(fig)
+
+                    ############################################################################
+                    # Preparing Graph 2
+                    params = list(Role_16_first_2.columns)
+                    params = params[4:]
+
+                    #Preparing Data
+                    ranges = []
+                    a_values = []
+                    b_values = []
+
+                    for x in params:
+                        a = min(Role_16_first_2[params][x])
+                        a = 0
+                        b = max(Role_16_first_2[params][x])
+                        b = 100
+                        ranges.append((a, b))
+
+                    for x in range(len(Role_16_first_2['Atleta'])):
+                        if Role_16_first_2['Atleta'][x] == jogadores:
+                            a_values = Role_16_first_2.iloc[x].values.tolist()
+                        if Role_16_first_2['Atleta'][x] == alvo:
+                            b_values = Role_16_first_2.iloc[x].values.tolist()
+                            
+                    a_values = a_values[4:]
+                    b_values = b_values[4:]
+
+                    values = [a_values, b_values]
+
+                    #Plotting Data
+                    title = dict(
+                        title_name = jogadores,
+                        title_color = '#B6282F',
+                        subtitle_name = jogadores_clube + "/" + jogadores_liga,
+                        subtitle_color = '#B6282F',
+                        title_name_2 = alvo,
+                        title_color_2 = '#344D94',
+                        subtitle_name_2 = alvo_clube + "/" + alvo_liga,
+                        subtitle_color_2 = '#344D94',
+                        title_fontsize = 18,
+                    ) 
+
+                    endnote = 'Viz by@JAmerico1898\ Data from Wyscout\nAll data in League percentiles'
+
+                    radar=Radar(fontfamily='Cursive', range_fontsize=8)
+                    fig,ax = radar.plot_radar(ranges=ranges,params=params,values=values,radar_color=['#B6282F', '#344D94'], dpi=600, alphas=[.8,.6], title=title, endnote=endnote, compare=True)
+                    st.pyplot(fig)
+
+                    ##########################################################################################
+                    ############################################################################
+
+                    #Terceiro Gráfico
+                    Role_16_first = Role_16_Mean_Charts.iloc[2:3, :]
+                    Role_16_first = pd.concat([Role_16_first, target]).reset_index()
+
+                    # Definindo atletas para comparar
+                    jogadores = Role_16_first.iat[0, 1]
+                    jogadores_clube = Role_16_first.iat[0, 2]
+                    jogadores_liga = Role_16_first.iat[0, 3]
+                    #alvo = Role_16_first.iat[1, 1]
+                    #alvo_clube = Role_16_first.iat[1, 2]
+                    #alvo_liga = Role_16_first.iat[1, 3]
+
+                    #Splitting Data
+                    Role_16_first_1 = Role_16_first.iloc[:, np.r_[0:3, 3:13]]
+                    Role_16_first_2 = Role_16_first.iloc[:, np.r_[0:3, 13:21]]
+
+                    # Preparing Graph 1
+                    params = list(Role_16_first_1.columns)
+                    params = params[4:]
+
+                    #Preparing Data
+                    ranges = []
+                    a_values = []
+                    b_values = []
+
+                    for x in params:
+                        a = min(Role_16_first_1[params][x])
+                        a = 0
+                        b = max(Role_16_first_1[params][x])
+                        b = 100
+                        ranges.append((a, b))
+
+                    for x in range(len(Role_16_first_1['Atleta'])):
+                        if Role_16_first_1['Atleta'][x] == jogadores:
+                            a_values = Role_16_first_1.iloc[x].values.tolist()
+                        if Role_16_first_1['Atleta'][x] == alvo:
+                            b_values = Role_16_first_1.iloc[x].values.tolist()
+                            
+                    a_values = a_values[4:]
+                    b_values = b_values[4:]
+
+                    values = [a_values, b_values]
+
+                    #Plotting Data
+                    title = dict(
+                        title_name = jogadores,
+                        title_color = '#B6282F',
+                        subtitle_name = jogadores_clube + "/" + jogadores_liga,
+                        subtitle_color = '#B6282F',
+                        title_name_2 = alvo,
+                        title_color_2 = '#344D94',
+                        subtitle_name_2 = alvo_clube + "/" + alvo_liga,
+                        subtitle_color_2 = '#344D94',
+                        title_fontsize = 18,
+                    ) 
+
+                    endnote = 'Viz by@JAmerico1898\ Data from Wyscout\nAll data in League percentiles'
+
+                    radar=Radar(fontfamily='Cursive', range_fontsize=8)
+                    fig,ax = radar.plot_radar(ranges=ranges,params=params,values=values,radar_color=['#B6282F', '#344D94'], dpi=600, alphas=[.8,.6], title=title, endnote=endnote, compare=True)
+                    st.pyplot(fig)
+
+                    ############################################################################
+                    # Preparing Graph 2
+                    params = list(Role_16_first_2.columns)
+                    params = params[4:]
+
+                    #Preparing Data
+                    ranges = []
+                    a_values = []
+                    b_values = []
+
+                    for x in params:
+                        a = min(Role_16_first_2[params][x])
+                        a = 0
+                        b = max(Role_16_first_2[params][x])
+                        b = 100
+                        ranges.append((a, b))
+
+                    for x in range(len(Role_16_first_2['Atleta'])):
+                        if Role_16_first_2['Atleta'][x] == jogadores:
+                            a_values = Role_16_first_2.iloc[x].values.tolist()
+                        if Role_16_first_2['Atleta'][x] == alvo:
+                            b_values = Role_16_first_2.iloc[x].values.tolist()
+                            
+                    a_values = a_values[4:]
+                    b_values = b_values[4:]
+
+                    values = [a_values, b_values]
+
+                    #Plotting Data
+                    title = dict(
+                        title_name = jogadores,
+                        title_color = '#B6282F',
+                        subtitle_name = jogadores_clube + "/" + jogadores_liga,
+                        subtitle_color = '#B6282F',
+                        title_name_2 = alvo,
+                        title_color_2 = '#344D94',
+                        subtitle_name_2 = alvo_clube + "/" + alvo_liga,
+                        subtitle_color_2 = '#344D94',
+                        title_fontsize = 18,
+                    ) 
+
+                    endnote = 'Viz by@JAmerico1898\ Data from Wyscout\nAll data in League percentiles'
+
+                    radar=Radar(fontfamily='Cursive', range_fontsize=8)
+                    fig,ax = radar.plot_radar(ranges=ranges,params=params,values=values,radar_color=['#B6282F', '#344D94'], dpi=600, alphas=[.8,.6], title=title, endnote=endnote, compare=True)
+                    st.pyplot(fig)
+
+                    ##########################################################################################
+                    ############################################################################
+
+                    #Quarto Gráfico
+                    Role_16_first = Role_16_Mean_Charts.iloc[3:4, :]
+                    Role_16_first = pd.concat([Role_16_first, target]).reset_index()
+
+                    # Definindo atletas para comparar
+                    jogadores = Role_16_first.iat[0, 1]
+                    jogadores_clube = Role_16_first.iat[0, 2]
+                    jogadores_liga = Role_16_first.iat[0, 3]
+                    #alvo = Role_16_first.iat[1, 1]
+                    #alvo_clube = Role_16_first.iat[1, 2]
+                    #alvo_liga = Role_16_first.iat[1, 3]
+
+                    #Splitting Data
+                    Role_16_first_1 = Role_16_first.iloc[:, np.r_[0:3, 3:13]]
+                    Role_16_first_2 = Role_16_first.iloc[:, np.r_[0:3, 13:21]]
+
+                    # Preparing Graph 1
+                    params = list(Role_16_first_1.columns)
+                    params = params[4:]
+
+                    #Preparing Data
+                    ranges = []
+                    a_values = []
+                    b_values = []
+
+                    for x in params:
+                        a = min(Role_16_first_1[params][x])
+                        a = 0
+                        b = max(Role_16_first_1[params][x])
+                        b = 100
+                        ranges.append((a, b))
+
+                    for x in range(len(Role_16_first_1['Atleta'])):
+                        if Role_16_first_1['Atleta'][x] == jogadores:
+                            a_values = Role_16_first_1.iloc[x].values.tolist()
+                        if Role_16_first_1['Atleta'][x] == alvo:
+                            b_values = Role_16_first_1.iloc[x].values.tolist()
+                            
+                    a_values = a_values[4:]
+                    b_values = b_values[4:]
+
+                    values = [a_values, b_values]
+
+                    #Plotting Data
+                    title = dict(
+                        title_name = jogadores,
+                        title_color = '#B6282F',
+                        subtitle_name = jogadores_clube + "/" + jogadores_liga,
+                        subtitle_color = '#B6282F',
+                        title_name_2 = alvo,
+                        title_color_2 = '#344D94',
+                        subtitle_name_2 = alvo_clube + "/" + alvo_liga,
+                        subtitle_color_2 = '#344D94',
+                        title_fontsize = 18,
+                    ) 
+
+                    endnote = 'Viz by@JAmerico1898\ Data from Wyscout\nAll data in League percentiles'
+
+                    radar=Radar(fontfamily='Cursive', range_fontsize=8)
+                    fig,ax = radar.plot_radar(ranges=ranges,params=params,values=values,radar_color=['#B6282F', '#344D94'], dpi=600, alphas=[.8,.6], title=title, endnote=endnote, compare=True)
+                    st.pyplot(fig)
+
+                    ############################################################################
+                    # Preparing Graph 2
+                    params = list(Role_16_first_2.columns)
+                    params = params[4:]
+
+                    #Preparing Data
+                    ranges = []
+                    a_values = []
+                    b_values = []
+
+                    for x in params:
+                        a = min(Role_16_first_2[params][x])
+                        a = 0
+                        b = max(Role_16_first_2[params][x])
+                        b = 100
+                        ranges.append((a, b))
+
+                    for x in range(len(Role_16_first_2['Atleta'])):
+                        if Role_16_first_2['Atleta'][x] == jogadores:
+                            a_values = Role_16_first_2.iloc[x].values.tolist()
+                        if Role_16_first_2['Atleta'][x] == alvo:
+                            b_values = Role_16_first_2.iloc[x].values.tolist()
+                            
+                    a_values = a_values[4:]
+                    b_values = b_values[4:]
+
+                    values = [a_values, b_values]
+
+                    #Plotting Data
+                    title = dict(
+                        title_name = jogadores,
+                        title_color = '#B6282F',
+                        subtitle_name = jogadores_clube + "/" + jogadores_liga,
+                        subtitle_color = '#B6282F',
+                        title_name_2 = alvo,
+                        title_color_2 = '#344D94',
+                        subtitle_name_2 = alvo_clube + "/" + alvo_liga,
+                        subtitle_color_2 = '#344D94',
+                        title_fontsize = 18,
+                    ) 
+
+                    endnote = 'Viz by@JAmerico1898\ Data from Wyscout\nAll data in League percentiles'
+
+                    radar=Radar(fontfamily='Cursive', range_fontsize=8)
+                    fig,ax = radar.plot_radar(ranges=ranges,params=params,values=values,radar_color=['#B6282F', '#344D94'], dpi=600, alphas=[.8,.6], title=title, endnote=endnote, compare=True)
+                    st.pyplot(fig)
+
+                    ##########################################################################################
+                    ############################################################################
+
+                    #Quinto Gráfico
+                    Role_16_first = Role_16_Mean_Charts.iloc[4:5, :]
+                    Role_16_first = pd.concat([Role_16_first, target]).reset_index()
+
+                    # Definindo atletas para comparar
+                    jogadores = Role_16_first.iat[0, 1]
+                    jogadores_clube = Role_16_first.iat[0, 2]
+                    jogadores_liga = Role_16_first.iat[0, 3]
+                    #alvo = Role_16_first.iat[1, 1]
+                    #alvo_clube = Role_16_first.iat[1, 2]
+                    #alvo_liga = Role_16_first.iat[1, 3]
+
+                    #Splitting Data
+                    Role_16_first_1 = Role_16_first.iloc[:, np.r_[0:3, 3:13]]
+                    Role_16_first_2 = Role_16_first.iloc[:, np.r_[0:3, 13:21]]
+
+                    # Preparing Graph 1
+                    params = list(Role_16_first_1.columns)
+                    params = params[4:]
+
+                    #Preparing Data
+                    ranges = []
+                    a_values = []
+                    b_values = []
+
+                    for x in params:
+                        a = min(Role_16_first_1[params][x])
+                        a = 0
+                        b = max(Role_16_first_1[params][x])
+                        b = 100
+                        ranges.append((a, b))
+
+                    for x in range(len(Role_16_first_1['Atleta'])):
+                        if Role_16_first_1['Atleta'][x] == jogadores:
+                            a_values = Role_16_first_1.iloc[x].values.tolist()
+                        if Role_16_first_1['Atleta'][x] == alvo:
+                            b_values = Role_16_first_1.iloc[x].values.tolist()
+                            
+                    a_values = a_values[4:]
+                    b_values = b_values[4:]
+
+                    values = [a_values, b_values]
+
+                    #Plotting Data
+                    title = dict(
+                        title_name = jogadores,
+                        title_color = '#B6282F',
+                        subtitle_name = jogadores_clube + "/" + jogadores_liga,
+                        subtitle_color = '#B6282F',
+                        title_name_2 = alvo,
+                        title_color_2 = '#344D94',
+                        subtitle_name_2 = alvo_clube + "/" + alvo_liga,
+                        subtitle_color_2 = '#344D94',
+                        title_fontsize = 18,
+                    ) 
+
+                    endnote = 'Viz by@JAmerico1898\ Data from Wyscout\nAll data in League percentiles'
+
+                    radar=Radar(fontfamily='Cursive', range_fontsize=8)
+                    fig,ax = radar.plot_radar(ranges=ranges,params=params,values=values,radar_color=['#B6282F', '#344D94'], dpi=600, alphas=[.8,.6], title=title, endnote=endnote, compare=True)
+                    st.pyplot(fig)
+
+                    ############################################################################
+                    # Preparing Graph 2
+                    params = list(Role_16_first_2.columns)
+                    params = params[4:]
+
+                    #Preparing Data
+                    ranges = []
+                    a_values = []
+                    b_values = []
+
+                    for x in params:
+                        a = min(Role_16_first_2[params][x])
+                        a = 0
+                        b = max(Role_16_first_2[params][x])
+                        b = 100
+                        ranges.append((a, b))
+
+                    for x in range(len(Role_16_first_2['Atleta'])):
+                        if Role_16_first_2['Atleta'][x] == jogadores:
+                            a_values = Role_16_first_2.iloc[x].values.tolist()
+                        if Role_16_first_2['Atleta'][x] == alvo:
+                            b_values = Role_16_first_2.iloc[x].values.tolist()
+                            
+                    a_values = a_values[4:]
+                    b_values = b_values[4:]
+
+                    values = [a_values, b_values]
+
+                    #Plotting Data
+                    title = dict(
+                        title_name = jogadores,
+                        title_color = '#B6282F',
+                        subtitle_name = jogadores_clube + "/" + jogadores_liga,
+                        subtitle_color = '#B6282F',
+                        title_name_2 = alvo,
+                        title_color_2 = '#344D94',
+                        subtitle_name_2 = alvo_clube,
+                        subtitle_color_2 = '#344D94',
+                        title_fontsize = 18,
+                    ) 
+
+                    endnote = 'Viz by@JAmerico1898\ Data from Wyscout\nAll data in League percentiles'
+
+                    radar=Radar(fontfamily='Cursive', range_fontsize=8)
+                    fig,ax = radar.plot_radar(ranges=ranges,params=params,values=values,radar_color=['#B6282F', '#344D94'], dpi=600, alphas=[.8,.6], title=title, endnote=endnote, compare=True)
+                    st.pyplot(fig)
+
+########################################################################################################################
+########################################################################################################################
+########################################################################################################################
+########################################################################################################################
+
+                if perfil_similar == ("Extremo Organizador"):
+                ###############################################################################
+                ###########################################################################
+                    # PRIMEIRO VOLANTE EQUILIBRADO
+                    # Texto de Abertura>
+                    markdown_amount_1 = f"<div style='text-align:center; font-size:{fontsize}px'>{jogador_similar:}</div>"
+                    st.markdown("<h4 style='text-align: center;'>Jogador Selecionado</b></h4>", unsafe_allow_html=True)
+                    st.markdown(markdown_amount_1, unsafe_allow_html=True)
+                    st.markdown("---")
+
+                    #Carregando arquivo de dados
+                    Role_17_data = pd.read_excel('17_Role_Extremo_Organizador_Similarity.xlsx')
+                    Role_17_data = Role_17_data.drop(Role_17_data.columns[0:4], axis=1)
+                    Role_17_data.reset_index(drop=True, inplace=True)
+
+                    # Step : Defina o atleta-alvo
+                    #base_bruta_similaridade = pd.read_excel("base_bruta_similaridade.xlsx")
+                    target = Role_17_data.loc[(Role_17_data['Atleta'] == jogador_similar)]
+
+                    #Step : Definindo "ID-alvo"
+                    given_ID = target.iat[0, -1]
+                    
+                    selected = Role_17_data
+
+                    # Step 9: Add columns "1", "2", "3" to Role_17_data
+
+                    selected['1'] = given_ID[0]
+                    selected['2'] = given_ID[1]
+                    selected['3'] = given_ID[2]
+                    selected['4'] = given_ID[3]
+
+                    # Assigning correct columns to 1, 2, 3
+
+                    if given_ID[0] == "A":
+                        selected['1'] = selected["A1"]
+                    elif given_ID[0] == "B":
+                        selected['1'] = selected["B1"]
+                    elif given_ID[0] == "C":
+                        selected['1'] = selected["C1"]
+                    elif given_ID[0] == "D":
+                        selected['1'] = selected["D1"]
+                    elif given_ID[0] == "E":
+                        selected['1'] = selected["E1"]
+                    elif given_ID[0] == "F":
+                        selected['1'] = selected["F1"]
+                    elif given_ID[0] == "G":
+                        selected['1'] = selected["G1"]
+                    elif given_ID[0] == "H":
+                        selected['1'] = selected["H1"]
+                    elif given_ID[0] == "I":
+                        selected['1'] = selected["I1"]
+                    elif given_ID[0] == "J":
+                        selected['1'] = selected["J1"]
+                    elif given_ID[0] == "K":
+                        selected['1'] = selected["K1"]
+                    elif given_ID[0] == "L":
+                        selected['1'] = selected["L1"]
+                    elif given_ID[0] == "M":
+                        selected['1'] = selected["M1"]
+
+
+                    if given_ID[1] == "A":
+                        selected['2'] = selected["A1"]
+                    elif given_ID[1] == "B":
+                        selected['2'] = selected["B1"]
+                    elif given_ID[1] == "C":
+                        selected['2'] = selected["C1"]
+                    elif given_ID[1] == "D":
+                        selected['2'] = selected["D1"]
+                    elif given_ID[1] == "E":
+                        selected['2'] = selected["E1"]
+                    elif given_ID[1] == "F":
+                        selected['2'] = selected["F1"]
+                    elif given_ID[1] == "G":
+                        selected['2'] = selected["G1"]
+                    elif given_ID[1] == "H":
+                        selected['2'] = selected["H1"]
+                    elif given_ID[1] == "I":
+                        selected['2'] = selected["I1"]
+                    elif given_ID[1] == "J":
+                        selected['2'] = selected["J1"]
+                    elif given_ID[1] == "K":
+                        selected['2'] = selected["K1"]
+                    elif given_ID[1] == "L":
+                        selected['2'] = selected["L1"]
+                    elif given_ID[1] == "M":
+                        selected['2'] = selected["M1"]
+                    
+                    
+                    if given_ID[2] == "A":
+                        selected['3'] = selected["A1"]
+                    elif given_ID[2] == "B":
+                        selected['3'] = selected["B1"]
+                    elif given_ID[2] == "C":
+                        selected['3'] = selected["C1"]
+                    elif given_ID[2] == "D":
+                        selected['3'] = selected["D1"]
+                    elif given_ID[2] == "E":
+                        selected['3'] = selected["E1"]
+                    elif given_ID[2] == "F":
+                        selected['3'] = selected["F1"]
+                    elif given_ID[2] == "G":
+                        selected['3'] = selected["G1"]
+                    elif given_ID[2] == "H":
+                        selected['3'] = selected["H1"]
+                    elif given_ID[2] == "I":
+                        selected['3'] = selected["I1"]
+                    elif given_ID[2] == "J":
+                        selected['3'] = selected["J1"]
+                    elif given_ID[2] == "K":
+                        selected['3'] = selected["K1"]
+                    elif given_ID[2] == "L":
+                        selected['3'] = selected["L1"]
+                    elif given_ID[2] == "M":
+                        selected['3'] = selected["M1"]
+
+                    if given_ID[3] == "A":
+                        selected['4'] = selected["A1"]
+                    elif given_ID[3] == "B":
+                        selected['4'] = selected["B1"]
+                    elif given_ID[3] == "C":
+                        selected['4'] = selected["C1"]
+                    elif given_ID[3] == "D":
+                        selected['4'] = selected["D1"]
+                    elif given_ID[3] == "E":
+                        selected['4'] = selected["E1"]
+                    elif given_ID[3] == "F":
+                        selected['4'] = selected["F1"]
+                    elif given_ID[3] == "G":
+                        selected['4'] = selected["G1"]
+                    elif given_ID[3] == "H":
+                        selected['4'] = selected["H1"]
+                    elif given_ID[3] == "I":
+                        selected['4'] = selected["I1"]
+                    elif given_ID[3] == "J":
+                        selected['4'] = selected["J1"]
+                    elif given_ID[3] == "K":
+                        selected['4'] = selected["K1"]
+                    elif given_ID[3] == "L":
+                        selected['4'] = selected["L1"]
+                    elif given_ID[3] == "M":
+                        selected['4'] = selected["M1"]
+
+                    # Applying PCA for Scaled Selected Columns
+
+                    leagues = ["ARG1", "AUT", "BEL1", "BRA1", "BRA2", "BUL","CHI", "CHN", 
+                            "COL", "DEN", "ECU", "ENG1", "ENG2", "FRA1", "FRA2", "GER1", 
+                            "GER2", "GRE", "HOL", "ITA1", "ITA2", "JAP", "MEX", "PAR", 
+                            "PER", "POR1", "QAT", "RUS", "SAUD", "SCT", "SER", "SPA1", 
+                            "SPA2", "SWZ", "TUR", "UAE", "UKR", "URU", "USA"]
+
+                    # Iterate over each league
+                    for league in leagues:
+
+                        # Extract columns 46 through 50
+                        ExtremoOrganizador = selected.iloc[:, np.r_[-4:0]]
+
+                        # Defining Columns
+                        ExtremoOrganizador_columns = ExtremoOrganizador.columns
+
+                        # Applying PCA
+                        pca = PCA(n_components=2)
+                        principalComponents = pca.fit_transform(ExtremoOrganizador)
+
+                        # Create a DataFrame with loadings
+                        LoadingsExtremoOrganizador = pd.DataFrame(pca.components_.T**2, index=ExtremoOrganizador_columns, columns=['loading factor 1', 'loading factor 2'])
+
+                        # Multiplying Matrices to obtain Pre_Variables
+                        Similarity = pd.DataFrame(np.matmul(ExtremoOrganizador, LoadingsExtremoOrganizador['loading factor 1']) + np.matmul(ExtremoOrganizador, LoadingsExtremoOrganizador['loading factor 2']),
+                                                columns=["Similarity"])
+
+                    # Rebuilding Full Training Set
+                    selected = selected.join(Similarity)
+
+                    ##############################################################
+                    ##############################################################
+
+                    # Lista de Similares
+                    # Initialize an empty list to store DataFrames
+                    target = selected.loc[(Role_17_data['Atleta'] == jogador_similar)]
+                    target_similarity = target.iat[0, -1]
+
+                    selected["Índice de Similaridade"] = (selected['Similarity']/target_similarity)*100
+                    selected["Índice de Similaridade"] = round(selected["Índice de Similaridade"], 2)
+
+                    target = selected.loc[(selected['Atleta'] == jogador_similar)]
+                    selected['Dif_Similarity'] = abs(selected["Índice de Similaridade"] - 100)
+
+                    selected = selected.sort_values(by='Dif_Similarity')
+
+                    lista_similares = selected.iloc[1:31, np.r_[0, 2, 30, 35, -2:0]]
+                    lista_similares = lista_similares.sort_values(by='Rating', ascending=False)
+
+                    # Lista de Jogadores Similares Ordenados segundo o Rating
+                    st.markdown("<h4 style='text-align: center;'>30 Jogadores + Similares</b></h4>", unsafe_allow_html=True)
+                    st.dataframe(lista_similares, use_container_width=True, hide_index=True)
+                    st.markdown("---")
+
+                    # Lista de Latinos
+                    selected_latam = selected[(selected["Nacionalidade"] == "Argentina")|(selected["Nacionalidade"] == "Brazil")
+                                        |(selected["Nacionalidade"] == "Bolivia")|(selected["Nacionalidade"] == "Chile")
+                                        |(selected["Nacionalidade"] == "Colombia")|(selected["Nacionalidade"] == "Costa Rica")
+                                        |(selected["Nacionalidade"] == "Ecuador")|(selected["Nacionalidade"] == "Mexico")
+                                        |(selected["Nacionalidade"] == "Panama")|(selected["Nacionalidade"] == "Paraguay")
+                                        |(selected["Nacionalidade"] == "Peru")|(selected["Nacionalidade"] == "Uruguay")
+                                        |(selected["Nacionalidade"] == "Venezuela")]
+
+                    lista_similares_latam = selected_latam.iloc[1:31, np.r_[0, 2, 30, 35, -2:0]]
+                    lista_similares_latam = lista_similares_latam.sort_values(by="Rating", ascending = False)
+
+                    #Texto para os Gráficos
+                    st.markdown("<h4 style='text-align: center;'>5 Jogadores Latinos Similares Melhor Ranquedos</b></h4>", unsafe_allow_html=True)
+                    st.markdown("---")    
+
+
+                    # Gerar Gráficos com os 5 melhores
+                    # Arquivo para o Gráfico
+                    Role_17_Mean_Charts = selected_latam.iloc[:, np.r_[0, 2, 30, 36:49]]
+                    target = target.iloc[:, np.r_[0, 2, 30, 36:49]]
+                    # Renomeando Colunas
+                    Role_17_Mean_Charts = Role_17_Mean_Charts.rename(columns={'Ações_Defensivas_BemSucedidas_Percentil':'Ações_Defensivas_BemSucedidas', 'Duelos_Defensivos_Ganhos_Percentil':'Duelos_Defensivos_Ganhos', 'Duelos_Aéreos_Ganhos_Percentil':'Duelos_Aéreos_Ganhos',
+                                                                                'Finalizações_Bloqueadas_Percentil':'Finalizações_Bloqueadas', 'Interceptações_Ajustadas_a_Posse_Percentil':'Interceptações_Ajustadas_a_Posse', 'Passes_Longos_Certos_Percentil':'Passes_Longos_Certos', 
+                                                                                'Passes_Frontais_Certos_Percentil':'Passes_Frontais_Certos', 'Passes_Progressivos_Certos_Percentil':'Passes_Progressivos_Certos', 'Passes_Laterais_Certos_Percentil':'Passes_Laterais_Certos', 'Duelos_Ofensivos_Ganhos_Percentil':'Duelos_Ofensivos_Ganhos', 
+                                                                                'Dribles_BemSucedidos_Percentil':'Dribles_BemSucedidos', 'Corridas_Progressivas_Percentil':'Corridas_Progressivas', 'Passes_TerçoFinal_Certos_Percentil':'Passes_TerçoFinal_Certos'})
+                    
+                    target = target.rename(columns={'Ações_Defensivas_BemSucedidas_Percentil':'Ações_Defensivas_BemSucedidas', 'Duelos_Defensivos_Ganhos_Percentil':'Duelos_Defensivos_Ganhos', 'Duelos_Aéreos_Ganhos_Percentil':'Duelos_Aéreos_Ganhos',
+                                                                                'Finalizações_Bloqueadas_Percentil':'Finalizações_Bloqueadas', 'Interceptações_Ajustadas_a_Posse_Percentil':'Interceptações_Ajustadas_a_Posse', 'Passes_Longos_Certos_Percentil':'Passes_Longos_Certos', 
+                                                                                'Passes_Frontais_Certos_Percentil':'Passes_Frontais_Certos', 'Passes_Progressivos_Certos_Percentil':'Passes_Progressivos_Certos', 'Passes_Laterais_Certos_Percentil':'Passes_Laterais_Certos', 'Duelos_Ofensivos_Ganhos_Percentil':'Duelos_Ofensivos_Ganhos', 
+                                                                                'Dribles_BemSucedidos_Percentil':'Dribles_BemSucedidos', 'Corridas_Progressivas_Percentil':'Corridas_Progressivas', 'Passes_TerçoFinal_Certos_Percentil':'Passes_TerçoFinal_Certos'})
+                    #Dropping Atleta-alvo
+                    Role_17_Mean_Charts = Role_17_Mean_Charts[Role_17_Mean_Charts['Atleta'] != jogador_similar] 
+                    #Extraindo 5 melhores
+                    Role_17_Mean_Charts = Role_17_Mean_Charts.iloc[0:5, :]
+
+
+                    #Primeiro Gráfico
+                    Role_17_first = Role_17_Mean_Charts.iloc[0:1, :]
+                    Role_17_first = pd.concat([Role_17_first, target]).reset_index()
+
+                    # Definindo atletas para comparar
+                    jogadores = Role_17_first.iat[0, 1]
+                    jogadores_clube = Role_17_first.iat[0, 2]
+                    jogadores_liga = Role_17_first.iat[0, 3]
+                    alvo = Role_17_first.iat[1, 1]
+                    alvo_clube = Role_17_first.iat[1, 2]
+                    alvo_liga = Role_17_first.iat[1, 3]
+
+                    #Splitting Data
+                    Role_17_first_1 = Role_17_first.iloc[:, np.r_[0:3, 3:11]]
+                    Role_17_first_2 = Role_17_first.iloc[:, np.r_[0:3, 11:17]]
+
+                    # Preparing Graph 1
+                    params = list(Role_17_first_1.columns)
+                    params = params[4:]
+                    
+                    #Preparing Data
+                    ranges = []
+                    a_values = []
+                    b_values = []
+
+                    for x in params:
+                        a = min(Role_17_first_1[params][x])
+                        a = 0
+                        b = max(Role_17_first_1[params][x])
+                        b = 100
+                        ranges.append((a, b))
+
+                    for x in range(len(Role_17_first_1['Atleta'])):
+                        if Role_17_first_1['Atleta'][x] == jogadores:
+                            a_values = Role_17_first_1.iloc[x].values.tolist()
+                        if Role_17_first_1['Atleta'][x] == alvo:
+                            b_values = Role_17_first_1.iloc[x].values.tolist()
+                            
+                    a_values = a_values[4:]
+                    b_values = b_values[4:]
+
+                    values = [a_values, b_values]
+
+                    #Plotting Data
+                    title = dict(
+                        title_name = jogadores,
+                        title_color = '#B6282F',
+                        subtitle_name = jogadores_clube + "/" + jogadores_liga,
+                        subtitle_color = '#B6282F',
+                        title_name_2 = alvo,
+                        title_color_2 = '#344D94',
+                        subtitle_name_2 = alvo_clube + "/" + alvo_liga,
+                        subtitle_color_2 = '#344D94',
+                        title_fontsize = 18,
+                    ) 
+
+                    endnote = 'Viz by@JAmerico1898\ Data from Wyscout\nAll data in League percentiles'
+
+                    radar=Radar(fontfamily='Cursive', range_fontsize=8)
+                    fig,ax = radar.plot_radar(ranges=ranges,params=params,values=values,radar_color=['#B6282F', '#344D94'], dpi=600, alphas=[.8,.6], title=title, endnote=endnote, compare=True)
+                    st.pyplot(fig)
+
+                    ############################################################################
+                    # Preparing Graph 2
+                    params = list(Role_17_first_2.columns)
+                    params = params[4:]
+                    
+                    #Preparing Data
+                    ranges = []
+                    a_values = []
+                    b_values = []
+
+                    for x in params:
+                        a = min(Role_17_first_2[params][x])
+                        a = 0
+                        b = max(Role_17_first_2[params][x])
+                        b = 100
+                        ranges.append((a, b))
+
+                    for x in range(len(Role_17_first_2['Atleta'])):
+                        if Role_17_first_2['Atleta'][x] == jogadores:
+                            a_values = Role_17_first_2.iloc[x].values.tolist()
+                        if Role_17_first_2['Atleta'][x] == alvo:
+                            b_values = Role_17_first_2.iloc[x].values.tolist()
+                            
+                    a_values = a_values[4:]
+                    b_values = b_values[4:]
+
+                    values = [a_values, b_values]
+
+                    #Plotting Data
+                    title = dict(
+                        title_name = jogadores,
+                        title_color = '#B6282F',
+                        subtitle_name = jogadores_clube + "/" + jogadores_liga,
+                        subtitle_color = '#B6282F',
+                        title_name_2 = alvo,
+                        title_color_2 = '#344D94',
+                        subtitle_name_2 = alvo_clube + "/" + alvo_liga,
+                        subtitle_color_2 = '#344D94',
+                        title_fontsize = 18,
+                    ) 
+
+                    endnote = 'Viz by@JAmerico1898\ Data from Wyscout\nAll data in League percentiles'
+
+                    radar=Radar(fontfamily='Cursive', range_fontsize=8)
+                    fig,ax = radar.plot_radar(ranges=ranges,params=params,values=values,radar_color=['#B6282F', '#344D94'], dpi=600, alphas=[.8,.6], title=title, endnote=endnote, compare=True)
+                    st.pyplot(fig)
+
+                    ############################################################################
+
+                    #Segundo Gráfico
+                    Role_17_first = Role_17_Mean_Charts.iloc[1:2, :]
+                    Role_17_first = pd.concat([Role_17_first, target]).reset_index()
+
+                    # Definindo atletas para comparar
+                    jogadores = Role_17_first.iat[0, 1]
+                    jogadores_clube = Role_17_first.iat[0, 2]
+                    jogadores_liga = Role_17_first.iat[0, 3]
+                    #alvo = Role_17_first.iat[1, 1]
+                    #alvo_clube = Role_17_first.iat[1, 2]
+                    #alvo_liga = Role_17_first.iat[1, 3]
+
+                    #Splitting Data
+                    Role_17_first_1 = Role_17_first.iloc[:, np.r_[0:3, 3:11]]
+                    Role_17_first_2 = Role_17_first.iloc[:, np.r_[0:3, 11:17]]
+
+                    # Preparing Graph 1
+                    params = list(Role_17_first_1.columns)
+                    params = params[4:]
+                    
+                    #Preparing Data
+                    ranges = []
+                    a_values = []
+                    b_values = []
+
+                    for x in params:
+                        a = min(Role_17_first_1[params][x])
+                        a = 0
+                        b = max(Role_17_first_1[params][x])
+                        b = 100
+                        ranges.append((a, b))
+
+                    for x in range(len(Role_17_first_1['Atleta'])):
+                        if Role_17_first_1['Atleta'][x] == jogadores:
+                            a_values = Role_17_first_1.iloc[x].values.tolist()
+                        if Role_17_first_1['Atleta'][x] == alvo:
+                            b_values = Role_17_first_1.iloc[x].values.tolist()
+                            
+                    a_values = a_values[4:]
+                    b_values = b_values[4:]
+
+                    values = [a_values, b_values]
+
+                    #Plotting Data
+                    title = dict(
+                        title_name = jogadores,
+                        title_color = '#B6282F',
+                        subtitle_name = jogadores_clube + "/" + jogadores_liga,
+                        subtitle_color = '#B6282F',
+                        title_name_2 = alvo,
+                        title_color_2 = '#344D94',
+                        subtitle_name_2 = alvo_clube + "/" + alvo_liga,
+                        subtitle_color_2 = '#344D94',
+                        title_fontsize = 18,
+                    ) 
+
+                    endnote = 'Viz by@JAmerico1898\ Data from Wyscout\nAll data in League percentiles'
+
+                    radar=Radar(fontfamily='Cursive', range_fontsize=8)
+                    fig,ax = radar.plot_radar(ranges=ranges,params=params,values=values,radar_color=['#B6282F', '#344D94'], dpi=600, alphas=[.8,.6], title=title, endnote=endnote, compare=True)
+                    st.pyplot(fig)
+
+                    ############################################################################
+                    # Preparing Graph 2
+                    params = list(Role_17_first_2.columns)
+                    params = params[4:]
+                    
+                    #Preparing Data
+                    ranges = []
+                    a_values = []
+                    b_values = []
+
+                    for x in params:
+                        a = min(Role_17_first_2[params][x])
+                        a = 0
+                        b = max(Role_17_first_2[params][x])
+                        b = 100
+                        ranges.append((a, b))
+
+                    for x in range(len(Role_17_first_2['Atleta'])):
+                        if Role_17_first_2['Atleta'][x] == jogadores:
+                            a_values = Role_17_first_2.iloc[x].values.tolist()
+                        if Role_17_first_2['Atleta'][x] == alvo:
+                            b_values = Role_17_first_2.iloc[x].values.tolist()
+                            
+                    a_values = a_values[4:]
+                    b_values = b_values[4:]
+
+                    values = [a_values, b_values]
+
+                    #Plotting Data
+                    title = dict(
+                        title_name = jogadores,
+                        title_color = '#B6282F',
+                        subtitle_name = jogadores_clube + "/" + jogadores_liga,
+                        subtitle_color = '#B6282F',
+                        title_name_2 = alvo,
+                        title_color_2 = '#344D94',
+                        subtitle_name_2 = alvo_clube + "/" + alvo_liga,
+                        subtitle_color_2 = '#344D94',
+                        title_fontsize = 18,
+                    ) 
+
+                    endnote = 'Viz by@JAmerico1898\ Data from Wyscout\nAll data in League percentiles'
+
+                    radar=Radar(fontfamily='Cursive', range_fontsize=8)
+                    fig,ax = radar.plot_radar(ranges=ranges,params=params,values=values,radar_color=['#B6282F', '#344D94'], dpi=600, alphas=[.8,.6], title=title, endnote=endnote, compare=True)
+                    st.pyplot(fig)
+
+                    ##########################################################################################
+                    ############################################################################
+
+                    #Terceiro Gráfico
+                    Role_17_first = Role_17_Mean_Charts.iloc[2:3, :]
+                    Role_17_first = pd.concat([Role_17_first, target]).reset_index()
+
+                    # Definindo atletas para comparar
+                    jogadores = Role_17_first.iat[0, 1]
+                    jogadores_clube = Role_17_first.iat[0, 2]
+                    jogadores_liga = Role_17_first.iat[0, 3]
+                    #alvo = Role_17_first.iat[1, 1]
+                    #alvo_clube = Role_17_first.iat[1, 2]
+                    #alvo_liga = Role_17_first.iat[1, 3]
+
+                    #Splitting Data
+                    Role_17_first_1 = Role_17_first.iloc[:, np.r_[0:3, 3:11]]
+                    Role_17_first_2 = Role_17_first.iloc[:, np.r_[0:3, 11:17]]
+
+                    # Preparing Graph 1
+                    params = list(Role_17_first_1.columns)
+                    params = params[4:]
+                    
+                    #Preparing Data
+                    ranges = []
+                    a_values = []
+                    b_values = []
+
+                    for x in params:
+                        a = min(Role_17_first_1[params][x])
+                        a = 0
+                        b = max(Role_17_first_1[params][x])
+                        b = 100
+                        ranges.append((a, b))
+
+                    for x in range(len(Role_17_first_1['Atleta'])):
+                        if Role_17_first_1['Atleta'][x] == jogadores:
+                            a_values = Role_17_first_1.iloc[x].values.tolist()
+                        if Role_17_first_1['Atleta'][x] == alvo:
+                            b_values = Role_17_first_1.iloc[x].values.tolist()
+                            
+                    a_values = a_values[4:]
+                    b_values = b_values[4:]
+
+                    values = [a_values, b_values]
+
+                    #Plotting Data
+                    title = dict(
+                        title_name = jogadores,
+                        title_color = '#B6282F',
+                        subtitle_name = jogadores_clube + "/" + jogadores_liga,
+                        subtitle_color = '#B6282F',
+                        title_name_2 = alvo,
+                        title_color_2 = '#344D94',
+                        subtitle_name_2 = alvo_clube + "/" + alvo_liga,
+                        subtitle_color_2 = '#344D94',
+                        title_fontsize = 18,
+                    ) 
+
+                    endnote = 'Viz by@JAmerico1898\ Data from Wyscout\nAll data in League percentiles'
+
+                    radar=Radar(fontfamily='Cursive', range_fontsize=8)
+                    fig,ax = radar.plot_radar(ranges=ranges,params=params,values=values,radar_color=['#B6282F', '#344D94'], dpi=600, alphas=[.8,.6], title=title, endnote=endnote, compare=True)
+                    st.pyplot(fig)
+
+                    ############################################################################
+                    # Preparing Graph 2
+                    params = list(Role_17_first_2.columns)
+                    params = params[4:]
+                    
+                    #Preparing Data
+                    ranges = []
+                    a_values = []
+                    b_values = []
+
+                    for x in params:
+                        a = min(Role_17_first_2[params][x])
+                        a = 0
+                        b = max(Role_17_first_2[params][x])
+                        b = 100
+                        ranges.append((a, b))
+
+                    for x in range(len(Role_17_first_2['Atleta'])):
+                        if Role_17_first_2['Atleta'][x] == jogadores:
+                            a_values = Role_17_first_2.iloc[x].values.tolist()
+                        if Role_17_first_2['Atleta'][x] == alvo:
+                            b_values = Role_17_first_2.iloc[x].values.tolist()
+                            
+                    a_values = a_values[4:]
+                    b_values = b_values[4:]
+
+                    values = [a_values, b_values]
+
+                    #Plotting Data
+                    title = dict(
+                        title_name = jogadores,
+                        title_color = '#B6282F',
+                        subtitle_name = jogadores_clube + "/" + jogadores_liga,
+                        subtitle_color = '#B6282F',
+                        title_name_2 = alvo,
+                        title_color_2 = '#344D94',
+                        subtitle_name_2 = alvo_clube + "/" + alvo_liga,
+                        subtitle_color_2 = '#344D94',
+                        title_fontsize = 18,
+                    ) 
+
+                    endnote = 'Viz by@JAmerico1898\ Data from Wyscout\nAll data in League percentiles'
+
+                    radar=Radar(fontfamily='Cursive', range_fontsize=8)
+                    fig,ax = radar.plot_radar(ranges=ranges,params=params,values=values,radar_color=['#B6282F', '#344D94'], dpi=600, alphas=[.8,.6], title=title, endnote=endnote, compare=True)
+                    st.pyplot(fig)
+
+                    ##########################################################################################
+                    ############################################################################
+
+                    #Quarto Gráfico
+                    Role_17_first = Role_17_Mean_Charts.iloc[3:4, :]
+                    Role_17_first = pd.concat([Role_17_first, target]).reset_index()
+
+                    # Definindo atletas para comparar
+                    jogadores = Role_17_first.iat[0, 1]
+                    jogadores_clube = Role_17_first.iat[0, 2]
+                    jogadores_liga = Role_17_first.iat[0, 3]
+                    #alvo = Role_17_first.iat[1, 1]
+                    #alvo_clube = Role_17_first.iat[1, 2]
+                    #alvo_liga = Role_17_first.iat[1, 3]
+
+                    #Splitting Data
+                    Role_17_first_1 = Role_17_first.iloc[:, np.r_[0:3, 3:11]]
+                    Role_17_first_2 = Role_17_first.iloc[:, np.r_[0:3, 11:17]]
+
+                    # Preparing Graph 1
+                    params = list(Role_17_first_1.columns)
+                    params = params[4:]
+                    
+                    #Preparing Data
+                    ranges = []
+                    a_values = []
+                    b_values = []
+
+                    for x in params:
+                        a = min(Role_17_first_1[params][x])
+                        a = 0
+                        b = max(Role_17_first_1[params][x])
+                        b = 100
+                        ranges.append((a, b))
+
+                    for x in range(len(Role_17_first_1['Atleta'])):
+                        if Role_17_first_1['Atleta'][x] == jogadores:
+                            a_values = Role_17_first_1.iloc[x].values.tolist()
+                        if Role_17_first_1['Atleta'][x] == alvo:
+                            b_values = Role_17_first_1.iloc[x].values.tolist()
+                            
+                    a_values = a_values[4:]
+                    b_values = b_values[4:]
+
+                    values = [a_values, b_values]
+
+                    #Plotting Data
+                    title = dict(
+                        title_name = jogadores,
+                        title_color = '#B6282F',
+                        subtitle_name = jogadores_clube + "/" + jogadores_liga,
+                        subtitle_color = '#B6282F',
+                        title_name_2 = alvo,
+                        title_color_2 = '#344D94',
+                        subtitle_name_2 = alvo_clube + "/" + alvo_liga,
+                        subtitle_color_2 = '#344D94',
+                        title_fontsize = 18,
+                    ) 
+
+                    endnote = 'Viz by@JAmerico1898\ Data from Wyscout\nAll data in League percentiles'
+
+                    radar=Radar(fontfamily='Cursive', range_fontsize=8)
+                    fig,ax = radar.plot_radar(ranges=ranges,params=params,values=values,radar_color=['#B6282F', '#344D94'], dpi=600, alphas=[.8,.6], title=title, endnote=endnote, compare=True)
+                    st.pyplot(fig)
+
+                    ############################################################################
+                    # Preparing Graph 2
+                    params = list(Role_17_first_2.columns)
+                    params = params[4:]
+                    
+                    #Preparing Data
+                    ranges = []
+                    a_values = []
+                    b_values = []
+
+                    for x in params:
+                        a = min(Role_17_first_2[params][x])
+                        a = 0
+                        b = max(Role_17_first_2[params][x])
+                        b = 100
+                        ranges.append((a, b))
+
+                    for x in range(len(Role_17_first_2['Atleta'])):
+                        if Role_17_first_2['Atleta'][x] == jogadores:
+                            a_values = Role_17_first_2.iloc[x].values.tolist()
+                        if Role_17_first_2['Atleta'][x] == alvo:
+                            b_values = Role_17_first_2.iloc[x].values.tolist()
+                            
+                    a_values = a_values[4:]
+                    b_values = b_values[4:]
+
+                    values = [a_values, b_values]
+
+                    #Plotting Data
+                    title = dict(
+                        title_name = jogadores,
+                        title_color = '#B6282F',
+                        subtitle_name = jogadores_clube + "/" + jogadores_liga,
+                        subtitle_color = '#B6282F',
+                        title_name_2 = alvo,
+                        title_color_2 = '#344D94',
+                        subtitle_name_2 = alvo_clube + "/" + alvo_liga,
+                        subtitle_color_2 = '#344D94',
+                        title_fontsize = 18,
+                    ) 
+
+                    endnote = 'Viz by@JAmerico1898\ Data from Wyscout\nAll data in League percentiles'
+
+                    radar=Radar(fontfamily='Cursive', range_fontsize=8)
+                    fig,ax = radar.plot_radar(ranges=ranges,params=params,values=values,radar_color=['#B6282F', '#344D94'], dpi=600, alphas=[.8,.6], title=title, endnote=endnote, compare=True)
+                    st.pyplot(fig)
+
+                    ##########################################################################################
+                    ############################################################################
+
+                    #Quinto Gráfico
+                    Role_17_first = Role_17_Mean_Charts.iloc[4:5, :]
+                    Role_17_first = pd.concat([Role_17_first, target]).reset_index()
+
+                    # Definindo atletas para comparar
+                    jogadores = Role_17_first.iat[0, 1]
+                    jogadores_clube = Role_17_first.iat[0, 2]
+                    jogadores_liga = Role_17_first.iat[0, 3]
+                    #alvo = Role_17_first.iat[1, 1]
+                    #alvo_clube = Role_17_first.iat[1, 2]
+                    #alvo_liga = Role_17_first.iat[1, 3]
+
+                    #Splitting Data
+                    Role_17_first_1 = Role_17_first.iloc[:, np.r_[0:3, 3:11]]
+                    Role_17_first_2 = Role_17_first.iloc[:, np.r_[0:3, 11:17]]
+
+                    # Preparing Graph 1
+                    params = list(Role_17_first_1.columns)
+                    params = params[4:]
+                    
+                    #Preparing Data
+                    ranges = []
+                    a_values = []
+                    b_values = []
+
+                    for x in params:
+                        a = min(Role_17_first_1[params][x])
+                        a = 0
+                        b = max(Role_17_first_1[params][x])
+                        b = 100
+                        ranges.append((a, b))
+
+                    for x in range(len(Role_17_first_1['Atleta'])):
+                        if Role_17_first_1['Atleta'][x] == jogadores:
+                            a_values = Role_17_first_1.iloc[x].values.tolist()
+                        if Role_17_first_1['Atleta'][x] == alvo:
+                            b_values = Role_17_first_1.iloc[x].values.tolist()
+                            
+                    a_values = a_values[4:]
+                    b_values = b_values[4:]
+
+                    values = [a_values, b_values]
+
+                    #Plotting Data
+                    title = dict(
+                        title_name = jogadores,
+                        title_color = '#B6282F',
+                        subtitle_name = jogadores_clube + "/" + jogadores_liga,
+                        subtitle_color = '#B6282F',
+                        title_name_2 = alvo,
+                        title_color_2 = '#344D94',
+                        subtitle_name_2 = alvo_clube + "/" + alvo_liga,
+                        subtitle_color_2 = '#344D94',
+                        title_fontsize = 18,
+                    ) 
+
+                    endnote = 'Viz by@JAmerico1898\ Data from Wyscout\nAll data in League percentiles'
+
+                    radar=Radar(fontfamily='Cursive', range_fontsize=8)
+                    fig,ax = radar.plot_radar(ranges=ranges,params=params,values=values,radar_color=['#B6282F', '#344D94'], dpi=600, alphas=[.8,.6], title=title, endnote=endnote, compare=True)
+                    st.pyplot(fig)
+
+                    ############################################################################
+                    # Preparing Graph 2
+                    params = list(Role_17_first_2.columns)
+                    params = params[4:]
+                    
+                    #Preparing Data
+                    ranges = []
+                    a_values = []
+                    b_values = []
+
+                    for x in params:
+                        a = min(Role_17_first_2[params][x])
+                        a = 0
+                        b = max(Role_17_first_2[params][x])
+                        b = 100
+                        ranges.append((a, b))
+
+                    for x in range(len(Role_17_first_2['Atleta'])):
+                        if Role_17_first_2['Atleta'][x] == jogadores:
+                            a_values = Role_17_first_2.iloc[x].values.tolist()
+                        if Role_17_first_2['Atleta'][x] == alvo:
+                            b_values = Role_17_first_2.iloc[x].values.tolist()
+                            
+                    a_values = a_values[4:]
+                    b_values = b_values[4:]
+
+                    values = [a_values, b_values]
+
+                    #Plotting Data
+                    title = dict(
+                        title_name = jogadores,
+                        title_color = '#B6282F',
+                        subtitle_name = jogadores_clube + "/" + jogadores_liga,
+                        subtitle_color = '#B6282F',
+                        title_name_2 = alvo,
+                        title_color_2 = '#344D94',
+                        subtitle_name_2 = alvo_clube + "/" + alvo_liga,
+                        subtitle_color_2 = '#344D94',
+                        title_fontsize = 18,
+                    ) 
+
+                    endnote = 'Viz by@JAmerico1898\ Data from Wyscout\nAll data in League percentiles'
+
+                    radar=Radar(fontfamily='Cursive', range_fontsize=8)
+                    fig,ax = radar.plot_radar(ranges=ranges,params=params,values=values,radar_color=['#B6282F', '#344D94'], dpi=600, alphas=[.8,.6], title=title, endnote=endnote, compare=True)
+                    st.pyplot(fig)
+                    #####################################################################################################################
+                    #####################################################################################################################
+                    #####################################################################################################################
+                    #####################################################################################################################
+                    #####################################################################################################################
+                    #####################################################################################################################
+
+                if perfil_similar == ("Extremo Tático"):
+                ###############################################################################
+                ###########################################################################
+                    # EXTREMO TÁTICO
+                    # Texto de Abertura>
+                    markdown_amount_1 = f"<div style='text-align:center; font-size:{fontsize}px'>{jogador_similar:}</div>"
+                    st.markdown("<h4 style='text-align: center;'>Jogador Selecionado</b></h4>", unsafe_allow_html=True)
+                    st.markdown(markdown_amount_1, unsafe_allow_html=True)
+                    st.markdown("---")
+
+                    #Carregando arquivo de dados
+                    Role_18_data = pd.read_excel('18_Role_Extremo_Tático_Similarity.xlsx')
+                    Role_18_data = Role_18_data.drop(Role_18_data.columns[0:4], axis=1)
+                    Role_18_data.reset_index(drop=True, inplace=True)
+
+                    # Step : Defina o atleta-alvo
+                    #base_bruta_similaridade = pd.read_excel("base_bruta_similaridade.xlsx")
+                    target = Role_18_data.loc[(Role_18_data['Atleta'] == jogador_similar)]
+
+                    #Step : Definindo "ID-alvo"
+                    given_ID = target.iat[0, -1]
+                    
+                    selected = Role_18_data
+
+                    # Step 9: Add columns "1", "2", "3" to Role_18_data
+
+                    selected['1'] = given_ID[0]
+                    selected['2'] = given_ID[1]
+                    selected['3'] = given_ID[2]
+
+
+                    # Assigning correct columns to 1, 2, 3
+
+                    if given_ID[0] == "A":
+                        selected['1'] = selected["A1"]
+                    elif given_ID[0] == "B":
+                        selected['1'] = selected["B1"]
+                    elif given_ID[0] == "C":
+                        selected['1'] = selected["C1"]
+                    elif given_ID[0] == "D":
+                        selected['1'] = selected["D1"]
+                    elif given_ID[0] == "E":
+                        selected['1'] = selected["E1"]
+                    elif given_ID[0] == "F":
+                        selected['1'] = selected["F1"]
+                    elif given_ID[0] == "G":
+                        selected['1'] = selected["G1"]
+
+
+
+                    if given_ID[1] == "A":
+                        selected['2'] = selected["A1"]
+                    elif given_ID[1] == "B":
+                        selected['2'] = selected["B1"]
+                    elif given_ID[1] == "C":
+                        selected['2'] = selected["C1"]
+                    elif given_ID[1] == "D":
+                        selected['2'] = selected["D1"]
+                    elif given_ID[1] == "E":
+                        selected['2'] = selected["E1"]
+                    elif given_ID[1] == "F":
+                        selected['2'] = selected["F1"]
+                    elif given_ID[1] == "G":
+                        selected['2'] = selected["G1"]
+                    
+                    
+                    if given_ID[2] == "A":
+                        selected['3'] = selected["A1"]
+                    elif given_ID[2] == "B":
+                        selected['3'] = selected["B1"]
+                    elif given_ID[2] == "C":
+                        selected['3'] = selected["C1"]
+                    elif given_ID[2] == "D":
+                        selected['3'] = selected["D1"]
+                    elif given_ID[2] == "E":
+                        selected['3'] = selected["E1"]
+                    elif given_ID[2] == "F":
+                        selected['3'] = selected["F1"]
+                    elif given_ID[2] == "G":
+                        selected['3'] = selected["G1"]
+
+                    # Applying PCA for Scaled Selected Columns
+
+                    leagues = ["ARG1", "AUT", "BEL1", "BRA1", "BRA2", "BUL","CHI", "CHN", 
+                            "COL", "DEN", "ECU", "ENG1", "ENG2", "FRA1", "FRA2", "GER1", 
+                            "GER2", "GRE", "HOL", "ITA1", "ITA2", "JAP", "MEX", "PAR", 
+                            "PER", "POR1", "QAT", "RUS", "SAUD", "SCT", "SER", "SPA1", 
+                            "SPA2", "SWZ", "TUR", "UAE", "UKR", "URU", "USA"]
+
+                    # Iterate over each league
+                    for league in leagues:
+
+                        # Extract columns 46 through 50
+                        ExtremoTático = selected.iloc[:, np.r_[-3:0]]
+
+                        # Defining Columns
+                        ExtremoTático_columns = ExtremoTático.columns
+
+                        # Applying PCA
+                        pca = PCA(n_components=2)
+                        principalComponents = pca.fit_transform(ExtremoTático)
+
+                        # Create a DataFrame with loadings
+                        LoadingsExtremoTático = pd.DataFrame(pca.components_.T**2, index=ExtremoTático_columns, columns=['loading factor 1', 'loading factor 2'])
+
+                        # Multiplying Matrices to obtain Pre_Variables
+                        Similarity = pd.DataFrame(np.matmul(ExtremoTático, LoadingsExtremoTático['loading factor 1']) + np.matmul(ExtremoTático, LoadingsExtremoTático['loading factor 2']),
+                                                columns=["Similarity"])
+
+                    # Rebuilding Full Training Set
+                    selected = selected.join(Similarity)
+
+                    ##############################################################
+                    ##############################################################
+
+                    # Lista de Similares
+                    # Initialize an empty list to store DataFrames
+                    target = selected.loc[(Role_18_data['Atleta'] == jogador_similar)]
+                    target_similarity = target.iat[0, -1]
+
+                    selected["Índice de Similaridade"] = (selected['Similarity']/target_similarity)*100
+                    selected["Índice de Similaridade"] = round(selected["Índice de Similaridade"], 2)
+
+                    target = selected.loc[(selected['Atleta'] == jogador_similar)]
+                    selected['Dif_Similarity'] = abs(selected["Índice de Similaridade"] - 100)
+
+                    selected = selected.sort_values(by='Dif_Similarity')
+
+                    lista_similares = selected.iloc[1:31, np.r_[0, 2, 24, 29, -2:0]]
+                    lista_similares = lista_similares.sort_values(by='Rating', ascending=False)
+
+                    # Lista de Jogadores Similares Ordenados segundo o Rating
+                    st.markdown("<h4 style='text-align: center;'>30 Jogadores + Similares</b></h4>", unsafe_allow_html=True)
+                    st.dataframe(lista_similares, use_container_width=True, hide_index=True)
+                    st.markdown("---")
+
+                    # Lista de Latinos
+                    selected_latam = selected[(selected["Nacionalidade"] == "Argentina")|(selected["Nacionalidade"] == "Brazil")
+                                        |(selected["Nacionalidade"] == "Bolivia")|(selected["Nacionalidade"] == "Chile")
+                                        |(selected["Nacionalidade"] == "Colombia")|(selected["Nacionalidade"] == "Costa Rica")
+                                        |(selected["Nacionalidade"] == "Ecuador")|(selected["Nacionalidade"] == "Mexico")
+                                        |(selected["Nacionalidade"] == "Panama")|(selected["Nacionalidade"] == "Paraguay")
+                                        |(selected["Nacionalidade"] == "Peru")|(selected["Nacionalidade"] == "Uruguay")
+                                        |(selected["Nacionalidade"] == "Venezuela")]
+
+                    lista_similares_latam = selected_latam.iloc[1:31, np.r_[0, 2, 24, 29, -2:0]]
+                    lista_similares_latam = lista_similares_latam.sort_values(by="Rating", ascending = False)
+
+                    #Texto para os Gráficos
+                    st.markdown("<h4 style='text-align: center;'>5 Jogadores Latinos Similares Melhor Ranquedos</b></h4>", unsafe_allow_html=True)
+                    st.markdown("---")    
+
+
+                    # Gerar Gráficos com os 5 melhores
+                    # Arquivo para o Gráfico
+                    Role_18_Mean_Charts = selected_latam.iloc[:, np.r_[0, 2, 24, 30:37]]
+                    target = target.iloc[:, np.r_[0, 2, 24, 30:37]]
+                    # Renomeando Colunas
+                    Role_18_Mean_Charts = Role_18_Mean_Charts.rename(columns={'Ações_Defensivas_BemSucedidas_Percentil':'Ações_Defensivas_BemSucedidas', 
+                                                          'Duelos_Defensivos_Ganhos_Percentil':'Duelos_Defensivos_Ganhos', 
+                                                            'Passes_Frontais_Percentil':'Passes_Frontais',
+                                                            'Passes_Progressivos_Certos_Percentil':'Passes_Progressivos_Certosl', 
+                                                            'Duelos_Ofensivos_Ganhos_Percentil':'Duelos_Ofensivos_Ganhos',
+                                                            'xG_Percentil':'xG', 
+                                                            'xA_Percentil':'xA'})
+                    
+                    target = target.rename(columns={'Ações_Defensivas_BemSucedidas_Percentil':'Ações_Defensivas_BemSucedidas', 
+                                                          'Duelos_Defensivos_Ganhos_Percentil':'Duelos_Defensivos_Ganhos', 
+                                                            'Passes_Frontais_Percentil':'Passes_Frontais',
+                                                            'Passes_Progressivos_Certos_Percentil':'Passes_Progressivos_Certosl', 
+                                                            'Duelos_Ofensivos_Ganhos_Percentil':'Duelos_Ofensivos_Ganhos',
+                                                            'xG_Percentil':'xG', 
+                                                            'xA_Percentil':'xA'})
+                    #Dropping Atleta-alvo
+                    Role_18_Mean_Charts = Role_18_Mean_Charts[Role_18_Mean_Charts['Atleta'] != jogador_similar] 
+                    #Extraindo 5 melhores
+                    Role_18_Mean_Charts = Role_18_Mean_Charts.iloc[0:5, :]
+
+
+                    #Primeiro Gráfico
+                    Role_18_first = Role_18_Mean_Charts.iloc[0:1, :]
+                    Role_18_first = pd.concat([Role_18_first, target]).reset_index()
+
+                    # Definindo atletas para comparar
+                    jogadores = Role_18_first.iat[0, 1]
+                    jogadores_clube = Role_18_first.iat[0, 2]
+                    jogadores_liga = Role_18_first.iat[0, 3]
+                    alvo = Role_18_first.iat[1, 1]
+                    alvo_clube = Role_18_first.iat[1, 2]
+                    alvo_liga = Role_18_first.iat[1, 3]
+
+                    #Splitting Data
+                    Role_18_first_1 = Role_18_first.iloc[:, np.r_[0:3, 3:11]]
+
+                    # Preparing Graph 1
+                    params = list(Role_18_first_1.columns)
+                    params = params[4:]
+                    
+                    #Preparing Data
+                    ranges = []
+                    a_values = []
+                    b_values = []
+
+                    for x in params:
+                        a = min(Role_18_first_1[params][x])
+                        a = 0
+                        b = max(Role_18_first_1[params][x])
+                        b = 100
+                        ranges.append((a, b))
+
+                    for x in range(len(Role_18_first_1['Atleta'])):
+                        if Role_18_first_1['Atleta'][x] == jogadores:
+                            a_values = Role_18_first_1.iloc[x].values.tolist()
+                        if Role_18_first_1['Atleta'][x] == alvo:
+                            b_values = Role_18_first_1.iloc[x].values.tolist()
+                            
+                    a_values = a_values[4:]
+                    b_values = b_values[4:]
+
+                    values = [a_values, b_values]
+
+                    #Plotting Data
+                    title = dict(
+                        title_name = jogadores,
+                        title_color = '#B6282F',
+                        subtitle_name = jogadores_clube + "/" + jogadores_liga,
+                        subtitle_color = '#B6282F',
+                        title_name_2 = alvo,
+                        title_color_2 = '#344D94',
+                        subtitle_name_2 = alvo_clube + "/" + alvo_liga,
+                        subtitle_color_2 = '#344D94',
+                        title_fontsize = 18,
+                    ) 
+
+                    endnote = 'Viz by@JAmerico1898\ Data from Wyscout\nAll data in League percentiles'
+
+                    radar=Radar(fontfamily='Cursive', range_fontsize=8)
+                    fig,ax = radar.plot_radar(ranges=ranges,params=params,values=values,radar_color=['#B6282F', '#344D94'], dpi=600, alphas=[.8,.6], title=title, endnote=endnote, compare=True)
+                    st.pyplot(fig)
+
+                    ############################################################################
+                    ############################################################################
+
+                    #Segundo Gráfico
+                    Role_18_first = Role_18_Mean_Charts.iloc[1:2, :]
+                    Role_18_first = pd.concat([Role_18_first, target]).reset_index()
+
+                    # Definindo atletas para comparar
+                    jogadores = Role_18_first.iat[0, 1]
+                    jogadores_clube = Role_18_first.iat[0, 2]
+                    jogadores_liga = Role_18_first.iat[0, 3]
+
+                    #Splitting Data
+                    Role_18_first_1 = Role_18_first.iloc[:, np.r_[0:3, 3:11]]
+
+                    # Preparing Graph 1
+                    params = list(Role_18_first_1.columns)
+                    params = params[4:]
+                    
+                    #Preparing Data
+                    ranges = []
+                    a_values = []
+                    b_values = []
+
+                    for x in params:
+                        a = min(Role_18_first_1[params][x])
+                        a = 0
+                        b = max(Role_18_first_1[params][x])
+                        b = 100
+                        ranges.append((a, b))
+
+                    for x in range(len(Role_18_first_1['Atleta'])):
+                        if Role_18_first_1['Atleta'][x] == jogadores:
+                            a_values = Role_18_first_1.iloc[x].values.tolist()
+                        if Role_18_first_1['Atleta'][x] == alvo:
+                            b_values = Role_18_first_1.iloc[x].values.tolist()
+                            
+                    a_values = a_values[4:]
+                    b_values = b_values[4:]
+
+                    values = [a_values, b_values]
+
+                    #Plotting Data
+                    title = dict(
+                        title_name = jogadores,
+                        title_color = '#B6282F',
+                        subtitle_name = jogadores_clube + "/" + jogadores_liga,
+                        subtitle_color = '#B6282F',
+                        title_name_2 = alvo,
+                        title_color_2 = '#344D94',
+                        subtitle_name_2 = alvo_clube + "/" + alvo_liga,
+                        subtitle_color_2 = '#344D94',
+                        title_fontsize = 18,
+                    ) 
+
+                    endnote = 'Viz by@JAmerico1898\ Data from Wyscout\nAll data in League percentiles'
+
+                    radar=Radar(fontfamily='Cursive', range_fontsize=8)
+                    fig,ax = radar.plot_radar(ranges=ranges,params=params,values=values,radar_color=['#B6282F', '#344D94'], dpi=600, alphas=[.8,.6], title=title, endnote=endnote, compare=True)
+                    st.pyplot(fig)
+
+                    ############################################################################
+                    ############################################################################
+
+                    #Terceiro Gráfico
+                    Role_18_first = Role_18_Mean_Charts.iloc[2:3, :]
+                    Role_18_first = pd.concat([Role_18_first, target]).reset_index()
+
+                    # Definindo atletas para comparar
+                    jogadores = Role_18_first.iat[0, 1]
+                    jogadores_clube = Role_18_first.iat[0, 2]
+                    jogadores_liga = Role_18_first.iat[0, 3]
+
+                    #Splitting Data
+                    Role_18_first_1 = Role_18_first.iloc[:, np.r_[0:3, 3:11]]
+
+                    # Preparing Graph 1
+                    params = list(Role_18_first_1.columns)
+                    params = params[4:]
+                    
+                    #Preparing Data
+                    ranges = []
+                    a_values = []
+                    b_values = []
+
+                    for x in params:
+                        a = min(Role_18_first_1[params][x])
+                        a = 0
+                        b = max(Role_18_first_1[params][x])
+                        b = 100
+                        ranges.append((a, b))
+
+                    for x in range(len(Role_18_first_1['Atleta'])):
+                        if Role_18_first_1['Atleta'][x] == jogadores:
+                            a_values = Role_18_first_1.iloc[x].values.tolist()
+                        if Role_18_first_1['Atleta'][x] == alvo:
+                            b_values = Role_18_first_1.iloc[x].values.tolist()
+                            
+                    a_values = a_values[4:]
+                    b_values = b_values[4:]
+
+                    values = [a_values, b_values]
+
+                    #Plotting Data
+                    title = dict(
+                        title_name = jogadores,
+                        title_color = '#B6282F',
+                        subtitle_name = jogadores_clube + "/" + jogadores_liga,
+                        subtitle_color = '#B6282F',
+                        title_name_2 = alvo,
+                        title_color_2 = '#344D94',
+                        subtitle_name_2 = alvo_clube + "/" + alvo_liga,
+                        subtitle_color_2 = '#344D94',
+                        title_fontsize = 18,
+                    ) 
+
+                    endnote = 'Viz by@JAmerico1898\ Data from Wyscout\nAll data in League percentiles'
+
+                    radar=Radar(fontfamily='Cursive', range_fontsize=8)
+                    fig,ax = radar.plot_radar(ranges=ranges,params=params,values=values,radar_color=['#B6282F', '#344D94'], dpi=600, alphas=[.8,.6], title=title, endnote=endnote, compare=True)
+                    st.pyplot(fig)
+
+                    ############################################################################
+                    ############################################################################
+
+                    #Quarto Gráfico
+                    Role_18_first = Role_18_Mean_Charts.iloc[3:4, :]
+                    Role_18_first = pd.concat([Role_18_first, target]).reset_index()
+
+                    # Definindo atletas para comparar
+                    jogadores = Role_18_first.iat[0, 1]
+                    jogadores_clube = Role_18_first.iat[0, 2]
+                    jogadores_liga = Role_18_first.iat[0, 3]
+
+                    #Splitting Data
+                    Role_18_first_1 = Role_18_first.iloc[:, np.r_[0:3, 3:11]]
+
+                    # Preparing Graph 1
+                    params = list(Role_18_first_1.columns)
+                    params = params[4:]
+                    
+                    #Preparing Data
+                    ranges = []
+                    a_values = []
+                    b_values = []
+
+                    for x in params:
+                        a = min(Role_18_first_1[params][x])
+                        a = 0
+                        b = max(Role_18_first_1[params][x])
+                        b = 100
+                        ranges.append((a, b))
+
+                    for x in range(len(Role_18_first_1['Atleta'])):
+                        if Role_18_first_1['Atleta'][x] == jogadores:
+                            a_values = Role_18_first_1.iloc[x].values.tolist()
+                        if Role_18_first_1['Atleta'][x] == alvo:
+                            b_values = Role_18_first_1.iloc[x].values.tolist()
+                            
+                    a_values = a_values[4:]
+                    b_values = b_values[4:]
+
+                    values = [a_values, b_values]
+
+                    #Plotting Data
+                    title = dict(
+                        title_name = jogadores,
+                        title_color = '#B6282F',
+                        subtitle_name = jogadores_clube + "/" + jogadores_liga,
+                        subtitle_color = '#B6282F',
+                        title_name_2 = alvo,
+                        title_color_2 = '#344D94',
+                        subtitle_name_2 = alvo_clube + "/" + alvo_liga,
+                        subtitle_color_2 = '#344D94',
+                        title_fontsize = 18,
+                    ) 
+
+                    endnote = 'Viz by@JAmerico1898\ Data from Wyscout\nAll data in League percentiles'
+
+                    radar=Radar(fontfamily='Cursive', range_fontsize=8)
+                    fig,ax = radar.plot_radar(ranges=ranges,params=params,values=values,radar_color=['#B6282F', '#344D94'], dpi=600, alphas=[.8,.6], title=title, endnote=endnote, compare=True)
+                    st.pyplot(fig)
+
+                    ############################################################################
+                    ############################################################################
+
+                    #Quinto Gráfico
+                    Role_18_first = Role_18_Mean_Charts.iloc[4:5, :]
+                    Role_18_first = pd.concat([Role_18_first, target]).reset_index()
+
+                    # Definindo atletas para comparar
+                    jogadores = Role_18_first.iat[0, 1]
+                    jogadores_clube = Role_18_first.iat[0, 2]
+                    jogadores_liga = Role_18_first.iat[0, 3]
+
+                    #Splitting Data
+                    Role_18_first_1 = Role_18_first.iloc[:, np.r_[0:3, 3:11]]
+
+                    # Preparing Graph 1
+                    params = list(Role_18_first_1.columns)
+                    params = params[4:]
+                    
+                    #Preparing Data
+                    ranges = []
+                    a_values = []
+                    b_values = []
+
+                    for x in params:
+                        a = min(Role_18_first_1[params][x])
+                        a = 0
+                        b = max(Role_18_first_1[params][x])
+                        b = 100
+                        ranges.append((a, b))
+
+                    for x in range(len(Role_18_first_1['Atleta'])):
+                        if Role_18_first_1['Atleta'][x] == jogadores:
+                            a_values = Role_18_first_1.iloc[x].values.tolist()
+                        if Role_18_first_1['Atleta'][x] == alvo:
+                            b_values = Role_18_first_1.iloc[x].values.tolist()
+                            
+                    a_values = a_values[4:]
+                    b_values = b_values[4:]
+
+                    values = [a_values, b_values]
+
+                    #Plotting Data
+                    title = dict(
+                        title_name = jogadores,
+                        title_color = '#B6282F',
+                        subtitle_name = jogadores_clube + "/" + jogadores_liga,
+                        subtitle_color = '#B6282F',
+                        title_name_2 = alvo,
+                        title_color_2 = '#344D94',
+                        subtitle_name_2 = alvo_clube + "/" + alvo_liga,
+                        subtitle_color_2 = '#344D94',
+                        title_fontsize = 18,
+                    ) 
+
+                    endnote = 'Viz by@JAmerico1898\ Data from Wyscout\nAll data in League percentiles'
+
+                    radar=Radar(fontfamily='Cursive', range_fontsize=8)
+                    fig,ax = radar.plot_radar(ranges=ranges,params=params,values=values,radar_color=['#B6282F', '#344D94'], dpi=600, alphas=[.8,.6], title=title, endnote=endnote, compare=True)
+                    st.pyplot(fig)
+
+                    #####################################################################################################################
+                    #####################################################################################################################
+                    #####################################################################################################################
+                    #####################################################################################################################
+                    #####################################################################################################################
+                    #####################################################################################################################
+
+                if perfil_similar == ("Extremo Agudo"):
+                ###############################################################################
+                ###########################################################################
+                    # PRIMEIRO VOLANTE EQUILIBRADO
+                    # Texto de Abertura>
+                    markdown_amount_1 = f"<div style='text-align:center; font-size:{fontsize}px'>{jogador_similar:}</div>"
+                    st.markdown("<h4 style='text-align: center;'>Jogador Selecionado</b></h4>", unsafe_allow_html=True)
+                    st.markdown(markdown_amount_1, unsafe_allow_html=True)
+                    st.markdown("---")
+
+                    #Carregando arquivo de dados
+                    Role_19_data = pd.read_excel('19_Role_Extremo_Agudo_Similarity.xlsx')
+                    Role_19_data = Role_19_data.drop(Role_19_data.columns[0:4], axis=1)
+                    Role_19_data.reset_index(drop=True, inplace=True)
+
+                    # Step : Defina o atleta-alvo
+                    #base_bruta_similaridade = pd.read_excel("base_bruta_similaridade.xlsx")
+                    target = Role_19_data.loc[(Role_19_data['Atleta'] == jogador_similar)]
+
+                    #Step : Definindo "ID-alvo"
+                    given_ID = target.iat[0, -1]
+                    
+                    selected = Role_19_data
+
+                    # Step 9: Add columns "1", "2", "3" to Role_19_data
+
+                    selected['1'] = given_ID[0]
+                    selected['2'] = given_ID[1]
+                    selected['3'] = given_ID[2]
+                    selected['4'] = given_ID[3]
+
+                    # Assigning correct columns to 1, 2, 3
+
+                    if given_ID[0] == "A":
+                        selected['1'] = selected["A1"]
+                    elif given_ID[0] == "B":
+                        selected['1'] = selected["B1"]
+                    elif given_ID[0] == "C":
+                        selected['1'] = selected["C1"]
+                    elif given_ID[0] == "D":
+                        selected['1'] = selected["D1"]
+                    elif given_ID[0] == "E":
+                        selected['1'] = selected["E1"]
+                    elif given_ID[0] == "F":
+                        selected['1'] = selected["F1"]
+                    elif given_ID[0] == "G":
+                        selected['1'] = selected["G1"]
+                    elif given_ID[0] == "H":
+                        selected['1'] = selected["H1"]
+                    elif given_ID[0] == "I":
+                        selected['1'] = selected["I1"]
+                    elif given_ID[0] == "J":
+                        selected['1'] = selected["J1"]
+                    elif given_ID[0] == "K":
+                        selected['1'] = selected["K1"]
+                    elif given_ID[0] == "L":
+                        selected['1'] = selected["L1"]
+                    elif given_ID[0] == "M":
+                        selected['1'] = selected["M1"]
+
+
+                    if given_ID[1] == "A":
+                        selected['2'] = selected["A1"]
+                    elif given_ID[1] == "B":
+                        selected['2'] = selected["B1"]
+                    elif given_ID[1] == "C":
+                        selected['2'] = selected["C1"]
+                    elif given_ID[1] == "D":
+                        selected['2'] = selected["D1"]
+                    elif given_ID[1] == "E":
+                        selected['2'] = selected["E1"]
+                    elif given_ID[1] == "F":
+                        selected['2'] = selected["F1"]
+                    elif given_ID[1] == "G":
+                        selected['2'] = selected["G1"]
+                    elif given_ID[1] == "H":
+                        selected['2'] = selected["H1"]
+                    elif given_ID[1] == "I":
+                        selected['2'] = selected["I1"]
+                    elif given_ID[1] == "J":
+                        selected['2'] = selected["J1"]
+                    elif given_ID[1] == "K":
+                        selected['2'] = selected["K1"]
+                    elif given_ID[1] == "L":
+                        selected['2'] = selected["L1"]
+                    elif given_ID[1] == "M":
+                        selected['2'] = selected["M1"]
+                    
+                    
+                    if given_ID[2] == "A":
+                        selected['3'] = selected["A1"]
+                    elif given_ID[2] == "B":
+                        selected['3'] = selected["B1"]
+                    elif given_ID[2] == "C":
+                        selected['3'] = selected["C1"]
+                    elif given_ID[2] == "D":
+                        selected['3'] = selected["D1"]
+                    elif given_ID[2] == "E":
+                        selected['3'] = selected["E1"]
+                    elif given_ID[2] == "F":
+                        selected['3'] = selected["F1"]
+                    elif given_ID[2] == "G":
+                        selected['3'] = selected["G1"]
+                    elif given_ID[2] == "H":
+                        selected['3'] = selected["H1"]
+                    elif given_ID[2] == "I":
+                        selected['3'] = selected["I1"]
+                    elif given_ID[2] == "J":
+                        selected['3'] = selected["J1"]
+                    elif given_ID[2] == "K":
+                        selected['3'] = selected["K1"]
+                    elif given_ID[2] == "L":
+                        selected['3'] = selected["L1"]
+                    elif given_ID[2] == "M":
+                        selected['3'] = selected["M1"]
+
+                    if given_ID[3] == "A":
+                        selected['4'] = selected["A1"]
+                    elif given_ID[3] == "B":
+                        selected['4'] = selected["B1"]
+                    elif given_ID[3] == "C":
+                        selected['4'] = selected["C1"]
+                    elif given_ID[3] == "D":
+                        selected['4'] = selected["D1"]
+                    elif given_ID[3] == "E":
+                        selected['4'] = selected["E1"]
+                    elif given_ID[3] == "F":
+                        selected['4'] = selected["F1"]
+                    elif given_ID[3] == "G":
+                        selected['4'] = selected["G1"]
+                    elif given_ID[3] == "H":
+                        selected['4'] = selected["H1"]
+                    elif given_ID[3] == "I":
+                        selected['4'] = selected["I1"]
+                    elif given_ID[3] == "J":
+                        selected['4'] = selected["J1"]
+                    elif given_ID[3] == "K":
+                        selected['4'] = selected["K1"]
+                    elif given_ID[3] == "L":
+                        selected['4'] = selected["L1"]
+                    elif given_ID[3] == "M":
+                        selected['4'] = selected["M1"]
+
+                    # Applying PCA for Scaled Selected Columns
+
+                    leagues = ["ARG1", "AUT", "BEL1", "BRA1", "BRA2", "BUL","CHI", "CHN", 
+                            "COL", "DEN", "ECU", "ENG1", "ENG2", "FRA1", "FRA2", "GER1", 
+                            "GER2", "GRE", "HOL", "ITA1", "ITA2", "JAP", "MEX", "PAR", 
+                            "PER", "POR1", "QAT", "RUS", "SAUD", "SCT", "SER", "SPA1", 
+                            "SPA2", "SWZ", "TUR", "UAE", "UKR", "URU", "USA"]
+
+                    # Iterate over each league
+                    for league in leagues:
+
+                        # Extract columns 46 through 50
+                        ExtremoAgudo = selected.iloc[:, np.r_[-4:0]]
+
+                        # Defining Columns
+                        ExtremoAgudo_columns = ExtremoAgudo.columns
+
+                        # Applying PCA
+                        pca = PCA(n_components=2)
+                        principalComponents = pca.fit_transform(ExtremoAgudo)
+
+                        # Create a DataFrame with loadings
+                        LoadingsExtremoAgudo = pd.DataFrame(pca.components_.T**2, index=ExtremoAgudo_columns, columns=['loading factor 1', 'loading factor 2'])
+
+                        # Multiplying Matrices to obtain Pre_Variables
+                        Similarity = pd.DataFrame(np.matmul(ExtremoAgudo, LoadingsExtremoAgudo['loading factor 1']) + np.matmul(ExtremoAgudo, LoadingsExtremoAgudo['loading factor 2']),
+                                                columns=["Similarity"])
+
+                    # Rebuilding Full Training Set
+                    selected = selected.join(Similarity)
+
+                    ##############################################################
+                    ##############################################################
+
+                    # Lista de Similares
+                    # Initialize an empty list to store DataFrames
+                    target = selected.loc[(Role_19_data['Atleta'] == jogador_similar)]
+                    target_similarity = target.iat[0, -1]
+
+                    selected["Índice de Similaridade"] = (selected['Similarity']/target_similarity)*100
+                    selected["Índice de Similaridade"] = round(selected["Índice de Similaridade"], 2)
+
+                    target = selected.loc[(selected['Atleta'] == jogador_similar)]
+                    selected['Dif_Similarity'] = abs(selected["Índice de Similaridade"] - 100)
+
+                    selected = selected.sort_values(by='Dif_Similarity')
+
+                    lista_similares = selected.iloc[1:31, np.r_[0, 2, 30, 35, -2:0]]
+                    lista_similares = lista_similares.sort_values(by='Rating', ascending=False)
+
+                    # Lista de Jogadores Similares Ordenados segundo o Rating
+                    st.markdown("<h4 style='text-align: center;'>30 Jogadores + Similares</b></h4>", unsafe_allow_html=True)
+                    st.dataframe(lista_similares, use_container_width=True, hide_index=True)
+                    st.markdown("---")
+
+                    # Lista de Latinos
+                    selected_latam = selected[(selected["Nacionalidade"] == "Argentina")|(selected["Nacionalidade"] == "Brazil")
+                                        |(selected["Nacionalidade"] == "Bolivia")|(selected["Nacionalidade"] == "Chile")
+                                        |(selected["Nacionalidade"] == "Colombia")|(selected["Nacionalidade"] == "Costa Rica")
+                                        |(selected["Nacionalidade"] == "Ecuador")|(selected["Nacionalidade"] == "Mexico")
+                                        |(selected["Nacionalidade"] == "Panama")|(selected["Nacionalidade"] == "Paraguay")
+                                        |(selected["Nacionalidade"] == "Peru")|(selected["Nacionalidade"] == "Uruguay")
+                                        |(selected["Nacionalidade"] == "Venezuela")]
+
+                    lista_similares_latam = selected_latam.iloc[1:31, np.r_[0, 2, 30, 35, -2:0]]
+                    lista_similares_latam = lista_similares_latam.sort_values(by="Rating", ascending = False)
+
+                    #Texto para os Gráficos
+                    st.markdown("<h4 style='text-align: center;'>5 Jogadores Latinos Similares Melhor Ranquedos</b></h4>", unsafe_allow_html=True)
+                    st.markdown("---")    
+
+
+                    # Gerar Gráficos com os 5 melhores
+                    # Arquivo para o Gráfico
+                    Role_19_Mean_Charts = selected_latam.iloc[:, np.r_[0, 2, 30, 36:49]]
+                    target = target.iloc[:, np.r_[0, 2, 30, 36:49]]
+                    # Renomeando Colunas
+                    Role_19_Mean_Charts = Role_19_Mean_Charts.rename(columns={'Ações_Defensivas_BemSucedidas_Percentil':'Ações_Defensivas_BemSucedidas', 'Duelos_Defensivos_Ganhos_Percentil':'Duelos_Defensivos_Ganhos', 'Duelos_Aéreos_Ganhos_Percentil':'Duelos_Aéreos_Ganhos',
+                                                                                'Finalizações_Bloqueadas_Percentil':'Finalizações_Bloqueadas', 'Interceptações_Ajustadas_a_Posse_Percentil':'Interceptações_Ajustadas_a_Posse', 'Passes_Longos_Certos_Percentil':'Passes_Longos_Certos', 
+                                                                                'Passes_Frontais_Certos_Percentil':'Passes_Frontais_Certos', 'Passes_Progressivos_Certos_Percentil':'Passes_Progressivos_Certos', 'Passes_Laterais_Certos_Percentil':'Passes_Laterais_Certos', 'Duelos_Ofensivos_Ganhos_Percentil':'Duelos_Ofensivos_Ganhos', 
+                                                                                'Dribles_BemSucedidos_Percentil':'Dribles_BemSucedidos', 'Corridas_Progressivas_Percentil':'Corridas_Progressivas', 'Passes_TerçoFinal_Certos_Percentil':'Passes_TerçoFinal_Certos'})
+                    
+                    target = target.rename(columns={'Ações_Defensivas_BemSucedidas_Percentil':'Ações_Defensivas_BemSucedidas', 'Duelos_Defensivos_Ganhos_Percentil':'Duelos_Defensivos_Ganhos', 'Duelos_Aéreos_Ganhos_Percentil':'Duelos_Aéreos_Ganhos',
+                                                                                'Finalizações_Bloqueadas_Percentil':'Finalizações_Bloqueadas', 'Interceptações_Ajustadas_a_Posse_Percentil':'Interceptações_Ajustadas_a_Posse', 'Passes_Longos_Certos_Percentil':'Passes_Longos_Certos', 
+                                                                                'Passes_Frontais_Certos_Percentil':'Passes_Frontais_Certos', 'Passes_Progressivos_Certos_Percentil':'Passes_Progressivos_Certos', 'Passes_Laterais_Certos_Percentil':'Passes_Laterais_Certos', 'Duelos_Ofensivos_Ganhos_Percentil':'Duelos_Ofensivos_Ganhos', 
+                                                                                'Dribles_BemSucedidos_Percentil':'Dribles_BemSucedidos', 'Corridas_Progressivas_Percentil':'Corridas_Progressivas', 'Passes_TerçoFinal_Certos_Percentil':'Passes_TerçoFinal_Certos'})
+                    #Dropping Atleta-alvo
+                    Role_19_Mean_Charts = Role_19_Mean_Charts[Role_19_Mean_Charts['Atleta'] != jogador_similar] 
+                    #Extraindo 5 melhores
+                    Role_19_Mean_Charts = Role_19_Mean_Charts.iloc[0:5, :]
+
+
+                    #Primeiro Gráfico
+                    Role_19_first = Role_19_Mean_Charts.iloc[0:1, :]
+                    Role_19_first = pd.concat([Role_19_first, target]).reset_index()
+
+                    # Definindo atletas para comparar
+                    jogadores = Role_19_first.iat[0, 1]
+                    jogadores_clube = Role_19_first.iat[0, 2]
+                    jogadores_liga = Role_19_first.iat[0, 3]
+                    alvo = Role_19_first.iat[1, 1]
+                    alvo_clube = Role_19_first.iat[1, 2]
+                    alvo_liga = Role_19_first.iat[1, 3]
+
+                    #Splitting Data
+                    Role_19_first_1 = Role_19_first.iloc[:, np.r_[0:3, 3:11]]
+                    Role_19_first_2 = Role_19_first.iloc[:, np.r_[0:3, 11:17]]
+
+                    # Preparing Graph 1
+                    params = list(Role_19_first_1.columns)
+                    params = params[4:]
+                    
+                    #Preparing Data
+                    ranges = []
+                    a_values = []
+                    b_values = []
+
+                    for x in params:
+                        a = min(Role_19_first_1[params][x])
+                        a = 0
+                        b = max(Role_19_first_1[params][x])
+                        b = 100
+                        ranges.append((a, b))
+
+                    for x in range(len(Role_19_first_1['Atleta'])):
+                        if Role_19_first_1['Atleta'][x] == jogadores:
+                            a_values = Role_19_first_1.iloc[x].values.tolist()
+                        if Role_19_first_1['Atleta'][x] == alvo:
+                            b_values = Role_19_first_1.iloc[x].values.tolist()
+                            
+                    a_values = a_values[4:]
+                    b_values = b_values[4:]
+
+                    values = [a_values, b_values]
+
+                    #Plotting Data
+                    title = dict(
+                        title_name = jogadores,
+                        title_color = '#B6282F',
+                        subtitle_name = jogadores_clube + "/" + jogadores_liga,
+                        subtitle_color = '#B6282F',
+                        title_name_2 = alvo,
+                        title_color_2 = '#344D94',
+                        subtitle_name_2 = alvo_clube + "/" + alvo_liga,
+                        subtitle_color_2 = '#344D94',
+                        title_fontsize = 18,
+                    ) 
+
+                    endnote = 'Viz by@JAmerico1898\ Data from Wyscout\nAll data in League percentiles'
+
+                    radar=Radar(fontfamily='Cursive', range_fontsize=8)
+                    fig,ax = radar.plot_radar(ranges=ranges,params=params,values=values,radar_color=['#B6282F', '#344D94'], dpi=600, alphas=[.8,.6], title=title, endnote=endnote, compare=True)
+                    st.pyplot(fig)
+
+                    ############################################################################
+                    # Preparing Graph 2
+                    params = list(Role_19_first_2.columns)
+                    params = params[4:]
+                    
+                    #Preparing Data
+                    ranges = []
+                    a_values = []
+                    b_values = []
+
+                    for x in params:
+                        a = min(Role_19_first_2[params][x])
+                        a = 0
+                        b = max(Role_19_first_2[params][x])
+                        b = 100
+                        ranges.append((a, b))
+
+                    for x in range(len(Role_19_first_2['Atleta'])):
+                        if Role_19_first_2['Atleta'][x] == jogadores:
+                            a_values = Role_19_first_2.iloc[x].values.tolist()
+                        if Role_19_first_2['Atleta'][x] == alvo:
+                            b_values = Role_19_first_2.iloc[x].values.tolist()
+                            
+                    a_values = a_values[4:]
+                    b_values = b_values[4:]
+
+                    values = [a_values, b_values]
+
+                    #Plotting Data
+                    title = dict(
+                        title_name = jogadores,
+                        title_color = '#B6282F',
+                        subtitle_name = jogadores_clube + "/" + jogadores_liga,
+                        subtitle_color = '#B6282F',
+                        title_name_2 = alvo,
+                        title_color_2 = '#344D94',
+                        subtitle_name_2 = alvo_clube + "/" + alvo_liga,
+                        subtitle_color_2 = '#344D94',
+                        title_fontsize = 18,
+                    ) 
+
+                    endnote = 'Viz by@JAmerico1898\ Data from Wyscout\nAll data in League percentiles'
+
+                    radar=Radar(fontfamily='Cursive', range_fontsize=8)
+                    fig,ax = radar.plot_radar(ranges=ranges,params=params,values=values,radar_color=['#B6282F', '#344D94'], dpi=600, alphas=[.8,.6], title=title, endnote=endnote, compare=True)
+                    st.pyplot(fig)
+
+                    ############################################################################
+
+                    #Segundo Gráfico
+                    Role_19_first = Role_19_Mean_Charts.iloc[1:2, :]
+                    Role_19_first = pd.concat([Role_19_first, target]).reset_index()
+
+                    # Definindo atletas para comparar
+                    jogadores = Role_19_first.iat[0, 1]
+                    jogadores_clube = Role_19_first.iat[0, 2]
+                    jogadores_liga = Role_19_first.iat[0, 3]
+                    #alvo = Role_19_first.iat[1, 1]
+                    #alvo_clube = Role_19_first.iat[1, 2]
+                    #alvo_liga = Role_19_first.iat[1, 3]
+
+                    #Splitting Data
+                    Role_19_first_1 = Role_19_first.iloc[:, np.r_[0:3, 3:11]]
+                    Role_19_first_2 = Role_19_first.iloc[:, np.r_[0:3, 11:17]]
+
+                    # Preparing Graph 1
+                    params = list(Role_19_first_1.columns)
+                    params = params[4:]
+                    
+                    #Preparing Data
+                    ranges = []
+                    a_values = []
+                    b_values = []
+
+                    for x in params:
+                        a = min(Role_19_first_1[params][x])
+                        a = 0
+                        b = max(Role_19_first_1[params][x])
+                        b = 100
+                        ranges.append((a, b))
+
+                    for x in range(len(Role_19_first_1['Atleta'])):
+                        if Role_19_first_1['Atleta'][x] == jogadores:
+                            a_values = Role_19_first_1.iloc[x].values.tolist()
+                        if Role_19_first_1['Atleta'][x] == alvo:
+                            b_values = Role_19_first_1.iloc[x].values.tolist()
+                            
+                    a_values = a_values[4:]
+                    b_values = b_values[4:]
+
+                    values = [a_values, b_values]
+
+                    #Plotting Data
+                    title = dict(
+                        title_name = jogadores,
+                        title_color = '#B6282F',
+                        subtitle_name = jogadores_clube + "/" + jogadores_liga,
+                        subtitle_color = '#B6282F',
+                        title_name_2 = alvo,
+                        title_color_2 = '#344D94',
+                        subtitle_name_2 = alvo_clube + "/" + alvo_liga,
+                        subtitle_color_2 = '#344D94',
+                        title_fontsize = 18,
+                    ) 
+
+                    endnote = 'Viz by@JAmerico1898\ Data from Wyscout\nAll data in League percentiles'
+
+                    radar=Radar(fontfamily='Cursive', range_fontsize=8)
+                    fig,ax = radar.plot_radar(ranges=ranges,params=params,values=values,radar_color=['#B6282F', '#344D94'], dpi=600, alphas=[.8,.6], title=title, endnote=endnote, compare=True)
+                    st.pyplot(fig)
+
+                    ############################################################################
+                    # Preparing Graph 2
+                    params = list(Role_19_first_2.columns)
+                    params = params[4:]
+                    
+                    #Preparing Data
+                    ranges = []
+                    a_values = []
+                    b_values = []
+
+                    for x in params:
+                        a = min(Role_19_first_2[params][x])
+                        a = 0
+                        b = max(Role_19_first_2[params][x])
+                        b = 100
+                        ranges.append((a, b))
+
+                    for x in range(len(Role_19_first_2['Atleta'])):
+                        if Role_19_first_2['Atleta'][x] == jogadores:
+                            a_values = Role_19_first_2.iloc[x].values.tolist()
+                        if Role_19_first_2['Atleta'][x] == alvo:
+                            b_values = Role_19_first_2.iloc[x].values.tolist()
+                            
+                    a_values = a_values[4:]
+                    b_values = b_values[4:]
+
+                    values = [a_values, b_values]
+
+                    #Plotting Data
+                    title = dict(
+                        title_name = jogadores,
+                        title_color = '#B6282F',
+                        subtitle_name = jogadores_clube + "/" + jogadores_liga,
+                        subtitle_color = '#B6282F',
+                        title_name_2 = alvo,
+                        title_color_2 = '#344D94',
+                        subtitle_name_2 = alvo_clube + "/" + alvo_liga,
+                        subtitle_color_2 = '#344D94',
+                        title_fontsize = 18,
+                    ) 
+
+                    endnote = 'Viz by@JAmerico1898\ Data from Wyscout\nAll data in League percentiles'
+
+                    radar=Radar(fontfamily='Cursive', range_fontsize=8)
+                    fig,ax = radar.plot_radar(ranges=ranges,params=params,values=values,radar_color=['#B6282F', '#344D94'], dpi=600, alphas=[.8,.6], title=title, endnote=endnote, compare=True)
+                    st.pyplot(fig)
+
+                    ##########################################################################################
+                    ############################################################################
+
+                    #Terceiro Gráfico
+                    Role_19_first = Role_19_Mean_Charts.iloc[2:3, :]
+                    Role_19_first = pd.concat([Role_19_first, target]).reset_index()
+
+                    # Definindo atletas para comparar
+                    jogadores = Role_19_first.iat[0, 1]
+                    jogadores_clube = Role_19_first.iat[0, 2]
+                    jogadores_liga = Role_19_first.iat[0, 3]
+                    #alvo = Role_19_first.iat[1, 1]
+                    #alvo_clube = Role_19_first.iat[1, 2]
+                    #alvo_liga = Role_19_first.iat[1, 3]
+
+                    #Splitting Data
+                    Role_19_first_1 = Role_19_first.iloc[:, np.r_[0:3, 3:11]]
+                    Role_19_first_2 = Role_19_first.iloc[:, np.r_[0:3, 11:17]]
+
+                    # Preparing Graph 1
+                    params = list(Role_19_first_1.columns)
+                    params = params[4:]
+                    
+                    #Preparing Data
+                    ranges = []
+                    a_values = []
+                    b_values = []
+
+                    for x in params:
+                        a = min(Role_19_first_1[params][x])
+                        a = 0
+                        b = max(Role_19_first_1[params][x])
+                        b = 100
+                        ranges.append((a, b))
+
+                    for x in range(len(Role_19_first_1['Atleta'])):
+                        if Role_19_first_1['Atleta'][x] == jogadores:
+                            a_values = Role_19_first_1.iloc[x].values.tolist()
+                        if Role_19_first_1['Atleta'][x] == alvo:
+                            b_values = Role_19_first_1.iloc[x].values.tolist()
+                            
+                    a_values = a_values[4:]
+                    b_values = b_values[4:]
+
+                    values = [a_values, b_values]
+
+                    #Plotting Data
+                    title = dict(
+                        title_name = jogadores,
+                        title_color = '#B6282F',
+                        subtitle_name = jogadores_clube + "/" + jogadores_liga,
+                        subtitle_color = '#B6282F',
+                        title_name_2 = alvo,
+                        title_color_2 = '#344D94',
+                        subtitle_name_2 = alvo_clube + "/" + alvo_liga,
+                        subtitle_color_2 = '#344D94',
+                        title_fontsize = 18,
+                    ) 
+
+                    endnote = 'Viz by@JAmerico1898\ Data from Wyscout\nAll data in League percentiles'
+
+                    radar=Radar(fontfamily='Cursive', range_fontsize=8)
+                    fig,ax = radar.plot_radar(ranges=ranges,params=params,values=values,radar_color=['#B6282F', '#344D94'], dpi=600, alphas=[.8,.6], title=title, endnote=endnote, compare=True)
+                    st.pyplot(fig)
+
+                    ############################################################################
+                    # Preparing Graph 2
+                    params = list(Role_19_first_2.columns)
+                    params = params[4:]
+                    
+                    #Preparing Data
+                    ranges = []
+                    a_values = []
+                    b_values = []
+
+                    for x in params:
+                        a = min(Role_19_first_2[params][x])
+                        a = 0
+                        b = max(Role_19_first_2[params][x])
+                        b = 100
+                        ranges.append((a, b))
+
+                    for x in range(len(Role_19_first_2['Atleta'])):
+                        if Role_19_first_2['Atleta'][x] == jogadores:
+                            a_values = Role_19_first_2.iloc[x].values.tolist()
+                        if Role_19_first_2['Atleta'][x] == alvo:
+                            b_values = Role_19_first_2.iloc[x].values.tolist()
+                            
+                    a_values = a_values[4:]
+                    b_values = b_values[4:]
+
+                    values = [a_values, b_values]
+
+                    #Plotting Data
+                    title = dict(
+                        title_name = jogadores,
+                        title_color = '#B6282F',
+                        subtitle_name = jogadores_clube + "/" + jogadores_liga,
+                        subtitle_color = '#B6282F',
+                        title_name_2 = alvo,
+                        title_color_2 = '#344D94',
+                        subtitle_name_2 = alvo_clube + "/" + alvo_liga,
+                        subtitle_color_2 = '#344D94',
+                        title_fontsize = 18,
+                    ) 
+
+                    endnote = 'Viz by@JAmerico1898\ Data from Wyscout\nAll data in League percentiles'
+
+                    radar=Radar(fontfamily='Cursive', range_fontsize=8)
+                    fig,ax = radar.plot_radar(ranges=ranges,params=params,values=values,radar_color=['#B6282F', '#344D94'], dpi=600, alphas=[.8,.6], title=title, endnote=endnote, compare=True)
+                    st.pyplot(fig)
+
+                    ##########################################################################################
+                    ############################################################################
+
+                    #Quarto Gráfico
+                    Role_19_first = Role_19_Mean_Charts.iloc[3:4, :]
+                    Role_19_first = pd.concat([Role_19_first, target]).reset_index()
+
+                    # Definindo atletas para comparar
+                    jogadores = Role_19_first.iat[0, 1]
+                    jogadores_clube = Role_19_first.iat[0, 2]
+                    jogadores_liga = Role_19_first.iat[0, 3]
+                    #alvo = Role_19_first.iat[1, 1]
+                    #alvo_clube = Role_19_first.iat[1, 2]
+                    #alvo_liga = Role_19_first.iat[1, 3]
+
+                    #Splitting Data
+                    Role_19_first_1 = Role_19_first.iloc[:, np.r_[0:3, 3:11]]
+                    Role_19_first_2 = Role_19_first.iloc[:, np.r_[0:3, 11:17]]
+
+                    # Preparing Graph 1
+                    params = list(Role_19_first_1.columns)
+                    params = params[4:]
+                    
+                    #Preparing Data
+                    ranges = []
+                    a_values = []
+                    b_values = []
+
+                    for x in params:
+                        a = min(Role_19_first_1[params][x])
+                        a = 0
+                        b = max(Role_19_first_1[params][x])
+                        b = 100
+                        ranges.append((a, b))
+
+                    for x in range(len(Role_19_first_1['Atleta'])):
+                        if Role_19_first_1['Atleta'][x] == jogadores:
+                            a_values = Role_19_first_1.iloc[x].values.tolist()
+                        if Role_19_first_1['Atleta'][x] == alvo:
+                            b_values = Role_19_first_1.iloc[x].values.tolist()
+                            
+                    a_values = a_values[4:]
+                    b_values = b_values[4:]
+
+                    values = [a_values, b_values]
+
+                    #Plotting Data
+                    title = dict(
+                        title_name = jogadores,
+                        title_color = '#B6282F',
+                        subtitle_name = jogadores_clube + "/" + jogadores_liga,
+                        subtitle_color = '#B6282F',
+                        title_name_2 = alvo,
+                        title_color_2 = '#344D94',
+                        subtitle_name_2 = alvo_clube + "/" + alvo_liga,
+                        subtitle_color_2 = '#344D94',
+                        title_fontsize = 18,
+                    ) 
+
+                    endnote = 'Viz by@JAmerico1898\ Data from Wyscout\nAll data in League percentiles'
+
+                    radar=Radar(fontfamily='Cursive', range_fontsize=8)
+                    fig,ax = radar.plot_radar(ranges=ranges,params=params,values=values,radar_color=['#B6282F', '#344D94'], dpi=600, alphas=[.8,.6], title=title, endnote=endnote, compare=True)
+                    st.pyplot(fig)
+
+                    ############################################################################
+                    # Preparing Graph 2
+                    params = list(Role_19_first_2.columns)
+                    params = params[4:]
+                    
+                    #Preparing Data
+                    ranges = []
+                    a_values = []
+                    b_values = []
+
+                    for x in params:
+                        a = min(Role_19_first_2[params][x])
+                        a = 0
+                        b = max(Role_19_first_2[params][x])
+                        b = 100
+                        ranges.append((a, b))
+
+                    for x in range(len(Role_19_first_2['Atleta'])):
+                        if Role_19_first_2['Atleta'][x] == jogadores:
+                            a_values = Role_19_first_2.iloc[x].values.tolist()
+                        if Role_19_first_2['Atleta'][x] == alvo:
+                            b_values = Role_19_first_2.iloc[x].values.tolist()
+                            
+                    a_values = a_values[4:]
+                    b_values = b_values[4:]
+
+                    values = [a_values, b_values]
+
+                    #Plotting Data
+                    title = dict(
+                        title_name = jogadores,
+                        title_color = '#B6282F',
+                        subtitle_name = jogadores_clube + "/" + jogadores_liga,
+                        subtitle_color = '#B6282F',
+                        title_name_2 = alvo,
+                        title_color_2 = '#344D94',
+                        subtitle_name_2 = alvo_clube + "/" + alvo_liga,
+                        subtitle_color_2 = '#344D94',
+                        title_fontsize = 18,
+                    ) 
+
+                    endnote = 'Viz by@JAmerico1898\ Data from Wyscout\nAll data in League percentiles'
+
+                    radar=Radar(fontfamily='Cursive', range_fontsize=8)
+                    fig,ax = radar.plot_radar(ranges=ranges,params=params,values=values,radar_color=['#B6282F', '#344D94'], dpi=600, alphas=[.8,.6], title=title, endnote=endnote, compare=True)
+                    st.pyplot(fig)
+
+                    ##########################################################################################
+                    ############################################################################
+
+                    #Quinto Gráfico
+                    Role_19_first = Role_19_Mean_Charts.iloc[4:5, :]
+                    Role_19_first = pd.concat([Role_19_first, target]).reset_index()
+
+                    # Definindo atletas para comparar
+                    jogadores = Role_19_first.iat[0, 1]
+                    jogadores_clube = Role_19_first.iat[0, 2]
+                    jogadores_liga = Role_19_first.iat[0, 3]
+                    #alvo = Role_19_first.iat[1, 1]
+                    #alvo_clube = Role_19_first.iat[1, 2]
+                    #alvo_liga = Role_19_first.iat[1, 3]
+
+                    #Splitting Data
+                    Role_19_first_1 = Role_19_first.iloc[:, np.r_[0:3, 3:11]]
+                    Role_19_first_2 = Role_19_first.iloc[:, np.r_[0:3, 11:17]]
+
+                    # Preparing Graph 1
+                    params = list(Role_19_first_1.columns)
+                    params = params[4:]
+                    
+                    #Preparing Data
+                    ranges = []
+                    a_values = []
+                    b_values = []
+
+                    for x in params:
+                        a = min(Role_19_first_1[params][x])
+                        a = 0
+                        b = max(Role_19_first_1[params][x])
+                        b = 100
+                        ranges.append((a, b))
+
+                    for x in range(len(Role_19_first_1['Atleta'])):
+                        if Role_19_first_1['Atleta'][x] == jogadores:
+                            a_values = Role_19_first_1.iloc[x].values.tolist()
+                        if Role_19_first_1['Atleta'][x] == alvo:
+                            b_values = Role_19_first_1.iloc[x].values.tolist()
+                            
+                    a_values = a_values[4:]
+                    b_values = b_values[4:]
+
+                    values = [a_values, b_values]
+
+                    #Plotting Data
+                    title = dict(
+                        title_name = jogadores,
+                        title_color = '#B6282F',
+                        subtitle_name = jogadores_clube + "/" + jogadores_liga,
+                        subtitle_color = '#B6282F',
+                        title_name_2 = alvo,
+                        title_color_2 = '#344D94',
+                        subtitle_name_2 = alvo_clube + "/" + alvo_liga,
+                        subtitle_color_2 = '#344D94',
+                        title_fontsize = 18,
+                    ) 
+
+                    endnote = 'Viz by@JAmerico1898\ Data from Wyscout\nAll data in League percentiles'
+
+                    radar=Radar(fontfamily='Cursive', range_fontsize=8)
+                    fig,ax = radar.plot_radar(ranges=ranges,params=params,values=values,radar_color=['#B6282F', '#344D94'], dpi=600, alphas=[.8,.6], title=title, endnote=endnote, compare=True)
+                    st.pyplot(fig)
+
+                    ############################################################################
+                    # Preparing Graph 2
+                    params = list(Role_19_first_2.columns)
+                    params = params[4:]
+                    
+                    #Preparing Data
+                    ranges = []
+                    a_values = []
+                    b_values = []
+
+                    for x in params:
+                        a = min(Role_19_first_2[params][x])
+                        a = 0
+                        b = max(Role_19_first_2[params][x])
+                        b = 100
+                        ranges.append((a, b))
+
+                    for x in range(len(Role_19_first_2['Atleta'])):
+                        if Role_19_first_2['Atleta'][x] == jogadores:
+                            a_values = Role_19_first_2.iloc[x].values.tolist()
+                        if Role_19_first_2['Atleta'][x] == alvo:
+                            b_values = Role_19_first_2.iloc[x].values.tolist()
+                            
+                    a_values = a_values[4:]
+                    b_values = b_values[4:]
+
+                    values = [a_values, b_values]
+
+                    #Plotting Data
+                    title = dict(
+                        title_name = jogadores,
+                        title_color = '#B6282F',
+                        subtitle_name = jogadores_clube + "/" + jogadores_liga,
+                        subtitle_color = '#B6282F',
+                        title_name_2 = alvo,
+                        title_color_2 = '#344D94',
+                        subtitle_name_2 = alvo_clube + "/" + alvo_liga,
+                        subtitle_color_2 = '#344D94',
+                        title_fontsize = 18,
+                    ) 
+
+                    endnote = 'Viz by@JAmerico1898\ Data from Wyscout\nAll data in League percentiles'
+
+                    radar=Radar(fontfamily='Cursive', range_fontsize=8)
+                    fig,ax = radar.plot_radar(ranges=ranges,params=params,values=values,radar_color=['#B6282F', '#344D94'], dpi=600, alphas=[.8,.6], title=title, endnote=endnote, compare=True)
+                    st.pyplot(fig)
+                    #####################################################################################################################
+                    #####################################################################################################################
+                    #####################################################################################################################
+                    #####################################################################################################################
+                    #####################################################################################################################
+                    #####################################################################################################################
+                if perfil_similar == ("Atacante Referência"):
+                ###############################################################################
+                ###########################################################################
+                    # PRIMEIRO VOLANTE EQUILIBRADO
+                    # Texto de Abertura>
+                    markdown_amount_1 = f"<div style='text-align:center; font-size:{fontsize}px'>{jogador_similar:}</div>"
+                    st.markdown("<h4 style='text-align: center;'>Jogador Selecionado</b></h4>", unsafe_allow_html=True)
+                    st.markdown(markdown_amount_1, unsafe_allow_html=True)
+                    st.markdown("---")
+
+                    #Carregando arquivo de dados
+                    Role_20_data = pd.read_excel('20_Role_Atacante_Referência_Similarity.xlsx')
+                    Role_20_data = Role_20_data.drop(Role_20_data.columns[0:4], axis=1)
+                    Role_20_data.reset_index(drop=True, inplace=True)
+
+                    # Step : Defina o atleta-alvo
+                    #base_bruta_similaridade = pd.read_excel("base_bruta_similaridade.xlsx")
+                    target = Role_20_data.loc[(Role_20_data['Atleta'] == jogador_similar)]
+
+                    #Step : Definindo "ID-alvo"
+                    given_ID = target.iat[0, -1]
+                    
+                    selected = Role_20_data
+
+                    # Step 9: Add columns "1", "2", "3" to Role_20_data
+
+                    selected['1'] = given_ID[0]
+                    selected['2'] = given_ID[1]
+                    selected['3'] = given_ID[2]
+                    selected['4'] = given_ID[3]
+
+                    # Assigning correct columns to 1, 2, 3
+
+                    if given_ID[0] == "A":
+                        selected['1'] = selected["A1"]
+                    elif given_ID[0] == "B":
+                        selected['1'] = selected["B1"]
+                    elif given_ID[0] == "C":
+                        selected['1'] = selected["C1"]
+                    elif given_ID[0] == "D":
+                        selected['1'] = selected["D1"]
+                    elif given_ID[0] == "E":
+                        selected['1'] = selected["E1"]
+                    elif given_ID[0] == "F":
+                        selected['1'] = selected["F1"]
+                    elif given_ID[0] == "G":
+                        selected['1'] = selected["G1"]
+                    elif given_ID[0] == "H":
+                        selected['1'] = selected["H1"]
+                    elif given_ID[0] == "I":
+                        selected['1'] = selected["I1"]
+                    elif given_ID[0] == "J":
+                        selected['1'] = selected["J1"]
+                    elif given_ID[0] == "K":
+                        selected['1'] = selected["K1"]
+                    elif given_ID[0] == "L":
+                        selected['1'] = selected["L1"]
+                    elif given_ID[0] == "M":
+                        selected['1'] = selected["M1"]
+
+
+                    if given_ID[1] == "A":
+                        selected['2'] = selected["A1"]
+                    elif given_ID[1] == "B":
+                        selected['2'] = selected["B1"]
+                    elif given_ID[1] == "C":
+                        selected['2'] = selected["C1"]
+                    elif given_ID[1] == "D":
+                        selected['2'] = selected["D1"]
+                    elif given_ID[1] == "E":
+                        selected['2'] = selected["E1"]
+                    elif given_ID[1] == "F":
+                        selected['2'] = selected["F1"]
+                    elif given_ID[1] == "G":
+                        selected['2'] = selected["G1"]
+                    elif given_ID[1] == "H":
+                        selected['2'] = selected["H1"]
+                    elif given_ID[1] == "I":
+                        selected['2'] = selected["I1"]
+                    elif given_ID[1] == "J":
+                        selected['2'] = selected["J1"]
+                    elif given_ID[1] == "K":
+                        selected['2'] = selected["K1"]
+                    elif given_ID[1] == "L":
+                        selected['2'] = selected["L1"]
+                    elif given_ID[1] == "M":
+                        selected['2'] = selected["M1"]
+                    
+                    
+                    if given_ID[2] == "A":
+                        selected['3'] = selected["A1"]
+                    elif given_ID[2] == "B":
+                        selected['3'] = selected["B1"]
+                    elif given_ID[2] == "C":
+                        selected['3'] = selected["C1"]
+                    elif given_ID[2] == "D":
+                        selected['3'] = selected["D1"]
+                    elif given_ID[2] == "E":
+                        selected['3'] = selected["E1"]
+                    elif given_ID[2] == "F":
+                        selected['3'] = selected["F1"]
+                    elif given_ID[2] == "G":
+                        selected['3'] = selected["G1"]
+                    elif given_ID[2] == "H":
+                        selected['3'] = selected["H1"]
+                    elif given_ID[2] == "I":
+                        selected['3'] = selected["I1"]
+                    elif given_ID[2] == "J":
+                        selected['3'] = selected["J1"]
+                    elif given_ID[2] == "K":
+                        selected['3'] = selected["K1"]
+                    elif given_ID[2] == "L":
+                        selected['3'] = selected["L1"]
+                    elif given_ID[2] == "M":
+                        selected['3'] = selected["M1"]
+
+                    if given_ID[3] == "A":
+                        selected['4'] = selected["A1"]
+                    elif given_ID[3] == "B":
+                        selected['4'] = selected["B1"]
+                    elif given_ID[3] == "C":
+                        selected['4'] = selected["C1"]
+                    elif given_ID[3] == "D":
+                        selected['4'] = selected["D1"]
+                    elif given_ID[3] == "E":
+                        selected['4'] = selected["E1"]
+                    elif given_ID[3] == "F":
+                        selected['4'] = selected["F1"]
+                    elif given_ID[3] == "G":
+                        selected['4'] = selected["G1"]
+                    elif given_ID[3] == "H":
+                        selected['4'] = selected["H1"]
+                    elif given_ID[3] == "I":
+                        selected['4'] = selected["I1"]
+                    elif given_ID[3] == "J":
+                        selected['4'] = selected["J1"]
+                    elif given_ID[3] == "K":
+                        selected['4'] = selected["K1"]
+                    elif given_ID[3] == "L":
+                        selected['4'] = selected["L1"]
+                    elif given_ID[3] == "M":
+                        selected['4'] = selected["M1"]
+
+                    # Applying PCA for Scaled Selected Columns
+
+                    leagues = ["ARG1", "AUT", "BEL1", "BRA1", "BRA2", "BUL","CHI", "CHN", 
+                            "COL", "DEN", "ECU", "ENG1", "ENG2", "FRA1", "FRA2", "GER1", 
+                            "GER2", "GRE", "HOL", "ITA1", "ITA2", "JAP", "MEX", "PAR", 
+                            "PER", "POR1", "QAT", "RUS", "SAUD", "SCT", "SER", "SPA1", 
+                            "SPA2", "SWZ", "TUR", "UAE", "UKR", "URU", "USA"]
+
+                    # Iterate over each league
+                    for league in leagues:
+
+                        # Extract columns 46 through 50
+                        AtacanteReferência = selected.iloc[:, np.r_[-4:0]]
+
+                        # Defining Columns
+                        AtacanteReferência_columns = AtacanteReferência.columns
+
+                        # Applying PCA
+                        pca = PCA(n_components=2)
+                        principalComponents = pca.fit_transform(AtacanteReferência)
+
+                        # Create a DataFrame with loadings
+                        LoadingsAtacanteReferência = pd.DataFrame(pca.components_.T**2, index=AtacanteReferência_columns, columns=['loading factor 1', 'loading factor 2'])
+
+                        # Multiplying Matrices to obtain Pre_Variables
+                        Similarity = pd.DataFrame(np.matmul(AtacanteReferência, LoadingsAtacanteReferência['loading factor 1']) + np.matmul(AtacanteReferência, LoadingsAtacanteReferência['loading factor 2']),
+                                                columns=["Similarity"])
+
+                    # Rebuilding Full Training Set
+                    selected = selected.join(Similarity)
+
+                    ##############################################################
+                    ##############################################################
+
+                    # Lista de Similares
+                    # Initialize an empty list to store DataFrames
+                    target = selected.loc[(Role_20_data['Atleta'] == jogador_similar)]
+                    target_similarity = target.iat[0, -1]
+
+                    selected["Índice de Similaridade"] = (selected['Similarity']/target_similarity)*100
+                    selected["Índice de Similaridade"] = round(selected["Índice de Similaridade"], 2)
+
+                    target = selected.loc[(selected['Atleta'] == jogador_similar)]
+                    selected['Dif_Similarity'] = abs(selected["Índice de Similaridade"] - 100)
+
+                    selected = selected.sort_values(by='Dif_Similarity')
+
+                    lista_similares = selected.iloc[1:31, np.r_[0, 2, 27, 32, -2:0]]
+                    lista_similares = lista_similares.sort_values(by='Rating', ascending=False)
+
+                    # Lista de Jogadores Similares Ordenados segundo o Rating
+                    st.markdown("<h4 style='text-align: center;'>30 Jogadores + Similares</b></h4>", unsafe_allow_html=True)
+                    st.dataframe(lista_similares, use_container_width=True, hide_index=True)
+                    st.markdown("---")
+
+                    # Lista de Latinos
+                    selected_latam = selected[(selected["Nacionalidade"] == "Argentina")|(selected["Nacionalidade"] == "Brazil")
+                                        |(selected["Nacionalidade"] == "Bolivia")|(selected["Nacionalidade"] == "Chile")
+                                        |(selected["Nacionalidade"] == "Colombia")|(selected["Nacionalidade"] == "Costa Rica")
+                                        |(selected["Nacionalidade"] == "Ecuador")|(selected["Nacionalidade"] == "Mexico")
+                                        |(selected["Nacionalidade"] == "Panama")|(selected["Nacionalidade"] == "Paraguay")
+                                        |(selected["Nacionalidade"] == "Peru")|(selected["Nacionalidade"] == "Uruguay")
+                                        |(selected["Nacionalidade"] == "Venezuela")]
+
+                    lista_similares_latam = selected_latam.iloc[1:31, np.r_[0, 2, 27, 32, -2:0]]
+                    lista_similares_latam = lista_similares_latam.sort_values(by="Rating", ascending = False)
+
+                    #Texto para os Gráficos
+                    st.markdown("<h4 style='text-align: center;'>5 Jogadores Latinos Similares Melhor Ranquedos</b></h4>", unsafe_allow_html=True)
+                    st.markdown("---")    
+
+
+                    # Gerar Gráficos com os 5 melhores
+                    # Arquivo para o Gráfico
+                    Role_20_Mean_Charts = selected_latam.iloc[:, np.r_[0, 2, 27, 33:43]]
+                    target = target.iloc[:, np.r_[0, 2, 27, 33:43]]
+                    # Renomeando Colunas
+                    Role_20_Mean_Charts = Role_20_Mean_Charts.rename(columns={'Ações_Defensivas_BemSucedidas_Percentil':'Ações_Defensivas_BemSucedidas', 'Duelos_Defensivos_Ganhos_Percentil':'Duelos_Defensivos_Ganhos', 'Duelos_Aéreos_Ganhos_Percentil':'Duelos_Aéreos_Ganhos',
+                                                                                'Finalizações_Bloqueadas_Percentil':'Finalizações_Bloqueadas', 'Interceptações_Ajustadas_a_Posse_Percentil':'Interceptações_Ajustadas_a_Posse', 'Passes_Longos_Certos_Percentil':'Passes_Longos_Certos', 
+                                                                                'Passes_Frontais_Certos_Percentil':'Passes_Frontais_Certos', 'Passes_Progressivos_Certos_Percentil':'Passes_Progressivos_Certos', 'Passes_Laterais_Certos_Percentil':'Passes_Laterais_Certos', 'Duelos_Ofensivos_Ganhos_Percentil':'Duelos_Ofensivos_Ganhos', 
+                                                                                'Dribles_BemSucedidos_Percentil':'Dribles_BemSucedidos', 'Corridas_Progressivas_Percentil':'Corridas_Progressivas', 'Passes_TerçoFinal_Certos_Percentil':'Passes_TerçoFinal_Certos'})
+                    
+                    target = target.rename(columns={'Ações_Defensivas_BemSucedidas_Percentil':'Ações_Defensivas_BemSucedidas', 'Duelos_Defensivos_Ganhos_Percentil':'Duelos_Defensivos_Ganhos', 'Duelos_Aéreos_Ganhos_Percentil':'Duelos_Aéreos_Ganhos',
+                                                                                'Finalizações_Bloqueadas_Percentil':'Finalizações_Bloqueadas', 'Interceptações_Ajustadas_a_Posse_Percentil':'Interceptações_Ajustadas_a_Posse', 'Passes_Longos_Certos_Percentil':'Passes_Longos_Certos', 
+                                                                                'Passes_Frontais_Certos_Percentil':'Passes_Frontais_Certos', 'Passes_Progressivos_Certos_Percentil':'Passes_Progressivos_Certos', 'Passes_Laterais_Certos_Percentil':'Passes_Laterais_Certos', 'Duelos_Ofensivos_Ganhos_Percentil':'Duelos_Ofensivos_Ganhos', 
+                                                                                'Dribles_BemSucedidos_Percentil':'Dribles_BemSucedidos', 'Corridas_Progressivas_Percentil':'Corridas_Progressivas', 'Passes_TerçoFinal_Certos_Percentil':'Passes_TerçoFinal_Certos'})
+                    #Dropping Atleta-alvo
+                    Role_20_Mean_Charts = Role_20_Mean_Charts[Role_20_Mean_Charts['Atleta'] != jogador_similar] 
+                    #Extraindo 5 melhores
+                    Role_20_Mean_Charts = Role_20_Mean_Charts.iloc[0:5, :]
+
+
+                    #Primeiro Gráfico
+                    Role_20_first = Role_20_Mean_Charts.iloc[0:1, :]
+                    Role_20_first = pd.concat([Role_20_first, target]).reset_index()
+
+                    # Definindo atletas para comparar
+                    jogadores = Role_20_first.iat[0, 1]
+                    jogadores_clube = Role_20_first.iat[0, 2]
+                    jogadores_liga = Role_20_first.iat[0, 3]
+                    alvo = Role_20_first.iat[1, 1]
+                    alvo_clube = Role_20_first.iat[1, 2]
+                    alvo_liga = Role_20_first.iat[1, 3]
+
+                    #Splitting Data
+                    Role_20_first_1 = Role_20_first.iloc[:, np.r_[0:3, 3:9]]
+                    Role_20_first_2 = Role_20_first.iloc[:, np.r_[0:3, 9:14]]
+
+                    # Preparing Graph 1
+                    params = list(Role_20_first_1.columns)
+                    params = params[4:]
+                    
+                    #Preparing Data
+                    ranges = []
+                    a_values = []
+                    b_values = []
+
+                    for x in params:
+                        a = min(Role_20_first_1[params][x])
+                        a = 0
+                        b = max(Role_20_first_1[params][x])
+                        b = 100
+                        ranges.append((a, b))
+
+                    for x in range(len(Role_20_first_1['Atleta'])):
+                        if Role_20_first_1['Atleta'][x] == jogadores:
+                            a_values = Role_20_first_1.iloc[x].values.tolist()
+                        if Role_20_first_1['Atleta'][x] == alvo:
+                            b_values = Role_20_first_1.iloc[x].values.tolist()
+                            
+                    a_values = a_values[4:]
+                    b_values = b_values[4:]
+
+                    values = [a_values, b_values]
+
+                    #Plotting Data
+                    title = dict(
+                        title_name = jogadores,
+                        title_color = '#B6282F',
+                        subtitle_name = jogadores_clube + "/" + jogadores_liga,
+                        subtitle_color = '#B6282F',
+                        title_name_2 = alvo,
+                        title_color_2 = '#344D94',
+                        subtitle_name_2 = alvo_clube + "/" + alvo_liga,
+                        subtitle_color_2 = '#344D94',
+                        title_fontsize = 18,
+                    ) 
+
+                    endnote = 'Viz by@JAmerico1898\ Data from Wyscout\nAll data in League percentiles'
+
+                    radar=Radar(fontfamily='Cursive', range_fontsize=8)
+                    fig,ax = radar.plot_radar(ranges=ranges,params=params,values=values,radar_color=['#B6282F', '#344D94'], dpi=600, alphas=[.8,.6], title=title, endnote=endnote, compare=True)
+                    st.pyplot(fig)
+
+                    ############################################################################
+                    # Preparing Graph 2
+                    params = list(Role_20_first_2.columns)
+                    params = params[4:]
+                    
+                    #Preparing Data
+                    ranges = []
+                    a_values = []
+                    b_values = []
+
+                    for x in params:
+                        a = min(Role_20_first_2[params][x])
+                        a = 0
+                        b = max(Role_20_first_2[params][x])
+                        b = 100
+                        ranges.append((a, b))
+
+                    for x in range(len(Role_20_first_2['Atleta'])):
+                        if Role_20_first_2['Atleta'][x] == jogadores:
+                            a_values = Role_20_first_2.iloc[x].values.tolist()
+                        if Role_20_first_2['Atleta'][x] == alvo:
+                            b_values = Role_20_first_2.iloc[x].values.tolist()
+                            
+                    a_values = a_values[4:]
+                    b_values = b_values[4:]
+
+                    values = [a_values, b_values]
+
+                    #Plotting Data
+                    title = dict(
+                        title_name = jogadores,
+                        title_color = '#B6282F',
+                        subtitle_name = jogadores_clube + "/" + jogadores_liga,
+                        subtitle_color = '#B6282F',
+                        title_name_2 = alvo,
+                        title_color_2 = '#344D94',
+                        subtitle_name_2 = alvo_clube + "/" + alvo_liga,
+                        subtitle_color_2 = '#344D94',
+                        title_fontsize = 18,
+                    ) 
+
+                    endnote = 'Viz by@JAmerico1898\ Data from Wyscout\nAll data in League percentiles'
+
+                    radar=Radar(fontfamily='Cursive', range_fontsize=8)
+                    fig,ax = radar.plot_radar(ranges=ranges,params=params,values=values,radar_color=['#B6282F', '#344D94'], dpi=600, alphas=[.8,.6], title=title, endnote=endnote, compare=True)
+                    st.pyplot(fig)
+
+                    ############################################################################
+
+                    #Segundo Gráfico
+                    Role_20_first = Role_20_Mean_Charts.iloc[1:2, :]
+                    Role_20_first = pd.concat([Role_20_first, target]).reset_index()
+
+                    # Definindo atletas para comparar
+                    jogadores = Role_20_first.iat[0, 1]
+                    jogadores_clube = Role_20_first.iat[0, 2]
+                    jogadores_liga = Role_20_first.iat[0, 3]
+                    #alvo = Role_20_first.iat[1, 1]
+                    #alvo_clube = Role_20_first.iat[1, 2]
+                    #alvo_liga = Role_20_first.iat[1, 3]
+
+                    #Splitting Data
+                    Role_20_first_1 = Role_20_first.iloc[:, np.r_[0:3, 3:9]]
+                    Role_20_first_2 = Role_20_first.iloc[:, np.r_[0:3, 9:14]]
+
+                    # Preparing Graph 1
+                    params = list(Role_20_first_1.columns)
+                    params = params[4:]
+                    
+                    #Preparing Data
+                    ranges = []
+                    a_values = []
+                    b_values = []
+
+                    for x in params:
+                        a = min(Role_20_first_1[params][x])
+                        a = 0
+                        b = max(Role_20_first_1[params][x])
+                        b = 100
+                        ranges.append((a, b))
+
+                    for x in range(len(Role_20_first_1['Atleta'])):
+                        if Role_20_first_1['Atleta'][x] == jogadores:
+                            a_values = Role_20_first_1.iloc[x].values.tolist()
+                        if Role_20_first_1['Atleta'][x] == alvo:
+                            b_values = Role_20_first_1.iloc[x].values.tolist()
+                            
+                    a_values = a_values[4:]
+                    b_values = b_values[4:]
+
+                    values = [a_values, b_values]
+
+                    #Plotting Data
+                    title = dict(
+                        title_name = jogadores,
+                        title_color = '#B6282F',
+                        subtitle_name = jogadores_clube + "/" + jogadores_liga,
+                        subtitle_color = '#B6282F',
+                        title_name_2 = alvo,
+                        title_color_2 = '#344D94',
+                        subtitle_name_2 = alvo_clube + "/" + alvo_liga,
+                        subtitle_color_2 = '#344D94',
+                        title_fontsize = 18,
+                    ) 
+
+                    endnote = 'Viz by@JAmerico1898\ Data from Wyscout\nAll data in League percentiles'
+
+                    radar=Radar(fontfamily='Cursive', range_fontsize=8)
+                    fig,ax = radar.plot_radar(ranges=ranges,params=params,values=values,radar_color=['#B6282F', '#344D94'], dpi=600, alphas=[.8,.6], title=title, endnote=endnote, compare=True)
+                    st.pyplot(fig)
+
+                    ############################################################################
+                    # Preparing Graph 2
+                    params = list(Role_20_first_2.columns)
+                    params = params[4:]
+                    
+                    #Preparing Data
+                    ranges = []
+                    a_values = []
+                    b_values = []
+
+                    for x in params:
+                        a = min(Role_20_first_2[params][x])
+                        a = 0
+                        b = max(Role_20_first_2[params][x])
+                        b = 100
+                        ranges.append((a, b))
+
+                    for x in range(len(Role_20_first_2['Atleta'])):
+                        if Role_20_first_2['Atleta'][x] == jogadores:
+                            a_values = Role_20_first_2.iloc[x].values.tolist()
+                        if Role_20_first_2['Atleta'][x] == alvo:
+                            b_values = Role_20_first_2.iloc[x].values.tolist()
+                            
+                    a_values = a_values[4:]
+                    b_values = b_values[4:]
+
+                    values = [a_values, b_values]
+
+                    #Plotting Data
+                    title = dict(
+                        title_name = jogadores,
+                        title_color = '#B6282F',
+                        subtitle_name = jogadores_clube + "/" + jogadores_liga,
+                        subtitle_color = '#B6282F',
+                        title_name_2 = alvo,
+                        title_color_2 = '#344D94',
+                        subtitle_name_2 = alvo_clube + "/" + alvo_liga,
+                        subtitle_color_2 = '#344D94',
+                        title_fontsize = 18,
+                    ) 
+
+                    endnote = 'Viz by@JAmerico1898\ Data from Wyscout\nAll data in League percentiles'
+
+                    radar=Radar(fontfamily='Cursive', range_fontsize=8)
+                    fig,ax = radar.plot_radar(ranges=ranges,params=params,values=values,radar_color=['#B6282F', '#344D94'], dpi=600, alphas=[.8,.6], title=title, endnote=endnote, compare=True)
+                    st.pyplot(fig)
+
+                    ##########################################################################################
+                    ############################################################################
+
+                    #Terceiro Gráfico
+                    Role_20_first = Role_20_Mean_Charts.iloc[2:3, :]
+                    Role_20_first = pd.concat([Role_20_first, target]).reset_index()
+
+                    # Definindo atletas para comparar
+                    jogadores = Role_20_first.iat[0, 1]
+                    jogadores_clube = Role_20_first.iat[0, 2]
+                    jogadores_liga = Role_20_first.iat[0, 3]
+                    #alvo = Role_20_first.iat[1, 1]
+                    #alvo_clube = Role_20_first.iat[1, 2]
+                    #alvo_liga = Role_20_first.iat[1, 3]
+
+                    #Splitting Data
+                    Role_20_first_1 = Role_20_first.iloc[:, np.r_[0:3, 3:9]]
+                    Role_20_first_2 = Role_20_first.iloc[:, np.r_[0:3, 9:14]]
+
+                    # Preparing Graph 1
+                    params = list(Role_20_first_1.columns)
+                    params = params[4:]
+                    
+                    #Preparing Data
+                    ranges = []
+                    a_values = []
+                    b_values = []
+
+                    for x in params:
+                        a = min(Role_20_first_1[params][x])
+                        a = 0
+                        b = max(Role_20_first_1[params][x])
+                        b = 100
+                        ranges.append((a, b))
+
+                    for x in range(len(Role_20_first_1['Atleta'])):
+                        if Role_20_first_1['Atleta'][x] == jogadores:
+                            a_values = Role_20_first_1.iloc[x].values.tolist()
+                        if Role_20_first_1['Atleta'][x] == alvo:
+                            b_values = Role_20_first_1.iloc[x].values.tolist()
+                            
+                    a_values = a_values[4:]
+                    b_values = b_values[4:]
+
+                    values = [a_values, b_values]
+
+                    #Plotting Data
+                    title = dict(
+                        title_name = jogadores,
+                        title_color = '#B6282F',
+                        subtitle_name = jogadores_clube + "/" + jogadores_liga,
+                        subtitle_color = '#B6282F',
+                        title_name_2 = alvo,
+                        title_color_2 = '#344D94',
+                        subtitle_name_2 = alvo_clube + "/" + alvo_liga,
+                        subtitle_color_2 = '#344D94',
+                        title_fontsize = 18,
+                    ) 
+
+                    endnote = 'Viz by@JAmerico1898\ Data from Wyscout\nAll data in League percentiles'
+
+                    radar=Radar(fontfamily='Cursive', range_fontsize=8)
+                    fig,ax = radar.plot_radar(ranges=ranges,params=params,values=values,radar_color=['#B6282F', '#344D94'], dpi=600, alphas=[.8,.6], title=title, endnote=endnote, compare=True)
+                    st.pyplot(fig)
+
+                    ############################################################################
+                    # Preparing Graph 2
+                    params = list(Role_20_first_2.columns)
+                    params = params[4:]
+                    
+                    #Preparing Data
+                    ranges = []
+                    a_values = []
+                    b_values = []
+
+                    for x in params:
+                        a = min(Role_20_first_2[params][x])
+                        a = 0
+                        b = max(Role_20_first_2[params][x])
+                        b = 100
+                        ranges.append((a, b))
+
+                    for x in range(len(Role_20_first_2['Atleta'])):
+                        if Role_20_first_2['Atleta'][x] == jogadores:
+                            a_values = Role_20_first_2.iloc[x].values.tolist()
+                        if Role_20_first_2['Atleta'][x] == alvo:
+                            b_values = Role_20_first_2.iloc[x].values.tolist()
+                            
+                    a_values = a_values[4:]
+                    b_values = b_values[4:]
+
+                    values = [a_values, b_values]
+
+                    #Plotting Data
+                    title = dict(
+                        title_name = jogadores,
+                        title_color = '#B6282F',
+                        subtitle_name = jogadores_clube + "/" + jogadores_liga,
+                        subtitle_color = '#B6282F',
+                        title_name_2 = alvo,
+                        title_color_2 = '#344D94',
+                        subtitle_name_2 = alvo_clube + "/" + alvo_liga,
+                        subtitle_color_2 = '#344D94',
+                        title_fontsize = 18,
+                    ) 
+
+                    endnote = 'Viz by@JAmerico1898\ Data from Wyscout\nAll data in League percentiles'
+
+                    radar=Radar(fontfamily='Cursive', range_fontsize=8)
+                    fig,ax = radar.plot_radar(ranges=ranges,params=params,values=values,radar_color=['#B6282F', '#344D94'], dpi=600, alphas=[.8,.6], title=title, endnote=endnote, compare=True)
+                    st.pyplot(fig)
+
+                    ##########################################################################################
+                    ############################################################################
+
+                    #Quarto Gráfico
+                    Role_20_first = Role_20_Mean_Charts.iloc[3:4, :]
+                    Role_20_first = pd.concat([Role_20_first, target]).reset_index()
+
+                    # Definindo atletas para comparar
+                    jogadores = Role_20_first.iat[0, 1]
+                    jogadores_clube = Role_20_first.iat[0, 2]
+                    jogadores_liga = Role_20_first.iat[0, 3]
+                    #alvo = Role_20_first.iat[1, 1]
+                    #alvo_clube = Role_20_first.iat[1, 2]
+                    #alvo_liga = Role_20_first.iat[1, 3]
+
+                    #Splitting Data
+                    Role_20_first_1 = Role_20_first.iloc[:, np.r_[0:3, 3:9]]
+                    Role_20_first_2 = Role_20_first.iloc[:, np.r_[0:3, 9:14]]
+
+                    # Preparing Graph 1
+                    params = list(Role_20_first_1.columns)
+                    params = params[4:]
+                    
+                    #Preparing Data
+                    ranges = []
+                    a_values = []
+                    b_values = []
+
+                    for x in params:
+                        a = min(Role_20_first_1[params][x])
+                        a = 0
+                        b = max(Role_20_first_1[params][x])
+                        b = 100
+                        ranges.append((a, b))
+
+                    for x in range(len(Role_20_first_1['Atleta'])):
+                        if Role_20_first_1['Atleta'][x] == jogadores:
+                            a_values = Role_20_first_1.iloc[x].values.tolist()
+                        if Role_20_first_1['Atleta'][x] == alvo:
+                            b_values = Role_20_first_1.iloc[x].values.tolist()
+                            
+                    a_values = a_values[4:]
+                    b_values = b_values[4:]
+
+                    values = [a_values, b_values]
+
+                    #Plotting Data
+                    title = dict(
+                        title_name = jogadores,
+                        title_color = '#B6282F',
+                        subtitle_name = jogadores_clube + "/" + jogadores_liga,
+                        subtitle_color = '#B6282F',
+                        title_name_2 = alvo,
+                        title_color_2 = '#344D94',
+                        subtitle_name_2 = alvo_clube + "/" + alvo_liga,
+                        subtitle_color_2 = '#344D94',
+                        title_fontsize = 18,
+                    ) 
+
+                    endnote = 'Viz by@JAmerico1898\ Data from Wyscout\nAll data in League percentiles'
+
+                    radar=Radar(fontfamily='Cursive', range_fontsize=8)
+                    fig,ax = radar.plot_radar(ranges=ranges,params=params,values=values,radar_color=['#B6282F', '#344D94'], dpi=600, alphas=[.8,.6], title=title, endnote=endnote, compare=True)
+                    st.pyplot(fig)
+
+                    ############################################################################
+                    # Preparing Graph 2
+                    params = list(Role_20_first_2.columns)
+                    params = params[4:]
+                    
+                    #Preparing Data
+                    ranges = []
+                    a_values = []
+                    b_values = []
+
+                    for x in params:
+                        a = min(Role_20_first_2[params][x])
+                        a = 0
+                        b = max(Role_20_first_2[params][x])
+                        b = 100
+                        ranges.append((a, b))
+
+                    for x in range(len(Role_20_first_2['Atleta'])):
+                        if Role_20_first_2['Atleta'][x] == jogadores:
+                            a_values = Role_20_first_2.iloc[x].values.tolist()
+                        if Role_20_first_2['Atleta'][x] == alvo:
+                            b_values = Role_20_first_2.iloc[x].values.tolist()
+                            
+                    a_values = a_values[4:]
+                    b_values = b_values[4:]
+
+                    values = [a_values, b_values]
+
+                    #Plotting Data
+                    title = dict(
+                        title_name = jogadores,
+                        title_color = '#B6282F',
+                        subtitle_name = jogadores_clube + "/" + jogadores_liga,
+                        subtitle_color = '#B6282F',
+                        title_name_2 = alvo,
+                        title_color_2 = '#344D94',
+                        subtitle_name_2 = alvo_clube + "/" + alvo_liga,
+                        subtitle_color_2 = '#344D94',
+                        title_fontsize = 18,
+                    ) 
+
+                    endnote = 'Viz by@JAmerico1898\ Data from Wyscout\nAll data in League percentiles'
+
+                    radar=Radar(fontfamily='Cursive', range_fontsize=8)
+                    fig,ax = radar.plot_radar(ranges=ranges,params=params,values=values,radar_color=['#B6282F', '#344D94'], dpi=600, alphas=[.8,.6], title=title, endnote=endnote, compare=True)
+                    st.pyplot(fig)
+
+                    ##########################################################################################
+                    ############################################################################
+
+                    #Quinto Gráfico
+                    Role_20_first = Role_20_Mean_Charts.iloc[4:5, :]
+                    Role_20_first = pd.concat([Role_20_first, target]).reset_index()
+
+                    # Definindo atletas para comparar
+                    jogadores = Role_20_first.iat[0, 1]
+                    jogadores_clube = Role_20_first.iat[0, 2]
+                    jogadores_liga = Role_20_first.iat[0, 3]
+                    #alvo = Role_20_first.iat[1, 1]
+                    #alvo_clube = Role_20_first.iat[1, 2]
+                    #alvo_liga = Role_20_first.iat[1, 3]
+
+                    #Splitting Data
+                    Role_20_first_1 = Role_20_first.iloc[:, np.r_[0:3, 3:9]]
+                    Role_20_first_2 = Role_20_first.iloc[:, np.r_[0:3, 9:14]]
+
+                    # Preparing Graph 1
+                    params = list(Role_20_first_1.columns)
+                    params = params[4:]
+                    
+                    #Preparing Data
+                    ranges = []
+                    a_values = []
+                    b_values = []
+
+                    for x in params:
+                        a = min(Role_20_first_1[params][x])
+                        a = 0
+                        b = max(Role_20_first_1[params][x])
+                        b = 100
+                        ranges.append((a, b))
+
+                    for x in range(len(Role_20_first_1['Atleta'])):
+                        if Role_20_first_1['Atleta'][x] == jogadores:
+                            a_values = Role_20_first_1.iloc[x].values.tolist()
+                        if Role_20_first_1['Atleta'][x] == alvo:
+                            b_values = Role_20_first_1.iloc[x].values.tolist()
+                            
+                    a_values = a_values[4:]
+                    b_values = b_values[4:]
+
+                    values = [a_values, b_values]
+
+                    #Plotting Data
+                    title = dict(
+                        title_name = jogadores,
+                        title_color = '#B6282F',
+                        subtitle_name = jogadores_clube + "/" + jogadores_liga,
+                        subtitle_color = '#B6282F',
+                        title_name_2 = alvo,
+                        title_color_2 = '#344D94',
+                        subtitle_name_2 = alvo_clube + "/" + alvo_liga,
+                        subtitle_color_2 = '#344D94',
+                        title_fontsize = 18,
+                    ) 
+
+                    endnote = 'Viz by@JAmerico1898\ Data from Wyscout\nAll data in League percentiles'
+
+                    radar=Radar(fontfamily='Cursive', range_fontsize=8)
+                    fig,ax = radar.plot_radar(ranges=ranges,params=params,values=values,radar_color=['#B6282F', '#344D94'], dpi=600, alphas=[.8,.6], title=title, endnote=endnote, compare=True)
+                    st.pyplot(fig)
+
+                    ############################################################################
+                    # Preparing Graph 2
+                    params = list(Role_20_first_2.columns)
+                    params = params[4:]
+                    
+                    #Preparing Data
+                    ranges = []
+                    a_values = []
+                    b_values = []
+
+                    for x in params:
+                        a = min(Role_20_first_2[params][x])
+                        a = 0
+                        b = max(Role_20_first_2[params][x])
+                        b = 100
+                        ranges.append((a, b))
+
+                    for x in range(len(Role_20_first_2['Atleta'])):
+                        if Role_20_first_2['Atleta'][x] == jogadores:
+                            a_values = Role_20_first_2.iloc[x].values.tolist()
+                        if Role_20_first_2['Atleta'][x] == alvo:
+                            b_values = Role_20_first_2.iloc[x].values.tolist()
+                            
+                    a_values = a_values[4:]
+                    b_values = b_values[4:]
+
+                    values = [a_values, b_values]
+
+                    #Plotting Data
+                    title = dict(
+                        title_name = jogadores,
+                        title_color = '#B6282F',
+                        subtitle_name = jogadores_clube + "/" + jogadores_liga,
+                        subtitle_color = '#B6282F',
+                        title_name_2 = alvo,
+                        title_color_2 = '#344D94',
+                        subtitle_name_2 = alvo_clube + "/" + alvo_liga,
+                        subtitle_color_2 = '#344D94',
+                        title_fontsize = 18,
+                    ) 
+
+                    endnote = 'Viz by@JAmerico1898\ Data from Wyscout\nAll data in League percentiles'
+
+                    radar=Radar(fontfamily='Cursive', range_fontsize=8)
+                    fig,ax = radar.plot_radar(ranges=ranges,params=params,values=values,radar_color=['#B6282F', '#344D94'], dpi=600, alphas=[.8,.6], title=title, endnote=endnote, compare=True)
+                    st.pyplot(fig)
+                    #####################################################################################################################
+                    #####################################################################################################################
+                    #####################################################################################################################
+                    #####################################################################################################################
+                    #####################################################################################################################
+                    #####################################################################################################################
+                if perfil_similar == ("Atacante Móvel"):
+                ###############################################################################
+                ###########################################################################
+                    # PRIMEIRO VOLANTE EQUILIBRADO
+                    # Texto de Abertura>
+                    markdown_amount_1 = f"<div style='text-align:center; font-size:{fontsize}px'>{jogador_similar:}</div>"
+                    st.markdown("<h4 style='text-align: center;'>Jogador Selecionado</b></h4>", unsafe_allow_html=True)
+                    st.markdown(markdown_amount_1, unsafe_allow_html=True)
+                    st.markdown("---")
+
+                    #Carregando arquivo de dados
+                    Role_21_data = pd.read_excel('21_Role_Atacante_Móvel_Similarity.xlsx')
+                    Role_21_data = Role_21_data.drop(Role_21_data.columns[0:4], axis=1)
+                    Role_21_data.reset_index(drop=True, inplace=True)
+
+                    # Step : Defina o atleta-alvo
+                    #base_bruta_similaridade = pd.read_excel("base_bruta_similaridade.xlsx")
+                    target = Role_21_data.loc[(Role_21_data['Atleta'] == jogador_similar)]
+
+                    #Step : Definindo "ID-alvo"
+                    given_ID = target.iat[0, -1]
+                    
+                    selected = Role_21_data
+
+                    # Step 9: Add columns "1", "2", "3" to Role_21_data
+
+                    selected['1'] = given_ID[0]
+                    selected['2'] = given_ID[1]
+                    selected['3'] = given_ID[2]
+                    selected['4'] = given_ID[3]
+
+                    # Assigning correct columns to 1, 2, 3
+
+                    if given_ID[0] == "A":
+                        selected['1'] = selected["A1"]
+                    elif given_ID[0] == "B":
+                        selected['1'] = selected["B1"]
+                    elif given_ID[0] == "C":
+                        selected['1'] = selected["C1"]
+                    elif given_ID[0] == "D":
+                        selected['1'] = selected["D1"]
+                    elif given_ID[0] == "E":
+                        selected['1'] = selected["E1"]
+                    elif given_ID[0] == "F":
+                        selected['1'] = selected["F1"]
+                    elif given_ID[0] == "G":
+                        selected['1'] = selected["G1"]
+                    elif given_ID[0] == "H":
+                        selected['1'] = selected["H1"]
+                    elif given_ID[0] == "I":
+                        selected['1'] = selected["I1"]
+                    elif given_ID[0] == "J":
+                        selected['1'] = selected["J1"]
+                    elif given_ID[0] == "K":
+                        selected['1'] = selected["K1"]
+                    elif given_ID[0] == "L":
+                        selected['1'] = selected["L1"]
+                    elif given_ID[0] == "M":
+                        selected['1'] = selected["M1"]
+
+
+                    if given_ID[1] == "A":
+                        selected['2'] = selected["A1"]
+                    elif given_ID[1] == "B":
+                        selected['2'] = selected["B1"]
+                    elif given_ID[1] == "C":
+                        selected['2'] = selected["C1"]
+                    elif given_ID[1] == "D":
+                        selected['2'] = selected["D1"]
+                    elif given_ID[1] == "E":
+                        selected['2'] = selected["E1"]
+                    elif given_ID[1] == "F":
+                        selected['2'] = selected["F1"]
+                    elif given_ID[1] == "G":
+                        selected['2'] = selected["G1"]
+                    elif given_ID[1] == "H":
+                        selected['2'] = selected["H1"]
+                    elif given_ID[1] == "I":
+                        selected['2'] = selected["I1"]
+                    elif given_ID[1] == "J":
+                        selected['2'] = selected["J1"]
+                    elif given_ID[1] == "K":
+                        selected['2'] = selected["K1"]
+                    elif given_ID[1] == "L":
+                        selected['2'] = selected["L1"]
+                    elif given_ID[1] == "M":
+                        selected['2'] = selected["M1"]
+                    
+                    
+                    if given_ID[2] == "A":
+                        selected['3'] = selected["A1"]
+                    elif given_ID[2] == "B":
+                        selected['3'] = selected["B1"]
+                    elif given_ID[2] == "C":
+                        selected['3'] = selected["C1"]
+                    elif given_ID[2] == "D":
+                        selected['3'] = selected["D1"]
+                    elif given_ID[2] == "E":
+                        selected['3'] = selected["E1"]
+                    elif given_ID[2] == "F":
+                        selected['3'] = selected["F1"]
+                    elif given_ID[2] == "G":
+                        selected['3'] = selected["G1"]
+                    elif given_ID[2] == "H":
+                        selected['3'] = selected["H1"]
+                    elif given_ID[2] == "I":
+                        selected['3'] = selected["I1"]
+                    elif given_ID[2] == "J":
+                        selected['3'] = selected["J1"]
+                    elif given_ID[2] == "K":
+                        selected['3'] = selected["K1"]
+                    elif given_ID[2] == "L":
+                        selected['3'] = selected["L1"]
+                    elif given_ID[2] == "M":
+                        selected['3'] = selected["M1"]
+
+                    if given_ID[3] == "A":
+                        selected['4'] = selected["A1"]
+                    elif given_ID[3] == "B":
+                        selected['4'] = selected["B1"]
+                    elif given_ID[3] == "C":
+                        selected['4'] = selected["C1"]
+                    elif given_ID[3] == "D":
+                        selected['4'] = selected["D1"]
+                    elif given_ID[3] == "E":
+                        selected['4'] = selected["E1"]
+                    elif given_ID[3] == "F":
+                        selected['4'] = selected["F1"]
+                    elif given_ID[3] == "G":
+                        selected['4'] = selected["G1"]
+                    elif given_ID[3] == "H":
+                        selected['4'] = selected["H1"]
+                    elif given_ID[3] == "I":
+                        selected['4'] = selected["I1"]
+                    elif given_ID[3] == "J":
+                        selected['4'] = selected["J1"]
+                    elif given_ID[3] == "K":
+                        selected['4'] = selected["K1"]
+                    elif given_ID[3] == "L":
+                        selected['4'] = selected["L1"]
+                    elif given_ID[3] == "M":
+                        selected['4'] = selected["M1"]
+
+                    # Applying PCA for Scaled Selected Columns
+
+                    leagues = ["ARG1", "AUT", "BEL1", "BRA1", "BRA2", "BUL","CHI", "CHN", 
+                            "COL", "DEN", "ECU", "ENG1", "ENG2", "FRA1", "FRA2", "GER1", 
+                            "GER2", "GRE", "HOL", "ITA1", "ITA2", "JAP", "MEX", "PAR", 
+                            "PER", "POR1", "QAT", "RUS", "SAUD", "SCT", "SER", "SPA1", 
+                            "SPA2", "SWZ", "TUR", "UAE", "UKR", "URU", "USA"]
+
+                    # Iterate over each league
+                    for league in leagues:
+
+                        # Extract columns 46 through 50
+                        AtacanteMóvel = selected.iloc[:, np.r_[-4:0]]
+
+                        # Defining Columns
+                        AtacanteMóvel_columns = AtacanteMóvel.columns
+
+                        # Applying PCA
+                        pca = PCA(n_components=2)
+                        principalComponents = pca.fit_transform(AtacanteMóvel)
+
+                        # Create a DataFrame with loadings
+                        LoadingsAtacanteMóvel = pd.DataFrame(pca.components_.T**2, index=AtacanteMóvel_columns, columns=['loading factor 1', 'loading factor 2'])
+
+                        # Multiplying Matrices to obtain Pre_Variables
+                        Similarity = pd.DataFrame(np.matmul(AtacanteMóvel, LoadingsAtacanteMóvel['loading factor 1']) + np.matmul(AtacanteMóvel, LoadingsAtacanteMóvel['loading factor 2']),
+                                                columns=["Similarity"])
+
+                    # Rebuilding Full Training Set
+                    selected = selected.join(Similarity)
+
+                    ##############################################################
+                    ##############################################################
+
+                    # Lista de Similares
+                    # Initialize an empty list to store DataFrames
+                    target = selected.loc[(Role_21_data['Atleta'] == jogador_similar)]
+                    target_similarity = target.iat[0, -1]
+
+                    selected["Índice de Similaridade"] = (selected['Similarity']/target_similarity)*100
+                    selected["Índice de Similaridade"] = round(selected["Índice de Similaridade"], 2)
+
+                    target = selected.loc[(selected['Atleta'] == jogador_similar)]
+                    selected['Dif_Similarity'] = abs(selected["Índice de Similaridade"] - 100)
+
+                    selected = selected.sort_values(by='Dif_Similarity')
+
+                    lista_similares = selected.iloc[1:31, np.r_[0, 2, 26, 31, -2:0]]
+                    lista_similares = lista_similares.sort_values(by='Rating', ascending=False)
+
+                    # Lista de Jogadores Similares Ordenados segundo o Rating
+                    st.markdown("<h4 style='text-align: center;'>30 Jogadores + Similares</b></h4>", unsafe_allow_html=True)
+                    st.dataframe(lista_similares, use_container_width=True, hide_index=True)
+                    st.markdown("---")
+
+                    # Lista de Latinos
+                    selected_latam = selected[(selected["Nacionalidade"] == "Argentina")|(selected["Nacionalidade"] == "Brazil")
+                                        |(selected["Nacionalidade"] == "Bolivia")|(selected["Nacionalidade"] == "Chile")
+                                        |(selected["Nacionalidade"] == "Colombia")|(selected["Nacionalidade"] == "Costa Rica")
+                                        |(selected["Nacionalidade"] == "Ecuador")|(selected["Nacionalidade"] == "Mexico")
+                                        |(selected["Nacionalidade"] == "Panama")|(selected["Nacionalidade"] == "Paraguay")
+                                        |(selected["Nacionalidade"] == "Peru")|(selected["Nacionalidade"] == "Uruguay")
+                                        |(selected["Nacionalidade"] == "Venezuela")]
+
+                    lista_similares_latam = selected_latam.iloc[1:31, np.r_[0, 2, 26, 31, -2:0]]
+                    lista_similares_latam = lista_similares_latam.sort_values(by="Rating", ascending = False)
+
+                    #Texto para os Gráficos
+                    st.markdown("<h4 style='text-align: center;'>5 Jogadores Latinos Similares Melhor Ranquedos</b></h4>", unsafe_allow_html=True)
+                    st.markdown("---")    
+
+
+                    # Gerar Gráficos com os 5 melhores
+                    # Arquivo para o Gráfico
+                    Role_21_Mean_Charts = selected_latam.iloc[:, np.r_[0, 2, 26, 32:41]]
+                    target = target.iloc[:, np.r_[0, 2, 26, 32:41]]
+                    # Renomeando Colunas
+                    Role_21_Mean_Charts = Role_21_Mean_Charts.rename(columns={'Ações_Defensivas_BemSucedidas_Percentil':'Ações_Defensivas_BemSucedidas', 'Duelos_Defensivos_Ganhos_Percentil':'Duelos_Defensivos_Ganhos', 'Duelos_Aéreos_Ganhos_Percentil':'Duelos_Aéreos_Ganhos',
+                                                                                'Finalizações_Bloqueadas_Percentil':'Finalizações_Bloqueadas', 'Interceptações_Ajustadas_a_Posse_Percentil':'Interceptações_Ajustadas_a_Posse', 'Passes_Longos_Certos_Percentil':'Passes_Longos_Certos', 
+                                                                                'Passes_Frontais_Certos_Percentil':'Passes_Frontais_Certos', 'Passes_Progressivos_Certos_Percentil':'Passes_Progressivos_Certos', 'Passes_Laterais_Certos_Percentil':'Passes_Laterais_Certos', 'Duelos_Ofensivos_Ganhos_Percentil':'Duelos_Ofensivos_Ganhos', 
+                                                                                'Dribles_BemSucedidos_Percentil':'Dribles_BemSucedidos', 'Corridas_Progressivas_Percentil':'Corridas_Progressivas', 'Passes_TerçoFinal_Certos_Percentil':'Passes_TerçoFinal_Certos'})
+                    
+                    target = target.rename(columns={'Ações_Defensivas_BemSucedidas_Percentil':'Ações_Defensivas_BemSucedidas', 'Duelos_Defensivos_Ganhos_Percentil':'Duelos_Defensivos_Ganhos', 'Duelos_Aéreos_Ganhos_Percentil':'Duelos_Aéreos_Ganhos',
+                                                                                'Finalizações_Bloqueadas_Percentil':'Finalizações_Bloqueadas', 'Interceptações_Ajustadas_a_Posse_Percentil':'Interceptações_Ajustadas_a_Posse', 'Passes_Longos_Certos_Percentil':'Passes_Longos_Certos', 
+                                                                                'Passes_Frontais_Certos_Percentil':'Passes_Frontais_Certos', 'Passes_Progressivos_Certos_Percentil':'Passes_Progressivos_Certos', 'Passes_Laterais_Certos_Percentil':'Passes_Laterais_Certos', 'Duelos_Ofensivos_Ganhos_Percentil':'Duelos_Ofensivos_Ganhos', 
+                                                                                'Dribles_BemSucedidos_Percentil':'Dribles_BemSucedidos', 'Corridas_Progressivas_Percentil':'Corridas_Progressivas', 'Passes_TerçoFinal_Certos_Percentil':'Passes_TerçoFinal_Certos'})
+                    #Dropping Atleta-alvo
+                    Role_21_Mean_Charts = Role_21_Mean_Charts[Role_21_Mean_Charts['Atleta'] != jogador_similar] 
+                    #Extraindo 5 melhores
+                    Role_21_Mean_Charts = Role_21_Mean_Charts.iloc[0:5, :]
+
+
+                    #Primeiro Gráfico
+                    Role_21_first = Role_21_Mean_Charts.iloc[0:1, :]
+                    Role_21_first = pd.concat([Role_21_first, target]).reset_index()
+
+                    # Definindo atletas para comparar
+                    jogadores = Role_21_first.iat[0, 1]
+                    jogadores_clube = Role_21_first.iat[0, 2]
+                    jogadores_liga = Role_21_first.iat[0, 3]
+                    alvo = Role_21_first.iat[1, 1]
+                    alvo_clube = Role_21_first.iat[1, 2]
+                    alvo_liga = Role_21_first.iat[1, 3]
+
+                    #Splitting Data
+                    Role_21_first_1 = Role_21_first.iloc[:, np.r_[0:3, 3:13]]
+                    #Role_21_first_2 = Role_21_first.iloc[:, np.r_[0:3, 11:17]]
+
+                    # Preparing Graph 1
+                    params = list(Role_21_first_1.columns)
+                    params = params[4:]
+                    
+                    #Preparing Data
+                    ranges = []
+                    a_values = []
+                    b_values = []
+
+                    for x in params:
+                        a = min(Role_21_first_1[params][x])
+                        a = 0
+                        b = max(Role_21_first_1[params][x])
+                        b = 100
+                        ranges.append((a, b))
+
+                    for x in range(len(Role_21_first_1['Atleta'])):
+                        if Role_21_first_1['Atleta'][x] == jogadores:
+                            a_values = Role_21_first_1.iloc[x].values.tolist()
+                        if Role_21_first_1['Atleta'][x] == alvo:
+                            b_values = Role_21_first_1.iloc[x].values.tolist()
+                            
+                    a_values = a_values[4:]
+                    b_values = b_values[4:]
+
+                    values = [a_values, b_values]
+
+                    #Plotting Data
+                    title = dict(
+                        title_name = jogadores,
+                        title_color = '#B6282F',
+                        subtitle_name = jogadores_clube + "/" + jogadores_liga,
+                        subtitle_color = '#B6282F',
+                        title_name_2 = alvo,
+                        title_color_2 = '#344D94',
+                        subtitle_name_2 = alvo_clube + "/" + alvo_liga,
+                        subtitle_color_2 = '#344D94',
+                        title_fontsize = 18,
+                    ) 
+
+                    endnote = 'Viz by@JAmerico1898\ Data from Wyscout\nAll data in League percentiles'
+
+                    radar=Radar(fontfamily='Cursive', range_fontsize=8)
+                    fig,ax = radar.plot_radar(ranges=ranges,params=params,values=values,radar_color=['#B6282F', '#344D94'], dpi=600, alphas=[.8,.6], title=title, endnote=endnote, compare=True)
+                    st.pyplot(fig)
+
+                    ############################################################################
+                    #Segundo Gráfico
+                    Role_21_first = Role_21_Mean_Charts.iloc[1:2, :]
+                    Role_21_first = pd.concat([Role_21_first, target]).reset_index()
+
+                    # Definindo atletas para comparar
+                    jogadores = Role_21_first.iat[0, 1]
+                    jogadores_clube = Role_21_first.iat[0, 2]
+                    jogadores_liga = Role_21_first.iat[0, 3]
+                    #alvo = Role_21_first.iat[1, 1]
+                    #alvo_clube = Role_21_first.iat[1, 2]
+                    #alvo_liga = Role_21_first.iat[1, 3]
+
+                    #Splitting Data
+                    Role_21_first_1 = Role_21_first.iloc[:, np.r_[0:3, 3:13]]
+                    #Role_21_first_2 = Role_21_first.iloc[:, np.r_[0:3, 11:17]]
+
+                    # Preparing Graph 1
+                    params = list(Role_21_first_1.columns)
+                    params = params[4:]
+                    
+                    #Preparing Data
+                    ranges = []
+                    a_values = []
+                    b_values = []
+
+                    for x in params:
+                        a = min(Role_21_first_1[params][x])
+                        a = 0
+                        b = max(Role_21_first_1[params][x])
+                        b = 100
+                        ranges.append((a, b))
+
+                    for x in range(len(Role_21_first_1['Atleta'])):
+                        if Role_21_first_1['Atleta'][x] == jogadores:
+                            a_values = Role_21_first_1.iloc[x].values.tolist()
+                        if Role_21_first_1['Atleta'][x] == alvo:
+                            b_values = Role_21_first_1.iloc[x].values.tolist()
+                            
+                    a_values = a_values[4:]
+                    b_values = b_values[4:]
+
+                    values = [a_values, b_values]
+
+                    #Plotting Data
+                    title = dict(
+                        title_name = jogadores,
+                        title_color = '#B6282F',
+                        subtitle_name = jogadores_clube + "/" + jogadores_liga,
+                        subtitle_color = '#B6282F',
+                        title_name_2 = alvo,
+                        title_color_2 = '#344D94',
+                        subtitle_name_2 = alvo_clube + "/" + alvo_liga,
+                        subtitle_color_2 = '#344D94',
+                        title_fontsize = 18,
+                    ) 
+
+                    endnote = 'Viz by@JAmerico1898\ Data from Wyscout\nAll data in League percentiles'
+
+                    radar=Radar(fontfamily='Cursive', range_fontsize=8)
+                    fig,ax = radar.plot_radar(ranges=ranges,params=params,values=values,radar_color=['#B6282F', '#344D94'], dpi=600, alphas=[.8,.6], title=title, endnote=endnote, compare=True)
+                    st.pyplot(fig)
+
+                    ############################################################################
+                    ############################################################################
+
+                    #Terceiro Gráfico
+                    Role_21_first = Role_21_Mean_Charts.iloc[2:3, :]
+                    Role_21_first = pd.concat([Role_21_first, target]).reset_index()
+
+                    # Definindo atletas para comparar
+                    jogadores = Role_21_first.iat[0, 1]
+                    jogadores_clube = Role_21_first.iat[0, 2]
+                    jogadores_liga = Role_21_first.iat[0, 3]
+                    #alvo = Role_21_first.iat[1, 1]
+                    #alvo_clube = Role_21_first.iat[1, 2]
+                    #alvo_liga = Role_21_first.iat[1, 3]
+
+                    #Splitting Data
+                    Role_21_first_1 = Role_21_first.iloc[:, np.r_[0:3, 3:13]]
+                    #Role_21_first_2 = Role_21_first.iloc[:, np.r_[0:3, 11:17]]
+
+                    # Preparing Graph 1
+                    params = list(Role_21_first_1.columns)
+                    params = params[4:]
+                    
+                    #Preparing Data
+                    ranges = []
+                    a_values = []
+                    b_values = []
+
+                    for x in params:
+                        a = min(Role_21_first_1[params][x])
+                        a = 0
+                        b = max(Role_21_first_1[params][x])
+                        b = 100
+                        ranges.append((a, b))
+
+                    for x in range(len(Role_21_first_1['Atleta'])):
+                        if Role_21_first_1['Atleta'][x] == jogadores:
+                            a_values = Role_21_first_1.iloc[x].values.tolist()
+                        if Role_21_first_1['Atleta'][x] == alvo:
+                            b_values = Role_21_first_1.iloc[x].values.tolist()
+                            
+                    a_values = a_values[4:]
+                    b_values = b_values[4:]
+
+                    values = [a_values, b_values]
+
+                    #Plotting Data
+                    title = dict(
+                        title_name = jogadores,
+                        title_color = '#B6282F',
+                        subtitle_name = jogadores_clube + "/" + jogadores_liga,
+                        subtitle_color = '#B6282F',
+                        title_name_2 = alvo,
+                        title_color_2 = '#344D94',
+                        subtitle_name_2 = alvo_clube + "/" + alvo_liga,
+                        subtitle_color_2 = '#344D94',
+                        title_fontsize = 18,
+                    ) 
+
+                    endnote = 'Viz by@JAmerico1898\ Data from Wyscout\nAll data in League percentiles'
+
+                    radar=Radar(fontfamily='Cursive', range_fontsize=8)
+                    fig,ax = radar.plot_radar(ranges=ranges,params=params,values=values,radar_color=['#B6282F', '#344D94'], dpi=600, alphas=[.8,.6], title=title, endnote=endnote, compare=True)
+                    st.pyplot(fig)
+
+                    ############################################################################
+                    ############################################################################
+
+                    #Quarto Gráfico
+                    Role_21_first = Role_21_Mean_Charts.iloc[3:4, :]
+                    Role_21_first = pd.concat([Role_21_first, target]).reset_index()
+
+                    # Definindo atletas para comparar
+                    jogadores = Role_21_first.iat[0, 1]
+                    jogadores_clube = Role_21_first.iat[0, 2]
+                    jogadores_liga = Role_21_first.iat[0, 3]
+                    #alvo = Role_21_first.iat[1, 1]
+                    #alvo_clube = Role_21_first.iat[1, 2]
+                    #alvo_liga = Role_21_first.iat[1, 3]
+
+                    #Splitting Data
+                    Role_21_first_1 = Role_21_first.iloc[:, np.r_[0:3, 3:13]]
+                    #Role_21_first_2 = Role_21_first.iloc[:, np.r_[0:3, 11:17]]
+
+                    # Preparing Graph 1
+                    params = list(Role_21_first_1.columns)
+                    params = params[4:]
+                    
+                    #Preparing Data
+                    ranges = []
+                    a_values = []
+                    b_values = []
+
+                    for x in params:
+                        a = min(Role_21_first_1[params][x])
+                        a = 0
+                        b = max(Role_21_first_1[params][x])
+                        b = 100
+                        ranges.append((a, b))
+
+                    for x in range(len(Role_21_first_1['Atleta'])):
+                        if Role_21_first_1['Atleta'][x] == jogadores:
+                            a_values = Role_21_first_1.iloc[x].values.tolist()
+                        if Role_21_first_1['Atleta'][x] == alvo:
+                            b_values = Role_21_first_1.iloc[x].values.tolist()
+                            
+                    a_values = a_values[4:]
+                    b_values = b_values[4:]
+
+                    values = [a_values, b_values]
+
+                    #Plotting Data
+                    title = dict(
+                        title_name = jogadores,
+                        title_color = '#B6282F',
+                        subtitle_name = jogadores_clube + "/" + jogadores_liga,
+                        subtitle_color = '#B6282F',
+                        title_name_2 = alvo,
+                        title_color_2 = '#344D94',
+                        subtitle_name_2 = alvo_clube + "/" + alvo_liga,
+                        subtitle_color_2 = '#344D94',
+                        title_fontsize = 18,
+                    ) 
+
+                    endnote = 'Viz by@JAmerico1898\ Data from Wyscout\nAll data in League percentiles'
+
+                    radar=Radar(fontfamily='Cursive', range_fontsize=8)
+                    fig,ax = radar.plot_radar(ranges=ranges,params=params,values=values,radar_color=['#B6282F', '#344D94'], dpi=600, alphas=[.8,.6], title=title, endnote=endnote, compare=True)
+                    st.pyplot(fig)
+
+                    ############################################################################
+                    ############################################################################
+
+                    #Quinto Gráfico
+                    Role_21_first = Role_21_Mean_Charts.iloc[4:5, :]
+                    Role_21_first = pd.concat([Role_21_first, target]).reset_index()
+
+                    # Definindo atletas para comparar
+                    jogadores = Role_21_first.iat[0, 1]
+                    jogadores_clube = Role_21_first.iat[0, 2]
+                    jogadores_liga = Role_21_first.iat[0, 3]
+                    #alvo = Role_21_first.iat[1, 1]
+                    #alvo_clube = Role_21_first.iat[1, 2]
+                    #alvo_liga = Role_21_first.iat[1, 3]
+
+                    #Splitting Data
+                    Role_21_first_1 = Role_21_first.iloc[:, np.r_[0:3, 3:13]]
+                    #Role_21_first_2 = Role_21_first.iloc[:, np.r_[0:3, 11:17]]
+
+                    # Preparing Graph 1
+                    params = list(Role_21_first_1.columns)
+                    params = params[4:]
+                    
+                    #Preparing Data
+                    ranges = []
+                    a_values = []
+                    b_values = []
+
+                    for x in params:
+                        a = min(Role_21_first_1[params][x])
+                        a = 0
+                        b = max(Role_21_first_1[params][x])
+                        b = 100
+                        ranges.append((a, b))
+
+                    for x in range(len(Role_21_first_1['Atleta'])):
+                        if Role_21_first_1['Atleta'][x] == jogadores:
+                            a_values = Role_21_first_1.iloc[x].values.tolist()
+                        if Role_21_first_1['Atleta'][x] == alvo:
+                            b_values = Role_21_first_1.iloc[x].values.tolist()
+                            
+                    a_values = a_values[4:]
+                    b_values = b_values[4:]
+
+                    values = [a_values, b_values]
+
+                    #Plotting Data
+                    title = dict(
+                        title_name = jogadores,
+                        title_color = '#B6282F',
+                        subtitle_name = jogadores_clube + "/" + jogadores_liga,
+                        subtitle_color = '#B6282F',
+                        title_name_2 = alvo,
+                        title_color_2 = '#344D94',
+                        subtitle_name_2 = alvo_clube + "/" + alvo_liga,
+                        subtitle_color_2 = '#344D94',
+                        title_fontsize = 18,
+                    ) 
+
+                    endnote = 'Viz by@JAmerico1898\ Data from Wyscout\nAll data in League percentiles'
+
+                    radar=Radar(fontfamily='Cursive', range_fontsize=8)
+                    fig,ax = radar.plot_radar(ranges=ranges,params=params,values=values,radar_color=['#B6282F', '#344D94'], dpi=600, alphas=[.8,.6], title=title, endnote=endnote, compare=True)
+                    st.pyplot(fig)
+
+                    #####################################################################################################################
+                    #####################################################################################################################
+                    #####################################################################################################################
+                    #####################################################################################################################
+                if perfil_similar == ("Segundo Atacante"):
+                ###############################################################################
+                ###########################################################################
+                    # PRIMEIRO VOLANTE EQUILIBRADO
+                    # Texto de Abertura>
+                    markdown_amount_1 = f"<div style='text-align:center; font-size:{fontsize}px'>{jogador_similar:}</div>"
+                    st.markdown("<h4 style='text-align: center;'>Jogador Selecionado</b></h4>", unsafe_allow_html=True)
+                    st.markdown(markdown_amount_1, unsafe_allow_html=True)
+                    st.markdown("---")
+
+                    #Carregando arquivo de dados
+                    Role_22_data = pd.read_excel('22_Role_Segundo_Atacante_Similarity.xlsx')
+                    Role_22_data = Role_22_data.drop(Role_22_data.columns[0:4], axis=1)
+                    Role_22_data.reset_index(drop=True, inplace=True)
+
+                    # Step : Defina o atleta-alvo
+                    #base_bruta_similaridade = pd.read_excel("base_bruta_similaridade.xlsx")
+                    target = Role_22_data.loc[(Role_22_data['Atleta'] == jogador_similar)]
+
+                    #Step : Definindo "ID-alvo"
+                    given_ID = target.iat[0, -1]
+                    
+                    selected = Role_22_data
+
+                    # Step 9: Add columns "1", "2", "3" to Role_22_data
+
+                    selected['1'] = given_ID[0]
+                    selected['2'] = given_ID[1]
+                    selected['3'] = given_ID[2]
+                    selected['4'] = given_ID[3]
+
+                    # Assigning correct columns to 1, 2, 3
+
+                    if given_ID[0] == "A":
+                        selected['1'] = selected["A1"]
+                    elif given_ID[0] == "B":
+                        selected['1'] = selected["B1"]
+                    elif given_ID[0] == "C":
+                        selected['1'] = selected["C1"]
+                    elif given_ID[0] == "D":
+                        selected['1'] = selected["D1"]
+                    elif given_ID[0] == "E":
+                        selected['1'] = selected["E1"]
+                    elif given_ID[0] == "F":
+                        selected['1'] = selected["F1"]
+                    elif given_ID[0] == "G":
+                        selected['1'] = selected["G1"]
+                    elif given_ID[0] == "H":
+                        selected['1'] = selected["H1"]
+                    elif given_ID[0] == "I":
+                        selected['1'] = selected["I1"]
+                    elif given_ID[0] == "J":
+                        selected['1'] = selected["J1"]
+                    elif given_ID[0] == "K":
+                        selected['1'] = selected["K1"]
+                    elif given_ID[0] == "L":
+                        selected['1'] = selected["L1"]
+                    elif given_ID[0] == "M":
+                        selected['1'] = selected["M1"]
+
+
+                    if given_ID[1] == "A":
+                        selected['2'] = selected["A1"]
+                    elif given_ID[1] == "B":
+                        selected['2'] = selected["B1"]
+                    elif given_ID[1] == "C":
+                        selected['2'] = selected["C1"]
+                    elif given_ID[1] == "D":
+                        selected['2'] = selected["D1"]
+                    elif given_ID[1] == "E":
+                        selected['2'] = selected["E1"]
+                    elif given_ID[1] == "F":
+                        selected['2'] = selected["F1"]
+                    elif given_ID[1] == "G":
+                        selected['2'] = selected["G1"]
+                    elif given_ID[1] == "H":
+                        selected['2'] = selected["H1"]
+                    elif given_ID[1] == "I":
+                        selected['2'] = selected["I1"]
+                    elif given_ID[1] == "J":
+                        selected['2'] = selected["J1"]
+                    elif given_ID[1] == "K":
+                        selected['2'] = selected["K1"]
+                    elif given_ID[1] == "L":
+                        selected['2'] = selected["L1"]
+                    elif given_ID[1] == "M":
+                        selected['2'] = selected["M1"]
+                    
+                    
+                    if given_ID[2] == "A":
+                        selected['3'] = selected["A1"]
+                    elif given_ID[2] == "B":
+                        selected['3'] = selected["B1"]
+                    elif given_ID[2] == "C":
+                        selected['3'] = selected["C1"]
+                    elif given_ID[2] == "D":
+                        selected['3'] = selected["D1"]
+                    elif given_ID[2] == "E":
+                        selected['3'] = selected["E1"]
+                    elif given_ID[2] == "F":
+                        selected['3'] = selected["F1"]
+                    elif given_ID[2] == "G":
+                        selected['3'] = selected["G1"]
+                    elif given_ID[2] == "H":
+                        selected['3'] = selected["H1"]
+                    elif given_ID[2] == "I":
+                        selected['3'] = selected["I1"]
+                    elif given_ID[2] == "J":
+                        selected['3'] = selected["J1"]
+                    elif given_ID[2] == "K":
+                        selected['3'] = selected["K1"]
+                    elif given_ID[2] == "L":
+                        selected['3'] = selected["L1"]
+                    elif given_ID[2] == "M":
+                        selected['3'] = selected["M1"]
+
+                    if given_ID[3] == "A":
+                        selected['4'] = selected["A1"]
+                    elif given_ID[3] == "B":
+                        selected['4'] = selected["B1"]
+                    elif given_ID[3] == "C":
+                        selected['4'] = selected["C1"]
+                    elif given_ID[3] == "D":
+                        selected['4'] = selected["D1"]
+                    elif given_ID[3] == "E":
+                        selected['4'] = selected["E1"]
+                    elif given_ID[3] == "F":
+                        selected['4'] = selected["F1"]
+                    elif given_ID[3] == "G":
+                        selected['4'] = selected["G1"]
+                    elif given_ID[3] == "H":
+                        selected['4'] = selected["H1"]
+                    elif given_ID[3] == "I":
+                        selected['4'] = selected["I1"]
+                    elif given_ID[3] == "J":
+                        selected['4'] = selected["J1"]
+                    elif given_ID[3] == "K":
+                        selected['4'] = selected["K1"]
+                    elif given_ID[3] == "L":
+                        selected['4'] = selected["L1"]
+                    elif given_ID[3] == "M":
+                        selected['4'] = selected["M1"]
+
+                    # Applying PCA for Scaled Selected Columns
+
+                    leagues = ["ARG1", "AUT", "BEL1", "BRA1", "BRA2", "BUL","CHI", "CHN", 
+                            "COL", "DEN", "ECU", "ENG1", "ENG2", "FRA1", "FRA2", "GER1", 
+                            "GER2", "GRE", "HOL", "ITA1", "ITA2", "JAP", "MEX", "PAR", 
+                            "PER", "POR1", "QAT", "RUS", "SAUD", "SCT", "SER", "SPA1", 
+                            "SPA2", "SWZ", "TUR", "UAE", "UKR", "URU", "USA"]
+
+                    # Iterate over each league
+                    for league in leagues:
+
+                        # Extract columns 46 through 50
+                        SegundoAtacante = selected.iloc[:, np.r_[-4:0]]
+
+                        # Defining Columns
+                        SegundoAtacante_columns = SegundoAtacante.columns
+
+                        # Applying PCA
+                        pca = PCA(n_components=2)
+                        principalComponents = pca.fit_transform(SegundoAtacante)
+
+                        # Create a DataFrame with loadings
+                        LoadingsSegundoAtacante = pd.DataFrame(pca.components_.T**2, index=SegundoAtacante_columns, columns=['loading factor 1', 'loading factor 2'])
+
+                        # Multiplying Matrices to obtain Pre_Variables
+                        Similarity = pd.DataFrame(np.matmul(SegundoAtacante, LoadingsSegundoAtacante['loading factor 1']) + np.matmul(SegundoAtacante, LoadingsSegundoAtacante['loading factor 2']),
+                                                columns=["Similarity"])
+
+                    # Rebuilding Full Training Set
+                    selected = selected.join(Similarity)
+
+                    ##############################################################
+                    ##############################################################
+
+                    # Lista de Similares
+                    # Initialize an empty list to store DataFrames
+                    target = selected.loc[(Role_22_data['Atleta'] == jogador_similar)]
+                    target_similarity = target.iat[0, -1]
+
+                    selected["Índice de Similaridade"] = (selected['Similarity']/target_similarity)*100
+                    selected["Índice de Similaridade"] = round(selected["Índice de Similaridade"], 2)
+
+                    target = selected.loc[(selected['Atleta'] == jogador_similar)]
+                    selected['Dif_Similarity'] = abs(selected["Índice de Similaridade"] - 100)
+
+                    selected = selected.sort_values(by='Dif_Similarity')
+
+                    lista_similares = selected.iloc[1:31, np.r_[0, 2, 30, 35, -2:0]]
+                    lista_similares = lista_similares.sort_values(by='Rating', ascending=False)
+
+                    # Lista de Jogadores Similares Ordenados segundo o Rating
+                    st.markdown("<h4 style='text-align: center;'>30 Jogadores + Similares</b></h4>", unsafe_allow_html=True)
+                    st.dataframe(lista_similares, use_container_width=True, hide_index=True)
+                    st.markdown("---")
+
+                    # Lista de Latinos
+                    selected_latam = selected[(selected["Nacionalidade"] == "Argentina")|(selected["Nacionalidade"] == "Brazil")
+                                        |(selected["Nacionalidade"] == "Bolivia")|(selected["Nacionalidade"] == "Chile")
+                                        |(selected["Nacionalidade"] == "Colombia")|(selected["Nacionalidade"] == "Costa Rica")
+                                        |(selected["Nacionalidade"] == "Ecuador")|(selected["Nacionalidade"] == "Mexico")
+                                        |(selected["Nacionalidade"] == "Panama")|(selected["Nacionalidade"] == "Paraguay")
+                                        |(selected["Nacionalidade"] == "Peru")|(selected["Nacionalidade"] == "Uruguay")
+                                        |(selected["Nacionalidade"] == "Venezuela")]
+
+                    lista_similares_latam = selected_latam.iloc[1:31, np.r_[0, 2, 30, 35, -2:0]]
+                    lista_similares_latam = lista_similares_latam.sort_values(by="Rating", ascending = False)
+
+                    #Texto para os Gráficos
+                    st.markdown("<h4 style='text-align: center;'>5 Jogadores Latinos Similares Melhor Ranquedos</b></h4>", unsafe_allow_html=True)
+                    st.markdown("---")    
+
+
+                    # Gerar Gráficos com os 5 melhores
+                    # Arquivo para o Gráfico
+                    Role_22_Mean_Charts = selected_latam.iloc[:, np.r_[0, 2, 30, 36:49]]
+                    target = target.iloc[:, np.r_[0, 2, 30, 36:49]]
+                    # Renomeando Colunas
+                    Role_22_Mean_Charts = Role_22_Mean_Charts.rename(columns={'Ações_Defensivas_BemSucedidas_Percentil':'Ações_Defensivas_BemSucedidas', 'Duelos_Defensivos_Ganhos_Percentil':'Duelos_Defensivos_Ganhos', 'Duelos_Aéreos_Ganhos_Percentil':'Duelos_Aéreos_Ganhos',
+                                                                                'Finalizações_Bloqueadas_Percentil':'Finalizações_Bloqueadas', 'Interceptações_Ajustadas_a_Posse_Percentil':'Interceptações_Ajustadas_a_Posse', 'Passes_Longos_Certos_Percentil':'Passes_Longos_Certos', 
+                                                                                'Passes_Frontais_Certos_Percentil':'Passes_Frontais_Certos', 'Passes_Progressivos_Certos_Percentil':'Passes_Progressivos_Certos', 'Passes_Laterais_Certos_Percentil':'Passes_Laterais_Certos', 'Duelos_Ofensivos_Ganhos_Percentil':'Duelos_Ofensivos_Ganhos', 
+                                                                                'Dribles_BemSucedidos_Percentil':'Dribles_BemSucedidos', 'Corridas_Progressivas_Percentil':'Corridas_Progressivas', 'Passes_TerçoFinal_Certos_Percentil':'Passes_TerçoFinal_Certos'})
+                    
+                    target = target.rename(columns={'Ações_Defensivas_BemSucedidas_Percentil':'Ações_Defensivas_BemSucedidas', 'Duelos_Defensivos_Ganhos_Percentil':'Duelos_Defensivos_Ganhos', 'Duelos_Aéreos_Ganhos_Percentil':'Duelos_Aéreos_Ganhos',
+                                                                                'Finalizações_Bloqueadas_Percentil':'Finalizações_Bloqueadas', 'Interceptações_Ajustadas_a_Posse_Percentil':'Interceptações_Ajustadas_a_Posse', 'Passes_Longos_Certos_Percentil':'Passes_Longos_Certos', 
+                                                                                'Passes_Frontais_Certos_Percentil':'Passes_Frontais_Certos', 'Passes_Progressivos_Certos_Percentil':'Passes_Progressivos_Certos', 'Passes_Laterais_Certos_Percentil':'Passes_Laterais_Certos', 'Duelos_Ofensivos_Ganhos_Percentil':'Duelos_Ofensivos_Ganhos', 
+                                                                                'Dribles_BemSucedidos_Percentil':'Dribles_BemSucedidos', 'Corridas_Progressivas_Percentil':'Corridas_Progressivas', 'Passes_TerçoFinal_Certos_Percentil':'Passes_TerçoFinal_Certos'})
+                    #Dropping Atleta-alvo
+                    Role_22_Mean_Charts = Role_22_Mean_Charts[Role_22_Mean_Charts['Atleta'] != jogador_similar] 
+                    #Extraindo 5 melhores
+                    Role_22_Mean_Charts = Role_22_Mean_Charts.iloc[0:5, :]
+
+
+                    #Primeiro Gráfico
+                    Role_22_first = Role_22_Mean_Charts.iloc[0:1, :]
+                    Role_22_first = pd.concat([Role_22_first, target]).reset_index()
+
+                    # Definindo atletas para comparar
+                    jogadores = Role_22_first.iat[0, 1]
+                    jogadores_clube = Role_22_first.iat[0, 2]
+                    jogadores_liga = Role_22_first.iat[0, 3]
+                    alvo = Role_22_first.iat[1, 1]
+                    alvo_clube = Role_22_first.iat[1, 2]
+                    alvo_liga = Role_22_first.iat[1, 3]
+
+                    #Splitting Data
+                    Role_22_first_1 = Role_22_first.iloc[:, np.r_[0:3, 3:11]]
+                    Role_22_first_2 = Role_22_first.iloc[:, np.r_[0:3, 11:17]]
+
+                    # Preparing Graph 1
+                    params = list(Role_22_first_1.columns)
+                    params = params[4:]
+                    
+                    #Preparing Data
+                    ranges = []
+                    a_values = []
+                    b_values = []
+
+                    for x in params:
+                        a = min(Role_22_first_1[params][x])
+                        a = 0
+                        b = max(Role_22_first_1[params][x])
+                        b = 100
+                        ranges.append((a, b))
+
+                    for x in range(len(Role_22_first_1['Atleta'])):
+                        if Role_22_first_1['Atleta'][x] == jogadores:
+                            a_values = Role_22_first_1.iloc[x].values.tolist()
+                        if Role_22_first_1['Atleta'][x] == alvo:
+                            b_values = Role_22_first_1.iloc[x].values.tolist()
+                            
+                    a_values = a_values[4:]
+                    b_values = b_values[4:]
+
+                    values = [a_values, b_values]
+
+                    #Plotting Data
+                    title = dict(
+                        title_name = jogadores,
+                        title_color = '#B6282F',
+                        subtitle_name = jogadores_clube + "/" + jogadores_liga,
+                        subtitle_color = '#B6282F',
+                        title_name_2 = alvo,
+                        title_color_2 = '#344D94',
+                        subtitle_name_2 = alvo_clube + "/" + alvo_liga,
+                        subtitle_color_2 = '#344D94',
+                        title_fontsize = 18,
+                    ) 
+
+                    endnote = 'Viz by@JAmerico1898\ Data from Wyscout\nAll data in League percentiles'
+
+                    radar=Radar(fontfamily='Cursive', range_fontsize=8)
+                    fig,ax = radar.plot_radar(ranges=ranges,params=params,values=values,radar_color=['#B6282F', '#344D94'], dpi=600, alphas=[.8,.6], title=title, endnote=endnote, compare=True)
+                    st.pyplot(fig)
+
+                    ############################################################################
+                    # Preparing Graph 2
+                    params = list(Role_22_first_2.columns)
+                    params = params[4:]
+                    
+                    #Preparing Data
+                    ranges = []
+                    a_values = []
+                    b_values = []
+
+                    for x in params:
+                        a = min(Role_22_first_2[params][x])
+                        a = 0
+                        b = max(Role_22_first_2[params][x])
+                        b = 100
+                        ranges.append((a, b))
+
+                    for x in range(len(Role_22_first_2['Atleta'])):
+                        if Role_22_first_2['Atleta'][x] == jogadores:
+                            a_values = Role_22_first_2.iloc[x].values.tolist()
+                        if Role_22_first_2['Atleta'][x] == alvo:
+                            b_values = Role_22_first_2.iloc[x].values.tolist()
+                            
+                    a_values = a_values[4:]
+                    b_values = b_values[4:]
+
+                    values = [a_values, b_values]
+
+                    #Plotting Data
+                    title = dict(
+                        title_name = jogadores,
+                        title_color = '#B6282F',
+                        subtitle_name = jogadores_clube + "/" + jogadores_liga,
+                        subtitle_color = '#B6282F',
+                        title_name_2 = alvo,
+                        title_color_2 = '#344D94',
+                        subtitle_name_2 = alvo_clube + "/" + alvo_liga,
+                        subtitle_color_2 = '#344D94',
+                        title_fontsize = 18,
+                    ) 
+
+                    endnote = 'Viz by@JAmerico1898\ Data from Wyscout\nAll data in League percentiles'
+
+                    radar=Radar(fontfamily='Cursive', range_fontsize=8)
+                    fig,ax = radar.plot_radar(ranges=ranges,params=params,values=values,radar_color=['#B6282F', '#344D94'], dpi=600, alphas=[.8,.6], title=title, endnote=endnote, compare=True)
+                    st.pyplot(fig)
+
+                    ############################################################################
+
+                    #Segundo Gráfico
+                    Role_22_first = Role_22_Mean_Charts.iloc[1:2, :]
+                    Role_22_first = pd.concat([Role_22_first, target]).reset_index()
+
+                    # Definindo atletas para comparar
+                    jogadores = Role_22_first.iat[0, 1]
+                    jogadores_clube = Role_22_first.iat[0, 2]
+                    jogadores_liga = Role_22_first.iat[0, 3]
+                    #alvo = Role_22_first.iat[1, 1]
+                    #alvo_clube = Role_22_first.iat[1, 2]
+                    #alvo_liga = Role_22_first.iat[1, 3]
+
+                    #Splitting Data
+                    Role_22_first_1 = Role_22_first.iloc[:, np.r_[0:3, 3:11]]
+                    Role_22_first_2 = Role_22_first.iloc[:, np.r_[0:3, 11:17]]
+
+                    # Preparing Graph 1
+                    params = list(Role_22_first_1.columns)
+                    params = params[4:]
+                    
+                    #Preparing Data
+                    ranges = []
+                    a_values = []
+                    b_values = []
+
+                    for x in params:
+                        a = min(Role_22_first_1[params][x])
+                        a = 0
+                        b = max(Role_22_first_1[params][x])
+                        b = 100
+                        ranges.append((a, b))
+
+                    for x in range(len(Role_22_first_1['Atleta'])):
+                        if Role_22_first_1['Atleta'][x] == jogadores:
+                            a_values = Role_22_first_1.iloc[x].values.tolist()
+                        if Role_22_first_1['Atleta'][x] == alvo:
+                            b_values = Role_22_first_1.iloc[x].values.tolist()
+                            
+                    a_values = a_values[4:]
+                    b_values = b_values[4:]
+
+                    values = [a_values, b_values]
+
+                    #Plotting Data
+                    title = dict(
+                        title_name = jogadores,
+                        title_color = '#B6282F',
+                        subtitle_name = jogadores_clube + "/" + jogadores_liga,
+                        subtitle_color = '#B6282F',
+                        title_name_2 = alvo,
+                        title_color_2 = '#344D94',
+                        subtitle_name_2 = alvo_clube + "/" + alvo_liga,
+                        subtitle_color_2 = '#344D94',
+                        title_fontsize = 18,
+                    ) 
+
+                    endnote = 'Viz by@JAmerico1898\ Data from Wyscout\nAll data in League percentiles'
+
+                    radar=Radar(fontfamily='Cursive', range_fontsize=8)
+                    fig,ax = radar.plot_radar(ranges=ranges,params=params,values=values,radar_color=['#B6282F', '#344D94'], dpi=600, alphas=[.8,.6], title=title, endnote=endnote, compare=True)
+                    st.pyplot(fig)
+
+                    ############################################################################
+                    # Preparing Graph 2
+                    params = list(Role_22_first_2.columns)
+                    params = params[4:]
+                    
+                    #Preparing Data
+                    ranges = []
+                    a_values = []
+                    b_values = []
+
+                    for x in params:
+                        a = min(Role_22_first_2[params][x])
+                        a = 0
+                        b = max(Role_22_first_2[params][x])
+                        b = 100
+                        ranges.append((a, b))
+
+                    for x in range(len(Role_22_first_2['Atleta'])):
+                        if Role_22_first_2['Atleta'][x] == jogadores:
+                            a_values = Role_22_first_2.iloc[x].values.tolist()
+                        if Role_22_first_2['Atleta'][x] == alvo:
+                            b_values = Role_22_first_2.iloc[x].values.tolist()
+                            
+                    a_values = a_values[4:]
+                    b_values = b_values[4:]
+
+                    values = [a_values, b_values]
+
+                    #Plotting Data
+                    title = dict(
+                        title_name = jogadores,
+                        title_color = '#B6282F',
+                        subtitle_name = jogadores_clube + "/" + jogadores_liga,
+                        subtitle_color = '#B6282F',
+                        title_name_2 = alvo,
+                        title_color_2 = '#344D94',
+                        subtitle_name_2 = alvo_clube + "/" + alvo_liga,
+                        subtitle_color_2 = '#344D94',
+                        title_fontsize = 18,
+                    ) 
+
+                    endnote = 'Viz by@JAmerico1898\ Data from Wyscout\nAll data in League percentiles'
+
+                    radar=Radar(fontfamily='Cursive', range_fontsize=8)
+                    fig,ax = radar.plot_radar(ranges=ranges,params=params,values=values,radar_color=['#B6282F', '#344D94'], dpi=600, alphas=[.8,.6], title=title, endnote=endnote, compare=True)
+                    st.pyplot(fig)
+
+                    ##########################################################################################
+                    ############################################################################
+
+                    #Terceiro Gráfico
+                    Role_22_first = Role_22_Mean_Charts.iloc[2:3, :]
+                    Role_22_first = pd.concat([Role_22_first, target]).reset_index()
+
+                    # Definindo atletas para comparar
+                    jogadores = Role_22_first.iat[0, 1]
+                    jogadores_clube = Role_22_first.iat[0, 2]
+                    jogadores_liga = Role_22_first.iat[0, 3]
+                    #alvo = Role_22_first.iat[1, 1]
+                    #alvo_clube = Role_22_first.iat[1, 2]
+                    #alvo_liga = Role_22_first.iat[1, 3]
+
+                    #Splitting Data
+                    Role_22_first_1 = Role_22_first.iloc[:, np.r_[0:3, 3:11]]
+                    Role_22_first_2 = Role_22_first.iloc[:, np.r_[0:3, 11:17]]
+
+                    # Preparing Graph 1
+                    params = list(Role_22_first_1.columns)
+                    params = params[4:]
+                    
+                    #Preparing Data
+                    ranges = []
+                    a_values = []
+                    b_values = []
+
+                    for x in params:
+                        a = min(Role_22_first_1[params][x])
+                        a = 0
+                        b = max(Role_22_first_1[params][x])
+                        b = 100
+                        ranges.append((a, b))
+
+                    for x in range(len(Role_22_first_1['Atleta'])):
+                        if Role_22_first_1['Atleta'][x] == jogadores:
+                            a_values = Role_22_first_1.iloc[x].values.tolist()
+                        if Role_22_first_1['Atleta'][x] == alvo:
+                            b_values = Role_22_first_1.iloc[x].values.tolist()
+                            
+                    a_values = a_values[4:]
+                    b_values = b_values[4:]
+
+                    values = [a_values, b_values]
+
+                    #Plotting Data
+                    title = dict(
+                        title_name = jogadores,
+                        title_color = '#B6282F',
+                        subtitle_name = jogadores_clube + "/" + jogadores_liga,
+                        subtitle_color = '#B6282F',
+                        title_name_2 = alvo,
+                        title_color_2 = '#344D94',
+                        subtitle_name_2 = alvo_clube + "/" + alvo_liga,
+                        subtitle_color_2 = '#344D94',
+                        title_fontsize = 18,
+                    ) 
+
+                    endnote = 'Viz by@JAmerico1898\ Data from Wyscout\nAll data in League percentiles'
+
+                    radar=Radar(fontfamily='Cursive', range_fontsize=8)
+                    fig,ax = radar.plot_radar(ranges=ranges,params=params,values=values,radar_color=['#B6282F', '#344D94'], dpi=600, alphas=[.8,.6], title=title, endnote=endnote, compare=True)
+                    st.pyplot(fig)
+
+                    ############################################################################
+                    # Preparing Graph 2
+                    params = list(Role_22_first_2.columns)
+                    params = params[4:]
+                    
+                    #Preparing Data
+                    ranges = []
+                    a_values = []
+                    b_values = []
+
+                    for x in params:
+                        a = min(Role_22_first_2[params][x])
+                        a = 0
+                        b = max(Role_22_first_2[params][x])
+                        b = 100
+                        ranges.append((a, b))
+
+                    for x in range(len(Role_22_first_2['Atleta'])):
+                        if Role_22_first_2['Atleta'][x] == jogadores:
+                            a_values = Role_22_first_2.iloc[x].values.tolist()
+                        if Role_22_first_2['Atleta'][x] == alvo:
+                            b_values = Role_22_first_2.iloc[x].values.tolist()
+                            
+                    a_values = a_values[4:]
+                    b_values = b_values[4:]
+
+                    values = [a_values, b_values]
+
+                    #Plotting Data
+                    title = dict(
+                        title_name = jogadores,
+                        title_color = '#B6282F',
+                        subtitle_name = jogadores_clube + "/" + jogadores_liga,
+                        subtitle_color = '#B6282F',
+                        title_name_2 = alvo,
+                        title_color_2 = '#344D94',
+                        subtitle_name_2 = alvo_clube + "/" + alvo_liga,
+                        subtitle_color_2 = '#344D94',
+                        title_fontsize = 18,
+                    ) 
+
+                    endnote = 'Viz by@JAmerico1898\ Data from Wyscout\nAll data in League percentiles'
+
+                    radar=Radar(fontfamily='Cursive', range_fontsize=8)
+                    fig,ax = radar.plot_radar(ranges=ranges,params=params,values=values,radar_color=['#B6282F', '#344D94'], dpi=600, alphas=[.8,.6], title=title, endnote=endnote, compare=True)
+                    st.pyplot(fig)
+
+                    ##########################################################################################
+                    ############################################################################
+
+                    #Quarto Gráfico
+                    Role_22_first = Role_22_Mean_Charts.iloc[3:4, :]
+                    Role_22_first = pd.concat([Role_22_first, target]).reset_index()
+
+                    # Definindo atletas para comparar
+                    jogadores = Role_22_first.iat[0, 1]
+                    jogadores_clube = Role_22_first.iat[0, 2]
+                    jogadores_liga = Role_22_first.iat[0, 3]
+                    #alvo = Role_22_first.iat[1, 1]
+                    #alvo_clube = Role_22_first.iat[1, 2]
+                    #alvo_liga = Role_22_first.iat[1, 3]
+
+                    #Splitting Data
+                    Role_22_first_1 = Role_22_first.iloc[:, np.r_[0:3, 3:11]]
+                    Role_22_first_2 = Role_22_first.iloc[:, np.r_[0:3, 11:17]]
+
+                    # Preparing Graph 1
+                    params = list(Role_22_first_1.columns)
+                    params = params[4:]
+                    
+                    #Preparing Data
+                    ranges = []
+                    a_values = []
+                    b_values = []
+
+                    for x in params:
+                        a = min(Role_22_first_1[params][x])
+                        a = 0
+                        b = max(Role_22_first_1[params][x])
+                        b = 100
+                        ranges.append((a, b))
+
+                    for x in range(len(Role_22_first_1['Atleta'])):
+                        if Role_22_first_1['Atleta'][x] == jogadores:
+                            a_values = Role_22_first_1.iloc[x].values.tolist()
+                        if Role_22_first_1['Atleta'][x] == alvo:
+                            b_values = Role_22_first_1.iloc[x].values.tolist()
+                            
+                    a_values = a_values[4:]
+                    b_values = b_values[4:]
+
+                    values = [a_values, b_values]
+
+                    #Plotting Data
+                    title = dict(
+                        title_name = jogadores,
+                        title_color = '#B6282F',
+                        subtitle_name = jogadores_clube + "/" + jogadores_liga,
+                        subtitle_color = '#B6282F',
+                        title_name_2 = alvo,
+                        title_color_2 = '#344D94',
+                        subtitle_name_2 = alvo_clube + "/" + alvo_liga,
+                        subtitle_color_2 = '#344D94',
+                        title_fontsize = 18,
+                    ) 
+
+                    endnote = 'Viz by@JAmerico1898\ Data from Wyscout\nAll data in League percentiles'
+
+                    radar=Radar(fontfamily='Cursive', range_fontsize=8)
+                    fig,ax = radar.plot_radar(ranges=ranges,params=params,values=values,radar_color=['#B6282F', '#344D94'], dpi=600, alphas=[.8,.6], title=title, endnote=endnote, compare=True)
+                    st.pyplot(fig)
+
+                    ############################################################################
+                    # Preparing Graph 2
+                    params = list(Role_22_first_2.columns)
+                    params = params[4:]
+                    
+                    #Preparing Data
+                    ranges = []
+                    a_values = []
+                    b_values = []
+
+                    for x in params:
+                        a = min(Role_22_first_2[params][x])
+                        a = 0
+                        b = max(Role_22_first_2[params][x])
+                        b = 100
+                        ranges.append((a, b))
+
+                    for x in range(len(Role_22_first_2['Atleta'])):
+                        if Role_22_first_2['Atleta'][x] == jogadores:
+                            a_values = Role_22_first_2.iloc[x].values.tolist()
+                        if Role_22_first_2['Atleta'][x] == alvo:
+                            b_values = Role_22_first_2.iloc[x].values.tolist()
+                            
+                    a_values = a_values[4:]
+                    b_values = b_values[4:]
+
+                    values = [a_values, b_values]
+
+                    #Plotting Data
+                    title = dict(
+                        title_name = jogadores,
+                        title_color = '#B6282F',
+                        subtitle_name = jogadores_clube + "/" + jogadores_liga,
+                        subtitle_color = '#B6282F',
+                        title_name_2 = alvo,
+                        title_color_2 = '#344D94',
+                        subtitle_name_2 = alvo_clube + "/" + alvo_liga,
+                        subtitle_color_2 = '#344D94',
+                        title_fontsize = 18,
+                    ) 
+
+                    endnote = 'Viz by@JAmerico1898\ Data from Wyscout\nAll data in League percentiles'
+
+                    radar=Radar(fontfamily='Cursive', range_fontsize=8)
+                    fig,ax = radar.plot_radar(ranges=ranges,params=params,values=values,radar_color=['#B6282F', '#344D94'], dpi=600, alphas=[.8,.6], title=title, endnote=endnote, compare=True)
+                    st.pyplot(fig)
+
+                    ##########################################################################################
+                    ############################################################################
+
+                    #Quinto Gráfico
+                    Role_22_first = Role_22_Mean_Charts.iloc[4:5, :]
+                    Role_22_first = pd.concat([Role_22_first, target]).reset_index()
+
+                    # Definindo atletas para comparar
+                    jogadores = Role_22_first.iat[0, 1]
+                    jogadores_clube = Role_22_first.iat[0, 2]
+                    jogadores_liga = Role_22_first.iat[0, 3]
+                    #alvo = Role_22_first.iat[1, 1]
+                    #alvo_clube = Role_22_first.iat[1, 2]
+                    #alvo_liga = Role_22_first.iat[1, 3]
+
+                    #Splitting Data
+                    Role_22_first_1 = Role_22_first.iloc[:, np.r_[0:3, 3:11]]
+                    Role_22_first_2 = Role_22_first.iloc[:, np.r_[0:3, 11:17]]
+
+                    # Preparing Graph 1
+                    params = list(Role_22_first_1.columns)
+                    params = params[4:]
+                    
+                    #Preparing Data
+                    ranges = []
+                    a_values = []
+                    b_values = []
+
+                    for x in params:
+                        a = min(Role_22_first_1[params][x])
+                        a = 0
+                        b = max(Role_22_first_1[params][x])
+                        b = 100
+                        ranges.append((a, b))
+
+                    for x in range(len(Role_22_first_1['Atleta'])):
+                        if Role_22_first_1['Atleta'][x] == jogadores:
+                            a_values = Role_22_first_1.iloc[x].values.tolist()
+                        if Role_22_first_1['Atleta'][x] == alvo:
+                            b_values = Role_22_first_1.iloc[x].values.tolist()
+                            
+                    a_values = a_values[4:]
+                    b_values = b_values[4:]
+
+                    values = [a_values, b_values]
+
+                    #Plotting Data
+                    title = dict(
+                        title_name = jogadores,
+                        title_color = '#B6282F',
+                        subtitle_name = jogadores_clube + "/" + jogadores_liga,
+                        subtitle_color = '#B6282F',
+                        title_name_2 = alvo,
+                        title_color_2 = '#344D94',
+                        subtitle_name_2 = alvo_clube + "/" + alvo_liga,
+                        subtitle_color_2 = '#344D94',
+                        title_fontsize = 18,
+                    ) 
+
+                    endnote = 'Viz by@JAmerico1898\ Data from Wyscout\nAll data in League percentiles'
+
+                    radar=Radar(fontfamily='Cursive', range_fontsize=8)
+                    fig,ax = radar.plot_radar(ranges=ranges,params=params,values=values,radar_color=['#B6282F', '#344D94'], dpi=600, alphas=[.8,.6], title=title, endnote=endnote, compare=True)
+                    st.pyplot(fig)
+
+                    ############################################################################
+                    # Preparing Graph 2
+                    params = list(Role_22_first_2.columns)
+                    params = params[4:]
+                    
+                    #Preparing Data
+                    ranges = []
+                    a_values = []
+                    b_values = []
+
+                    for x in params:
+                        a = min(Role_22_first_2[params][x])
+                        a = 0
+                        b = max(Role_22_first_2[params][x])
+                        b = 100
+                        ranges.append((a, b))
+
+                    for x in range(len(Role_22_first_2['Atleta'])):
+                        if Role_22_first_2['Atleta'][x] == jogadores:
+                            a_values = Role_22_first_2.iloc[x].values.tolist()
+                        if Role_22_first_2['Atleta'][x] == alvo:
+                            b_values = Role_22_first_2.iloc[x].values.tolist()
+                            
+                    a_values = a_values[4:]
+                    b_values = b_values[4:]
+
+                    values = [a_values, b_values]
+
+                    #Plotting Data
+                    title = dict(
+                        title_name = jogadores,
+                        title_color = '#B6282F',
+                        subtitle_name = jogadores_clube + "/" + jogadores_liga,
+                        subtitle_color = '#B6282F',
+                        title_name_2 = alvo,
+                        title_color_2 = '#344D94',
+                        subtitle_name_2 = alvo_clube + "/" + alvo_liga,
+                        subtitle_color_2 = '#344D94',
+                        title_fontsize = 18,
+                    ) 
+
+                    endnote = 'Viz by@JAmerico1898\ Data from Wyscout\nAll data in League percentiles'
+
+                    radar=Radar(fontfamily='Cursive', range_fontsize=8)
+                    fig,ax = radar.plot_radar(ranges=ranges,params=params,values=values,radar_color=['#B6282F', '#344D94'], dpi=600, alphas=[.8,.6], title=title, endnote=endnote, compare=True)
+                    st.pyplot(fig)
+                    #####################################################################################################################
+                    #####################################################################################################################
+                    #####################################################################################################################
+                    #####################################################################################################################
+                    #####################################################################################################################
+                    #####################################################################################################################
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
