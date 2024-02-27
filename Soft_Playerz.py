@@ -4724,10 +4724,10 @@ if choose == "Jogadores Similares":
 
                     # Applying PCA for Scaled Selected Columns
 
-                    leagues = ["ARG1", "AUT", "BEL1", "BRA1", "BRA2", "BUL","CHI", "CHN", 
-                            "COL", "DEN", "ECU", "ENG1", "ENG2", "FRA1", "FRA2", "GER1", 
+                    leagues = ["ARG1", "AUT", "BEL1", "BRA1", "BRA2", "BUL", "CHN", 
+                            "COL", "DEN", "ENG1", "ENG2", "FRA1", "FRA2", "GER1", 
                             "GER2", "GRE", "HOL", "ITA1", "ITA2", "JAP", "MEX", "PAR", 
-                            "PER", "POR1", "QAT", "RUS", "SAUD", "SCT", "SER", "SPA1", 
+                            "POR1", "QAT", "RUS", "SAUD", "SCT", "SER", "SPA1", 
                             "SPA2", "SWZ", "TUR", "UAE", "UKR", "URU", "USA"]
 
                     # Iterate over each league
@@ -5232,10 +5232,10 @@ if choose == "Jogadores Similares":
 
                     # Applying PCA for Scaled Selected Columns
 
-                    leagues = ["ARG1", "AUT", "BEL1", "BRA1", "BRA2", "BUL","CHI", "CHN", 
-                            "COL", "DEN", "ECU", "ENG1", "ENG2", "FRA1", "FRA2", "GER1", 
+                    leagues = ["ARG1", "AUT", "BEL1", "BRA1", "BRA2", "BUL", "CHN", 
+                            "COL", "DEN", "ENG1", "ENG2", "FRA1", "FRA2", "GER1", 
                             "GER2", "GRE", "HOL", "ITA1", "ITA2", "JAP", "MEX", "PAR", 
-                            "PER", "POR1", "QAT", "RUS", "SAUD", "SCT", "SER", "SPA1", 
+                            "POR1", "QAT", "RUS", "SAUD", "SCT", "SER", "SPA1", 
                             "SPA2", "SWZ", "TUR", "UAE", "UKR", "URU", "USA"]
 
                     # Iterate over each league
@@ -5705,10 +5705,10 @@ if choose == "Jogadores Similares":
 
                     # Applying PCA for Scaled Selected Columns
 
-                    leagues = ["ARG1", "AUT", "BEL1", "BRA1", "BRA2", "BUL","CHI", "CHN", 
-                            "COL", "DEN", "ECU", "ENG1", "ENG2", "FRA1", "FRA2", "GER1", 
+                    leagues = ["ARG1", "AUT", "BEL1", "BRA1", "BRA2", "BUL", "CHN", 
+                            "COL", "DEN", "ENG1", "ENG2", "FRA1", "FRA2", "GER1", 
                             "GER2", "GRE", "HOL", "ITA1", "ITA2", "JAP", "MEX", "PAR", 
-                            "PER", "POR1", "QAT", "RUS", "SAUD", "SCT", "SER", "SPA1", 
+                            "POR1", "QAT", "RUS", "SAUD", "SCT", "SER", "SPA1", 
                             "SPA2", "SWZ", "TUR", "UAE", "UKR", "URU", "USA"]
 
                     # Iterate over each league
@@ -6286,10 +6286,10 @@ if choose == "Jogadores Similares":
 
                     # Applying PCA for Scaled Selected Columns
 
-                    leagues = ["ARG1", "AUT", "BEL1", "BRA1", "BRA2", "BUL","CHI", "CHN", 
-                            "COL", "DEN", "ECU", "ENG1", "ENG2", "FRA1", "FRA2", "GER1", 
+                    leagues = ["ARG1", "AUT", "BEL1", "BRA1", "BRA2", "BUL", "CHN", 
+                            "COL", "DEN", "ENG1", "ENG2", "FRA1", "FRA2", "GER1", 
                             "GER2", "GRE", "HOL", "ITA1", "ITA2", "JAP", "MEX", "PAR", 
-                            "PER", "POR1", "QAT", "RUS", "SAUD", "SCT", "SER", "SPA1", 
+                            "POR1", "QAT", "RUS", "SAUD", "SCT", "SER", "SPA1", 
                             "SPA2", "SWZ", "TUR", "UAE", "UKR", "URU", "USA"]
 
                     # Iterate over each league
@@ -7169,10 +7169,10 @@ if choose == "Jogadores Similares":
 
                     # Applying PCA for Scaled Selected Columns
 
-                    leagues = ["ARG1", "AUT", "BEL1", "BRA1", "BRA2", "BUL","CHI", "CHN", 
-                            "COL", "DEN", "ECU", "ENG1", "ENG2", "FRA1", "FRA2", "GER1", 
+                    leagues = ["ARG1", "AUT", "BEL1", "BRA1", "BRA2", "BUL", "CHN", 
+                            "COL", "DEN", "ENG1", "ENG2", "FRA1", "FRA2", "GER1", 
                             "GER2", "GRE", "HOL", "ITA1", "ITA2", "JAP", "MEX", "PAR", 
-                            "PER", "POR1", "QAT", "RUS", "SAUD", "SCT", "SER", "SPA1", 
+                            "POR1", "QAT", "RUS", "SAUD", "SCT", "SER", "SPA1", 
                             "SPA2", "SWZ", "TUR", "UAE", "UKR", "URU", "USA"]
 
                     # Iterate over each league
@@ -7897,10 +7897,10 @@ if choose == "Jogadores Similares":
 
                     # Applying PCA for Scaled Selected Columns
 
-                    leagues = ["ARG1", "AUT", "BEL1", "BRA1", "BRA2", "BUL","CHI", "CHN", 
-                            "COL", "DEN", "ECU", "ENG1", "ENG2", "FRA1", "FRA2", "GER1", 
+                    leagues = ["ARG1", "AUT", "BEL1", "BRA1", "BRA2", "BUL", "CHN", 
+                            "COL", "DEN", "ENG1", "ENG2", "FRA1", "FRA2", "GER1", 
                             "GER2", "GRE", "HOL", "ITA1", "ITA2", "JAP", "MEX", "PAR", 
-                            "PER", "POR1", "QAT", "RUS", "SAUD", "SCT", "SER", "SPA1", 
+                            "POR1", "QAT", "RUS", "SAUD", "SCT", "SER", "SPA1", 
                             "SPA2", "SWZ", "TUR", "UAE", "UKR", "URU", "USA"]
 
                     # Iterate over each league
@@ -8413,10 +8413,10 @@ if choose == "Jogadores Similares":
 
                     # Applying PCA for Scaled Selected Columns
 
-                    leagues = ["ARG1", "AUT", "BEL1", "BRA1", "BRA2", "BUL","CHI", "CHN", 
-                            "COL", "DEN", "ECU", "ENG1", "ENG2", "FRA1", "FRA2", "GER1", 
+                    leagues = ["ARG1", "AUT", "BEL1", "BRA1", "BRA2", "BUL", "CHN", 
+                            "COL", "DEN", "ENG1", "ENG2", "FRA1", "FRA2", "GER1", 
                             "GER2", "GRE", "HOL", "ITA1", "ITA2", "JAP", "MEX", "PAR", 
-                            "PER", "POR1", "QAT", "RUS", "SAUD", "SCT", "SER", "SPA1", 
+                            "POR1", "QAT", "RUS", "SAUD", "SCT", "SER", "SPA1", 
                             "SPA2", "SWZ", "TUR", "UAE", "UKR", "URU", "USA"]
 
                     # Iterate over each league
@@ -9198,10 +9198,10 @@ if choose == "Jogadores Similares":
 
                     # Applying PCA for Scaled Selected Columns
 
-                    leagues = ["ARG1", "AUT", "BEL1", "BRA1", "BRA2", "BUL","CHI", "CHN", 
-                            "COL", "DEN", "ECU", "ENG1", "ENG2", "FRA1", "FRA2", "GER1", 
+                    leagues = ["ARG1", "AUT", "BEL1", "BRA1", "BRA2", "BUL", "CHN", 
+                            "COL", "DEN", "ENG1", "ENG2", "FRA1", "FRA2", "GER1", 
                             "GER2", "GRE", "HOL", "ITA1", "ITA2", "JAP", "MEX", "PAR", 
-                            "PER", "POR1", "QAT", "RUS", "SAUD", "SCT", "SER", "SPA1", 
+                            "POR1", "QAT", "RUS", "SAUD", "SCT", "SER", "SPA1", 
                             "SPA2", "SWZ", "TUR", "UAE", "UKR", "URU", "USA"]
 
                     # Iterate over each league
@@ -9913,10 +9913,10 @@ if choose == "Jogadores Similares":
 
                    # Applying PCA for Scaled Selected Columns
 
-                    leagues = ["ARG1", "AUT", "BEL1", "BRA1", "BRA2", "BUL","CHI", "CHN", 
-                            "COL", "DEN", "ECU", "ENG1", "ENG2", "FRA1", "FRA2", "GER1", 
+                    leagues = ["ARG1", "AUT", "BEL1", "BRA1", "BRA2", "BUL", "CHN", 
+                            "COL", "DEN", "ENG1", "ENG2", "FRA1", "FRA2", "GER1", 
                             "GER2", "GRE", "HOL", "ITA1", "ITA2", "JAP", "MEX", "PAR", 
-                            "PER", "POR1", "QAT", "RUS", "SAUD", "SCT", "SER", "SPA1", 
+                            "POR1", "QAT", "RUS", "SAUD", "SCT", "SER", "SPA1", 
                             "SPA2", "SWZ", "TUR", "UAE", "UKR", "URU", "USA"]
 
                     # Iterate over each league
@@ -10426,10 +10426,10 @@ if choose == "Jogadores Similares":
 
                     # Applying PCA for Scaled Selected Columns
 
-                    leagues = ["ARG1", "AUT", "BEL1", "BRA1", "BRA2", "BUL","CHI", "CHN", 
-                            "COL", "DEN", "ECU", "ENG1", "ENG2", "FRA1", "FRA2", "GER1", 
+                    leagues = ["ARG1", "AUT", "BEL1", "BRA1", "BRA2", "BUL", "CHN", 
+                            "COL", "DEN", "ENG1", "ENG2", "FRA1", "FRA2", "GER1", 
                             "GER2", "GRE", "HOL", "ITA1", "ITA2", "JAP", "MEX", "PAR", 
-                            "PER", "POR1", "QAT", "RUS", "SAUD", "SCT", "SER", "SPA1", 
+                            "POR1", "QAT", "RUS", "SAUD", "SCT", "SER", "SPA1", 
                             "SPA2", "SWZ", "TUR", "UAE", "UKR", "URU", "USA"]
 
                     # Iterate over each league
@@ -10994,10 +10994,10 @@ if choose == "Jogadores Similares":
 
                     # Applying PCA for Scaled Selected Columns
 
-                    leagues = ["ARG1", "AUT", "BEL1", "BRA1", "BRA2", "BUL","CHI", "CHN", 
-                            "COL", "DEN", "ECU", "ENG1", "ENG2", "FRA1", "FRA2", "GER1", 
+                    leagues = ["ARG1", "AUT", "BEL1", "BRA1", "BRA2", "BUL", "CHN", 
+                            "COL", "DEN", "ENG1", "ENG2", "FRA1", "FRA2", "GER1", 
                             "GER2", "GRE", "HOL", "ITA1", "ITA2", "JAP", "MEX", "PAR", 
-                            "PER", "POR1", "QAT", "RUS", "SAUD", "SCT", "SER", "SPA1", 
+                            "POR1", "QAT", "RUS", "SAUD", "SCT", "SER", "SPA1", 
                             "SPA2", "SWZ", "TUR", "UAE", "UKR", "URU", "USA"]
 
                     # Iterate over each league
@@ -11820,10 +11820,10 @@ if choose == "Jogadores Similares":
 
                     # Applying PCA for Scaled Selected Columns
 
-                    leagues = ["ARG1", "AUT", "BEL1", "BRA1", "BRA2", "BUL","CHI", "CHN", 
-                            "COL", "DEN", "ECU", "ENG1", "ENG2", "FRA1", "FRA2", "GER1", 
+                    leagues = ["ARG1", "AUT", "BEL1", "BRA1", "BRA2", "BUL", "CHN", 
+                            "COL", "DEN", "ENG1", "ENG2", "FRA1", "FRA2", "GER1", 
                             "GER2", "GRE", "HOL", "ITA1", "ITA2", "JAP", "MEX", "PAR", 
-                            "PER", "POR1", "QAT", "RUS", "SAUD", "SCT", "SER", "SPA1", 
+                            "POR1", "QAT", "RUS", "SAUD", "SCT", "SER", "SPA1", 
                             "SPA2", "SWZ", "TUR", "UAE", "UKR", "URU", "USA"]
 
                     # Iterate over each league
@@ -12609,10 +12609,10 @@ if choose == "Jogadores Similares":
 
                     # Applying PCA for Scaled Selected Columns
 
-                    leagues = ["ARG1", "AUT", "BEL1", "BRA1", "BRA2", "BUL","CHI", "CHN", 
-                            "COL", "DEN", "ECU", "ENG1", "ENG2", "FRA1", "FRA2", "GER1", 
+                    leagues = ["ARG1", "AUT", "BEL1", "BRA1", "BRA2", "BUL", "CHN", 
+                            "COL", "DEN", "ENG1", "ENG2", "FRA1", "FRA2", "GER1", 
                             "GER2", "GRE", "HOL", "ITA1", "ITA2", "JAP", "MEX", "PAR", 
-                            "PER", "POR1", "QAT", "RUS", "SAUD", "SCT", "SER", "SPA1", 
+                            "POR1", "QAT", "RUS", "SAUD", "SCT", "SER", "SPA1", 
                             "SPA2", "SWZ", "TUR", "UAE", "UKR", "URU", "USA"]
 
                     # Iterate over each league
@@ -13406,10 +13406,10 @@ if choose == "Jogadores Similares":
 
                     # Applying PCA for Scaled Selected Columns
 
-                    leagues = ["ARG1", "AUT", "BEL1", "BRA1", "BRA2", "BUL","CHI", "CHN", 
-                            "COL", "DEN", "ECU", "ENG1", "ENG2", "FRA1", "FRA2", "GER1", 
+                    leagues = ["ARG1", "AUT", "BEL1", "BRA1", "BRA2", "BUL", "CHN", 
+                            "COL", "DEN", "ENG1", "ENG2", "FRA1", "FRA2", "GER1", 
                             "GER2", "GRE", "HOL", "ITA1", "ITA2", "JAP", "MEX", "PAR", 
-                            "PER", "POR1", "QAT", "RUS", "SAUD", "SCT", "SER", "SPA1", 
+                            "POR1", "QAT", "RUS", "SAUD", "SCT", "SER", "SPA1", 
                             "SPA2", "SWZ", "TUR", "UAE", "UKR", "URU", "USA"]
 
                     # Iterate over each league
@@ -14186,10 +14186,10 @@ if choose == "Jogadores Similares":
 
                     # Applying PCA for Scaled Selected Columns
 
-                    leagues = ["ARG1", "AUT", "BEL1", "BRA1", "BRA2", "BUL","CHI", "CHN", 
-                            "COL", "DEN", "ECU", "ENG1", "ENG2", "FRA1", "FRA2", "GER1", 
+                    leagues = ["ARG1", "AUT", "BEL1", "BRA1", "BRA2", "BUL", "CHN", 
+                            "COL", "DEN", "ENG1", "ENG2", "FRA1", "FRA2", "GER1", 
                             "GER2", "GRE", "HOL", "ITA1", "ITA2", "JAP", "MEX", "PAR", 
-                            "PER", "POR1", "QAT", "RUS", "SAUD", "SCT", "SER", "SPA1", 
+                            "POR1", "QAT", "RUS", "SAUD", "SCT", "SER", "SPA1", 
                             "SPA2", "SWZ", "TUR", "UAE", "UKR", "URU", "USA"]
 
                     # Iterate over each league
@@ -15066,10 +15066,10 @@ if choose == "Jogadores Similares":
 
                     # Applying PCA for Scaled Selected Columns
 
-                    leagues = ["ARG1", "AUT", "BEL1", "BRA1", "BRA2", "BUL","CHI", "CHN", 
-                            "COL", "DEN", "ECU", "ENG1", "ENG2", "FRA1", "FRA2", "GER1", 
+                    leagues = ["ARG1", "AUT", "BEL1", "BRA1", "BRA2", "BUL", "CHN", 
+                            "COL", "DEN", "ENG1", "ENG2", "FRA1", "FRA2", "GER1", 
                             "GER2", "GRE", "HOL", "ITA1", "ITA2", "JAP", "MEX", "PAR", 
-                            "PER", "POR1", "QAT", "RUS", "SAUD", "SCT", "SER", "SPA1", 
+                            "POR1", "QAT", "RUS", "SAUD", "SCT", "SER", "SPA1", 
                             "SPA2", "SWZ", "TUR", "UAE", "UKR", "URU", "USA"]
 
                     # Iterate over each league
@@ -15865,10 +15865,10 @@ if choose == "Jogadores Similares":
 
                     # Applying PCA for Scaled Selected Columns
 
-                    leagues = ["ARG1", "AUT", "BEL1", "BRA1", "BRA2", "BUL","CHI", "CHN", 
-                            "COL", "DEN", "ECU", "ENG1", "ENG2", "FRA1", "FRA2", "GER1", 
+                    leagues = ["ARG1", "AUT", "BEL1", "BRA1", "BRA2", "BUL", "CHN", 
+                            "COL", "DEN", "ENG1", "ENG2", "FRA1", "FRA2", "GER1", 
                             "GER2", "GRE", "HOL", "ITA1", "ITA2", "JAP", "MEX", "PAR", 
-                            "PER", "POR1", "QAT", "RUS", "SAUD", "SCT", "SER", "SPA1", 
+                            "POR1", "QAT", "RUS", "SAUD", "SCT", "SER", "SPA1", 
                             "SPA2", "SWZ", "TUR", "UAE", "UKR", "URU", "USA"]
 
                     # Iterate over each league
@@ -16600,10 +16600,10 @@ if choose == "Jogadores Similares":
 
                     # Applying PCA for Scaled Selected Columns
 
-                    leagues = ["ARG1", "AUT", "BEL1", "BRA1", "BRA2", "BUL","CHI", "CHN", 
-                            "COL", "DEN", "ECU", "ENG1", "ENG2", "FRA1", "FRA2", "GER1", 
+                    leagues = ["ARG1", "AUT", "BEL1", "BRA1", "BRA2", "BUL", "CHN", 
+                            "COL", "DEN", "ENG1", "ENG2", "FRA1", "FRA2", "GER1", 
                             "GER2", "GRE", "HOL", "ITA1", "ITA2", "JAP", "MEX", "PAR", 
-                            "PER", "POR1", "QAT", "RUS", "SAUD", "SCT", "SER", "SPA1", 
+                            "POR1", "QAT", "RUS", "SAUD", "SCT", "SER", "SPA1", 
                             "SPA2", "SWZ", "TUR", "UAE", "UKR", "URU", "USA"]
 
                     # Iterate over each league
@@ -17153,10 +17153,10 @@ if choose == "Jogadores Similares":
 
                     # Applying PCA for Scaled Selected Columns
 
-                    leagues = ["ARG1", "AUT", "BEL1", "BRA1", "BRA2", "BUL","CHI", "CHN", 
-                            "COL", "DEN", "ECU", "ENG1", "ENG2", "FRA1", "FRA2", "GER1", 
+                    leagues = ["ARG1", "AUT", "BEL1", "BRA1", "BRA2", "BUL", "CHN", 
+                            "COL", "DEN", "ENG1", "ENG2", "FRA1", "FRA2", "GER1", 
                             "GER2", "GRE", "HOL", "ITA1", "ITA2", "JAP", "MEX", "PAR", 
-                            "PER", "POR1", "QAT", "RUS", "SAUD", "SCT", "SER", "SPA1", 
+                            "POR1", "QAT", "RUS", "SAUD", "SCT", "SER", "SPA1", 
                             "SPA2", "SWZ", "TUR", "UAE", "UKR", "URU", "USA"]
 
                     # Iterate over each league
@@ -17949,10 +17949,10 @@ if choose == "Jogadores Similares":
 
                     # Applying PCA for Scaled Selected Columns
 
-                    leagues = ["ARG1", "AUT", "BEL1", "BRA1", "BRA2", "BUL","CHI", "CHN", 
-                            "COL", "DEN", "ECU", "ENG1", "ENG2", "FRA1", "FRA2", "GER1", 
+                    leagues = ["ARG1", "AUT", "BEL1", "BRA1", "BRA2", "BUL", "CHN", 
+                            "COL", "DEN", "ENG1", "ENG2", "FRA1", "FRA2", "GER1", 
                             "GER2", "GRE", "HOL", "ITA1", "ITA2", "JAP", "MEX", "PAR", 
-                            "PER", "POR1", "QAT", "RUS", "SAUD", "SCT", "SER", "SPA1", 
+                            "POR1", "QAT", "RUS", "SAUD", "SCT", "SER", "SPA1", 
                             "SPA2", "SWZ", "TUR", "UAE", "UKR", "URU", "USA"]
 
                     # Iterate over each league
@@ -18745,10 +18745,10 @@ if choose == "Jogadores Similares":
 
                     # Applying PCA for Scaled Selected Columns
 
-                    leagues = ["ARG1", "AUT", "BEL1", "BRA1", "BRA2", "BUL","CHI", "CHN", 
-                            "COL", "DEN", "ECU", "ENG1", "ENG2", "FRA1", "FRA2", "GER1", 
+                    leagues = ["ARG1", "AUT", "BEL1", "BRA1", "BRA2", "BUL", "CHN", 
+                            "COL", "DEN", "ENG1", "ENG2", "FRA1", "FRA2", "GER1", 
                             "GER2", "GRE", "HOL", "ITA1", "ITA2", "JAP", "MEX", "PAR", 
-                            "PER", "POR1", "QAT", "RUS", "SAUD", "SCT", "SER", "SPA1", 
+                            "POR1", "QAT", "RUS", "SAUD", "SCT", "SER", "SPA1", 
                             "SPA2", "SWZ", "TUR", "UAE", "UKR", "URU", "USA"]
 
                     # Iterate over each league
@@ -19304,10 +19304,10 @@ if choose == "Jogadores Similares":
 
                     # Applying PCA for Scaled Selected Columns
 
-                    leagues = ["ARG1", "AUT", "BEL1", "BRA1", "BRA2", "BUL","CHI", "CHN", 
-                            "COL", "DEN", "ECU", "ENG1", "ENG2", "FRA1", "FRA2", "GER1", 
+                    leagues = ["ARG1", "AUT", "BEL1", "BRA1", "BRA2", "BUL", "CHN", 
+                            "COL", "DEN", "ENG1", "ENG2", "FRA1", "FRA2", "GER1", 
                             "GER2", "GRE", "HOL", "ITA1", "ITA2", "JAP", "MEX", "PAR", 
-                            "PER", "POR1", "QAT", "RUS", "SAUD", "SCT", "SER", "SPA1", 
+                            "POR1", "QAT", "RUS", "SAUD", "SCT", "SER", "SPA1", 
                             "SPA2", "SWZ", "TUR", "UAE", "UKR", "URU", "USA"]
 
                     # Iterate over each league
