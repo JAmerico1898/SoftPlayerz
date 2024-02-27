@@ -4776,15 +4776,15 @@ if choose == "Jogadores Similares":
                     st.markdown("---")    
 
                     # Lista de Latinos
-                    selected_latam = selected[(selected["Nacionalidade"] == "Argentina")|(selected["Nacionalidade"] == "Brazil")
-                                        |(selected["Nacionalidade"] == "Bolivia")|(selected["Nacionalidade"] == "Chile")
-                                        |(selected["Nacionalidade"] == "Colombia")|(selected["Nacionalidade"] == "Costa Rica")
-                                        |(selected["Nacionalidade"] == "Ecuador")|(selected["Nacionalidade"] == "Mexico")
-                                        |(selected["Nacionalidade"] == "Panama")|(selected["Nacionalidade"] == "Paraguay")
-                                        |(selected["Nacionalidade"] == "Peru")|(selected["Nacionalidade"] == "Uruguay")
-                                        |(selected["Nacionalidade"] == "Venezuela")]
-
-                    lista_similares_latam = selected_latam.iloc[1:31, np.r_[0, 2, 24, 29, -2:0]]
+                    selected_latam = selected.iloc[1:31, :]
+                    selected_latam = selected_latam[(selected_latam["Nacionalidade"] == "Argentina")|(selected_latam["Nacionalidade"] == "Brazil")
+                                        |(selected_latam["Nacionalidade"] == "Bolivia")|(selected_latam["Nacionalidade"] == "Chile")
+                                        |(selected_latam["Nacionalidade"] == "Colombia")|(selected_latam["Nacionalidade"] == "Costa Rica")
+                                        |(selected_latam["Nacionalidade"] == "Ecuador")|(selected_latam["Nacionalidade"] == "Mexico")
+                                        |(selected_latam["Nacionalidade"] == "Panama")|(selected_latam["Nacionalidade"] == "Paraguay")
+                                        |(selected_latam["Nacionalidade"] == "Peru")|(selected_latam["Nacionalidade"] == "Uruguay")
+                                        |(selected_latam["Nacionalidade"] == "Venezuela")]
+                    lista_similares_latam = selected_latam.iloc[0:30, :]
                     lista_similares_latam = lista_similares_latam.sort_values(by="Rating", ascending = False)
                     
                     #Texto para os Gráficos
@@ -4794,7 +4794,7 @@ if choose == "Jogadores Similares":
 
                     # Gerar Gráficos com os 5 melhores
                     # Arquivo para o Gráfico
-                    Role_1_Mean_Charts = selected_latam.iloc[:, np.r_[0, 2, 24, 30:37]]
+                    Role_1_Mean_Charts = lista_similares_latam.iloc[:, np.r_[0, 2, 24, 30:37]]
                     target = target.iloc[:, np.r_[0, 2, 24, 30:37]]
                     # Renomeando Colunas
                     Role_1_Mean_Charts = Role_1_Mean_Charts.rename(columns={'Duelos_Aéreos_Ganhos_Percentil':'Duelos_Aéreos_Ganhos', 'Defesas_Percentil': 'Defesas', 
@@ -5284,15 +5284,15 @@ if choose == "Jogadores Similares":
                     st.markdown("---")    
 
                     # Lista de Latinos
-                    selected_latam = selected[(selected["Nacionalidade"] == "Argentina")|(selected["Nacionalidade"] == "Brazil")
-                                        |(selected["Nacionalidade"] == "Bolivia")|(selected["Nacionalidade"] == "Chile")
-                                        |(selected["Nacionalidade"] == "Colombia")|(selected["Nacionalidade"] == "Costa Rica")
-                                        |(selected["Nacionalidade"] == "Ecuador")|(selected["Nacionalidade"] == "Mexico")
-                                        |(selected["Nacionalidade"] == "Panama")|(selected["Nacionalidade"] == "Paraguay")
-                                        |(selected["Nacionalidade"] == "Peru")|(selected["Nacionalidade"] == "Uruguay")
-                                        |(selected["Nacionalidade"] == "Venezuela")]
-
-                    lista_similares_latam = selected_latam.iloc[1:31, np.r_[0, 2, 27, 32, -2:0]]
+                    selected_latam = selected.iloc[1:31, :]
+                    selected_latam = selected_latam[(selected_latam["Nacionalidade"] == "Argentina")|(selected_latam["Nacionalidade"] == "Brazil")
+                                        |(selected_latam["Nacionalidade"] == "Bolivia")|(selected_latam["Nacionalidade"] == "Chile")
+                                        |(selected_latam["Nacionalidade"] == "Colombia")|(selected_latam["Nacionalidade"] == "Costa Rica")
+                                        |(selected_latam["Nacionalidade"] == "Ecuador")|(selected_latam["Nacionalidade"] == "Mexico")
+                                        |(selected_latam["Nacionalidade"] == "Panama")|(selected_latam["Nacionalidade"] == "Paraguay")
+                                        |(selected_latam["Nacionalidade"] == "Peru")|(selected_latam["Nacionalidade"] == "Uruguay")
+                                        |(selected_latam["Nacionalidade"] == "Venezuela")]
+                    lista_similares_latam = selected_latam.iloc[0:30, :]
                     lista_similares_latam = lista_similares_latam.sort_values(by="Rating", ascending = False)
                     
                     #Texto para os Gráficos
@@ -5302,7 +5302,7 @@ if choose == "Jogadores Similares":
 
                     # Gerar Gráficos com os 5 melhores
                     # Arquivo para o Gráfico
-                    Role_2_Mean_Charts = selected_latam.iloc[:, np.r_[0, 2, 27, 33:43]]
+                    Role_2_Mean_Charts = lista_similares_latam.iloc[:, np.r_[0, 2, 27, 33:43]]
                     target = target.iloc[:, np.r_[0, 2, 27, 33:43]]
                     # Renomeando Colunas
                     Role_2_Mean_Charts = Role_2_Mean_Charts.rename(columns={'Duelos_Aéreos_Ganhos_Percentil':'Duelos_Aéreos_Ganhos', 
@@ -5759,15 +5759,15 @@ if choose == "Jogadores Similares":
                     st.markdown("---")    
 
                     # Lista de Latinos
-                    selected_latam = selected[(selected["Nacionalidade"] == "Argentina")|(selected["Nacionalidade"] == "Brazil")
-                                        |(selected["Nacionalidade"] == "Bolivia")|(selected["Nacionalidade"] == "Chile")
-                                        |(selected["Nacionalidade"] == "Colombia")|(selected["Nacionalidade"] == "Costa Rica")
-                                        |(selected["Nacionalidade"] == "Ecuador")|(selected["Nacionalidade"] == "Mexico")
-                                        |(selected["Nacionalidade"] == "Panama")|(selected["Nacionalidade"] == "Paraguay")
-                                        |(selected["Nacionalidade"] == "Peru")|(selected["Nacionalidade"] == "Uruguay")
-                                        |(selected["Nacionalidade"] == "Venezuela")]
-
-                    lista_similares_latam = selected_latam.iloc[1:31, np.r_[0, 2, 23, 28, -2:0]]
+                    selected_latam = selected.iloc[1:31, :]
+                    selected_latam = selected_latam[(selected_latam["Nacionalidade"] == "Argentina")|(selected_latam["Nacionalidade"] == "Brazil")
+                                        |(selected_latam["Nacionalidade"] == "Bolivia")|(selected_latam["Nacionalidade"] == "Chile")
+                                        |(selected_latam["Nacionalidade"] == "Colombia")|(selected_latam["Nacionalidade"] == "Costa Rica")
+                                        |(selected_latam["Nacionalidade"] == "Ecuador")|(selected_latam["Nacionalidade"] == "Mexico")
+                                        |(selected_latam["Nacionalidade"] == "Panama")|(selected_latam["Nacionalidade"] == "Paraguay")
+                                        |(selected_latam["Nacionalidade"] == "Peru")|(selected_latam["Nacionalidade"] == "Uruguay")
+                                        |(selected_latam["Nacionalidade"] == "Venezuela")]
+                    lista_similares_latam = selected_latam.iloc[0:30, :]
                     lista_similares_latam = lista_similares_latam.sort_values(by="Rating", ascending = False)
 
                     #Texto para os Gráficos
@@ -5777,7 +5777,7 @@ if choose == "Jogadores Similares":
                     ########################################################################################################
                     # Gerar Gráficos com os 5 melhores
                     # Arquivo para o Gráfico
-                    Role_3_Mean_Charts = selected_latam.iloc[:, np.r_[0, 2, 23, 29:35]]
+                    Role_3_Mean_Charts = lista_similares_latam.iloc[:, np.r_[0, 2, 23, 29:35]]
                     target = target.iloc[:, np.r_[0, 2, 23, 29:35]]
                     # Renomeando Colunas
                     Role_3_Mean_Charts = Role_3_Mean_Charts.rename(columns={'Ações_Defensivas_BemSucedidas_Percentil':'Ações_Defensivas_BemSucedidas', 
@@ -6340,15 +6340,15 @@ if choose == "Jogadores Similares":
                     st.markdown("---")    
 
                     # Lista de Latinos
-                    selected_latam = selected[(selected["Nacionalidade"] == "Argentina")|(selected["Nacionalidade"] == "Brazil")
-                                        |(selected["Nacionalidade"] == "Bolivia")|(selected["Nacionalidade"] == "Chile")
-                                        |(selected["Nacionalidade"] == "Colombia")|(selected["Nacionalidade"] == "Costa Rica")
-                                        |(selected["Nacionalidade"] == "Ecuador")|(selected["Nacionalidade"] == "Mexico")
-                                        |(selected["Nacionalidade"] == "Panama")|(selected["Nacionalidade"] == "Paraguay")
-                                        |(selected["Nacionalidade"] == "Peru")|(selected["Nacionalidade"] == "Uruguay")
-                                        |(selected["Nacionalidade"] == "Venezuela")]
-
-                    lista_similares_latam = selected_latam.iloc[1:31, np.r_[0, 2, 32, 37, -2:0]]
+                    selected_latam = selected.iloc[1:31, :]
+                    selected_latam = selected_latam[(selected_latam["Nacionalidade"] == "Argentina")|(selected_latam["Nacionalidade"] == "Brazil")
+                                        |(selected_latam["Nacionalidade"] == "Bolivia")|(selected_latam["Nacionalidade"] == "Chile")
+                                        |(selected_latam["Nacionalidade"] == "Colombia")|(selected_latam["Nacionalidade"] == "Costa Rica")
+                                        |(selected_latam["Nacionalidade"] == "Ecuador")|(selected_latam["Nacionalidade"] == "Mexico")
+                                        |(selected_latam["Nacionalidade"] == "Panama")|(selected_latam["Nacionalidade"] == "Paraguay")
+                                        |(selected_latam["Nacionalidade"] == "Peru")|(selected_latam["Nacionalidade"] == "Uruguay")
+                                        |(selected_latam["Nacionalidade"] == "Venezuela")]
+                    lista_similares_latam = selected_latam.iloc[0:30, :]
                     lista_similares_latam = lista_similares_latam.sort_values(by="Rating", ascending = False)
 
                     #Texto para os Gráficos
@@ -6358,7 +6358,7 @@ if choose == "Jogadores Similares":
                     ########################################################################################################
                     # Gerar Gráficos com os 5 melhores
                     # Arquivo para o Gráfico
-                    Role_4_Mean_Charts = selected_latam.iloc[:, np.r_[0, 2, 32, 38:52]]
+                    Role_4_Mean_Charts = lista_similares_latam.iloc[:, np.r_[0, 2, 32, 38:52]]
                     target = target.iloc[:, np.r_[0, 2, 32, 38:52]]
                     # Renomeando Colunas
                     Role_4_Mean_Charts = Role_4_Mean_Charts.rename(columns={'Ações_Defensivas_BemSucedidas_Percentil':'Ações_Defensivas_BemSucedidas', 'Passes_Longos_Certos_Percentil':'Passes_Longos_Certos', 'Passes_Progressivos_Certos_Percentil':'Passes_Progressivos_Certos',
@@ -7224,15 +7224,15 @@ if choose == "Jogadores Similares":
                     st.markdown("---")    
 
                     # Lista de Latinos
-                    selected_latam = selected[(selected["Nacionalidade"] == "Argentina")|(selected["Nacionalidade"] == "Brazil")
-                                        |(selected["Nacionalidade"] == "Bolivia")|(selected["Nacionalidade"] == "Chile")
-                                        |(selected["Nacionalidade"] == "Colombia")|(selected["Nacionalidade"] == "Costa Rica")
-                                        |(selected["Nacionalidade"] == "Ecuador")|(selected["Nacionalidade"] == "Mexico")
-                                        |(selected["Nacionalidade"] == "Panama")|(selected["Nacionalidade"] == "Paraguay")
-                                        |(selected["Nacionalidade"] == "Peru")|(selected["Nacionalidade"] == "Uruguay")
-                                        |(selected["Nacionalidade"] == "Venezuela")]
-
-                    lista_similares_latam = selected_latam.iloc[1:31, np.r_[0, 2, 35, 40, -2:0]]
+                    selected_latam = selected.iloc[1:31, :]
+                    selected_latam = selected_latam[(selected_latam["Nacionalidade"] == "Argentina")|(selected_latam["Nacionalidade"] == "Brazil")
+                                        |(selected_latam["Nacionalidade"] == "Bolivia")|(selected_latam["Nacionalidade"] == "Chile")
+                                        |(selected_latam["Nacionalidade"] == "Colombia")|(selected_latam["Nacionalidade"] == "Costa Rica")
+                                        |(selected_latam["Nacionalidade"] == "Ecuador")|(selected_latam["Nacionalidade"] == "Mexico")
+                                        |(selected_latam["Nacionalidade"] == "Panama")|(selected_latam["Nacionalidade"] == "Paraguay")
+                                        |(selected_latam["Nacionalidade"] == "Peru")|(selected_latam["Nacionalidade"] == "Uruguay")
+                                        |(selected_latam["Nacionalidade"] == "Venezuela")]
+                    lista_similares_latam = selected_latam.iloc[0:30, :]
                     lista_similares_latam = lista_similares_latam.sort_values(by="Rating", ascending = False)
 
                     #Texto para os Gráficos
@@ -7242,7 +7242,7 @@ if choose == "Jogadores Similares":
                     ########################################################################################################
                     # Gerar Gráficos com os 5 melhores
                     # Arquivo para o Gráfico
-                    Role_5_Mean_Charts = selected_latam.iloc[:, np.r_[0, 2, 35, 41:59]]
+                    Role_5_Mean_Charts = lista_similares_latam.iloc[:, np.r_[0, 2, 35, 41:59]]
                     target = target.iloc[:, np.r_[0, 2, 35, 41:59]]
                     # Renomeando Colunas
                     Role_5_Mean_Charts = Role_5_Mean_Charts.rename(columns={'Ações_Defensivas_BemSucedidas_Percentil':'Ações_Defensivas_BemSucedidas', 'Duelos_Defensivos_Ganhos_Percentil':'Duelos_Defensivos_Ganhos', 'Duelos_Aéreos_Ganhos_Percentil':'Duelos_Aéreos_Ganhos', 'Passes_Longos_Certos_Percentil':'Passes_Longos_Certos', 'Passes_Progressivos_Certos_Percentil':'Passes_Progressivos_Certos',
@@ -7951,15 +7951,15 @@ if choose == "Jogadores Similares":
                     st.markdown("---")
 
                     # Lista de Latinos
-                    selected_latam = selected[(selected["Nacionalidade"] == "Argentina")|(selected["Nacionalidade"] == "Brazil")
-                                        |(selected["Nacionalidade"] == "Bolivia")|(selected["Nacionalidade"] == "Chile")
-                                        |(selected["Nacionalidade"] == "Colombia")|(selected["Nacionalidade"] == "Costa Rica")
-                                        |(selected["Nacionalidade"] == "Ecuador")|(selected["Nacionalidade"] == "Mexico")
-                                        |(selected["Nacionalidade"] == "Panama")|(selected["Nacionalidade"] == "Paraguay")
-                                        |(selected["Nacionalidade"] == "Peru")|(selected["Nacionalidade"] == "Uruguay")
-                                        |(selected["Nacionalidade"] == "Venezuela")]
-
-                    lista_similares_latam = selected_latam.iloc[1:31, np.r_[0, 2, 23, 28, -2:0]]
+                    selected_latam = selected.iloc[1:31, :]
+                    selected_latam = selected_latam[(selected_latam["Nacionalidade"] == "Argentina")|(selected_latam["Nacionalidade"] == "Brazil")
+                                        |(selected_latam["Nacionalidade"] == "Bolivia")|(selected_latam["Nacionalidade"] == "Chile")
+                                        |(selected_latam["Nacionalidade"] == "Colombia")|(selected_latam["Nacionalidade"] == "Costa Rica")
+                                        |(selected_latam["Nacionalidade"] == "Ecuador")|(selected_latam["Nacionalidade"] == "Mexico")
+                                        |(selected_latam["Nacionalidade"] == "Panama")|(selected_latam["Nacionalidade"] == "Paraguay")
+                                        |(selected_latam["Nacionalidade"] == "Peru")|(selected_latam["Nacionalidade"] == "Uruguay")
+                                        |(selected_latam["Nacionalidade"] == "Venezuela")]
+                    lista_similares_latam = selected_latam.iloc[0:30, :]
                     lista_similares_latam = lista_similares_latam.sort_values(by="Rating", ascending = False)
 
                     #Texto para os Gráficos
@@ -7969,7 +7969,7 @@ if choose == "Jogadores Similares":
 
                     # Gerar Gráficos com os 5 melhores
                     # Arquivo para o Gráfico
-                    Role_6_Mean_Charts = selected_latam.iloc[:, np.r_[0, 2, 23, 29:35]]
+                    Role_6_Mean_Charts = lista_similares_latam.iloc[:, np.r_[0, 2, 23, 29:35]]
                     target = target.iloc[:, np.r_[0, 2, 23, 29:35]]
                     # Renomeando Colunas
                     Role_6_Mean_Charts = Role_6_Mean_Charts.rename(columns={'Ações_Defensivas_BemSucedidas_Percentil':'Ações_Defensivas_BemSucedidas', 'Duelos_Defensivos_Ganhos_Percentil':'Duelos_Defensivos_Ganhos', 'Duelos_Aéreos_Ganhos_Percentil':'Duelos_Aéreos_Ganhos',
@@ -8467,15 +8467,15 @@ if choose == "Jogadores Similares":
                     st.markdown("---")
 
                     # Lista de Latinos
-                    selected_latam = selected[(selected["Nacionalidade"] == "Argentina")|(selected["Nacionalidade"] == "Brazil")
-                                        |(selected["Nacionalidade"] == "Bolivia")|(selected["Nacionalidade"] == "Chile")
-                                        |(selected["Nacionalidade"] == "Colombia")|(selected["Nacionalidade"] == "Costa Rica")
-                                        |(selected["Nacionalidade"] == "Ecuador")|(selected["Nacionalidade"] == "Mexico")
-                                        |(selected["Nacionalidade"] == "Panama")|(selected["Nacionalidade"] == "Paraguay")
-                                        |(selected["Nacionalidade"] == "Peru")|(selected["Nacionalidade"] == "Uruguay")
-                                        |(selected["Nacionalidade"] == "Venezuela")]
-
-                    lista_similares_latam = selected_latam.iloc[1:31, np.r_[0, 2, 27, 32, -2:0]]
+                    selected_latam = selected.iloc[1:31, :]
+                    selected_latam = selected_latam[(selected_latam["Nacionalidade"] == "Argentina")|(selected_latam["Nacionalidade"] == "Brazil")
+                                        |(selected_latam["Nacionalidade"] == "Bolivia")|(selected_latam["Nacionalidade"] == "Chile")
+                                        |(selected_latam["Nacionalidade"] == "Colombia")|(selected_latam["Nacionalidade"] == "Costa Rica")
+                                        |(selected_latam["Nacionalidade"] == "Ecuador")|(selected_latam["Nacionalidade"] == "Mexico")
+                                        |(selected_latam["Nacionalidade"] == "Panama")|(selected_latam["Nacionalidade"] == "Paraguay")
+                                        |(selected_latam["Nacionalidade"] == "Peru")|(selected_latam["Nacionalidade"] == "Uruguay")
+                                        |(selected_latam["Nacionalidade"] == "Venezuela")]
+                    lista_similares_latam = selected_latam.iloc[0:30, :]
                     lista_similares_latam = lista_similares_latam.sort_values(by="Rating", ascending = False)
 
                     #Texto para os Gráficos
@@ -8485,7 +8485,7 @@ if choose == "Jogadores Similares":
 
                     # Gerar Gráficos com os 5 melhores
                     # Arquivo para o Gráfico
-                    Role_7_Mean_Charts = selected_latam.iloc[:, np.r_[0, 2, 27, 33:43]]
+                    Role_7_Mean_Charts = lista_similares_latam.iloc[:, np.r_[0, 2, 27, 33:43]]
                     target = target.iloc[:, np.r_[0, 2, 27, 33:43]]
                     # Renomeando Colunas
                     Role_7_Mean_Charts = Role_7_Mean_Charts.rename(columns={'Ações_Defensivas_BemSucedidas_Percentil':'Ações_Defensivas_BemSucedidas', 'Duelos_Defensivos_Ganhos_Percentil':'Duelos_Defensivos_Ganhos', 'Duelos_Aéreos_Ganhos_Percentil':'Duelos_Aéreos_Ganhos',
@@ -9252,15 +9252,15 @@ if choose == "Jogadores Similares":
                     st.markdown("---")
 
                     # Lista de Latinos
-                    selected_latam = selected[(selected["Nacionalidade"] == "Argentina")|(selected["Nacionalidade"] == "Brazil")
-                                        |(selected["Nacionalidade"] == "Bolivia")|(selected["Nacionalidade"] == "Chile")
-                                        |(selected["Nacionalidade"] == "Colombia")|(selected["Nacionalidade"] == "Costa Rica")
-                                        |(selected["Nacionalidade"] == "Ecuador")|(selected["Nacionalidade"] == "Mexico")
-                                        |(selected["Nacionalidade"] == "Panama")|(selected["Nacionalidade"] == "Paraguay")
-                                        |(selected["Nacionalidade"] == "Peru")|(selected["Nacionalidade"] == "Uruguay")
-                                        |(selected["Nacionalidade"] == "Venezuela")]
-
-                    lista_similares_latam = selected_latam.iloc[1:31, np.r_[0, 2, 30, 35, -2:0]]
+                    selected_latam = selected.iloc[1:31, :]
+                    selected_latam = selected_latam[(selected_latam["Nacionalidade"] == "Argentina")|(selected_latam["Nacionalidade"] == "Brazil")
+                                        |(selected_latam["Nacionalidade"] == "Bolivia")|(selected_latam["Nacionalidade"] == "Chile")
+                                        |(selected_latam["Nacionalidade"] == "Colombia")|(selected_latam["Nacionalidade"] == "Costa Rica")
+                                        |(selected_latam["Nacionalidade"] == "Ecuador")|(selected_latam["Nacionalidade"] == "Mexico")
+                                        |(selected_latam["Nacionalidade"] == "Panama")|(selected_latam["Nacionalidade"] == "Paraguay")
+                                        |(selected_latam["Nacionalidade"] == "Peru")|(selected_latam["Nacionalidade"] == "Uruguay")
+                                        |(selected_latam["Nacionalidade"] == "Venezuela")]
+                    lista_similares_latam = selected_latam.iloc[0:30, :]
                     lista_similares_latam = lista_similares_latam.sort_values(by="Rating", ascending = False)
 
                     #Texto para os Gráficos
@@ -9270,7 +9270,7 @@ if choose == "Jogadores Similares":
 
                     # Gerar Gráficos com os 5 melhores
                     # Arquivo para o Gráfico
-                    Role_8_Mean_Charts = selected_latam.iloc[:, np.r_[0, 2, 30, 36:49]]
+                    Role_8_Mean_Charts = lista_similares_latam.iloc[:, np.r_[0, 2, 30, 36:49]]
                     target = target.iloc[:, np.r_[0, 2, 30, 36:49]]
                     # Renomeando Colunas
                     Role_8_Mean_Charts = Role_8_Mean_Charts.rename(columns={'Ações_Defensivas_BemSucedidas_Percentil':'Ações_Defensivas_BemSucedidas', 'Duelos_Defensivos_Ganhos_Percentil':'Duelos_Defensivos_Ganhos', 'Duelos_Aéreos_Ganhos_Percentil':'Duelos_Aéreos_Ganhos',
@@ -9967,15 +9967,15 @@ if choose == "Jogadores Similares":
                     st.markdown("---")
 
                     # Lista de Latinos
-                    selected_latam = selected[(selected["Nacionalidade"] == "Argentina")|(selected["Nacionalidade"] == "Brazil")
-                                        |(selected["Nacionalidade"] == "Bolivia")|(selected["Nacionalidade"] == "Chile")
-                                        |(selected["Nacionalidade"] == "Colombia")|(selected["Nacionalidade"] == "Costa Rica")
-                                        |(selected["Nacionalidade"] == "Ecuador")|(selected["Nacionalidade"] == "Mexico")
-                                        |(selected["Nacionalidade"] == "Panama")|(selected["Nacionalidade"] == "Paraguay")
-                                        |(selected["Nacionalidade"] == "Peru")|(selected["Nacionalidade"] == "Uruguay")
-                                        |(selected["Nacionalidade"] == "Venezuela")]
-
-                    lista_similares_latam = selected_latam.iloc[1:31, np.r_[0, 2, 21, 26, -2:0]]
+                    selected_latam = selected.iloc[1:31, :]
+                    selected_latam = selected_latam[(selected_latam["Nacionalidade"] == "Argentina")|(selected_latam["Nacionalidade"] == "Brazil")
+                                        |(selected_latam["Nacionalidade"] == "Bolivia")|(selected_latam["Nacionalidade"] == "Chile")
+                                        |(selected_latam["Nacionalidade"] == "Colombia")|(selected_latam["Nacionalidade"] == "Costa Rica")
+                                        |(selected_latam["Nacionalidade"] == "Ecuador")|(selected_latam["Nacionalidade"] == "Mexico")
+                                        |(selected_latam["Nacionalidade"] == "Panama")|(selected_latam["Nacionalidade"] == "Paraguay")
+                                        |(selected_latam["Nacionalidade"] == "Peru")|(selected_latam["Nacionalidade"] == "Uruguay")
+                                        |(selected_latam["Nacionalidade"] == "Venezuela")]
+                    lista_similares_latam = selected_latam.iloc[0:30, :]
                     lista_similares_latam = lista_similares_latam.sort_values(by="Rating", ascending = False)
 
                     #Texto para os Gráficos
@@ -9985,7 +9985,7 @@ if choose == "Jogadores Similares":
 
                     # Gerar Gráficos com os 5 melhores
                     # Arquivo para o Gráfico
-                    Role_9_Mean_Charts = selected_latam.iloc[:, np.r_[0, 2, 21, 27:31]]
+                    Role_9_Mean_Charts = lista_similares_latam.iloc[:, np.r_[0, 2, 21, 27:31]]
                     target = target.iloc[:, np.r_[0, 2, 21, 27:31]]
                     # Renomeando Colunas
                     Role_9_Mean_Charts = Role_9_Mean_Charts.rename(columns={'Ações_Defensivas_BemSucedidas_Percentil':'Ações_Defensivas_BemSucedidas', 
@@ -10480,15 +10480,15 @@ if choose == "Jogadores Similares":
                     st.markdown("---")
 
                     # Lista de Latinos
-                    selected_latam = selected[(selected["Nacionalidade"] == "Argentina")|(selected["Nacionalidade"] == "Brazil")
-                                        |(selected["Nacionalidade"] == "Bolivia")|(selected["Nacionalidade"] == "Chile")
-                                        |(selected["Nacionalidade"] == "Colombia")|(selected["Nacionalidade"] == "Costa Rica")
-                                        |(selected["Nacionalidade"] == "Ecuador")|(selected["Nacionalidade"] == "Mexico")
-                                        |(selected["Nacionalidade"] == "Panama")|(selected["Nacionalidade"] == "Paraguay")
-                                        |(selected["Nacionalidade"] == "Peru")|(selected["Nacionalidade"] == "Uruguay")
-                                        |(selected["Nacionalidade"] == "Venezuela")]
-
-                    lista_similares_latam = selected_latam.iloc[1:31, np.r_[0, 2, 26, 31, -2:0]]
+                    selected_latam = selected.iloc[1:31, :]
+                    selected_latam = selected_latam[(selected_latam["Nacionalidade"] == "Argentina")|(selected_latam["Nacionalidade"] == "Brazil")
+                                        |(selected_latam["Nacionalidade"] == "Bolivia")|(selected_latam["Nacionalidade"] == "Chile")
+                                        |(selected_latam["Nacionalidade"] == "Colombia")|(selected_latam["Nacionalidade"] == "Costa Rica")
+                                        |(selected_latam["Nacionalidade"] == "Ecuador")|(selected_latam["Nacionalidade"] == "Mexico")
+                                        |(selected_latam["Nacionalidade"] == "Panama")|(selected_latam["Nacionalidade"] == "Paraguay")
+                                        |(selected_latam["Nacionalidade"] == "Peru")|(selected_latam["Nacionalidade"] == "Uruguay")
+                                        |(selected_latam["Nacionalidade"] == "Venezuela")]
+                    lista_similares_latam = selected_latam.iloc[0:30, :]
                     lista_similares_latam = lista_similares_latam.sort_values(by="Rating", ascending = False)
 
                     #Texto para os Gráficos
@@ -10498,7 +10498,7 @@ if choose == "Jogadores Similares":
 
                     # Gerar Gráficos com os 5 melhores
                     # Arquivo para o Gráfico
-                    Role_10_Mean_Charts = selected_latam.iloc[:, np.r_[0, 2, 26, 32:41]]
+                    Role_10_Mean_Charts = lista_similares_latam.iloc[:, np.r_[0, 2, 26, 32:41]]
                     target = target.iloc[:, np.r_[0, 2, 26, 32:41]]
                     # Renomeando Colunas
                     Role_10_Mean_Charts = Role_10_Mean_Charts.rename(columns={'Ações_Defensivas_BemSucedidas_Percentil':'Ações_Defensivas_BemSucedidas', 
@@ -11048,15 +11048,15 @@ if choose == "Jogadores Similares":
                     st.markdown("---")
 
                     # Lista de Latinos
-                    selected_latam = selected[(selected["Nacionalidade"] == "Argentina")|(selected["Nacionalidade"] == "Brazil")
-                                        |(selected["Nacionalidade"] == "Bolivia")|(selected["Nacionalidade"] == "Chile")
-                                        |(selected["Nacionalidade"] == "Colombia")|(selected["Nacionalidade"] == "Costa Rica")
-                                        |(selected["Nacionalidade"] == "Ecuador")|(selected["Nacionalidade"] == "Mexico")
-                                        |(selected["Nacionalidade"] == "Panama")|(selected["Nacionalidade"] == "Paraguay")
-                                        |(selected["Nacionalidade"] == "Peru")|(selected["Nacionalidade"] == "Uruguay")
-                                        |(selected["Nacionalidade"] == "Venezuela")]
-
-                    lista_similares_latam = selected_latam.iloc[1:31, np.r_[0, 2, 28, 33, -2:0]]
+                    selected_latam = selected.iloc[1:31, :]
+                    selected_latam = selected_latam[(selected_latam["Nacionalidade"] == "Argentina")|(selected_latam["Nacionalidade"] == "Brazil")
+                                        |(selected_latam["Nacionalidade"] == "Bolivia")|(selected_latam["Nacionalidade"] == "Chile")
+                                        |(selected_latam["Nacionalidade"] == "Colombia")|(selected_latam["Nacionalidade"] == "Costa Rica")
+                                        |(selected_latam["Nacionalidade"] == "Ecuador")|(selected_latam["Nacionalidade"] == "Mexico")
+                                        |(selected_latam["Nacionalidade"] == "Panama")|(selected_latam["Nacionalidade"] == "Paraguay")
+                                        |(selected_latam["Nacionalidade"] == "Peru")|(selected_latam["Nacionalidade"] == "Uruguay")
+                                        |(selected_latam["Nacionalidade"] == "Venezuela")]
+                    lista_similares_latam = selected_latam.iloc[0:30, :]
                     lista_similares_latam = lista_similares_latam.sort_values(by="Rating", ascending = False)
 
                     #Texto para os Gráficos
@@ -11066,7 +11066,7 @@ if choose == "Jogadores Similares":
 
                     # Gerar Gráficos com os 5 melhores
                     # Arquivo para o Gráfico
-                    Role_11_Mean_Charts = selected_latam.iloc[:, np.r_[0, 2, 28, 34:45]]
+                    Role_11_Mean_Charts = lista_similares_latam.iloc[:, np.r_[0, 2, 28, 34:45]]
                     target = target.iloc[:, np.r_[0, 2, 28, 34:45]]
                     # Renomeando Colunas
                     Role_11_Mean_Charts = Role_11_Mean_Charts.rename(columns={'Ações_Defensivas_BemSucedidas_Percentil':'Ações_Defensivas_BemSucedidas', 'Duelos_Defensivos_Ganhos_Percentil':'Duelos_Defensivos_Ganhos', 'Duelos_Aéreos_Ganhos_Percentil':'Duelos_Aéreos_Ganhos',
@@ -11874,15 +11874,15 @@ if choose == "Jogadores Similares":
                     st.markdown("---")
 
                     # Lista de Latinos
-                    selected_latam = selected[(selected["Nacionalidade"] == "Argentina")|(selected["Nacionalidade"] == "Brazil")
-                                        |(selected["Nacionalidade"] == "Bolivia")|(selected["Nacionalidade"] == "Chile")
-                                        |(selected["Nacionalidade"] == "Colombia")|(selected["Nacionalidade"] == "Costa Rica")
-                                        |(selected["Nacionalidade"] == "Ecuador")|(selected["Nacionalidade"] == "Mexico")
-                                        |(selected["Nacionalidade"] == "Panama")|(selected["Nacionalidade"] == "Paraguay")
-                                        |(selected["Nacionalidade"] == "Peru")|(selected["Nacionalidade"] == "Uruguay")
-                                        |(selected["Nacionalidade"] == "Venezuela")]
-
-                    lista_similares_latam = selected_latam.iloc[1:31, np.r_[0, 2, 30, 35, -2:0]]
+                    selected_latam = selected.iloc[1:31, :]
+                    selected_latam = selected_latam[(selected_latam["Nacionalidade"] == "Argentina")|(selected_latam["Nacionalidade"] == "Brazil")
+                                        |(selected_latam["Nacionalidade"] == "Bolivia")|(selected_latam["Nacionalidade"] == "Chile")
+                                        |(selected_latam["Nacionalidade"] == "Colombia")|(selected_latam["Nacionalidade"] == "Costa Rica")
+                                        |(selected_latam["Nacionalidade"] == "Ecuador")|(selected_latam["Nacionalidade"] == "Mexico")
+                                        |(selected_latam["Nacionalidade"] == "Panama")|(selected_latam["Nacionalidade"] == "Paraguay")
+                                        |(selected_latam["Nacionalidade"] == "Peru")|(selected_latam["Nacionalidade"] == "Uruguay")
+                                        |(selected_latam["Nacionalidade"] == "Venezuela")]
+                    lista_similares_latam = selected_latam.iloc[0:30, :]
                     lista_similares_latam = lista_similares_latam.sort_values(by="Rating", ascending = False)
 
                     #Texto para os Gráficos
@@ -11892,7 +11892,7 @@ if choose == "Jogadores Similares":
 
                     # Gerar Gráficos com os 5 melhores
                     # Arquivo para o Gráfico
-                    Role_12_Mean_Charts = selected_latam.iloc[:, np.r_[0, 2, 30, 36:49]]
+                    Role_12_Mean_Charts = lista_similares_latam.iloc[:, np.r_[0, 2, 30, 36:49]]
                     target = target.iloc[:, np.r_[0, 2, 30, 36:49]]
                     # Renomeando Colunas
                     Role_12_Mean_Charts = Role_12_Mean_Charts.rename(columns={'Ações_Defensivas_BemSucedidas_Percentil':'Ações_Defensivas_BemSucedidas', 
@@ -12663,15 +12663,15 @@ if choose == "Jogadores Similares":
                     st.markdown("---")
 
                     # Lista de Latinos
-                    selected_latam = selected[(selected["Nacionalidade"] == "Argentina")|(selected["Nacionalidade"] == "Brazil")
-                                        |(selected["Nacionalidade"] == "Bolivia")|(selected["Nacionalidade"] == "Chile")
-                                        |(selected["Nacionalidade"] == "Colombia")|(selected["Nacionalidade"] == "Costa Rica")
-                                        |(selected["Nacionalidade"] == "Ecuador")|(selected["Nacionalidade"] == "Mexico")
-                                        |(selected["Nacionalidade"] == "Panama")|(selected["Nacionalidade"] == "Paraguay")
-                                        |(selected["Nacionalidade"] == "Peru")|(selected["Nacionalidade"] == "Uruguay")
-                                        |(selected["Nacionalidade"] == "Venezuela")]
-
-                    lista_similares_latam = selected_latam.iloc[1:31, np.r_[0, 2, 27, 32, -2:0]]
+                    selected_latam = selected.iloc[1:31, :]
+                    selected_latam = selected_latam[(selected_latam["Nacionalidade"] == "Argentina")|(selected_latam["Nacionalidade"] == "Brazil")
+                                        |(selected_latam["Nacionalidade"] == "Bolivia")|(selected_latam["Nacionalidade"] == "Chile")
+                                        |(selected_latam["Nacionalidade"] == "Colombia")|(selected_latam["Nacionalidade"] == "Costa Rica")
+                                        |(selected_latam["Nacionalidade"] == "Ecuador")|(selected_latam["Nacionalidade"] == "Mexico")
+                                        |(selected_latam["Nacionalidade"] == "Panama")|(selected_latam["Nacionalidade"] == "Paraguay")
+                                        |(selected_latam["Nacionalidade"] == "Peru")|(selected_latam["Nacionalidade"] == "Uruguay")
+                                        |(selected_latam["Nacionalidade"] == "Venezuela")]
+                    lista_similares_latam = selected_latam.iloc[0:30, :]
                     lista_similares_latam = lista_similares_latam.sort_values(by="Rating", ascending = False)
 
                     #Texto para os Gráficos
@@ -12681,7 +12681,7 @@ if choose == "Jogadores Similares":
 
                     # Gerar Gráficos com os 5 melhores
                     # Arquivo para o Gráfico
-                    Role_13_Mean_Charts = selected_latam.iloc[:, np.r_[0, 2, 27, 33:43]]
+                    Role_13_Mean_Charts = lista_similares_latam.iloc[:, np.r_[0, 2, 27, 33:43]]
                     target = target.iloc[:, np.r_[0, 2, 27, 33:43]]
                     # Renomeando Colunas
                     Role_13_Mean_Charts = Role_13_Mean_Charts.rename(columns={'Ações_Defensivas_BemSucedidas_Percentil':'Ações_Defensivas_BemSucedidas', 
@@ -13450,7 +13450,6 @@ if choose == "Jogadores Similares":
                     selected['Dif_Similarity'] = abs(selected["Índice de Similaridade"] - 100)
 
                     selected = selected.sort_values(by='Dif_Similarity')
-
                     lista_similares = selected.iloc[1:31, np.r_[0, 2, 30, 35, -2:0]]
                     lista_similares = lista_similares.sort_values(by='Rating', ascending=False)
 
@@ -13460,25 +13459,23 @@ if choose == "Jogadores Similares":
                     st.markdown("---")
 
                     # Lista de Latinos
-                    selected_latam = selected[(selected["Nacionalidade"] == "Argentina")|(selected["Nacionalidade"] == "Brazil")
-                                        |(selected["Nacionalidade"] == "Bolivia")|(selected["Nacionalidade"] == "Chile")
-                                        |(selected["Nacionalidade"] == "Colombia")|(selected["Nacionalidade"] == "Costa Rica")
-                                        |(selected["Nacionalidade"] == "Ecuador")|(selected["Nacionalidade"] == "Mexico")
-                                        |(selected["Nacionalidade"] == "Panama")|(selected["Nacionalidade"] == "Paraguay")
-                                        |(selected["Nacionalidade"] == "Peru")|(selected["Nacionalidade"] == "Uruguay")
-                                        |(selected["Nacionalidade"] == "Venezuela")]
-
-                    lista_similares_latam = selected_latam.iloc[1:31, np.r_[0, 2, 30, 35, -2:0]]
+                    selected_latam = selected.iloc[1:31, :]
+                    selected_latam = selected_latam[(selected_latam["Nacionalidade"] == "Argentina")|(selected_latam["Nacionalidade"] == "Brazil")
+                                        |(selected_latam["Nacionalidade"] == "Bolivia")|(selected_latam["Nacionalidade"] == "Chile")
+                                        |(selected_latam["Nacionalidade"] == "Colombia")|(selected_latam["Nacionalidade"] == "Costa Rica")
+                                        |(selected_latam["Nacionalidade"] == "Ecuador")|(selected_latam["Nacionalidade"] == "Mexico")
+                                        |(selected_latam["Nacionalidade"] == "Panama")|(selected_latam["Nacionalidade"] == "Paraguay")
+                                        |(selected_latam["Nacionalidade"] == "Peru")|(selected_latam["Nacionalidade"] == "Uruguay")
+                                        |(selected_latam["Nacionalidade"] == "Venezuela")]
+                    lista_similares_latam = selected_latam.iloc[0:30, :]
                     lista_similares_latam = lista_similares_latam.sort_values(by="Rating", ascending = False)
-
                     #Texto para os Gráficos
                     st.markdown("<h4 style='text-align: center;'>5 Jogadores Latinos Similares Melhor Ranquedos</b></h4>", unsafe_allow_html=True)
                     st.markdown("---")    
 
-
                     # Gerar Gráficos com os 5 melhores
                     # Arquivo para o Gráfico
-                    Role_14_Mean_Charts = selected_latam.iloc[:, np.r_[0, 2, 30, 36:49]]
+                    Role_14_Mean_Charts = lista_similares_latam.iloc[:, np.r_[0, 2, 30, 36:49]]
                     target = target.iloc[:, np.r_[0, 2, 30, 36:49]]
                     # Renomeando Colunas
                     Role_14_Mean_Charts = Role_14_Mean_Charts.rename(columns={'Ações_Defensivas_BemSucedidas_Percentil':'Ações_Defensivas_BemSucedidas', 'Duelos_Defensivos_Ganhos_Percentil':'Duelos_Defensivos_Ganhos', 'Duelos_Aéreos_Ganhos_Percentil':'Duelos_Aéreos_Ganhos',
@@ -14240,15 +14237,15 @@ if choose == "Jogadores Similares":
                     st.markdown("---")    
 
                     # Lista de Latinos
-                    selected_latam = selected[(selected["Nacionalidade"] == "Argentina")|(selected["Nacionalidade"] == "Brazil")
-                                        |(selected["Nacionalidade"] == "Bolivia")|(selected["Nacionalidade"] == "Chile")
-                                        |(selected["Nacionalidade"] == "Colombia")|(selected["Nacionalidade"] == "Costa Rica")
-                                        |(selected["Nacionalidade"] == "Ecuador")|(selected["Nacionalidade"] == "Mexico")
-                                        |(selected["Nacionalidade"] == "Panama")|(selected["Nacionalidade"] == "Paraguay")
-                                        |(selected["Nacionalidade"] == "Peru")|(selected["Nacionalidade"] == "Uruguay")
-                                        |(selected["Nacionalidade"] == "Venezuela")]
-
-                    lista_similares_latam = selected_latam.iloc[1:31, np.r_[0, 2, 27, 32, -2:0]]
+                    selected_latam = selected.iloc[1:31, :]
+                    selected_latam = selected_latam[(selected_latam["Nacionalidade"] == "Argentina")|(selected_latam["Nacionalidade"] == "Brazil")
+                                        |(selected_latam["Nacionalidade"] == "Bolivia")|(selected_latam["Nacionalidade"] == "Chile")
+                                        |(selected_latam["Nacionalidade"] == "Colombia")|(selected_latam["Nacionalidade"] == "Costa Rica")
+                                        |(selected_latam["Nacionalidade"] == "Ecuador")|(selected_latam["Nacionalidade"] == "Mexico")
+                                        |(selected_latam["Nacionalidade"] == "Panama")|(selected_latam["Nacionalidade"] == "Paraguay")
+                                        |(selected_latam["Nacionalidade"] == "Peru")|(selected_latam["Nacionalidade"] == "Uruguay")
+                                        |(selected_latam["Nacionalidade"] == "Venezuela")]
+                    lista_similares_latam = selected_latam.iloc[0:30, :]
                     lista_similares_latam = lista_similares_latam.sort_values(by="Rating", ascending = False)
 
                     #Texto para os Gráficos
@@ -14258,7 +14255,7 @@ if choose == "Jogadores Similares":
                     ########################################################################################################
                     # Gerar Gráficos com os 5 melhores
                     # Arquivo para o Gráfico
-                    Role_15_Mean_Charts = selected_latam.iloc[:, np.r_[0, 2, 27, 33:43]]
+                    Role_15_Mean_Charts = lista_similares_latam.iloc[:, np.r_[0, 2, 27, 33:43]]
                     target = target.iloc[:, np.r_[0, 2, 27, 33:43]]
                                         # Renomeando Colunas
                     Role_15_Mean_Charts = Role_15_Mean_Charts.rename(columns={'Passes_Longos_Certos_Percentil':'Passes_Longos_Certos', 
@@ -15121,15 +15118,15 @@ if choose == "Jogadores Similares":
                     st.markdown("---")    
 
                     # Lista de Latinos
-                    selected_latam = selected[(selected["Nacionalidade"] == "Argentina")|(selected["Nacionalidade"] == "Brazil")
-                                        |(selected["Nacionalidade"] == "Bolivia")|(selected["Nacionalidade"] == "Chile")
-                                        |(selected["Nacionalidade"] == "Colombia")|(selected["Nacionalidade"] == "Costa Rica")
-                                        |(selected["Nacionalidade"] == "Ecuador")|(selected["Nacionalidade"] == "Mexico")
-                                        |(selected["Nacionalidade"] == "Panama")|(selected["Nacionalidade"] == "Paraguay")
-                                        |(selected["Nacionalidade"] == "Peru")|(selected["Nacionalidade"] == "Uruguay")
-                                        |(selected["Nacionalidade"] == "Venezuela")]
-
-                    lista_similares_latam = selected_latam.iloc[1:31, np.r_[0, 2, 34, 39, -2:0]]
+                    selected_latam = selected.iloc[1:31, :]
+                    selected_latam = selected_latam[(selected_latam["Nacionalidade"] == "Argentina")|(selected_latam["Nacionalidade"] == "Brazil")
+                                        |(selected_latam["Nacionalidade"] == "Bolivia")|(selected_latam["Nacionalidade"] == "Chile")
+                                        |(selected_latam["Nacionalidade"] == "Colombia")|(selected_latam["Nacionalidade"] == "Costa Rica")
+                                        |(selected_latam["Nacionalidade"] == "Ecuador")|(selected_latam["Nacionalidade"] == "Mexico")
+                                        |(selected_latam["Nacionalidade"] == "Panama")|(selected_latam["Nacionalidade"] == "Paraguay")
+                                        |(selected_latam["Nacionalidade"] == "Peru")|(selected_latam["Nacionalidade"] == "Uruguay")
+                                        |(selected_latam["Nacionalidade"] == "Venezuela")]
+                    lista_similares_latam = selected_latam.iloc[0:30, :]
                     lista_similares_latam = lista_similares_latam.sort_values(by="Rating", ascending = False)
 
                     #Texto para os Gráficos
@@ -15139,7 +15136,7 @@ if choose == "Jogadores Similares":
                     ########################################################################################################
                     # Gerar Gráficos com os 5 melhores
                     # Arquivo para o Gráfico
-                    Role_16_Mean_Charts = selected_latam.iloc[:, np.r_[0, 2, 34, 40:57]]
+                    Role_16_Mean_Charts = lista_similares_latam.iloc[:, np.r_[0, 2, 34, 40:57]]
                     target = target.iloc[:, np.r_[0, 2, 34, 40:57]]
                                         # Renomeando Colunas
                     Role_16_Mean_Charts = Role_16_Mean_Charts.rename(columns={'Ações_Defensivas_BemSucedidas_Percentil':'Ações_Defensivas_BemSucedidas', 'Duelos_Defensivos_Ganhos_Percentil':'Duelos_Defensivos_Ganhos', 'Duelos_Aéreos_Ganhos_Percentil':'Duelos_Aéreos_Ganhos', 'Passes_Longos_Certos_Percentil':'Passes_Longos_Certos', 'Passes_Progressivos_Certos_Percentil':'Passes_Progressivos_Certos',
@@ -15919,15 +15916,15 @@ if choose == "Jogadores Similares":
                     st.markdown("---")
 
                     # Lista de Latinos
-                    selected_latam = selected[(selected["Nacionalidade"] == "Argentina")|(selected["Nacionalidade"] == "Brazil")
-                                        |(selected["Nacionalidade"] == "Bolivia")|(selected["Nacionalidade"] == "Chile")
-                                        |(selected["Nacionalidade"] == "Colombia")|(selected["Nacionalidade"] == "Costa Rica")
-                                        |(selected["Nacionalidade"] == "Ecuador")|(selected["Nacionalidade"] == "Mexico")
-                                        |(selected["Nacionalidade"] == "Panama")|(selected["Nacionalidade"] == "Paraguay")
-                                        |(selected["Nacionalidade"] == "Peru")|(selected["Nacionalidade"] == "Uruguay")
-                                        |(selected["Nacionalidade"] == "Venezuela")]
-
-                    lista_similares_latam = selected_latam.iloc[1:31, np.r_[0, 2, 30, 35, -2:0]]
+                    selected_latam = selected.iloc[1:31, :]
+                    selected_latam = selected_latam[(selected_latam["Nacionalidade"] == "Argentina")|(selected_latam["Nacionalidade"] == "Brazil")
+                                        |(selected_latam["Nacionalidade"] == "Bolivia")|(selected_latam["Nacionalidade"] == "Chile")
+                                        |(selected_latam["Nacionalidade"] == "Colombia")|(selected_latam["Nacionalidade"] == "Costa Rica")
+                                        |(selected_latam["Nacionalidade"] == "Ecuador")|(selected_latam["Nacionalidade"] == "Mexico")
+                                        |(selected_latam["Nacionalidade"] == "Panama")|(selected_latam["Nacionalidade"] == "Paraguay")
+                                        |(selected_latam["Nacionalidade"] == "Peru")|(selected_latam["Nacionalidade"] == "Uruguay")
+                                        |(selected_latam["Nacionalidade"] == "Venezuela")]
+                    lista_similares_latam = selected_latam.iloc[0:30, :]
                     lista_similares_latam = lista_similares_latam.sort_values(by="Rating", ascending = False)
 
                     #Texto para os Gráficos
@@ -15937,7 +15934,7 @@ if choose == "Jogadores Similares":
 
                     # Gerar Gráficos com os 5 melhores
                     # Arquivo para o Gráfico
-                    Role_17_Mean_Charts = selected_latam.iloc[:, np.r_[0, 2, 30, 36:49]]
+                    Role_17_Mean_Charts = lista_similares_latam.iloc[:, np.r_[0, 2, 30, 36:49]]
                     target = target.iloc[:, np.r_[0, 2, 30, 36:49]]
                     # Renomeando Colunas
                     Role_17_Mean_Charts = Role_17_Mean_Charts.rename(columns={'Ações_Defensivas_BemSucedidas_Percentil':'Ações_Defensivas_BemSucedidas', 'Duelos_Defensivos_Ganhos_Percentil':'Duelos_Defensivos_Ganhos', 'Duelos_Aéreos_Ganhos_Percentil':'Duelos_Aéreos_Ganhos',
@@ -16654,15 +16651,15 @@ if choose == "Jogadores Similares":
                     st.markdown("---")
 
                     # Lista de Latinos
-                    selected_latam = selected[(selected["Nacionalidade"] == "Argentina")|(selected["Nacionalidade"] == "Brazil")
-                                        |(selected["Nacionalidade"] == "Bolivia")|(selected["Nacionalidade"] == "Chile")
-                                        |(selected["Nacionalidade"] == "Colombia")|(selected["Nacionalidade"] == "Costa Rica")
-                                        |(selected["Nacionalidade"] == "Ecuador")|(selected["Nacionalidade"] == "Mexico")
-                                        |(selected["Nacionalidade"] == "Panama")|(selected["Nacionalidade"] == "Paraguay")
-                                        |(selected["Nacionalidade"] == "Peru")|(selected["Nacionalidade"] == "Uruguay")
-                                        |(selected["Nacionalidade"] == "Venezuela")]
-
-                    lista_similares_latam = selected_latam.iloc[1:31, np.r_[0, 2, 24, 29, -2:0]]
+                    selected_latam = selected.iloc[1:31, :]
+                    selected_latam = selected_latam[(selected_latam["Nacionalidade"] == "Argentina")|(selected_latam["Nacionalidade"] == "Brazil")
+                                        |(selected_latam["Nacionalidade"] == "Bolivia")|(selected_latam["Nacionalidade"] == "Chile")
+                                        |(selected_latam["Nacionalidade"] == "Colombia")|(selected_latam["Nacionalidade"] == "Costa Rica")
+                                        |(selected_latam["Nacionalidade"] == "Ecuador")|(selected_latam["Nacionalidade"] == "Mexico")
+                                        |(selected_latam["Nacionalidade"] == "Panama")|(selected_latam["Nacionalidade"] == "Paraguay")
+                                        |(selected_latam["Nacionalidade"] == "Peru")|(selected_latam["Nacionalidade"] == "Uruguay")
+                                        |(selected_latam["Nacionalidade"] == "Venezuela")]
+                    lista_similares_latam = selected_latam.iloc[0:30, :]
                     lista_similares_latam = lista_similares_latam.sort_values(by="Rating", ascending = False)
 
                     #Texto para os Gráficos
@@ -16672,7 +16669,7 @@ if choose == "Jogadores Similares":
 
                     # Gerar Gráficos com os 5 melhores
                     # Arquivo para o Gráfico
-                    Role_18_Mean_Charts = selected_latam.iloc[:, np.r_[0, 2, 24, 30:37]]
+                    Role_18_Mean_Charts = lista_similares_latam.iloc[:, np.r_[0, 2, 24, 30:37]]
                     target = target.iloc[:, np.r_[0, 2, 24, 30:37]]
                     # Renomeando Colunas
                     Role_18_Mean_Charts = Role_18_Mean_Charts.rename(columns={'Ações_Defensivas_BemSucedidas_Percentil':'Ações_Defensivas_BemSucedidas', 
@@ -17207,15 +17204,15 @@ if choose == "Jogadores Similares":
                     st.markdown("---")
 
                     # Lista de Latinos
-                    selected_latam = selected[(selected["Nacionalidade"] == "Argentina")|(selected["Nacionalidade"] == "Brazil")
-                                        |(selected["Nacionalidade"] == "Bolivia")|(selected["Nacionalidade"] == "Chile")
-                                        |(selected["Nacionalidade"] == "Colombia")|(selected["Nacionalidade"] == "Costa Rica")
-                                        |(selected["Nacionalidade"] == "Ecuador")|(selected["Nacionalidade"] == "Mexico")
-                                        |(selected["Nacionalidade"] == "Panama")|(selected["Nacionalidade"] == "Paraguay")
-                                        |(selected["Nacionalidade"] == "Peru")|(selected["Nacionalidade"] == "Uruguay")
-                                        |(selected["Nacionalidade"] == "Venezuela")]
-
-                    lista_similares_latam = selected_latam.iloc[1:31, np.r_[0, 2, 30, 35, -2:0]]
+                    selected_latam = selected.iloc[1:31, :]
+                    selected_latam = selected_latam[(selected_latam["Nacionalidade"] == "Argentina")|(selected_latam["Nacionalidade"] == "Brazil")
+                                        |(selected_latam["Nacionalidade"] == "Bolivia")|(selected_latam["Nacionalidade"] == "Chile")
+                                        |(selected_latam["Nacionalidade"] == "Colombia")|(selected_latam["Nacionalidade"] == "Costa Rica")
+                                        |(selected_latam["Nacionalidade"] == "Ecuador")|(selected_latam["Nacionalidade"] == "Mexico")
+                                        |(selected_latam["Nacionalidade"] == "Panama")|(selected_latam["Nacionalidade"] == "Paraguay")
+                                        |(selected_latam["Nacionalidade"] == "Peru")|(selected_latam["Nacionalidade"] == "Uruguay")
+                                        |(selected_latam["Nacionalidade"] == "Venezuela")]
+                    lista_similares_latam = selected_latam.iloc[0:30, :]
                     lista_similares_latam = lista_similares_latam.sort_values(by="Rating", ascending = False)
 
                     #Texto para os Gráficos
@@ -17225,7 +17222,7 @@ if choose == "Jogadores Similares":
 
                     # Gerar Gráficos com os 5 melhores
                     # Arquivo para o Gráfico
-                    Role_19_Mean_Charts = selected_latam.iloc[:, np.r_[0, 2, 30, 36:49]]
+                    Role_19_Mean_Charts = lista_similares_latam.iloc[:, np.r_[0, 2, 30, 36:49]]
                     target = target.iloc[:, np.r_[0, 2, 30, 36:49]]
                     # Renomeando Colunas
                     Role_19_Mean_Charts = Role_19_Mean_Charts.rename(columns={'Ações_Defensivas_BemSucedidas_Percentil':'Ações_Defensivas_BemSucedidas', 'Duelos_Defensivos_Ganhos_Percentil':'Duelos_Defensivos_Ganhos', 'Duelos_Aéreos_Ganhos_Percentil':'Duelos_Aéreos_Ganhos',
@@ -18003,15 +18000,15 @@ if choose == "Jogadores Similares":
                     st.markdown("---")
 
                     # Lista de Latinos
-                    selected_latam = selected[(selected["Nacionalidade"] == "Argentina")|(selected["Nacionalidade"] == "Brazil")
-                                        |(selected["Nacionalidade"] == "Bolivia")|(selected["Nacionalidade"] == "Chile")
-                                        |(selected["Nacionalidade"] == "Colombia")|(selected["Nacionalidade"] == "Costa Rica")
-                                        |(selected["Nacionalidade"] == "Ecuador")|(selected["Nacionalidade"] == "Mexico")
-                                        |(selected["Nacionalidade"] == "Panama")|(selected["Nacionalidade"] == "Paraguay")
-                                        |(selected["Nacionalidade"] == "Peru")|(selected["Nacionalidade"] == "Uruguay")
-                                        |(selected["Nacionalidade"] == "Venezuela")]
-
-                    lista_similares_latam = selected_latam.iloc[1:31, np.r_[0, 2, 27, 32, -2:0]]
+                    selected_latam = selected.iloc[1:31, :]
+                    selected_latam = selected_latam[(selected_latam["Nacionalidade"] == "Argentina")|(selected_latam["Nacionalidade"] == "Brazil")
+                                        |(selected_latam["Nacionalidade"] == "Bolivia")|(selected_latam["Nacionalidade"] == "Chile")
+                                        |(selected_latam["Nacionalidade"] == "Colombia")|(selected_latam["Nacionalidade"] == "Costa Rica")
+                                        |(selected_latam["Nacionalidade"] == "Ecuador")|(selected_latam["Nacionalidade"] == "Mexico")
+                                        |(selected_latam["Nacionalidade"] == "Panama")|(selected_latam["Nacionalidade"] == "Paraguay")
+                                        |(selected_latam["Nacionalidade"] == "Peru")|(selected_latam["Nacionalidade"] == "Uruguay")
+                                        |(selected_latam["Nacionalidade"] == "Venezuela")]
+                    lista_similares_latam = selected_latam.iloc[0:30, :]
                     lista_similares_latam = lista_similares_latam.sort_values(by="Rating", ascending = False)
 
                     #Texto para os Gráficos
@@ -18021,7 +18018,7 @@ if choose == "Jogadores Similares":
 
                     # Gerar Gráficos com os 5 melhores
                     # Arquivo para o Gráfico
-                    Role_20_Mean_Charts = selected_latam.iloc[:, np.r_[0, 2, 27, 33:43]]
+                    Role_20_Mean_Charts = lista_similares_latam.iloc[:, np.r_[0, 2, 27, 33:43]]
                     target = target.iloc[:, np.r_[0, 2, 27, 33:43]]
                     # Renomeando Colunas
                     Role_20_Mean_Charts = Role_20_Mean_Charts.rename(columns={'Ações_Defensivas_BemSucedidas_Percentil':'Ações_Defensivas_BemSucedidas', 'Duelos_Defensivos_Ganhos_Percentil':'Duelos_Defensivos_Ganhos', 'Duelos_Aéreos_Ganhos_Percentil':'Duelos_Aéreos_Ganhos',
@@ -18799,15 +18796,15 @@ if choose == "Jogadores Similares":
                     st.markdown("---")
 
                     # Lista de Latinos
-                    selected_latam = selected[(selected["Nacionalidade"] == "Argentina")|(selected["Nacionalidade"] == "Brazil")
-                                        |(selected["Nacionalidade"] == "Bolivia")|(selected["Nacionalidade"] == "Chile")
-                                        |(selected["Nacionalidade"] == "Colombia")|(selected["Nacionalidade"] == "Costa Rica")
-                                        |(selected["Nacionalidade"] == "Ecuador")|(selected["Nacionalidade"] == "Mexico")
-                                        |(selected["Nacionalidade"] == "Panama")|(selected["Nacionalidade"] == "Paraguay")
-                                        |(selected["Nacionalidade"] == "Peru")|(selected["Nacionalidade"] == "Uruguay")
-                                        |(selected["Nacionalidade"] == "Venezuela")]
-
-                    lista_similares_latam = selected_latam.iloc[1:31, np.r_[0, 2, 26, 31, -2:0]]
+                    selected_latam = selected.iloc[1:31, :]
+                    selected_latam = selected_latam[(selected_latam["Nacionalidade"] == "Argentina")|(selected_latam["Nacionalidade"] == "Brazil")
+                                        |(selected_latam["Nacionalidade"] == "Bolivia")|(selected_latam["Nacionalidade"] == "Chile")
+                                        |(selected_latam["Nacionalidade"] == "Colombia")|(selected_latam["Nacionalidade"] == "Costa Rica")
+                                        |(selected_latam["Nacionalidade"] == "Ecuador")|(selected_latam["Nacionalidade"] == "Mexico")
+                                        |(selected_latam["Nacionalidade"] == "Panama")|(selected_latam["Nacionalidade"] == "Paraguay")
+                                        |(selected_latam["Nacionalidade"] == "Peru")|(selected_latam["Nacionalidade"] == "Uruguay")
+                                        |(selected_latam["Nacionalidade"] == "Venezuela")]
+                    lista_similares_latam = selected_latam.iloc[0:30, :]
                     lista_similares_latam = lista_similares_latam.sort_values(by="Rating", ascending = False)
 
                     #Texto para os Gráficos
@@ -18817,7 +18814,7 @@ if choose == "Jogadores Similares":
 
                     # Gerar Gráficos com os 5 melhores
                     # Arquivo para o Gráfico
-                    Role_21_Mean_Charts = selected_latam.iloc[:, np.r_[0, 2, 26, 32:41]]
+                    Role_21_Mean_Charts = lista_similares_latam.iloc[:, np.r_[0, 2, 26, 32:41]]
                     target = target.iloc[:, np.r_[0, 2, 26, 32:41]]
                     # Renomeando Colunas
                     Role_21_Mean_Charts = Role_21_Mean_Charts.rename(columns={'Ações_Defensivas_BemSucedidas_Percentil':'Ações_Defensivas_BemSucedidas', 'Duelos_Defensivos_Ganhos_Percentil':'Duelos_Defensivos_Ganhos', 'Duelos_Aéreos_Ganhos_Percentil':'Duelos_Aéreos_Ganhos',
@@ -19358,15 +19355,16 @@ if choose == "Jogadores Similares":
                     st.markdown("---")
 
                     # Lista de Latinos
-                    selected_latam = selected[(selected["Nacionalidade"] == "Argentina")|(selected["Nacionalidade"] == "Brazil")
-                                        |(selected["Nacionalidade"] == "Bolivia")|(selected["Nacionalidade"] == "Chile")
-                                        |(selected["Nacionalidade"] == "Colombia")|(selected["Nacionalidade"] == "Costa Rica")
-                                        |(selected["Nacionalidade"] == "Ecuador")|(selected["Nacionalidade"] == "Mexico")
-                                        |(selected["Nacionalidade"] == "Panama")|(selected["Nacionalidade"] == "Paraguay")
-                                        |(selected["Nacionalidade"] == "Peru")|(selected["Nacionalidade"] == "Uruguay")
-                                        |(selected["Nacionalidade"] == "Venezuela")]
+                    selected_latam = selected.iloc[1:31, :]
+                    selected_latam = selected_latam[(selected_latam["Nacionalidade"] == "Argentina")|(selected_latam["Nacionalidade"] == "Brazil")
+                                        |(selected_latam["Nacionalidade"] == "Bolivia")|(selected_latam["Nacionalidade"] == "Chile")
+                                        |(selected_latam["Nacionalidade"] == "Colombia")|(selected_latam["Nacionalidade"] == "Costa Rica")
+                                        |(selected_latam["Nacionalidade"] == "Ecuador")|(selected_latam["Nacionalidade"] == "Mexico")
+                                        |(selected_latam["Nacionalidade"] == "Panama")|(selected_latam["Nacionalidade"] == "Paraguay")
+                                        |(selected_latam["Nacionalidade"] == "Peru")|(selected_latam["Nacionalidade"] == "Uruguay")
+                                        |(selected_latam["Nacionalidade"] == "Venezuela")]
+                    lista_similares_latam = selected_latam.iloc[0:30, :]
 
-                    lista_similares_latam = selected_latam.iloc[1:31, np.r_[0, 2, 30, 35, -2:0]]
                     lista_similares_latam = lista_similares_latam.sort_values(by="Rating", ascending = False)
 
                     #Texto para os Gráficos
@@ -19376,7 +19374,7 @@ if choose == "Jogadores Similares":
 
                     # Gerar Gráficos com os 5 melhores
                     # Arquivo para o Gráfico
-                    Role_22_Mean_Charts = selected_latam.iloc[:, np.r_[0, 2, 30, 36:49]]
+                    Role_22_Mean_Charts = lista_similares_latam.iloc[:, np.r_[0, 2, 30, 36:49]]
                     target = target.iloc[:, np.r_[0, 2, 30, 36:49]]
                     # Renomeando Colunas
                     Role_22_Mean_Charts = Role_22_Mean_Charts.rename(columns={'Ações_Defensivas_BemSucedidas_Percentil':'Ações_Defensivas_BemSucedidas', 'Duelos_Defensivos_Ganhos_Percentil':'Duelos_Defensivos_Ganhos', 'Duelos_Aéreos_Ganhos_Percentil':'Duelos_Aéreos_Ganhos',
