@@ -26,7 +26,7 @@ df6 = pd.read_csv("Posições.csv")
 df7 = pd.read_csv("temporadas.csv")
 df8 = pd.read_csv("nacionalidades.csv")
 df9 = pd.read_csv("contratos.csv")
-df10 = pd.read_csv('jogadores_similares.csv')
+df10 = pd.read_csv('jogadores_similares_2.csv')
 
 with st.sidebar:
 
@@ -4637,6 +4637,7 @@ if choose == "Jogadores Similares":
             df11 = df10.loc[(df10['Atleta']==jogador_similar) & (df10['Liga']==liga_similar)]
             posições = df11['Posição'].unique()
             posição_similar = st.selectbox("Escolha a Posição", options=posições)
+            dfequipe = df11['Equipe_Janela_Análise']
             if posição_similar:
                 #Determinar Perfil
                 df12 = df2.loc[(df2["Posição"]==posição_similar)]
@@ -4756,13 +4757,13 @@ if choose == "Jogadores Similares":
 
                     # Lista de Similares
                     # Initialize an empty list to store DataFrames
-                    target = selected.loc[(Role_1_data['Atleta'] == jogador_similar)]
+                    target = selected.loc[(Role_1_data['Atleta'] == jogador_similar) & (Role_1_data['Liga'] == liga_similar)]
                     target_similarity = target.iat[0, -1]
 
                     selected["Índice de Similaridade"] = (selected['Similarity']/target_similarity)*100
                     selected["Índice de Similaridade"] = round(selected["Índice de Similaridade"], 2)
 
-                    target = selected.loc[(selected['Atleta'] == jogador_similar)]
+                    target = selected.loc[(selected['Atleta'] == jogador_similar) & (selected['Liga'] == liga_similar)]
                     selected['Dif_Similarity'] = abs(selected["Índice de Similaridade"] - 100)
 
                     selected = selected.sort_values(by='Dif_Similarity')
@@ -5264,13 +5265,13 @@ if choose == "Jogadores Similares":
 
                     # Lista de Similares
                     # Initialize an empty list to store DataFrames
-                    target = selected.loc[(Role_2_data['Atleta'] == jogador_similar)]
+                    target = selected.loc[(Role_2_data['Atleta'] == jogador_similar) & (Role_2_data['Liga'] == liga_similar)]
                     target_similarity = target.iat[0, -1]
 
                     selected["Índice de Similaridade"] = (selected['Similarity']/target_similarity)*100
                     selected["Índice de Similaridade"] = round(selected["Índice de Similaridade"], 2)
 
-                    target = selected.loc[(selected['Atleta'] == jogador_similar)]
+                    target = selected.loc[(selected['Atleta'] == jogador_similar) & (selected['Liga'] == liga_similar)]
                     selected['Dif_Similarity'] = abs(selected["Índice de Similaridade"] - 100)
 
                     selected = selected.sort_values(by='Dif_Similarity')
@@ -5739,13 +5740,13 @@ if choose == "Jogadores Similares":
 
                     # Lista de Similares
                     # Initialize an empty list to store DataFrames
-                    target = selected.loc[(Role_3_data['Atleta'] == jogador_similar)]
+                    target = selected.loc[(Role_3_data['Atleta'] == jogador_similar) & (Role_3_data['Liga'] == liga_similar)]
                     target_similarity = target.iat[0, -1]
 
                     selected["Índice de Similaridade"] = (selected['Similarity']/target_similarity)*100
                     selected["Índice de Similaridade"] = round(selected["Índice de Similaridade"], 2)
 
-                    target = selected.loc[(selected['Atleta'] == jogador_similar)]
+                    target = selected.loc[(selected['Atleta'] == jogador_similar) & (selected['Liga'] == liga_similar)]
                     selected['Dif_Similarity'] = abs(selected["Índice de Similaridade"] - 100)
 
                     selected = selected.sort_values(by='Dif_Similarity')
@@ -6320,13 +6321,13 @@ if choose == "Jogadores Similares":
 
                     # Lista de Similares
                     # Initialize an empty list to store DataFrames
-                    target = selected.loc[(Role_4_data['Atleta'] == jogador_similar)]
+                    target = selected.loc[(Role_4_data['Atleta'] == jogador_similar) & (Role_4_data['Liga'] == liga_similar)]
                     target_similarity = target.iat[0, -1]
 
                     selected["Índice de Similaridade"] = (selected['Similarity']/target_similarity)*100
                     selected["Índice de Similaridade"] = round(selected["Índice de Similaridade"], 2)
 
-                    target = selected.loc[(selected['Atleta'] == jogador_similar)]
+                    target = selected.loc[(selected['Atleta'] == jogador_similar) & (selected['Liga'] == liga_similar)]
                     selected['Dif_Similarity'] = abs(selected["Índice de Similaridade"] - 100)
 
                     selected = selected.sort_values(by='Dif_Similarity')
@@ -7204,13 +7205,13 @@ if choose == "Jogadores Similares":
 
                     # Lista de Similares
                     # Initialize an empty list to store DataFrames
-                    target = selected.loc[(Role_5_data['Atleta'] == jogador_similar)]
+                    target = selected.loc[(Role_5_data['Atleta'] == jogador_similar) & (Role_5_data['Liga'] == liga_similar)]
                     target_similarity = target.iat[0, -1]
 
                     selected["Índice de Similaridade"] = (selected['Similarity']/target_similarity)*100
                     selected["Índice de Similaridade"] = round(selected["Índice de Similaridade"], 2)
 
-                    target = selected.loc[(selected['Atleta'] == jogador_similar)]
+                    target = selected.loc[(selected['Atleta'] == jogador_similar) & (selected['Liga'] == liga_similar)]
                     selected['Dif_Similarity'] = abs(selected["Índice de Similaridade"] - 100)
 
                     selected = selected.sort_values(by='Dif_Similarity')
@@ -7931,13 +7932,13 @@ if choose == "Jogadores Similares":
 
                     # Lista de Similares
                     # Initialize an empty list to store DataFrames
-                    target = selected.loc[(Role_6_data['Atleta'] == jogador_similar)]
+                    target = selected.loc[(Role_6_data['Atleta'] == jogador_similar) & (Role_6_data['Liga'] == liga_similar)]
                     target_similarity = target.iat[0, -1]
 
                     selected["Índice de Similaridade"] = (selected['Similarity']/target_similarity)*100
                     selected["Índice de Similaridade"] = round(selected["Índice de Similaridade"], 2)
 
-                    target = selected.loc[(selected['Atleta'] == jogador_similar)]
+                    target = selected.loc[(selected['Atleta'] == jogador_similar) & (selected['Liga'] == liga_similar)]
                     selected['Dif_Similarity'] = abs(selected["Índice de Similaridade"] - 100)
 
                     selected = selected.sort_values(by='Dif_Similarity')
@@ -8447,13 +8448,13 @@ if choose == "Jogadores Similares":
 
                     # Lista de Similares
                     # Initialize an empty list to store DataFrames
-                    target = selected.loc[(Role_7_data['Atleta'] == jogador_similar)]
+                    target = selected.loc[(Role_7_data['Atleta'] == jogador_similar) & (Role_7_data['Liga'] == liga_similar)]
                     target_similarity = target.iat[0, -1]
 
                     selected["Índice de Similaridade"] = (selected['Similarity']/target_similarity)*100
                     selected["Índice de Similaridade"] = round(selected["Índice de Similaridade"], 2)
 
-                    target = selected.loc[(selected['Atleta'] == jogador_similar)]
+                    target = selected.loc[(selected['Atleta'] == jogador_similar) & (selected['Liga'] == liga_similar)]
                     selected['Dif_Similarity'] = abs(selected["Índice de Similaridade"] - 100)
 
                     selected = selected.sort_values(by='Dif_Similarity')
@@ -9232,13 +9233,13 @@ if choose == "Jogadores Similares":
 
                     # Lista de Similares
                     # Initialize an empty list to store DataFrames
-                    target = selected.loc[(Role_8_data['Atleta'] == jogador_similar)]
+                    target = selected.loc[(Role_8_data['Atleta'] == jogador_similar) & (Role_8_data['Liga'] == liga_similar)]
                     target_similarity = target.iat[0, -1]
 
                     selected["Índice de Similaridade"] = (selected['Similarity']/target_similarity)*100
                     selected["Índice de Similaridade"] = round(selected["Índice de Similaridade"], 2)
 
-                    target = selected.loc[(selected['Atleta'] == jogador_similar)]
+                    target = selected.loc[(selected['Atleta'] == jogador_similar) & (selected['Liga'] == liga_similar)]
                     selected['Dif_Similarity'] = abs(selected["Índice de Similaridade"] - 100)
 
                     selected = selected.sort_values(by='Dif_Similarity')
@@ -9947,13 +9948,13 @@ if choose == "Jogadores Similares":
 
                     # Lista de Similares
                     # Initialize an empty list to store DataFrames
-                    target = selected.loc[(Role_9_data['Atleta'] == jogador_similar)]
+                    target = selected.loc[(Role_9_data['Atleta'] == jogador_similar) & (Role_9_data['Liga'] == liga_similar)]
                     target_similarity = target.iat[0, -1]
 
                     selected["Índice de Similaridade"] = (selected['Similarity']/target_similarity)*100
                     selected["Índice de Similaridade"] = round(selected["Índice de Similaridade"], 2)
 
-                    target = selected.loc[(selected['Atleta'] == jogador_similar)]
+                    target = selected.loc[(selected['Atleta'] == jogador_similar) & (selected['Liga'] == liga_similar)]
                     selected['Dif_Similarity'] = abs(selected["Índice de Similaridade"] - 100)
 
                     selected = selected.sort_values(by='Dif_Similarity')
@@ -10460,13 +10461,13 @@ if choose == "Jogadores Similares":
 
                     # Lista de Similares
                     # Initialize an empty list to store DataFrames
-                    target = selected.loc[(Role_10_data['Atleta'] == jogador_similar)]
+                    target = selected.loc[(Role_10_data['Atleta'] == jogador_similar) & (Role_10_data['Liga'] == liga_similar)]
                     target_similarity = target.iat[0, -1]
 
                     selected["Índice de Similaridade"] = (selected['Similarity']/target_similarity)*100
                     selected["Índice de Similaridade"] = round(selected["Índice de Similaridade"], 2)
 
-                    target = selected.loc[(selected['Atleta'] == jogador_similar)]
+                    target = selected.loc[(selected['Atleta'] == jogador_similar) & (selected['Liga'] == liga_similar)]
                     selected['Dif_Similarity'] = abs(selected["Índice de Similaridade"] - 100)
 
                     selected = selected.sort_values(by='Dif_Similarity')
@@ -11028,13 +11029,13 @@ if choose == "Jogadores Similares":
 
                     # Lista de Similares
                     # Initialize an empty list to store DataFrames
-                    target = selected.loc[(Role_11_data['Atleta'] == jogador_similar)]
+                    target = selected.loc[(Role_11_data['Atleta'] == jogador_similar) & (Role_11_data['Liga'] == liga_similar)]
                     target_similarity = target.iat[0, -1]
 
                     selected["Índice de Similaridade"] = (selected['Similarity']/target_similarity)*100
                     selected["Índice de Similaridade"] = round(selected["Índice de Similaridade"], 2)
 
-                    target = selected.loc[(selected['Atleta'] == jogador_similar)]
+                    target = selected.loc[(selected['Atleta'] == jogador_similar) & (selected['Liga'] == liga_similar)]
                     selected['Dif_Similarity'] = abs(selected["Índice de Similaridade"] - 100)
 
                     selected = selected.sort_values(by='Dif_Similarity')
@@ -11854,13 +11855,13 @@ if choose == "Jogadores Similares":
 
                     # Lista de Similares
                     # Initialize an empty list to store DataFrames
-                    target = selected.loc[(Role_12_data['Atleta'] == jogador_similar)]
+                    target = selected.loc[(Role_12_data['Atleta'] == jogador_similar) & (Role_12_data['Liga'] == liga_similar)]
                     target_similarity = target.iat[0, -1]
 
                     selected["Índice de Similaridade"] = (selected['Similarity']/target_similarity)*100
                     selected["Índice de Similaridade"] = round(selected["Índice de Similaridade"], 2)
 
-                    target = selected.loc[(selected['Atleta'] == jogador_similar)]
+                    target = selected.loc[(selected['Atleta'] == jogador_similar) & (selected['Liga'] == liga_similar)]
                     selected['Dif_Similarity'] = abs(selected["Índice de Similaridade"] - 100)
 
                     selected = selected.sort_values(by='Dif_Similarity')
@@ -12643,13 +12644,13 @@ if choose == "Jogadores Similares":
 
                     # Lista de Similares
                     # Initialize an empty list to store DataFrames
-                    target = selected.loc[(Role_13_data['Atleta'] == jogador_similar)]
+                    target = selected.loc[(Role_13_data['Atleta'] == jogador_similar) & (Role_13_data['Liga'] == liga_similar)]
                     target_similarity = target.iat[0, -1]
 
                     selected["Índice de Similaridade"] = (selected['Similarity']/target_similarity)*100
                     selected["Índice de Similaridade"] = round(selected["Índice de Similaridade"], 2)
 
-                    target = selected.loc[(selected['Atleta'] == jogador_similar)]
+                    target = selected.loc[(selected['Atleta'] == jogador_similar) & (selected['Liga'] == liga_similar)]
                     selected['Dif_Similarity'] = abs(selected["Índice de Similaridade"] - 100)
 
                     selected = selected.sort_values(by='Dif_Similarity')
@@ -13440,13 +13441,13 @@ if choose == "Jogadores Similares":
 
                     # Lista de Similares
                     # Initialize an empty list to store DataFrames
-                    target = selected.loc[(Role_14_data['Atleta'] == jogador_similar)]
+                    target = selected.loc[(Role_14_data['Atleta'] == jogador_similar) & (Role_14_data['Liga'] == liga_similar)]
                     target_similarity = target.iat[0, -1]
 
                     selected["Índice de Similaridade"] = (selected['Similarity']/target_similarity)*100
                     selected["Índice de Similaridade"] = round(selected["Índice de Similaridade"], 2)
 
-                    target = selected.loc[(selected['Atleta'] == jogador_similar)]
+                    target = selected.loc[(selected['Atleta'] == jogador_similar) & (selected['Liga'] == liga_similar)]
                     selected['Dif_Similarity'] = abs(selected["Índice de Similaridade"] - 100)
 
                     selected = selected.sort_values(by='Dif_Similarity')
@@ -14217,13 +14218,13 @@ if choose == "Jogadores Similares":
 
                     # Lista de Similares
                     # Initialize an empty list to store DataFrames
-                    target = selected.loc[(Role_15_data['Atleta'] == jogador_similar)]
+                    target = selected.loc[(Role_15_data['Atleta'] == jogador_similar) & (Role_15_data['Liga'] == liga_similar)]
                     target_similarity = target.iat[0, -1]
 
                     selected["Índice de Similaridade"] = (selected['Similarity']/target_similarity)*100
                     selected["Índice de Similaridade"] = round(selected["Índice de Similaridade"], 2)
 
-                    target = selected.loc[(selected['Atleta'] == jogador_similar)]
+                    target = selected.loc[(selected['Atleta'] == jogador_similar) & (selected['Liga'] == liga_similar)]
                     selected['Dif_Similarity'] = abs(selected["Índice de Similaridade"] - 100)
 
                     selected = selected.sort_values(by='Dif_Similarity')
@@ -15098,13 +15099,13 @@ if choose == "Jogadores Similares":
 
                     # Lista de Similares
                     # Initialize an empty list to store DataFrames
-                    target = selected.loc[(Role_16_data['Atleta'] == jogador_similar)]
+                    target = selected.loc[(Role_16_data['Atleta'] == jogador_similar) & (Role_16_data['Liga'] == liga_similar)]
                     target_similarity = target.iat[0, -1]
 
                     selected["Índice de Similaridade"] = (selected['Similarity']/target_similarity)*100
                     selected["Índice de Similaridade"] = round(selected["Índice de Similaridade"], 2)
 
-                    target = selected.loc[(selected['Atleta'] == jogador_similar)]
+                    target = selected.loc[(selected['Atleta'] == jogador_similar) & (selected['Liga'] == liga_similar)]
                     selected['Dif_Similarity'] = abs(selected["Índice de Similaridade"] - 100)
 
                     selected = selected.sort_values(by='Dif_Similarity')
@@ -15896,13 +15897,13 @@ if choose == "Jogadores Similares":
 
                     # Lista de Similares
                     # Initialize an empty list to store DataFrames
-                    target = selected.loc[(Role_17_data['Atleta'] == jogador_similar)]
+                    target = selected.loc[(Role_17_data['Atleta'] == jogador_similar) & (Role_17_data['Liga'] == liga_similar)]
                     target_similarity = target.iat[0, -1]
 
                     selected["Índice de Similaridade"] = (selected['Similarity']/target_similarity)*100
                     selected["Índice de Similaridade"] = round(selected["Índice de Similaridade"], 2)
 
-                    target = selected.loc[(selected['Atleta'] == jogador_similar)]
+                    target = selected.loc[(selected['Atleta'] == jogador_similar) & (selected['Liga'] == liga_similar)]
                     selected['Dif_Similarity'] = abs(selected["Índice de Similaridade"] - 100)
 
                     selected = selected.sort_values(by='Dif_Similarity')
@@ -16631,13 +16632,13 @@ if choose == "Jogadores Similares":
 
                     # Lista de Similares
                     # Initialize an empty list to store DataFrames
-                    target = selected.loc[(Role_18_data['Atleta'] == jogador_similar)]
+                    target = selected.loc[(Role_18_data['Atleta'] == jogador_similar) & (Role_18_data['Liga'] == liga_similar)]
                     target_similarity = target.iat[0, -1]
 
                     selected["Índice de Similaridade"] = (selected['Similarity']/target_similarity)*100
                     selected["Índice de Similaridade"] = round(selected["Índice de Similaridade"], 2)
 
-                    target = selected.loc[(selected['Atleta'] == jogador_similar)]
+                    target = selected.loc[(selected['Atleta'] == jogador_similar) & (selected['Liga'] == liga_similar)]
                     selected['Dif_Similarity'] = abs(selected["Índice de Similaridade"] - 100)
 
                     selected = selected.sort_values(by='Dif_Similarity')
@@ -17184,13 +17185,13 @@ if choose == "Jogadores Similares":
 
                     # Lista de Similares
                     # Initialize an empty list to store DataFrames
-                    target = selected.loc[(Role_19_data['Atleta'] == jogador_similar)]
+                    target = selected.loc[(Role_19_data['Atleta'] == jogador_similar) & (Role_19_data['Liga'] == liga_similar)]
                     target_similarity = target.iat[0, -1]
 
                     selected["Índice de Similaridade"] = (selected['Similarity']/target_similarity)*100
                     selected["Índice de Similaridade"] = round(selected["Índice de Similaridade"], 2)
 
-                    target = selected.loc[(selected['Atleta'] == jogador_similar)]
+                    target = selected.loc[(selected['Atleta'] == jogador_similar) & (selected['Liga'] == liga_similar)]
                     selected['Dif_Similarity'] = abs(selected["Índice de Similaridade"] - 100)
 
                     selected = selected.sort_values(by='Dif_Similarity')
@@ -17804,7 +17805,7 @@ if choose == "Jogadores Similares":
                 if perfil_similar == ("Atacante Referência"):
                 ###############################################################################
                 ###########################################################################
-                    # PRIMEIRO VOLANTE EQUILIBRADO
+                    # ATACANTE REFERÊNCIA
                     # Texto de Abertura>
                     markdown_amount_1 = f"<div style='text-align:center; font-size:{fontsize}px'>{jogador_similar:}</div>"
                     st.markdown("<h4 style='text-align: center;'>Jogador Selecionado</b></h4>", unsafe_allow_html=True)
@@ -17974,19 +17975,20 @@ if choose == "Jogadores Similares":
 
                     # Rebuilding Full Training Set
                     selected = selected.join(Similarity)
+                    st.dataframe(selected)
 
                     ##############################################################
                     ##############################################################
 
                     # Lista de Similares
                     # Initialize an empty list to store DataFrames
-                    target = selected.loc[(Role_20_data['Atleta'] == jogador_similar)]
+                    target = selected.loc[(Role_20_data['Atleta'] == jogador_similar) & (Role_20_data['Liga'] == liga_similar)]
                     target_similarity = target.iat[0, -1]
 
                     selected["Índice de Similaridade"] = (selected['Similarity']/target_similarity)*100
                     selected["Índice de Similaridade"] = round(selected["Índice de Similaridade"], 2)
 
-                    target = selected.loc[(selected['Atleta'] == jogador_similar)]
+                    target = selected.loc[(selected['Atleta'] == jogador_similar) & (selected['Liga'] == liga_similar)]
                     selected['Dif_Similarity'] = abs(selected["Índice de Similaridade"] - 100)
 
                     selected = selected.sort_values(by='Dif_Similarity')
@@ -18776,13 +18778,13 @@ if choose == "Jogadores Similares":
 
                     # Lista de Similares
                     # Initialize an empty list to store DataFrames
-                    target = selected.loc[(Role_21_data['Atleta'] == jogador_similar)]
+                    target = selected.loc[(Role_21_data['Atleta'] == jogador_similar) & (Role_21_data['Liga'] == liga_similar)]
                     target_similarity = target.iat[0, -1]
 
                     selected["Índice de Similaridade"] = (selected['Similarity']/target_similarity)*100
                     selected["Índice de Similaridade"] = round(selected["Índice de Similaridade"], 2)
 
-                    target = selected.loc[(selected['Atleta'] == jogador_similar)]
+                    target = selected.loc[(selected['Atleta'] == jogador_similar) & (selected['Liga'] == liga_similar)]
                     selected['Dif_Similarity'] = abs(selected["Índice de Similaridade"] - 100)
 
                     selected = selected.sort_values(by='Dif_Similarity')
@@ -19335,13 +19337,13 @@ if choose == "Jogadores Similares":
 
                     # Lista de Similares
                     # Initialize an empty list to store DataFrames
-                    target = selected.loc[(Role_22_data['Atleta'] == jogador_similar)]
+                    target = selected.loc[(Role_22_data['Atleta'] == jogador_similar) & (Role_22_data['Liga'] == liga_similar)]
                     target_similarity = target.iat[0, -1]
 
                     selected["Índice de Similaridade"] = (selected['Similarity']/target_similarity)*100
                     selected["Índice de Similaridade"] = round(selected["Índice de Similaridade"], 2)
 
-                    target = selected.loc[(selected['Atleta'] == jogador_similar)]
+                    target = selected.loc[(selected['Atleta'] == jogador_similar) & (selected['Liga'] == liga_similar)]
                     selected['Dif_Similarity'] = abs(selected["Índice de Similaridade"] - 100)
 
                     selected = selected.sort_values(by='Dif_Similarity')
