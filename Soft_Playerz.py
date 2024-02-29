@@ -18,15 +18,15 @@ st.markdown("<h6 style='text-align: center;'>app by @JAmerico1898</h6>", unsafe_
 st.markdown("<h6 style='text-align: center;'>A análise contempla +40.000 jogadores atuando em 62 ligas, em 22 funções diferentes<br> e +900 minutos em campo nas 3 últimas temporadas. Dados do Wyscout.<br>Atualizado em 10Dez2023.</h6>", unsafe_allow_html=True)
 st.markdown("---")
 
-df = pd.read_excel("jogadores.xlsx")
-df1 = pd.read_excel("jogador.xlsx")
-df2 = pd.read_excel("Funções.xlsx")
-df5 = pd.read_excel("ligas.xlsx")
-df6 = pd.read_excel("Posições.xlsx")
-df7 = pd.read_excel("temporadas.xlsx")
-df8 = pd.read_excel("nacionalidades.xlsx")
-df9 = pd.read_excel("contratos.xlsx")
-df10 = pd.read_excel('jogadores_similares.xlsx')
+df = pd.read_csv("jogadores.csv")
+df1 = pd.read_csv("jogador.csv")
+df2 = pd.read_csv("Funções.csv")
+df5 = pd.read_csv("ligas.csv")
+df6 = pd.read_csv("Posições.csv")
+df7 = pd.read_csv("temporadas.csv")
+df8 = pd.read_csv("nacionalidades.csv")
+df9 = pd.read_csv("contratos.csv")
+df10 = pd.read_csv('jogadores_similares.csv')
 
 with st.sidebar:
 
@@ -52,7 +52,7 @@ if choose == "Histórico do Jogador":
     nacionalidade = st.selectbox("Escolha a Nacionalidade do Atleta", options=nacionalidades)
     if jogadores and nacionalidade:
         st.markdown("<h4 style='text-align: center;'>Histórico do Jogador<br>Temporadas 2021/2022/2023<br>ou<br>Temporadas 2020-21/2021-22/2022-23</b></h4>", unsafe_allow_html=True)
-        historico = pd.read_excel("base_bruta.xlsx")
+        historico = pd.read_csv("base_bruta.csv")
         historico = historico.loc[(historico['Atleta']==jogadores)&(historico['Nacionalidade']==nacionalidade)]
         historico = historico.iloc[:, np.r_[0, 2, 9, 10, 13, 15, 16]]
         st.dataframe(historico, use_container_width=True, hide_index=True)
@@ -71,7 +71,7 @@ if choose == "10 Melhores da Liga":
     if liga and temporada:
         if posição == "Goleiro":
             st.markdown("<h4 style='text-align: center;'>10 Goleiros Clássicos Mais Bem Ranqueados</b></h4>", unsafe_allow_html=True)
-            tabela_3 = pd.read_excel("1_Role_Goleiro.xlsx")
+            tabela_3 = pd.read_csv("1_Role_Goleiro.csv")
             tabela_3 = tabela_3[(tabela_3['Liga']==liga)&(tabela_3['Versão_Temporada']==temporada)]
             tabela_3 = tabela_3.iloc[:, np.r_[1, 30, 3, 4, 7, 8:12, 15, 18:27]]
             tabela_3 = tabela_3.rename(columns={'Equipe_Janela_Análise':'Equipe', 'Posição_Wyscout':'Posição', 'Versão_Temporada':'Janela de Análise', 'Interceptações.1':'Interceptações'})
@@ -79,7 +79,7 @@ if choose == "10 Melhores da Liga":
             st.dataframe(tabela_3, use_container_width=True, hide_index=True)
 
             st.markdown("<h4 style='text-align: center;'>10 Goleiros Líberos Mais Bem Ranqueados</b></h4>", unsafe_allow_html=True)
-            tabela_4 = pd.read_excel("2_Role_Goleiro_Líbero.xlsx")
+            tabela_4 = pd.read_csv("2_Role_Goleiro_Líbero.csv")
             tabela_4 = tabela_4[(tabela_4['Liga']==liga)&(tabela_4['Versão_Temporada']==temporada)]
             tabela_4 = tabela_4.iloc[:, np.r_[1, 33, 3, 4, 7, 8:12, 15, 18:28]]
             tabela_4 = tabela_4.rename(columns={'Equipe_Janela_Análise':'Equipe', 'Posição_Wyscout':'Posição', 'Versão_Temporada':'Janela de Análise', 'Interceptações.1':'Interceptações'})
@@ -88,7 +88,7 @@ if choose == "10 Melhores da Liga":
 
         elif posição == "Lateral":
             st.markdown("<h4 style='text-align: center;'>10 Laterais Defensivos Mais Bem Ranqueados</b></h4>", unsafe_allow_html=True)
-            tabela_3 = pd.read_excel("3_Role_Lateral_Defensivo.xlsx")
+            tabela_3 = pd.read_csv("3_Role_Lateral_Defensivo.csv")
             tabela_3 = tabela_3[(tabela_3['Liga']==liga)&(tabela_3['Versão_Temporada']==temporada)]
             tabela_3 = tabela_3.iloc[:, np.r_[1, 29, 3, 4, 7, 8:12, 15, 18:23]]
             tabela_3 = tabela_3.rename(columns={'Equipe_Janela_Análise':'Equipe'})
@@ -96,7 +96,7 @@ if choose == "10 Melhores da Liga":
             st.dataframe(tabela_3, use_container_width=True, hide_index=True)
 
             st.markdown("<h4 style='text-align: center;'>10 Laterais Ofensivos Mais Bem Ranqueados</b></h4>", unsafe_allow_html=True)
-            tabela_4 = pd.read_excel("4_Role_Lateral_Ofensivo.xlsx")
+            tabela_4 = pd.read_csv("4_Role_Lateral_Ofensivo.csv")
             tabela_4 = tabela_4[(tabela_4['Liga']==liga)&(tabela_4['Versão_Temporada']==temporada)]
             tabela_4 = tabela_4.iloc[:, np.r_[1, 38, 3, 4, 7, 8:12, 15, 18:33]]
             tabela_4 = tabela_4.rename(columns={'Equipe_Janela_Análise':'Equipe'})
@@ -104,7 +104,7 @@ if choose == "10 Melhores da Liga":
             st.dataframe(tabela_4, use_container_width=True, hide_index=True)
 
             st.markdown("<h4 style='text-align: center;'>10 Laterais Equilibrados Mais Bem Ranqueados</b></h4>", unsafe_allow_html=True)
-            tabela_5 = pd.read_excel("5_Role_Lateral_Equilibrado.xlsx")
+            tabela_5 = pd.read_csv("5_Role_Lateral_Equilibrado.csv")
             tabela_5 = tabela_5[(tabela_5['Liga']==liga)&(tabela_5['Versão_Temporada']==temporada)]
             tabela_5 = tabela_5.iloc[:, np.r_[1, 41, 3, 4, 7, 8:12, 15, 18:35]]
             tabela_5 = tabela_5.rename(columns={'Equipe_Janela_Análise':'Equipe'})
@@ -113,7 +113,7 @@ if choose == "10 Melhores da Liga":
 
         elif posição == "Zagueiro":
             st.markdown("<h4 style='text-align: center;'>10 Zagueiros Clássicos Mais Bem Ranqueados</b></h4>", unsafe_allow_html=True)
-            tabela_6 = pd.read_excel("6_Role_Zagueiro_Defensivo.xlsx")
+            tabela_6 = pd.read_csv("6_Role_Zagueiro_Defensivo.csv")
             tabela_6 = tabela_6[(tabela_6['Liga']==liga)&(tabela_6['Versão_Temporada']==temporada)]
             tabela_6 = tabela_6.iloc[:, np.r_[1, 29, 3, 4, 7, 8:12, 15, 18:23]]
             tabela_6 = tabela_6.rename(columns={'Equipe_Janela_Análise':'Equipe'})
@@ -121,7 +121,7 @@ if choose == "10 Melhores da Liga":
             st.dataframe(tabela_6, use_container_width=True, hide_index=True)
 
             st.markdown("<h4 style='text-align: center;'>10 Zagueiros Construtores Mais Bem Ranqueados</b></h4>", unsafe_allow_html=True)
-            tabela_7 = pd.read_excel("7_Role_Zagueiro_Construtor.xlsx")
+            tabela_7 = pd.read_csv("7_Role_Zagueiro_Construtor.csv")
             tabela_7 = tabela_7[(tabela_7['Liga']==liga)&(tabela_7['Versão_Temporada']==temporada)]
             tabela_7 = tabela_7.iloc[:, np.r_[1, 33, 3, 4, 7, 8:12, 15, 18:28]]
             tabela_7 = tabela_7.rename(columns={'Equipe_Janela_Análise':'Equipe'})
@@ -129,7 +129,7 @@ if choose == "10 Melhores da Liga":
             st.dataframe(tabela_7, use_container_width=True, hide_index=True)
 
             st.markdown("<h4 style='text-align: center;'>10 Zagueiros Equilibrados Mais Bem Ranqueados</b></h4>", unsafe_allow_html=True)
-            tabela_8 = pd.read_excel("8_Role_Zagueiro_Equilibrado.xlsx")
+            tabela_8 = pd.read_csv("8_Role_Zagueiro_Equilibrado.csv")
             tabela_8 = tabela_8[(tabela_8['Liga']==liga)&(tabela_8['Versão_Temporada']==temporada)]
             tabela_8 = tabela_8.iloc[:, np.r_[1, 36, 3, 4, 7, 8:12, 15, 18:32]]
             tabela_8 = tabela_8.rename(columns={'Equipe_Janela_Análise':'Equipe'})
@@ -138,7 +138,7 @@ if choose == "10 Melhores da Liga":
 
         elif posição == "Primeiro Volante":
             st.markdown("<h4 style='text-align: center;'>10 Primeiros Volantes Defensivos Bem Ranqueados</b></h4>", unsafe_allow_html=True)
-            tabela_12 = pd.read_excel("9_Role_Volante_Defensivo.xlsx")
+            tabela_12 = pd.read_csv("9_Role_Volante_Defensivo.csv")
             tabela_12 = tabela_12[(tabela_12['Liga']==liga)&(tabela_12['Versão_Temporada']==temporada)]
             tabela_12 = tabela_12.iloc[:, np.r_[1, 27, 3, 4, 7, 8:12, 15, 18:22]]
             tabela_12 = tabela_12.rename(columns={'Equipe_Janela_Análise':'Equipe'})
@@ -146,7 +146,7 @@ if choose == "10 Melhores da Liga":
             st.dataframe(tabela_12, use_container_width=True, hide_index=True)
 
             st.markdown("<h4 style='text-align: center;'>10 Primeiros Volantes Construtores Mais Bem Ranqueados</b></h4>", unsafe_allow_html=True)
-            tabela_13 = pd.read_excel("10_Role_Volante_Construtor.xlsx")
+            tabela_13 = pd.read_csv("10_Role_Volante_Construtor.csv")
             tabela_13 = tabela_13[(tabela_13['Liga']==liga)&(tabela_13['Versão_Temporada']==temporada)]
             tabela_13 = tabela_13.iloc[:, np.r_[1, 32, 3, 4, 7, 8:12, 15, 18:27]]
             tabela_13 = tabela_13.rename(columns={'Equipe_Janela_Análise':'Equipe'})
@@ -154,7 +154,7 @@ if choose == "10 Melhores da Liga":
             st.dataframe(tabela_13, use_container_width=True, hide_index=True)
 
             st.markdown("<h4 style='text-align: center;'>10 Primeiros Volantes Equilibrados Mais Bem Ranqueados</b></h4>", unsafe_allow_html=True)
-            tabela_14 = pd.read_excel("11_Role_Volante_Equilibrado.xlsx")
+            tabela_14 = pd.read_csv("11_Role_Volante_Equilibrado.csv")
             tabela_14 = tabela_14[(tabela_14['Liga']==liga)&(tabela_14['Versão_Temporada']==temporada)]
             tabela_14 = tabela_14.iloc[:, np.r_[1, 34, 3, 4, 7, 8:12, 15, 18:29]]
             tabela_14 = tabela_14.rename(columns={'Equipe_Janela_Análise':'Equipe'})
@@ -163,7 +163,7 @@ if choose == "10 Melhores da Liga":
 
         elif posição == "Segundo Volante":
             st.markdown("<h4 style='text-align: center;'>10 Segundos Volantes Box-to-Box Mais Bem Ranqueados</b></h4>", unsafe_allow_html=True)
-            tabela_12 = pd.read_excel("12_Role_Segundo_Volante_Box_to_Box.xlsx")
+            tabela_12 = pd.read_csv("12_Role_Segundo_Volante_Box_to_Box.csv")
             tabela_12 = tabela_12[(tabela_12['Liga']==liga)&(tabela_12['Versão_Temporada']==temporada)]
             tabela_12 = tabela_12.iloc[:, np.r_[1, 36, 3, 4, 7, 8:12, 15, 18:31]]
             tabela_12 = tabela_12.rename(columns={'Equipe_Janela_Análise':'Equipe'})
@@ -171,7 +171,7 @@ if choose == "10 Melhores da Liga":
             st.dataframe(tabela_12, use_container_width=True, hide_index=True)
 
             st.markdown("<h4 style='text-align: center;'>10 Segundos Volantes Organizadores Mais Bem Ranqueados</b></h4>", unsafe_allow_html=True)
-            tabela_13 = pd.read_excel("13_Role_Segundo_Volante_Organizador.xlsx")
+            tabela_13 = pd.read_csv("13_Role_Segundo_Volante_Organizador.csv")
             tabela_13 = tabela_13[(tabela_13['Liga']==liga)&(tabela_13['Versão_Temporada']==temporada)]
             tabela_13 = tabela_13.iloc[:, np.r_[1, 33, 3, 4, 7, 8:12, 15, 18:28]]
             tabela_13 = tabela_13.rename(columns={'Equipe_Janela_Análise':'Equipe'})
@@ -179,7 +179,7 @@ if choose == "10 Melhores da Liga":
             st.dataframe(tabela_13, use_container_width=True, hide_index=True)
 
             st.markdown("<h4 style='text-align: center;'>10 Segundos Volantes Equilibrados Mais Bem Ranqueados</b></h4>", unsafe_allow_html=True)
-            tabela_14 = pd.read_excel("14_Role_Segundo_Volante_Equilibrado.xlsx")
+            tabela_14 = pd.read_csv("14_Role_Segundo_Volante_Equilibrado.csv")
             tabela_14 = tabela_14[(tabela_14['Liga']==liga)&(tabela_14['Versão_Temporada']==temporada)]
             tabela_14 = tabela_14.iloc[:, np.r_[1, 36, 3, 4, 7, 8:12, 15, 18:31]]
             tabela_14 = tabela_14.rename(columns={'Equipe_Janela_Análise':'Equipe'})
@@ -188,7 +188,7 @@ if choose == "10 Melhores da Liga":
 
         elif posição == "Meia":
             st.markdown("<h4 style='text-align: center;'>10 Meias Organizadores Mais Bem Ranqueados</b></h4>", unsafe_allow_html=True)
-            tabela_15 = pd.read_excel("15_Role_Meia_Organizador.xlsx")
+            tabela_15 = pd.read_csv("15_Role_Meia_Organizador.csv")
             tabela_15 = tabela_15[(tabela_15['Liga']==liga)&(tabela_15['Versão_Temporada']==temporada)]
             tabela_15 = tabela_15.iloc[:, np.r_[1, 33, 3, 4, 7, 8:12, 15, 18:28]]
             tabela_15 = tabela_15.rename(columns={'Equipe_Janela_Análise':'Equipe'})
@@ -196,7 +196,7 @@ if choose == "10 Melhores da Liga":
             st.dataframe(tabela_15, use_container_width=True, hide_index=True)
 
             st.markdown("<h4 style='text-align: center;'>10 Meias Atacantes Mais Bem Ranqueados</b></h4>", unsafe_allow_html=True)
-            tabela_16 = pd.read_excel("16_Role_Meia_Atacante.xlsx")
+            tabela_16 = pd.read_csv("16_Role_Meia_Atacante.csv")
             tabela_16 = tabela_16[(tabela_16['Liga']==liga)&(tabela_16['Versão_Temporada']==temporada)]
             tabela_16 = tabela_16.iloc[:, np.r_[1, 40, 3, 4, 7, 8:12, 15, 18:35]]
             tabela_16 = tabela_16.rename(columns={'Equipe_Janela_Análise':'Equipe'})
@@ -205,7 +205,7 @@ if choose == "10 Melhores da Liga":
 
         elif posição == "Extremo":
             st.markdown("<h4 style='text-align: center;'>10 Extremos Organizadores Mais Bem Ranqueados</b></h4>", unsafe_allow_html=True)
-            tabela_17 = pd.read_excel("17_Role_Extremo_Organizador.xlsx")
+            tabela_17 = pd.read_csv("17_Role_Extremo_Organizador.csv")
             tabela_17 = tabela_17[(tabela_17['Liga']==liga)&(tabela_17['Versão_Temporada']==temporada)]
             tabela_17 = tabela_17.iloc[:, np.r_[1, 36, 3, 4, 7, 8:12, 15, 18:31]]
             tabela_17 = tabela_17.rename(columns={'Equipe_Janela_Análise':'Equipe'})
@@ -213,7 +213,7 @@ if choose == "10 Melhores da Liga":
             st.dataframe(tabela_17, use_container_width=True, hide_index=True)
             
             st.markdown("<h4 style='text-align: center;'>10 Extremos Táticos Mais Bem Ranqueados</b></h4>", unsafe_allow_html=True)
-            tabela_18 = pd.read_excel("18_Role_Extremo_Tático.xlsx")
+            tabela_18 = pd.read_csv("18_Role_Extremo_Tático.csv")
             tabela_18 = tabela_18[(tabela_18['Liga']==liga)&(tabela_18['Versão_Temporada']==temporada)]
             tabela_18 = tabela_18.iloc[:, np.r_[1, 30, 3, 4, 7, 8:12, 15, 18:25]]
             tabela_18 = tabela_18.rename(columns={'Equipe_Janela_Análise':'Equipe'})
@@ -221,7 +221,7 @@ if choose == "10 Melhores da Liga":
             st.dataframe(tabela_18, use_container_width=True, hide_index=True)
 
             st.markdown("<h4 style='text-align: center;'>10 Extremos Agudos Mais Bem Ranqueados</b></h4>", unsafe_allow_html=True)
-            tabela_19 = pd.read_excel("19_Role_Extremo_Agudo.xlsx")
+            tabela_19 = pd.read_csv("19_Role_Extremo_Agudo.csv")
             tabela_19 = tabela_19[(tabela_19['Liga']==liga)&(tabela_19['Versão_Temporada']==temporada)]
             tabela_19 = tabela_19.iloc[:, np.r_[1, 36, 3, 4, 7, 8:12, 15, 18:31]]
             tabela_19 = tabela_19.rename(columns={'Equipe_Janela_Análise':'Equipe'})
@@ -230,7 +230,7 @@ if choose == "10 Melhores da Liga":
 
         else:
             st.markdown("<h4 style='text-align: center;'>10 Atacantes Referências Mais Bem Ranqueados</b></h4>", unsafe_allow_html=True)
-            tabela_17 = pd.read_excel("20_Role_Atacante_Referência.xlsx")
+            tabela_17 = pd.read_csv("20_Role_Atacante_Referência.csv")
             tabela_17 = tabela_17[(tabela_17['Liga']==liga)&(tabela_17['Versão_Temporada']==temporada)]
             tabela_17 = tabela_17.iloc[:, np.r_[1, 33, 3, 4, 7, 8:12, 15, 18:27]]
             tabela_17 = tabela_17.rename(columns={'Equipe_Janela_Análise':'Equipe'})
@@ -238,7 +238,7 @@ if choose == "10 Melhores da Liga":
             st.dataframe(tabela_17, use_container_width=True, hide_index=True)
             
             st.markdown("<h4 style='text-align: center;'>10 Atacantes Móveis Mais Bem Ranqueados</b></h4>", unsafe_allow_html=True)
-            tabela_18 = pd.read_excel("21_Role_Atacante_Móvel.xlsx")
+            tabela_18 = pd.read_csv("21_Role_Atacante_Móvel.csv")
             tabela_18 = tabela_18[(tabela_18['Liga']==liga)&(tabela_18['Versão_Temporada']==temporada)]
             tabela_18 = tabela_18.iloc[:, np.r_[1, 32, 3, 4, 7, 8:12, 15, 18:27]]
             tabela_18 = tabela_18.rename(columns={'Equipe_Janela_Análise':'Equipe'})
@@ -246,7 +246,7 @@ if choose == "10 Melhores da Liga":
             st.dataframe(tabela_18, use_container_width=True, hide_index=True)
 
             st.markdown("<h4 style='text-align: center;'>10 Segundos Atacantes Mais Bem Ranqueados</b></h4>", unsafe_allow_html=True)
-            tabela_19 = pd.read_excel("22_Role_Segundo_Atacante.xlsx")
+            tabela_19 = pd.read_csv("22_Role_Segundo_Atacante.csv")
             tabela_19 = tabela_19[(tabela_19['Liga']==liga)&(tabela_19['Versão_Temporada']==temporada)]
             tabela_19 = tabela_19.iloc[:, np.r_[1, 36, 3, 4, 7, 8:12, 15, 18:31]]
             tabela_19 = tabela_19.rename(columns={'Equipe_Janela_Análise':'Equipe'})
@@ -272,7 +272,7 @@ if choose == "Nacionais pelo Mundo":
     if nacionalidade and temporada:
         if posição == "Goleiro":
             st.markdown("<h4 style='text-align: center;'>15 Nacionais Mais Bem Ranqueados<br>Goleiros Clássicos</b></h4>", unsafe_allow_html=True)
-            tabela_5 = pd.read_excel("1_Role_Goleiro_Full.xlsx")
+            tabela_5 = pd.read_csv("1_Role_Goleiro_Full.csv")
             tabela_5 = tabela_5[(tabela_5['Nacionalidade']==nacionalidade)&(tabela_5['Versão_Temporada']==temporada)]
             tabela_5 = tabela_5.iloc[:, np.r_[1, 25, 30, 3, 4, 7, 9:12, 15, 18:25]]
             tabela_5 = tabela_5.rename(columns={'Equipe_Janela_Análise':'Equipe', 'Posição_Wyscout':'Posição', 'Versão_Temporada':'Janela de Análise', 'Interceptações.1':'Interceptações'})
@@ -289,7 +289,7 @@ if choose == "Nacionais pelo Mundo":
             st.dataframe(tabela_5, use_container_width=True, hide_index=True)
 
             st.markdown("<h4 style='text-align: center;'>15 Nacionais Mais Bem Ranqueados<br>Goleiros Líberos</b></h4>", unsafe_allow_html=True)
-            tabela_6 = pd.read_excel("2_Role_Goleiro_Líbero_Full.xlsx")
+            tabela_6 = pd.read_csv("2_Role_Goleiro_Líbero_Full.csv")
             tabela_6 = tabela_6[(tabela_6['Nacionalidade']==nacionalidade)&(tabela_6['Versão_Temporada']==temporada)]
             tabela_6 = tabela_6.iloc[:, np.r_[1, 28, 33, 3, 4, 7, 9:12, 15, 18:28]]
             tabela_6 = tabela_6.rename(columns={'Equipe_Janela_Análise':'Equipe', 'Posição_Wyscout':'Posição', 'Versão_Temporada':'Janela de Análise', 'Interceptações.1':'Interceptações'})
@@ -308,7 +308,7 @@ if choose == "Nacionais pelo Mundo":
 
         elif posição == "Lateral":
             st.markdown("<h4 style='text-align: center;'>15 Nacionais Mais Bem Ranqueados<br>Laterais Defensivos</b></h4>", unsafe_allow_html=True)
-            tabela_5 = pd.read_excel("3_Role_Lateral_Defensivo_Full.xlsx")
+            tabela_5 = pd.read_csv("3_Role_Lateral_Defensivo_Full.csv")
             tabela_5 = tabela_5[(tabela_5['Nacionalidade']==nacionalidade)&(tabela_5['Versão_Temporada']==temporada)]
             tabela_5 = tabela_5.iloc[:, np.r_[1, 24, 29, 3, 4, 7, 9:12, 15, 18:24]]
             tabela_5 = tabela_5.rename(columns={'Equipe_Janela_Análise':'Equipe', 'Posição_Wyscout':'Posição', 'Versão_Temporada':'Janela de Análise'})
@@ -325,7 +325,7 @@ if choose == "Nacionais pelo Mundo":
             st.dataframe(tabela_5, use_container_width=True, hide_index=True)
 
             st.markdown("<h4 style='text-align: center;'>15 Nacionais Mais Bem Ranqueados<br>Laterais Ofensivos</b></h4>", unsafe_allow_html=True)
-            tabela_6 = pd.read_excel("4_Role_Lateral_Ofensivo_Full.xlsx")
+            tabela_6 = pd.read_csv("4_Role_Lateral_Ofensivo_Full.csv")
             tabela_6 = tabela_6[(tabela_6['Nacionalidade']==nacionalidade)&(tabela_6['Versão_Temporada']==temporada)]
             tabela_6 = tabela_6.iloc[:, np.r_[1, 33, 38, 3, 4, 7, 9:12, 15, 18:33]]
             tabela_6 = tabela_6.rename(columns={'Equipe_Janela_Análise':'Equipe', 'Posição_Wyscout':'Posição', 'Versão_Temporada':'Janela de Análise'})
@@ -342,7 +342,7 @@ if choose == "Nacionais pelo Mundo":
             st.dataframe(tabela_6, use_container_width=True, hide_index=True)
 
             st.markdown("<h4 style='text-align: center;'>15 Nacionais Mais Bem Ranqueados<br>Laterais Equilibrados</b></h4>", unsafe_allow_html=True)
-            tabela_7 = pd.read_excel("5_Role_Lateral_Equilibrado_Full.xlsx")
+            tabela_7 = pd.read_csv("5_Role_Lateral_Equilibrado_Full.csv")
             tabela_7 = tabela_7[(tabela_7['Nacionalidade']==nacionalidade)&(tabela_7['Versão_Temporada']==temporada)]
             tabela_7 = tabela_7.iloc[:, np.r_[1, 36, 41, 3, 4, 7, 9:12, 15, 18:36]]
             tabela_7 = tabela_7.rename(columns={'Equipe_Janela_Análise':'Equipe', 'Posição_Wyscout':'Posição', 'Versão_Temporada':'Janela de Análise'})
@@ -360,7 +360,7 @@ if choose == "Nacionais pelo Mundo":
 
         elif posição == "Zagueiro":
             st.markdown("<h4 style='text-align: center;'>15 Nacionais Mais Bem Ranqueados<br>Zagueiros Clássicos</b></h4>", unsafe_allow_html=True)
-            tabela_8 = pd.read_excel("6_Role_Zagueiro_Defensivo_Full.xlsx")
+            tabela_8 = pd.read_csv("6_Role_Zagueiro_Defensivo_Full.csv")
             tabela_8 = tabela_8[(tabela_8['Nacionalidade']==nacionalidade)&(tabela_8['Versão_Temporada']==temporada)]
             tabela_8 = tabela_8.iloc[:, np.r_[1, 24, 29, 3, 4, 7, 9:12, 15, 18:24]]
             tabela_8 = tabela_8.rename(columns={'Equipe_Janela_Análise':'Equipe', 'Posição_Wyscout':'Posição', 'Versão_Temporada':'Janela de Análise'})
@@ -377,7 +377,7 @@ if choose == "Nacionais pelo Mundo":
             st.dataframe(tabela_8, use_container_width=True, hide_index=True)
 
             st.markdown("<h4 style='text-align: center;'>15 Nacionais Mais Bem Ranqueados<br>Zagueiros Construtores</b></h4>", unsafe_allow_html=True)
-            tabela_9 = pd.read_excel("7_Role_Zagueiro_Construtor_Full.xlsx")
+            tabela_9 = pd.read_csv("7_Role_Zagueiro_Construtor_Full.csv")
             tabela_9 = tabela_9[(tabela_9['Nacionalidade']==nacionalidade)&(tabela_9['Versão_Temporada']==temporada)]
             tabela_9 = tabela_9.iloc[:, np.r_[1, 28, 33, 3, 4, 7, 9:12, 15, 18:28]]
             tabela_9 = tabela_9.rename(columns={'Equipe_Janela_Análise':'Equipe', 'Posição_Wyscout':'Posição', 'Versão_Temporada':'Janela de Análise'})
@@ -394,7 +394,7 @@ if choose == "Nacionais pelo Mundo":
             st.dataframe(tabela_9, use_container_width=True, hide_index=True)
 
             st.markdown("<h4 style='text-align: center;'>15 Nacionais Mais Bem Ranqueados<br>Zagueiros Equilibrados</b></h4>", unsafe_allow_html=True)
-            tabela_10 = pd.read_excel("8_Role_Zagueiro_Equilibrado_Full.xlsx")
+            tabela_10 = pd.read_csv("8_Role_Zagueiro_Equilibrado_Full.csv")
             tabela_10 = tabela_10[(tabela_10['Nacionalidade']==nacionalidade)&(tabela_10['Versão_Temporada']==temporada)]
             tabela_10 = tabela_10.iloc[:, np.r_[1, 31, 36, 3, 4, 7, 9:12, 15, 18:31]]
             tabela_10 = tabela_10.rename(columns={'Equipe_Janela_Análise':'Equipe', 'Posição_Wyscout':'Posição', 'Versão_Temporada':'Janela de Análise'})
@@ -412,7 +412,7 @@ if choose == "Nacionais pelo Mundo":
 
         elif posição == "Primeiro Volante":
             st.markdown("<h4 style='text-align: center;'>15 Nacionais Mais Bem Ranqueados<br>Primeiros Volantes Defensivos</b></h4>", unsafe_allow_html=True)
-            tabela_11 = pd.read_excel("9_Role_Volante_Defensivo_Full.xlsx")
+            tabela_11 = pd.read_csv("9_Role_Volante_Defensivo_Full.csv")
             tabela_11 = tabela_11[(tabela_11['Nacionalidade']==nacionalidade)&(tabela_11['Versão_Temporada']==temporada)]
             tabela_11 = tabela_11.iloc[:, np.r_[1, 22, 27, 3, 4, 7, 9:12, 15, 18:22]]
             tabela_11 = tabela_11.rename(columns={'Equipe_Janela_Análise':'Equipe', 'Posição_Wyscout':'Posição', 'Versão_Temporada':'Janela de Análise'})
@@ -429,7 +429,7 @@ if choose == "Nacionais pelo Mundo":
             st.dataframe(tabela_11, use_container_width=True, hide_index=True)
 
             st.markdown("<h4 style='text-align: center;'>15 Nacionais Mais Bem Ranqueados<br>Primeiros Volantes Construtores</b></h4>", unsafe_allow_html=True)
-            tabela_12 = pd.read_excel("10_Role_Volante_Construtor_Full.xlsx")
+            tabela_12 = pd.read_csv("10_Role_Volante_Construtor_Full.csv")
             tabela_12 = tabela_12[(tabela_12['Nacionalidade']==nacionalidade)&(tabela_12['Versão_Temporada']==temporada)]
             tabela_12 = tabela_12.iloc[:, np.r_[1, 27, 32, 3, 4, 7, 9:12, 15, 18:27]]
             tabela_12 = tabela_12.rename(columns={'Equipe_Janela_Análise':'Equipe', 'Posição_Wyscout':'Posição', 'Versão_Temporada':'Janela de Análise'})
@@ -446,7 +446,7 @@ if choose == "Nacionais pelo Mundo":
             st.dataframe(tabela_12, use_container_width=True, hide_index=True)
 
             st.markdown("<h4 style='text-align: center;'>15 Nacionais Mais Bem Ranqueados<br>Primeiros Volantes Equilibrados</b></h4>", unsafe_allow_html=True)
-            tabela_13 = pd.read_excel("11_Role_Volante_Equilibrado_Full.xlsx")
+            tabela_13 = pd.read_csv("11_Role_Volante_Equilibrado_Full.csv")
             tabela_13 = tabela_13[(tabela_13['Nacionalidade']==nacionalidade)&(tabela_13['Versão_Temporada']==temporada)]
             tabela_13 = tabela_13.iloc[:, np.r_[1, 29, 34, 3, 4, 7, 9:12, 15, 18:29]]
             tabela_13 = tabela_13.rename(columns={'Equipe_Janela_Análise':'Equipe', 'Posição_Wyscout':'Posição', 'Versão_Temporada':'Janela de Análise'})
@@ -464,7 +464,7 @@ if choose == "Nacionais pelo Mundo":
 
         elif posição == "Segundo Volante":
             st.markdown("<h4 style='text-align: center;'>15 Nacionais Mais Bem Ranqueados<br>Segundos Volantes Box-to-Box</b></h4>", unsafe_allow_html=True)
-            tabela_11 = pd.read_excel("12_Role_Segundo_Volante_Box_to_Box_Full.xlsx")
+            tabela_11 = pd.read_csv("12_Role_Segundo_Volante_Box_to_Box_Full.csv")
             tabela_11 = tabela_11[(tabela_11['Nacionalidade']==nacionalidade)&(tabela_11['Versão_Temporada']==temporada)]
             tabela_11 = tabela_11.iloc[:, np.r_[1, 31, 36, 3, 4, 7, 9:12, 15, 18:31]]
             tabela_11 = tabela_11.rename(columns={'Equipe_Janela_Análise':'Equipe', 'Posição_Wyscout':'Posição', 'Versão_Temporada':'Janela de Análise'})
@@ -481,7 +481,7 @@ if choose == "Nacionais pelo Mundo":
             st.dataframe(tabela_11, use_container_width=True, hide_index=True)
 
             st.markdown("<h4 style='text-align: center;'>15 Nacionais Mais Bem Ranqueados<br>Segundos Volantes Organizadores</b></h4>", unsafe_allow_html=True)
-            tabela_12 = pd.read_excel("13_Role_Segundo_Volante_Organizador_Full.xlsx")
+            tabela_12 = pd.read_csv("13_Role_Segundo_Volante_Organizador_Full.csv")
             tabela_12 = tabela_12[(tabela_12['Nacionalidade']==nacionalidade)&(tabela_12['Versão_Temporada']==temporada)]
             tabela_12 = tabela_12.iloc[:, np.r_[1, 28, 33, 3, 4, 7, 9:12, 15, 18:28]]
             tabela_12 = tabela_12.rename(columns={'Equipe_Janela_Análise':'Equipe', 'Posição_Wyscout':'Posição', 'Versão_Temporada':'Janela de Análise'})
@@ -498,7 +498,7 @@ if choose == "Nacionais pelo Mundo":
             st.dataframe(tabela_12, use_container_width=True, hide_index=True)
 
             st.markdown("<h4 style='text-align: center;'>15 Nacionais Mais Bem Ranqueados<br>Segundos Volantes Equilibrados</b></h4>", unsafe_allow_html=True)
-            tabela_13 = pd.read_excel("14_Role_Segundo_Volante_Equilibrado_Full.xlsx")
+            tabela_13 = pd.read_csv("14_Role_Segundo_Volante_Equilibrado_Full.csv")
             tabela_13 = tabela_13[(tabela_13['Nacionalidade']==nacionalidade)&(tabela_13['Versão_Temporada']==temporada)]
             tabela_13 = tabela_13.iloc[:, np.r_[1, 31, 36, 3, 4, 7, 9:12, 15, 18:31]]
             tabela_13 = tabela_13.rename(columns={'Equipe_Janela_Análise':'Equipe', 'Posição_Wyscout':'Posição', 'Versão_Temporada':'Janela de Análise'})
@@ -516,7 +516,7 @@ if choose == "Nacionais pelo Mundo":
 
         elif posição == "Meia":
             st.markdown("<h4 style='text-align: center;'>15 Nacionais Mais Bem Ranqueados<br>Meias Organizadores </b></h4>", unsafe_allow_html=True)
-            tabela_14 = pd.read_excel("15_Role_Meia_Organizador_Full.xlsx")
+            tabela_14 = pd.read_csv("15_Role_Meia_Organizador_Full.csv")
             tabela_14 = tabela_14[(tabela_14['Nacionalidade']==nacionalidade)&(tabela_14['Versão_Temporada']==temporada)]
             tabela_14 = tabela_14.iloc[:, np.r_[1, 28, 33, 3, 4, 7, 9:12, 15, 18:28]]
             tabela_14 = tabela_14.rename(columns={'Equipe_Janela_Análise':'Equipe', 'Posição_Wyscout':'Posição', 'Versão_Temporada':'Janela de Análise'})
@@ -533,7 +533,7 @@ if choose == "Nacionais pelo Mundo":
             st.dataframe(tabela_14, use_container_width=True, hide_index=True)
 
             st.markdown("<h4 style='text-align: center;'>15 Nacionais Mais Bem Ranqueados<br>Meias Atacantes</b></h4>", unsafe_allow_html=True)
-            tabela_15 = pd.read_excel("16_Role_Meia_Atacante_Full.xlsx")
+            tabela_15 = pd.read_csv("16_Role_Meia_Atacante_Full.csv")
             tabela_15 = tabela_15[(tabela_15['Nacionalidade']==nacionalidade)&(tabela_15['Versão_Temporada']==temporada)]
             tabela_15 = tabela_15.iloc[:, np.r_[1, 35, 40, 3, 4, 7, 9:12, 15, 18:35]]
             tabela_15 = tabela_15.rename(columns={'Equipe_Janela_Análise':'Equipe', 'Posição_Wyscout':'Posição', 'Versão_Temporada':'Janela de Análise'})
@@ -551,7 +551,7 @@ if choose == "Nacionais pelo Mundo":
 
         elif posição == "Extremo":
             st.markdown("<h4 style='text-align: center;'>15 Nacionais Mais Bem Ranqueados<br>Extremos Organizadores</b></h4>", unsafe_allow_html=True)
-            tabela_16 = pd.read_excel("17_Role_Extremo_Organizador_Full.xlsx")
+            tabela_16 = pd.read_csv("17_Role_Extremo_Organizador_Full.csv")
             tabela_16 = tabela_16[(tabela_16['Nacionalidade']==nacionalidade)&(tabela_16['Versão_Temporada']==temporada)]
             tabela_16 = tabela_16.iloc[:, np.r_[1, 31, 36, 3, 4, 7, 9:12, 15, 18:31]]
             tabela_16 = tabela_16.rename(columns={'Equipe_Janela_Análise':'Equipe', 'Posição_Wyscout':'Posição', 'Versão_Temporada':'Janela de Análise'})
@@ -568,7 +568,7 @@ if choose == "Nacionais pelo Mundo":
             st.dataframe(tabela_16, use_container_width=True, hide_index=True)
 
             st.markdown("<h4 style='text-align: center;'>15 Nacionais Mais Bem Ranqueados<br>Extremos Táticos</b></h4>", unsafe_allow_html=True)
-            tabela_17 = pd.read_excel("18_Role_Extremo_Tático_Full.xlsx")
+            tabela_17 = pd.read_csv("18_Role_Extremo_Tático_Full.csv")
             tabela_17 = tabela_17[(tabela_17['Nacionalidade']==nacionalidade)&(tabela_17['Versão_Temporada']==temporada)]
             tabela_17 = tabela_17.iloc[:, np.r_[1, 25, 30, 3, 4, 7, 9:12, 15, 18:25]]
             tabela_17 = tabela_17.rename(columns={'Equipe_Janela_Análise':'Equipe', 'Posição_Wyscout':'Posição', 'Versão_Temporada':'Janela de Análise'})
@@ -585,7 +585,7 @@ if choose == "Nacionais pelo Mundo":
             st.dataframe(tabela_17, use_container_width=True, hide_index=True)
 
             st.markdown("<h4 style='text-align: center;'>15 Nacionais Mais Bem Ranqueados<br>Extremos Agudos</b></h4>", unsafe_allow_html=True)
-            tabela_18 = pd.read_excel("19_Role_Extremo_Agudo_Full.xlsx")
+            tabela_18 = pd.read_csv("19_Role_Extremo_Agudo_Full.csv")
             tabela_18 = tabela_18[(tabela_18['Nacionalidade']==nacionalidade)&(tabela_18['Versão_Temporada']==temporada)]
             tabela_18 = tabela_18.iloc[:, np.r_[1, 31, 36, 3, 4, 7, 9:12, 15, 18:31]]
             tabela_18 = tabela_18.rename(columns={'Equipe_Janela_Análise':'Equipe', 'Posição_Wyscout':'Posição', 'Versão_Temporada':'Janela de Análise'})
@@ -603,7 +603,7 @@ if choose == "Nacionais pelo Mundo":
 
         elif posição == "Atacante":
             st.markdown("<h4 style='text-align: center;'>15 Nacionais Mais Bem Ranqueados<br>Atacantes Referência</b></h4>", unsafe_allow_html=True)
-            tabela_19 = pd.read_excel("20_Role_Atacante_Referência_Full.xlsx")
+            tabela_19 = pd.read_csv("20_Role_Atacante_Referência_Full.csv")
             tabela_19 = tabela_19[(tabela_19['Nacionalidade']==nacionalidade)&(tabela_19['Versão_Temporada']==temporada)]
             tabela_19 = tabela_19.iloc[:, np.r_[1, 28, 33, 3, 4, 7, 9:12, 15, 18:28]]
             tabela_19 = tabela_19.rename(columns={'Equipe_Janela_Análise':'Equipe', 'Posição_Wyscout':'Posição', 'Versão_Temporada':'Janela de Análise'})
@@ -620,7 +620,7 @@ if choose == "Nacionais pelo Mundo":
             st.dataframe(tabela_19, use_container_width=True, hide_index=True)
 
             st.markdown("<h4 style='text-align: center;'>15 Nacionais Mais Bem Ranqueados<br>Atacantes Móveis</b></h4>", unsafe_allow_html=True)
-            tabela_20 = pd.read_excel("21_Role_Atacante_Móvel_Full.xlsx")
+            tabela_20 = pd.read_csv("21_Role_Atacante_Móvel_Full.csv")
             tabela_20 = tabela_20[(tabela_20['Nacionalidade']==nacionalidade)&(tabela_20['Versão_Temporada']==temporada)]
             tabela_20 = tabela_20.iloc[:, np.r_[1, 27, 32, 3, 4, 7, 9:12, 15, 18:27]]
             tabela_20 = tabela_20.rename(columns={'Equipe_Janela_Análise':'Equipe', 'Posição_Wyscout':'Posição', 'Versão_Temporada':'Janela de Análise'})
@@ -637,7 +637,7 @@ if choose == "Nacionais pelo Mundo":
             st.dataframe(tabela_20, use_container_width=True, hide_index=True)
 
             st.markdown("<h4 style='text-align: center;'>15 Nacionais Mais Bem Ranqueados<br>Segundos Atacantes</b></h4>", unsafe_allow_html=True)
-            tabela_21 = pd.read_excel("22_Role_Segundo_Atacante_Full.xlsx")
+            tabela_21 = pd.read_csv("22_Role_Segundo_Atacante_Full.csv")
             tabela_21 = tabela_21[(tabela_21['Nacionalidade']==nacionalidade)&(tabela_21['Versão_Temporada']==temporada)]
             tabela_21 = tabela_21.iloc[:, np.r_[1, 31, 36, 3, 4, 7, 9:12, 15, 18:31]]
             tabela_21 = tabela_21.rename(columns={'Equipe_Janela_Análise':'Equipe', 'Posição_Wyscout':'Posição', 'Versão_Temporada':'Janela de Análise'})
@@ -673,7 +673,7 @@ if choose == "Free Agents pelo Mundo":
 
     if posição == ("Goleiro"):
         st.markdown("<h4 style='text-align: center;'>Free Agents Nacionais Mais Bem Ranqueados<br>Goleiros</b></h4>", unsafe_allow_html=True)
-        tabela_7 = pd.read_excel("1_Role_Goleiro_Full.xlsx")
+        tabela_7 = pd.read_csv("1_Role_Goleiro_Full.csv")
         tabela_7 = tabela_7.loc[(tabela_7['Nacionalidade']==nacionalidade)&(tabela_7['Fim_Contrato']<=contrato)&(tabela_7['Versão_Temporada']==temporada)]   
         tabela_7 = tabela_7.iloc[:, np.r_[1, 3, 7, 15, 8:12, 25, 26, 27]]
         tabela_7 = tabela_7[(tabela_7['Liga'] == 'ENG1') | (tabela_7['Liga'] == 'ENG2') | (tabela_7['Liga'] == 'FRA1') | (tabela_7['Liga'] == 'FRA2') 
@@ -685,7 +685,7 @@ if choose == "Free Agents pelo Mundo":
             | (tabela_7['Liga'] == 'POR2') | (tabela_7['Liga'] == 'BUL') | (tabela_7['Liga'] == 'AUT') | (tabela_7['Liga'] == 'QAT')
             | (tabela_7['Liga'] == 'BRA1') | (tabela_7['Liga'] == 'ARG1')]
 
-        tabela_8 = pd.read_excel("PlayerAnalysis_Role_1_Full.xlsx")
+        tabela_8 = pd.read_csv("PlayerAnalysis_Role_1_Full.csv")
         tabela_8 = tabela_8.loc[(tabela_8['Nacionalidade']==nacionalidade)&(tabela_8['Fim_Contrato']<=contrato)&(tabela_8['Versão_Temporada']==temporada)]
         tabela_8 = tabela_8.iloc[:, np.r_[9, 30:34, 26, 28]]
         tabela_8 = tabela_8[(tabela_8['Liga'] == 'ENG1') | (tabela_8['Liga'] == 'ENG2') | (tabela_8['Liga'] == 'FRA1') | (tabela_8['Liga'] == 'FRA2') 
@@ -704,7 +704,7 @@ if choose == "Free Agents pelo Mundo":
         st.dataframe(tabela_7, use_container_width=True, hide_index=True)
 
 
-        tabela_8 = pd.read_excel("2_Role_Goleiro_Líbero_Full.xlsx")
+        tabela_8 = pd.read_csv("2_Role_Goleiro_Líbero_Full.csv")
         tabela_8 = tabela_8.loc[(tabela_8['Nacionalidade']==nacionalidade)&(tabela_8['Fim_Contrato']<=contrato)&(tabela_8['Versão_Temporada']==temporada)]   
         tabela_8 = tabela_8.iloc[:, np.r_[1, 3, 7, 15, 8:12, 28, 30]]
         tabela_8 = tabela_8[(tabela_8['Liga'] == 'ENG1') | (tabela_8['Liga'] == 'ENG2') | (tabela_8['Liga'] == 'FRA1') | (tabela_8['Liga'] == 'FRA2') 
@@ -716,7 +716,7 @@ if choose == "Free Agents pelo Mundo":
             | (tabela_8['Liga'] == 'POR2') | (tabela_8['Liga'] == 'BUL') | (tabela_8['Liga'] == 'AUT') | (tabela_8['Liga'] == 'QAT')
             | (tabela_8['Liga'] == 'BRA1') | (tabela_8['Liga'] == 'ARG1')]
 
-        tabela_9 = pd.read_excel("PlayerAnalysis_Role_2_Full.xlsx")
+        tabela_9 = pd.read_csv("PlayerAnalysis_Role_2_Full.csv")
         tabela_9 = tabela_9.loc[(tabela_9['Nacionalidade']==nacionalidade)&(tabela_9['Fim_Contrato']<=contrato)&(tabela_9['Versão_Temporada']==temporada)]
         tabela_9 = tabela_9.iloc[:, np.r_[12, 33:37, 29, 31]]
         tabela_9 = tabela_9[(tabela_9['Liga'] == 'ENG1') | (tabela_9['Liga'] == 'ENG2') | (tabela_9['Liga'] == 'FRA1') | (tabela_9['Liga'] == 'FRA2') 
@@ -736,7 +736,7 @@ if choose == "Free Agents pelo Mundo":
 
     elif posição == ("Lateral"):
         st.markdown("<h4 style='text-align: center;'>Free Agents Nacionais Mais Bem Ranqueados<br>Laterais </b></h4>", unsafe_allow_html=True)
-        tabela_9 = pd.read_excel("3_Role_Lateral_Defensivo_Full.xlsx")
+        tabela_9 = pd.read_csv("3_Role_Lateral_Defensivo_Full.csv")
         tabela_9 = tabela_9.loc[(tabela_9['Nacionalidade']==nacionalidade)&(tabela_9['Fim_Contrato']<=contrato)&(tabela_9['Versão_Temporada']==temporada)]   
         tabela_9 = tabela_9.iloc[:, np.r_[1, 3, 4, 7, 15, 8:12, 24]]
         tabela_9 = tabela_9[(tabela_9['Liga'] == 'ENG1') | (tabela_9['Liga'] == 'ENG2') | (tabela_9['Liga'] == 'FRA1') | (tabela_9['Liga'] == 'FRA2') 
@@ -748,7 +748,7 @@ if choose == "Free Agents pelo Mundo":
             | (tabela_9['Liga'] == 'POR2') | (tabela_9['Liga'] == 'BUL') | (tabela_9['Liga'] == 'AUT') | (tabela_9['Liga'] == 'QAT')
             | (tabela_9['Liga'] == 'BRA1') | (tabela_9['Liga'] == 'ARG1')]
 
-        tabela_10 = pd.read_excel("PlayerAnalysis_Role_3_Full.xlsx")
+        tabela_10 = pd.read_csv("PlayerAnalysis_Role_3_Full.csv")
         tabela_10 = tabela_10.loc[(tabela_10['Nacionalidade']==nacionalidade)&(tabela_10['Fim_Contrato']<=contrato)&(tabela_10['Versão_Temporada']==temporada)]
         tabela_10 = tabela_10.iloc[:, np.r_[8, 25, 29:33]]
         tabela_10 = tabela_10[(tabela_10['Liga'] == 'ENG1') | (tabela_10['Liga'] == 'ENG2') | (tabela_10['Liga'] == 'FRA1') | (tabela_10['Liga'] == 'FRA2') 
@@ -767,7 +767,7 @@ if choose == "Free Agents pelo Mundo":
         st.dataframe(tabela_9, use_container_width=True, hide_index=True)
 
 
-        tabela_11 = pd.read_excel("4_Role_Lateral_Ofensivo_Full.xlsx")
+        tabela_11 = pd.read_csv("4_Role_Lateral_Ofensivo_Full.csv")
         tabela_11 = tabela_11.loc[(tabela_11['Nacionalidade']==nacionalidade)&(tabela_11['Fim_Contrato']<=contrato)&(tabela_11['Versão_Temporada']==temporada)]   
         tabela_11 = tabela_11.iloc[:, np.r_[1, 3, 4, 7, 15, 8:12, 33]]
         tabela_11 = tabela_11[(tabela_11['Liga'] == 'ENG1') | (tabela_11['Liga'] == 'ENG2') | (tabela_11['Liga'] == 'FRA1') | (tabela_11['Liga'] == 'FRA2') 
@@ -779,7 +779,7 @@ if choose == "Free Agents pelo Mundo":
             | (tabela_11['Liga'] == 'POR2') | (tabela_11['Liga'] == 'BUL') | (tabela_11['Liga'] == 'AUT') | (tabela_11['Liga'] == 'QAT') 
             | (tabela_11['Liga'] == 'BRA1') | (tabela_11['Liga'] == 'ARG1')]
 
-        tabela_12 = pd.read_excel("PlayerAnalysis_Role_4_Full.xlsx")
+        tabela_12 = pd.read_csv("PlayerAnalysis_Role_4_Full.csv")
         tabela_12 = tabela_12.loc[(tabela_12['Nacionalidade']==nacionalidade)&(tabela_12['Fim_Contrato']<=contrato)&(tabela_12['Versão_Temporada']==temporada)]
         tabela_12 = tabela_12.iloc[:, np.r_[17, 34, 38:42]]
         tabela_12 = tabela_12[(tabela_12['Liga'] == 'ENG1') | (tabela_12['Liga'] == 'ENG2') | (tabela_12['Liga'] == 'FRA1') | (tabela_12['Liga'] == 'FRA2') 
@@ -799,7 +799,7 @@ if choose == "Free Agents pelo Mundo":
         st.dataframe(tabela_11, use_container_width=True, hide_index=True)
 
 
-        tabela_13 = pd.read_excel("5_Role_Lateral_Equilibrado_Full.xlsx")
+        tabela_13 = pd.read_csv("5_Role_Lateral_Equilibrado_Full.csv")
         tabela_13 = tabela_13.loc[(tabela_13['Nacionalidade']==nacionalidade)&(tabela_13['Fim_Contrato']<=contrato)&(tabela_13['Versão_Temporada']==temporada)]   
         tabela_13 = tabela_13.iloc[:, np.r_[1, 3, 4, 7, 15, 8:12, 36]]
         tabela_13 = tabela_13[(tabela_13['Liga'] == 'ENG1') | (tabela_13['Liga'] == 'ENG2') | (tabela_13['Liga'] == 'FRA1') | (tabela_13['Liga'] == 'FRA2') 
@@ -811,7 +811,7 @@ if choose == "Free Agents pelo Mundo":
             | (tabela_13['Liga'] == 'POR2') | (tabela_13['Liga'] == 'BUL') | (tabela_13['Liga'] == 'AUT') | (tabela_13['Liga'] == 'QAT') 
             | (tabela_13['Liga'] == 'BRA1') | (tabela_13['Liga'] == 'ARG1')]
 
-        tabela_14 = pd.read_excel("PlayerAnalysis_Role_5_Full.xlsx")
+        tabela_14 = pd.read_csv("PlayerAnalysis_Role_5_Full.csv")
         tabela_14 = tabela_14.loc[(tabela_14['Nacionalidade']==nacionalidade)&(tabela_14['Fim_Contrato']<=contrato)&(tabela_14['Versão_Temporada']==temporada)]
         tabela_14 = tabela_14.iloc[:, np.r_[20, 37, 41:45]]
         tabela_14 = tabela_14[(tabela_14['Liga'] == 'ENG1') | (tabela_14['Liga'] == 'ENG2') | (tabela_14['Liga'] == 'FRA1') | (tabela_14['Liga'] == 'FRA2') 
@@ -831,7 +831,7 @@ if choose == "Free Agents pelo Mundo":
 
     elif posição == ("Zagueiro"):
         st.markdown("<h4 style='text-align: center;'>Free Agents Nacionais Mais Bem Ranqueados<br>Zagueiros </b></h4>", unsafe_allow_html=True)
-        tabela_9 = pd.read_excel("6_Role_Zagueiro_Defensivo_Full.xlsx")
+        tabela_9 = pd.read_csv("6_Role_Zagueiro_Defensivo_Full.csv")
         tabela_9 = tabela_9.loc[(tabela_9['Nacionalidade']==nacionalidade)&(tabela_9['Fim_Contrato']<=contrato)&(tabela_9['Versão_Temporada']==temporada)]   
         tabela_9 = tabela_9.iloc[:, np.r_[1, 3, 4, 7, 15, 8:12, 24]]
         tabela_9 = tabela_9[(tabela_9['Liga'] == 'ENG1') | (tabela_9['Liga'] == 'ENG2') | (tabela_9['Liga'] == 'FRA1') | (tabela_9['Liga'] == 'FRA2') 
@@ -843,7 +843,7 @@ if choose == "Free Agents pelo Mundo":
             | (tabela_9['Liga'] == 'POR2') | (tabela_9['Liga'] == 'BUL') | (tabela_9['Liga'] == 'AUT') | (tabela_9['Liga'] == 'QAT') 
             | (tabela_9['Liga'] == 'BRA1') | (tabela_9['Liga'] == 'ARG1')]
 
-        tabela_10 = pd.read_excel("PlayerAnalysis_Role_6_Full.xlsx")
+        tabela_10 = pd.read_csv("PlayerAnalysis_Role_6_Full.csv")
         tabela_10 = tabela_10.loc[(tabela_10['Nacionalidade']==nacionalidade)&(tabela_10['Fim_Contrato']<=contrato)&(tabela_10['Versão_Temporada']==temporada)]
         tabela_10 = tabela_10.iloc[:, np.r_[8, 25, 29:33]]
         tabela_10 = tabela_10[(tabela_10['Liga'] == 'ENG1') | (tabela_10['Liga'] == 'ENG2') | (tabela_10['Liga'] == 'FRA1') | (tabela_10['Liga'] == 'FRA2') 
@@ -862,7 +862,7 @@ if choose == "Free Agents pelo Mundo":
         st.dataframe(tabela_9, use_container_width=True, hide_index=True)
 
 
-        tabela_11 = pd.read_excel("7_Role_Zagueiro_Construtor_Full.xlsx")
+        tabela_11 = pd.read_csv("7_Role_Zagueiro_Construtor_Full.csv")
         tabela_11 = tabela_11.loc[(tabela_11['Nacionalidade']==nacionalidade)&(tabela_11['Fim_Contrato']<=contrato)&(tabela_11['Versão_Temporada']==temporada)]   
         tabela_11 = tabela_11.iloc[:, np.r_[1, 3, 4, 7, 15, 8:12, 28]]
         tabela_11 = tabela_11[(tabela_11['Liga'] == 'ENG1') | (tabela_11['Liga'] == 'ENG2') | (tabela_11['Liga'] == 'FRA1') | (tabela_11['Liga'] == 'FRA2') 
@@ -874,7 +874,7 @@ if choose == "Free Agents pelo Mundo":
             | (tabela_11['Liga'] == 'POR2') | (tabela_11['Liga'] == 'BUL') | (tabela_11['Liga'] == 'AUT') | (tabela_11['Liga'] == 'QAT') 
             | (tabela_11['Liga'] == 'BRA1') | (tabela_11['Liga'] == 'ARG1')]
 
-        tabela_12 = pd.read_excel("PlayerAnalysis_Role_7_Full.xlsx")
+        tabela_12 = pd.read_csv("PlayerAnalysis_Role_7_Full.csv")
         tabela_12 = tabela_12.loc[(tabela_12['Nacionalidade']==nacionalidade)&(tabela_12['Fim_Contrato']<=contrato)&(tabela_12['Versão_Temporada']==temporada)]
         tabela_12 = tabela_12.iloc[:, np.r_[12, 29, 33:37]]
         tabela_12 = tabela_12[(tabela_12['Liga'] == 'ENG1') | (tabela_12['Liga'] == 'ENG2') | (tabela_12['Liga'] == 'FRA1') | (tabela_12['Liga'] == 'FRA2') 
@@ -894,7 +894,7 @@ if choose == "Free Agents pelo Mundo":
         st.dataframe(tabela_11, use_container_width=True, hide_index=True)
 
 
-        tabela_13 = pd.read_excel("8_Role_Zagueiro_Equilibrado_Full.xlsx")
+        tabela_13 = pd.read_csv("8_Role_Zagueiro_Equilibrado_Full.csv")
         tabela_13 = tabela_13.loc[(tabela_13['Nacionalidade']==nacionalidade)&(tabela_13['Fim_Contrato']<=contrato)&(tabela_13['Versão_Temporada']==temporada)]   
         tabela_13 = tabela_13.iloc[:, np.r_[1, 3, 4, 7, 15, 8:12, 31]]
         tabela_13 = tabela_13[(tabela_13['Liga'] == 'ENG1') | (tabela_13['Liga'] == 'ENG2') | (tabela_13['Liga'] == 'FRA1') | (tabela_13['Liga'] == 'FRA2') 
@@ -906,7 +906,7 @@ if choose == "Free Agents pelo Mundo":
             | (tabela_13['Liga'] == 'POR2') | (tabela_13['Liga'] == 'BUL') | (tabela_13['Liga'] == 'AUT') | (tabela_13['Liga'] == 'QAT') 
             | (tabela_13['Liga'] == 'BRA1') | (tabela_13['Liga'] == 'ARG1')]
 
-        tabela_14 = pd.read_excel("PlayerAnalysis_Role_8_Full.xlsx")
+        tabela_14 = pd.read_csv("PlayerAnalysis_Role_8_Full.csv")
         tabela_14 = tabela_14.loc[(tabela_14['Nacionalidade']==nacionalidade)&(tabela_14['Fim_Contrato']<=contrato)&(tabela_14['Versão_Temporada']==temporada)]
         tabela_14 = tabela_14.iloc[:, np.r_[15, 32, 36:40]]
         tabela_14 = tabela_14[(tabela_14['Liga'] == 'ENG1') | (tabela_14['Liga'] == 'ENG2') | (tabela_14['Liga'] == 'FRA1') | (tabela_14['Liga'] == 'FRA2') 
@@ -929,7 +929,7 @@ if choose == "Free Agents pelo Mundo":
 
     elif posição == ("Primeiro Volante"):
         st.markdown("<h4 style='text-align: center;'>Free Agents Nacionais Mais Bem Ranqueados<br>Primeiros Volantes </b></h4>", unsafe_allow_html=True)
-        tabela_9 = pd.read_excel("9_Role_Volante_Defensivo_Full.xlsx")
+        tabela_9 = pd.read_csv("9_Role_Volante_Defensivo_Full.csv")
         tabela_9 = tabela_9.loc[(tabela_9['Nacionalidade']==nacionalidade)&(tabela_9['Fim_Contrato']<=contrato)&(tabela_9['Versão_Temporada']==temporada)]   
         tabela_9 = tabela_9.iloc[:, np.r_[1, 3, 4, 7, 15, 8:12, 22]]
         tabela_9 = tabela_9[(tabela_9['Liga'] == 'ENG1') | (tabela_9['Liga'] == 'ENG2') | (tabela_9['Liga'] == 'FRA1') | (tabela_9['Liga'] == 'FRA2') 
@@ -941,7 +941,7 @@ if choose == "Free Agents pelo Mundo":
             | (tabela_9['Liga'] == 'POR2') | (tabela_9['Liga'] == 'BUL') | (tabela_9['Liga'] == 'AUT') | (tabela_9['Liga'] == 'QAT')
             | (tabela_9['Liga'] == 'BRA1') | (tabela_9['Liga'] == 'ARG1')]
 
-        tabela_10 = pd.read_excel("PlayerAnalysis_Role_9_Full.xlsx")
+        tabela_10 = pd.read_csv("PlayerAnalysis_Role_9_Full.csv")
         tabela_10 = tabela_10.loc[(tabela_10['Nacionalidade']==nacionalidade)&(tabela_10['Fim_Contrato']<=contrato)&(tabela_10['Versão_Temporada']==temporada)]
         tabela_10 = tabela_10.iloc[:, np.r_[6, 23, 27:31]]
         tabela_10 = tabela_10[(tabela_10['Liga'] == 'ENG1') | (tabela_10['Liga'] == 'ENG2') | (tabela_10['Liga'] == 'FRA1') | (tabela_10['Liga'] == 'FRA2') 
@@ -960,7 +960,7 @@ if choose == "Free Agents pelo Mundo":
         st.dataframe(tabela_9, use_container_width=True, hide_index=True)
 
 
-        tabela_11 = pd.read_excel("10_Role_Volante_Construtor_Full.xlsx")
+        tabela_11 = pd.read_csv("10_Role_Volante_Construtor_Full.csv")
         tabela_11 = tabela_11.loc[(tabela_11['Nacionalidade']==nacionalidade)&(tabela_11['Fim_Contrato']<=contrato)&(tabela_11['Versão_Temporada']==temporada)]   
         tabela_11 = tabela_11.iloc[:, np.r_[1, 3, 4, 7, 15, 8:12, 27]]
         tabela_11 = tabela_11[(tabela_11['Liga'] == 'ENG1') | (tabela_11['Liga'] == 'ENG2') | (tabela_11['Liga'] == 'FRA1') | (tabela_11['Liga'] == 'FRA2') 
@@ -972,7 +972,7 @@ if choose == "Free Agents pelo Mundo":
             | (tabela_11['Liga'] == 'POR2') | (tabela_11['Liga'] == 'BUL') | (tabela_11['Liga'] == 'AUT') | (tabela_11['Liga'] == 'QAT')
             | (tabela_11['Liga'] == 'BRA1') | (tabela_11['Liga'] == 'ARG1')]
 
-        tabela_12 = pd.read_excel("PlayerAnalysis_Role_10_Full.xlsx")
+        tabela_12 = pd.read_csv("PlayerAnalysis_Role_10_Full.csv")
         tabela_12 = tabela_12.loc[(tabela_12['Nacionalidade']==nacionalidade)&(tabela_12['Fim_Contrato']<=contrato)&(tabela_12['Versão_Temporada']==temporada)]
         tabela_12 = tabela_12.iloc[:, np.r_[11, 28, 32:36]]
         tabela_12 = tabela_12[(tabela_12['Liga'] == 'ENG1') | (tabela_12['Liga'] == 'ENG2') | (tabela_12['Liga'] == 'FRA1') | (tabela_12['Liga'] == 'FRA2') 
@@ -992,7 +992,7 @@ if choose == "Free Agents pelo Mundo":
         st.dataframe(tabela_11, use_container_width=True, hide_index=True)
 
 
-        tabela_13 = pd.read_excel("11_Role_Volante_Equilibrado_Full.xlsx")
+        tabela_13 = pd.read_csv("11_Role_Volante_Equilibrado_Full.csv")
         tabela_13 = tabela_13.loc[(tabela_13['Nacionalidade']==nacionalidade)&(tabela_13['Fim_Contrato']<=contrato)&(tabela_13['Versão_Temporada']==temporada)]   
         tabela_13 = tabela_13.iloc[:, np.r_[1, 3, 4, 7, 15, 8:12, 29]]
         tabela_13 = tabela_13[(tabela_13['Liga'] == 'ENG1') | (tabela_13['Liga'] == 'ENG2') | (tabela_13['Liga'] == 'FRA1') | (tabela_13['Liga'] == 'FRA2') 
@@ -1004,7 +1004,7 @@ if choose == "Free Agents pelo Mundo":
             | (tabela_13['Liga'] == 'POR2') | (tabela_13['Liga'] == 'BUL') | (tabela_13['Liga'] == 'AUT') | (tabela_13['Liga'] == 'QAT')
             | (tabela_13['Liga'] == 'BRA1') | (tabela_13['Liga'] == 'ARG1')]
 
-        tabela_14 = pd.read_excel("PlayerAnalysis_Role_11_Full.xlsx")
+        tabela_14 = pd.read_csv("PlayerAnalysis_Role_11_Full.csv")
         tabela_14 = tabela_14.loc[(tabela_14['Nacionalidade']==nacionalidade)&(tabela_14['Fim_Contrato']<=contrato)&(tabela_14['Versão_Temporada']==temporada)]
         tabela_14 = tabela_14.iloc[:, np.r_[13, 30, 34:38]]
         tabela_14 = tabela_14[(tabela_14['Liga'] == 'ENG1') | (tabela_14['Liga'] == 'ENG2') | (tabela_14['Liga'] == 'FRA1') | (tabela_14['Liga'] == 'FRA2') 
@@ -1027,7 +1027,7 @@ if choose == "Free Agents pelo Mundo":
 
     elif posição == ("Segundo Volante"):
         st.markdown("<h4 style='text-align: center;'>Free Agents Nacionais Mais Bem Ranqueados<br>Segundos Volantes </b></h4>", unsafe_allow_html=True)
-        tabela_9 = pd.read_excel("12_Role_Segundo_Volante_Box_to_Box_Full.xlsx")
+        tabela_9 = pd.read_csv("12_Role_Segundo_Volante_Box_to_Box_Full.csv")
         tabela_9 = tabela_9.loc[(tabela_9['Nacionalidade']==nacionalidade)&(tabela_9['Fim_Contrato']<=contrato)&(tabela_9['Versão_Temporada']==temporada)]   
         tabela_9 = tabela_9.iloc[:, np.r_[1, 3, 4, 7, 15, 8:12, 31]]
         tabela_9 = tabela_9[(tabela_9['Liga'] == 'ENG1') | (tabela_9['Liga'] == 'ENG2') | (tabela_9['Liga'] == 'FRA1') | (tabela_9['Liga'] == 'FRA2') 
@@ -1039,7 +1039,7 @@ if choose == "Free Agents pelo Mundo":
             | (tabela_9['Liga'] == 'POR2') | (tabela_9['Liga'] == 'BUL') | (tabela_9['Liga'] == 'AUT') | (tabela_9['Liga'] == 'QAT')
             | (tabela_9['Liga'] == 'BRA1') | (tabela_9['Liga'] == 'ARG1')]
 
-        tabela_10 = pd.read_excel("PlayerAnalysis_Role_12_Full.xlsx")
+        tabela_10 = pd.read_csv("PlayerAnalysis_Role_12_Full.csv")
         tabela_10 = tabela_10.loc[(tabela_10['Nacionalidade']==nacionalidade)&(tabela_10['Fim_Contrato']<=contrato)&(tabela_10['Versão_Temporada']==temporada)]
         tabela_10 = tabela_10.iloc[:, np.r_[15, 32, 36:40]]
         tabela_10 = tabela_10[(tabela_10['Liga'] == 'ENG1') | (tabela_10['Liga'] == 'ENG2') | (tabela_10['Liga'] == 'FRA1') | (tabela_10['Liga'] == 'FRA2') 
@@ -1058,7 +1058,7 @@ if choose == "Free Agents pelo Mundo":
         st.dataframe(tabela_9, use_container_width=True, hide_index=True)
 
 
-        tabela_11 = pd.read_excel("13_Role_Segundo_Volante_Organizador_Full.xlsx")
+        tabela_11 = pd.read_csv("13_Role_Segundo_Volante_Organizador_Full.csv")
         tabela_11 = tabela_11.loc[(tabela_11['Nacionalidade']==nacionalidade)&(tabela_11['Fim_Contrato']<=contrato)&(tabela_11['Versão_Temporada']==temporada)]   
         tabela_11 = tabela_11.iloc[:, np.r_[1, 3, 4, 7, 15, 8:12, 28]]
         tabela_11 = tabela_11[(tabela_11['Liga'] == 'ENG1') | (tabela_11['Liga'] == 'ENG2') | (tabela_11['Liga'] == 'FRA1') | (tabela_11['Liga'] == 'FRA2') 
@@ -1070,7 +1070,7 @@ if choose == "Free Agents pelo Mundo":
             | (tabela_11['Liga'] == 'POR2') | (tabela_11['Liga'] == 'BUL') | (tabela_11['Liga'] == 'AUT') | (tabela_11['Liga'] == 'QAT') 
             | (tabela_11['Liga'] == 'BRA1') | (tabela_11['Liga'] == 'ARG1')]
 
-        tabela_12 = pd.read_excel("PlayerAnalysis_Role_13_Full.xlsx")
+        tabela_12 = pd.read_csv("PlayerAnalysis_Role_13_Full.csv")
         tabela_12 = tabela_12.loc[(tabela_12['Nacionalidade']==nacionalidade)&(tabela_12['Fim_Contrato']<=contrato)&(tabela_12['Versão_Temporada']==temporada)]
         tabela_12 = tabela_12.iloc[:, np.r_[12, 29, 33:37]]
         tabela_12 = tabela_12[(tabela_12['Liga'] == 'ENG1') | (tabela_12['Liga'] == 'ENG2') | (tabela_12['Liga'] == 'FRA1') | (tabela_12['Liga'] == 'FRA2') 
@@ -1090,7 +1090,7 @@ if choose == "Free Agents pelo Mundo":
         st.dataframe(tabela_11, use_container_width=True, hide_index=True)
 
 
-        tabela_13 = pd.read_excel("14_Role_Segundo_Volante_Equilibrado_Full.xlsx")
+        tabela_13 = pd.read_csv("14_Role_Segundo_Volante_Equilibrado_Full.csv")
         tabela_13 = tabela_13.loc[(tabela_13['Nacionalidade']==nacionalidade)&(tabela_13['Fim_Contrato']<=contrato)&(tabela_13['Versão_Temporada']==temporada)]   
         tabela_13 = tabela_13.iloc[:, np.r_[1, 3, 4, 7, 15, 8:12, 31]]
         tabela_13 = tabela_13[(tabela_13['Liga'] == 'ENG1') | (tabela_13['Liga'] == 'ENG2') | (tabela_13['Liga'] == 'FRA1') | (tabela_13['Liga'] == 'FRA2') 
@@ -1102,7 +1102,7 @@ if choose == "Free Agents pelo Mundo":
             | (tabela_13['Liga'] == 'POR2') | (tabela_13['Liga'] == 'BUL') | (tabela_13['Liga'] == 'AUT') | (tabela_13['Liga'] == 'QAT') 
             | (tabela_13['Liga'] == 'BRA1') | (tabela_13['Liga'] == 'ARG1')]
 
-        tabela_14 = pd.read_excel("PlayerAnalysis_Role_14_Full.xlsx")
+        tabela_14 = pd.read_csv("PlayerAnalysis_Role_14_Full.csv")
         tabela_14 = tabela_14.loc[(tabela_14['Nacionalidade']==nacionalidade)&(tabela_14['Fim_Contrato']<=contrato)&(tabela_14['Versão_Temporada']==temporada)]
         tabela_14 = tabela_14.iloc[:, np.r_[15, 32, 36:40]]
         tabela_14 = tabela_14[(tabela_14['Liga'] == 'ENG1') | (tabela_14['Liga'] == 'ENG2') | (tabela_14['Liga'] == 'FRA1') | (tabela_14['Liga'] == 'FRA2') 
@@ -1125,7 +1125,7 @@ if choose == "Free Agents pelo Mundo":
 
     elif posição == ("Meia"):
         st.markdown("<h4 style='text-align: center;'>Free Agents Nacionais Mais Bem Ranqueados<br>Meias </b></h4>", unsafe_allow_html=True)
-        tabela_9 = pd.read_excel("15_Role_Meia_Organizador_Full.xlsx")
+        tabela_9 = pd.read_csv("15_Role_Meia_Organizador_Full.csv")
         tabela_9 = tabela_9.loc[(tabela_9['Nacionalidade']==nacionalidade)&(tabela_9['Fim_Contrato']<=contrato)&(tabela_9['Versão_Temporada']==temporada)]   
         tabela_9 = tabela_9.iloc[:, np.r_[1, 3, 4, 7, 15, 8:12, 28]]
         tabela_9 = tabela_9[(tabela_9['Liga'] == 'ENG1') | (tabela_9['Liga'] == 'ENG2') | (tabela_9['Liga'] == 'FRA1') | (tabela_9['Liga'] == 'FRA2') 
@@ -1137,7 +1137,7 @@ if choose == "Free Agents pelo Mundo":
             | (tabela_9['Liga'] == 'POR2') | (tabela_9['Liga'] == 'BUL') | (tabela_9['Liga'] == 'AUT') | (tabela_9['Liga'] == 'QAT') 
             | (tabela_9['Liga'] == 'BRA1') | (tabela_9['Liga'] == 'ARG1')]
 
-        tabela_10 = pd.read_excel("PlayerAnalysis_Role_15_Full.xlsx")
+        tabela_10 = pd.read_csv("PlayerAnalysis_Role_15_Full.csv")
         tabela_10 = tabela_10.loc[(tabela_10['Nacionalidade']==nacionalidade)&(tabela_10['Fim_Contrato']<=contrato)&(tabela_10['Versão_Temporada']==temporada)]
         tabela_10 = tabela_10.iloc[:, np.r_[12, 29, 33:37]]
         tabela_10 = tabela_10[(tabela_10['Liga'] == 'ENG1') | (tabela_10['Liga'] == 'ENG2') | (tabela_10['Liga'] == 'FRA1') | (tabela_10['Liga'] == 'FRA2') 
@@ -1156,7 +1156,7 @@ if choose == "Free Agents pelo Mundo":
         st.dataframe(tabela_9, use_container_width=True, hide_index=True)
 
 
-        tabela_11 = pd.read_excel("16_Role_Meia_Atacante_Full.xlsx")
+        tabela_11 = pd.read_csv("16_Role_Meia_Atacante_Full.csv")
         tabela_11 = tabela_11.loc[(tabela_11['Nacionalidade']==nacionalidade)&(tabela_11['Fim_Contrato']<=contrato)&(tabela_11['Versão_Temporada']==temporada)]   
         tabela_11 = tabela_11.iloc[:, np.r_[1, 3, 4, 7, 15, 8:12, 35]]
         tabela_11 = tabela_11[(tabela_11['Liga'] == 'ENG1') | (tabela_11['Liga'] == 'ENG2') | (tabela_11['Liga'] == 'FRA1') | (tabela_11['Liga'] == 'FRA2') 
@@ -1168,7 +1168,7 @@ if choose == "Free Agents pelo Mundo":
             | (tabela_11['Liga'] == 'POR2') | (tabela_11['Liga'] == 'BUL') | (tabela_11['Liga'] == 'AUT') | (tabela_11['Liga'] == 'QAT') 
             | (tabela_11['Liga'] == 'BRA1') | (tabela_11['Liga'] == 'ARG1')]
 
-        tabela_12 = pd.read_excel("PlayerAnalysis_Role_16_Full.xlsx")
+        tabela_12 = pd.read_csv("PlayerAnalysis_Role_16_Full.csv")
         tabela_12 = tabela_12.loc[(tabela_12['Nacionalidade']==nacionalidade)&(tabela_12['Fim_Contrato']<=contrato)&(tabela_12['Versão_Temporada']==temporada)]
         tabela_12 = tabela_12.iloc[:, np.r_[19, 36, 40:44]]
         tabela_12 = tabela_12[(tabela_12['Liga'] == 'ENG1') | (tabela_12['Liga'] == 'ENG2') | (tabela_12['Liga'] == 'FRA1') | (tabela_12['Liga'] == 'FRA2') 
@@ -1193,7 +1193,7 @@ if choose == "Free Agents pelo Mundo":
 
     elif posição == ("Extremo"):
         st.markdown("<h4 style='text-align: center;'>Free Agents Nacionais Mais Bem Ranqueados<br>Extremos </b></h4>", unsafe_allow_html=True)
-        tabela_9 = pd.read_excel("17_Role_Extremo_Organizador_Full.xlsx")
+        tabela_9 = pd.read_csv("17_Role_Extremo_Organizador_Full.csv")
         tabela_9 = tabela_9.loc[(tabela_9['Nacionalidade']==nacionalidade)&(tabela_9['Fim_Contrato']<=contrato)&(tabela_9['Versão_Temporada']==temporada)]   
         tabela_9 = tabela_9.iloc[:, np.r_[1, 3, 4, 7, 15, 8:12, 31]]
         tabela_9 = tabela_9[(tabela_9['Liga'] == 'ENG1') | (tabela_9['Liga'] == 'ENG2') | (tabela_9['Liga'] == 'FRA1') | (tabela_9['Liga'] == 'FRA2') 
@@ -1205,7 +1205,7 @@ if choose == "Free Agents pelo Mundo":
             | (tabela_9['Liga'] == 'POR2') | (tabela_9['Liga'] == 'BUL') | (tabela_9['Liga'] == 'AUT') | (tabela_9['Liga'] == 'QAT') 
             | (tabela_9['Liga'] == 'BRA1') | (tabela_9['Liga'] == 'ARG1')]
 
-        tabela_10 = pd.read_excel("PlayerAnalysis_Role_17_Full.xlsx")
+        tabela_10 = pd.read_csv("PlayerAnalysis_Role_17_Full.csv")
         tabela_10 = tabela_10.loc[(tabela_10['Nacionalidade']==nacionalidade)&(tabela_10['Fim_Contrato']<=contrato)&(tabela_10['Versão_Temporada']==temporada)]
         tabela_10 = tabela_10.iloc[:, np.r_[15, 32, 36:40]]
         tabela_10 = tabela_10[(tabela_10['Liga'] == 'ENG1') | (tabela_10['Liga'] == 'ENG2') | (tabela_10['Liga'] == 'FRA1') | (tabela_10['Liga'] == 'FRA2') 
@@ -1224,7 +1224,7 @@ if choose == "Free Agents pelo Mundo":
         st.dataframe(tabela_9, use_container_width=True, hide_index=True)
 
 
-        tabela_11 = pd.read_excel("18_Role_Extremo_Tático_Full.xlsx")
+        tabela_11 = pd.read_csv("18_Role_Extremo_Tático_Full.csv")
         tabela_11 = tabela_11.loc[(tabela_11['Nacionalidade']==nacionalidade)&(tabela_11['Fim_Contrato']<=contrato)&(tabela_11['Versão_Temporada']==temporada)]   
         tabela_11 = tabela_11.iloc[:, np.r_[1, 3, 4, 7, 15, 8:12, 25]]
         tabela_11 = tabela_11[(tabela_11['Liga'] == 'ENG1') | (tabela_11['Liga'] == 'ENG2') | (tabela_11['Liga'] == 'FRA1') | (tabela_11['Liga'] == 'FRA2') 
@@ -1236,7 +1236,7 @@ if choose == "Free Agents pelo Mundo":
             | (tabela_11['Liga'] == 'POR2') | (tabela_11['Liga'] == 'BUL') | (tabela_11['Liga'] == 'AUT') | (tabela_11['Liga'] == 'QAT') 
             | (tabela_11['Liga'] == 'BRA1') | (tabela_11['Liga'] == 'ARG1')]
 
-        tabela_12 = pd.read_excel("PlayerAnalysis_Role_18_Full.xlsx")
+        tabela_12 = pd.read_csv("PlayerAnalysis_Role_18_Full.csv")
         tabela_12 = tabela_12.loc[(tabela_12['Nacionalidade']==nacionalidade)&(tabela_12['Fim_Contrato']<=contrato)&(tabela_12['Versão_Temporada']==temporada)]
         tabela_12 = tabela_12.iloc[:, np.r_[9, 26, 30:34]]
         tabela_12 = tabela_12[(tabela_12['Liga'] == 'ENG1') | (tabela_12['Liga'] == 'ENG2') | (tabela_12['Liga'] == 'FRA1') | (tabela_12['Liga'] == 'FRA2') 
@@ -1256,7 +1256,7 @@ if choose == "Free Agents pelo Mundo":
         st.dataframe(tabela_11, use_container_width=True, hide_index=True)
 
 
-        tabela_13 = pd.read_excel("19_Role_Extremo_Agudo_Full.xlsx")
+        tabela_13 = pd.read_csv("19_Role_Extremo_Agudo_Full.csv")
         tabela_13 = tabela_13.loc[(tabela_13['Nacionalidade']==nacionalidade)&(tabela_13['Fim_Contrato']<=contrato)&(tabela_13['Versão_Temporada']==temporada)]   
         tabela_13 = tabela_13.iloc[:, np.r_[1, 3, 4, 7, 15, 8:12, 31]]
         tabela_13 = tabela_13[(tabela_13['Liga'] == 'ENG1') | (tabela_13['Liga'] == 'ENG2') | (tabela_13['Liga'] == 'FRA1') | (tabela_13['Liga'] == 'FRA2') 
@@ -1268,7 +1268,7 @@ if choose == "Free Agents pelo Mundo":
             | (tabela_13['Liga'] == 'POR2') | (tabela_13['Liga'] == 'BUL') | (tabela_13['Liga'] == 'AUT') | (tabela_13['Liga'] == 'QAT')
             | (tabela_13['Liga'] == 'BRA1') | (tabela_13['Liga'] == 'ARG1')]
 
-        tabela_14 = pd.read_excel("PlayerAnalysis_Role_19_Full.xlsx")
+        tabela_14 = pd.read_csv("PlayerAnalysis_Role_19_Full.csv")
         tabela_14 = tabela_14.loc[(tabela_14['Nacionalidade']==nacionalidade)&(tabela_14['Fim_Contrato']<=contrato)&(tabela_14['Versão_Temporada']==temporada)]
         tabela_14 = tabela_14.iloc[:, np.r_[15, 32, 36:40]]
         tabela_14 = tabela_14[(tabela_14['Liga'] == 'ENG1') | (tabela_14['Liga'] == 'ENG2') | (tabela_14['Liga'] == 'FRA1') | (tabela_14['Liga'] == 'FRA2') 
@@ -1291,7 +1291,7 @@ if choose == "Free Agents pelo Mundo":
 
     elif posição == ("Atacante"):
         st.markdown("<h4 style='text-align: center;'>Free Agents Nacionais Mais Bem Ranqueados<br>Atacantes </b></h4>", unsafe_allow_html=True)
-        tabela_9 = pd.read_excel("20_Role_Atacante_Referência_Full.xlsx")
+        tabela_9 = pd.read_csv("20_Role_Atacante_Referência_Full.csv")
         tabela_9 = tabela_9.loc[(tabela_9['Nacionalidade']==nacionalidade)&(tabela_9['Fim_Contrato']<=contrato)&(tabela_9['Versão_Temporada']==temporada)]   
         tabela_9 = tabela_9.iloc[:, np.r_[1, 3, 4, 7, 15, 8:12, 28]]
         tabela_9 = tabela_9[(tabela_9['Liga'] == 'ENG1') | (tabela_9['Liga'] == 'ENG2') | (tabela_9['Liga'] == 'FRA1') | (tabela_9['Liga'] == 'FRA2') 
@@ -1303,7 +1303,7 @@ if choose == "Free Agents pelo Mundo":
             | (tabela_9['Liga'] == 'POR2') | (tabela_9['Liga'] == 'BUL') | (tabela_9['Liga'] == 'AUT') | (tabela_9['Liga'] == 'QAT') 
             | (tabela_9['Liga'] == 'BRA1') | (tabela_9['Liga'] == 'ARG1')]
 
-        tabela_10 = pd.read_excel("PlayerAnalysis_Role_20_Full.xlsx")
+        tabela_10 = pd.read_csv("PlayerAnalysis_Role_20_Full.csv")
         tabela_10 = tabela_10.loc[(tabela_10['Nacionalidade']==nacionalidade)&(tabela_10['Fim_Contrato']<=contrato)&(tabela_10['Versão_Temporada']==temporada)]
         tabela_10 = tabela_10.iloc[:, np.r_[12, 29, 33:37]]
         tabela_10 = tabela_10[(tabela_10['Liga'] == 'ENG1') | (tabela_10['Liga'] == 'ENG2') | (tabela_10['Liga'] == 'FRA1') | (tabela_10['Liga'] == 'FRA2') 
@@ -1322,7 +1322,7 @@ if choose == "Free Agents pelo Mundo":
         st.dataframe(tabela_9, use_container_width=True, hide_index=True)
 
 
-        tabela_11 = pd.read_excel("21_Role_Atacante_Móvel_Full.xlsx")
+        tabela_11 = pd.read_csv("21_Role_Atacante_Móvel_Full.csv")
         tabela_11 = tabela_11.loc[(tabela_11['Nacionalidade']==nacionalidade)&(tabela_11['Fim_Contrato']<=contrato)&(tabela_11['Versão_Temporada']==temporada)]   
         tabela_11 = tabela_11.iloc[:, np.r_[1, 3, 4, 7, 15, 8:12, 27]]
         tabela_11 = tabela_11[(tabela_11['Liga'] == 'ENG1') | (tabela_11['Liga'] == 'ENG2') | (tabela_11['Liga'] == 'FRA1') | (tabela_11['Liga'] == 'FRA2') 
@@ -1334,7 +1334,7 @@ if choose == "Free Agents pelo Mundo":
             | (tabela_11['Liga'] == 'POR2') | (tabela_11['Liga'] == 'BUL') | (tabela_11['Liga'] == 'AUT') | (tabela_11['Liga'] == 'QAT') 
             | (tabela_11['Liga'] == 'BRA1') | (tabela_11['Liga'] == 'ARG1')]
 
-        tabela_12 = pd.read_excel("PlayerAnalysis_Role_21_Full.xlsx")
+        tabela_12 = pd.read_csv("PlayerAnalysis_Role_21_Full.csv")
         tabela_12 = tabela_12.loc[(tabela_12['Nacionalidade']==nacionalidade)&(tabela_12['Fim_Contrato']<=contrato)&(tabela_12['Versão_Temporada']==temporada)]
         tabela_12 = tabela_12.iloc[:, np.r_[11, 28, 32:36]]
         tabela_12 = tabela_12[(tabela_12['Liga'] == 'ENG1') | (tabela_12['Liga'] == 'ENG2') | (tabela_12['Liga'] == 'FRA1') | (tabela_12['Liga'] == 'FRA2') 
@@ -1354,7 +1354,7 @@ if choose == "Free Agents pelo Mundo":
         st.dataframe(tabela_11, use_container_width=True, hide_index=True)
 
 
-        tabela_13 = pd.read_excel("22_Role_Segundo_Atacante_Full.xlsx")
+        tabela_13 = pd.read_csv("22_Role_Segundo_Atacante_Full.csv")
         tabela_13 = tabela_13.loc[(tabela_13['Nacionalidade']==nacionalidade)&(tabela_13['Fim_Contrato']<=contrato)&(tabela_13['Versão_Temporada']==temporada)]   
         tabela_13 = tabela_13.iloc[:, np.r_[1, 3, 4, 7, 15, 8:12, 31]]
         tabela_13 = tabela_13[(tabela_13['Liga'] == 'ENG1') | (tabela_13['Liga'] == 'ENG2') | (tabela_13['Liga'] == 'FRA1') | (tabela_13['Liga'] == 'FRA2') 
@@ -1366,7 +1366,7 @@ if choose == "Free Agents pelo Mundo":
             | (tabela_13['Liga'] == 'POR2') | (tabela_13['Liga'] == 'BUL') | (tabela_13['Liga'] == 'AUT') | (tabela_13['Liga'] == 'QAT') 
             | (tabela_13['Liga'] == 'BRA1') | (tabela_13['Liga'] == 'ARG1')]
 
-        tabela_14 = pd.read_excel("PlayerAnalysis_Role_22_Full.xlsx")
+        tabela_14 = pd.read_csv("PlayerAnalysis_Role_22_Full.csv")
         tabela_14 = tabela_14.loc[(tabela_14['Nacionalidade']==nacionalidade)&(tabela_14['Fim_Contrato']<=contrato)&(tabela_14['Versão_Temporada']==temporada)]
         tabela_14 = tabela_14.iloc[:, np.r_[15, 32, 36:40]]
         tabela_14 = tabela_14[(tabela_14['Liga'] == 'ENG1') | (tabela_14['Liga'] == 'ENG2') | (tabela_14['Liga'] == 'FRA1') | (tabela_14['Liga'] == 'FRA2') 
@@ -1412,7 +1412,7 @@ if choose == "Ranking de Jogadores":
                         #####################################################################################################################
                         # GOLEIRO CLÁSSICO
                         # Elaborar Tabela de Abertura com Rating, Ranking, Percentil
-                        tabela_1 = pd.read_excel('PlayerAnalysis_Role_1.xlsx')
+                        tabela_1 = pd.read_csv('PlayerAnalysis_Role_1.csv')
                         tabela_1  = tabela_1.iloc[:, np.r_[9, 14, 26, 30:34, 28, 32, 11]]
                         tabela_1 = tabela_1[(tabela_1['Atleta']==jogadores)&(tabela_1['Código_Posição_Wyscout']==0)&(tabela_1['Versão_Temporada']==temporada)&(tabela_1['Liga']==liga)]
                         clube = tabela_1.iat[0, 9]
@@ -1431,7 +1431,7 @@ if choose == "Ranking de Jogadores":
                         #####################################################################################################################
                         #####################################################################################################################
                         # Dados Básicos do Jogador
-                        tabela_a  = pd.read_excel("PlayerAnalysis_Role_1.xlsx")
+                        tabela_a  = pd.read_csv("PlayerAnalysis_Role_1.csv")
                         tabela_a = tabela_a.iloc[:, np.r_[9, 11, 15:21, 22:25, 14, 26, 28]]
                         tabela_a = tabela_a[(tabela_a['Atleta']==jogadores)&(tabela_a['Código_Posição_Wyscout']==0)&(tabela_a['Versão_Temporada']==temporada)&(tabela_a['Liga']==liga)]
                         tabela_a  = tabela_a.iloc[:, np.r_[0:11]]
@@ -1462,7 +1462,7 @@ if choose == "Ranking de Jogadores":
                        ##################################################################################################################### 
                        #####################################################################################################################
                         # #Elaborar Tabela com Métricas do Atleta
-                        tabela_2 = pd.read_excel('1_Role_Goleiro.xlsx')
+                        tabela_2 = pd.read_csv('1_Role_Goleiro.csv')
                         tabela_2 = tabela_2.iloc[:, np.r_[1, 18:25, 6, 25, 27]]
                         tabela_2 = tabela_2[(tabela_2['Atleta']==jogadores)&(tabela_2['Código_Posição_Wyscout']==0)&(tabela_2['Versão_Temporada']==temporada)&(tabela_2['Liga']==liga)]
                         tabela_2  = tabela_2.iloc[:, np.r_[0:8]]
@@ -1470,7 +1470,7 @@ if choose == "Ranking de Jogadores":
                         tabela_2  = pd.DataFrame(tabela_2)
                         tabela_2 = tabela_2.round(decimals=2)
                         # Média da Liga
-                        tabela_b = pd.read_excel('1_Role_Goleiro.xlsx')
+                        tabela_b = pd.read_csv('1_Role_Goleiro.csv')
                         tabela_b = tabela_b.iloc[:, np.r_[1, 18:25, 6, 25, 27]]
                         tabela_b = tabela_b[(tabela_b['Código_Posição_Wyscout']==0)&(tabela_b['Versão_Temporada']==temporada)&(tabela_b['Liga']==liga)]
                         tabela_b = tabela_b.iloc[:, np.r_[1:8, 9]]
@@ -1482,7 +1482,7 @@ if choose == "Ranking de Jogadores":
                         tabela_c['Atleta'] = Atleta 
                         tabela_c.insert(0, 'Atleta', tabela_c.pop('Atleta'))
                         # Percentil na Liga
-                        tabela_d = pd.read_excel('PlayerAnalysis_Role_1.xlsx')
+                        tabela_d = pd.read_csv('PlayerAnalysis_Role_1.csv')
                         tabela_d = tabela_d.iloc[:, np.r_[48:55, 9, 14, 26, 28]]
                         tabela_d = tabela_d[(tabela_d['Atleta']==jogadores)&(tabela_d['Código_Posição_Wyscout']==0)&(tabela_d['Versão_Temporada']==temporada)&(tabela_d['Liga']==liga)]
                         tabela_d = tabela_d.iloc[:, np.r_[0:7]]
@@ -1509,7 +1509,7 @@ if choose == "Ranking de Jogadores":
                         #Plotar Gráfico Alternativo
                         # Player Comparison Data
                         st.markdown("<h4 style='text-align: center;'>Comparativo do Jogador com a Média da Liga</h4>", unsafe_allow_html=True)
-                        Role_1_Mean_Charts = pd.read_excel('1_Role_Goleiro.xlsx')
+                        Role_1_Mean_Charts = pd.read_csv('1_Role_Goleiro.csv')
                         #PLOTTING COMPARISON BETWEEN 1 PLAYER AND LEAGUE MEAN
                         #Determining Club and League 
                         Role_x_Mean_Charts  = Role_1_Mean_Charts.iloc[:, np.r_[1, 3, 25, 27, 18:25]]
@@ -1598,7 +1598,7 @@ if choose == "Ranking de Jogadores":
                         #####################################################################################################################
                         # GOLEIRO LÍBERO
                         # Elaborar Tabela de Abertura com Rating, Ranking, Percentil
-                        tabela_1 = pd.read_excel('PlayerAnalysis_Role_2.xlsx')
+                        tabela_1 = pd.read_csv('PlayerAnalysis_Role_2.csv')
                         tabela_1  = tabela_1.iloc[:, np.r_[12, 17, 29, 33:37, 31, 35, 14]]
                         tabela_1 = tabela_1[(tabela_1['Atleta']==jogadores)&(tabela_1['Código_Posição_Wyscout']==0)&(tabela_1['Versão_Temporada']==temporada)&(tabela_1['Liga']==liga)]
                         clube = tabela_1.iat[0, 9]
@@ -1632,7 +1632,7 @@ if choose == "Ranking de Jogadores":
                         #Plotar Gráfico Alternativo
                         # Player Comparison Data
                         st.markdown("<h4 style='text-align: center;'>Comparativo do Jogador com a Média da Liga</h4>", unsafe_allow_html=True)
-                        Role_2_Mean_Charts = pd.read_excel('2_Role_Goleiro_Líbero.xlsx')
+                        Role_2_Mean_Charts = pd.read_csv('2_Role_Goleiro_Líbero.csv')
                         #PLOTTING COMPARISON BETWEEN 1 PLAYER AND LEAGUE MEAN
                         #Determining Club and League 
                         Role_x_Mean_Charts  = Role_2_Mean_Charts.iloc[:, np.r_[1, 3, 28, 30, 18:28]]
@@ -1729,7 +1729,7 @@ if choose == "Ranking de Jogadores":
                         #####################################################################################################################
                         # LATERAL DEFENSIVO
                         # Elaborar Tabela de Abertura com Rating, Ranking, Percentil
-                        tabela_1 = pd.read_excel('PlayerAnalysis_Role_3.xlsx')
+                        tabela_1 = pd.read_csv('PlayerAnalysis_Role_3.csv')
                         tabela_1  = tabela_1.iloc[:, np.r_[8, 13, 25, 29:33, 27, 10]]
                         tabela_1 = tabela_1[(tabela_1['Atleta']==jogadores)&(tabela_1['Código_Posição_Wyscout']==1)&(tabela_1['Versão_Temporada']==temporada)&(tabela_1['Liga']==liga)]
                         clube = tabela_1.iat[0, 8]
@@ -1748,7 +1748,7 @@ if choose == "Ranking de Jogadores":
                         ##################################################################################################################### 
                         #####################################################################################################################
                         # Dados Básicos do Jogador
-                        tabela_a  = pd.read_excel("PlayerAnalysis_Role_3.xlsx")
+                        tabela_a  = pd.read_csv("PlayerAnalysis_Role_3.csv")
                         tabela_a = tabela_a.iloc[:, np.r_[8, 10, 14:20, 21:24, 13, 25, 27]]
                         tabela_a = tabela_a[(tabela_a['Atleta']==jogadores)&(tabela_a['Código_Posição_Wyscout']==1)&(tabela_a['Versão_Temporada']==temporada)&(tabela_a['Liga']==liga)]
                         tabela_a  = tabela_a.iloc[:, np.r_[0:11]]
@@ -1781,7 +1781,7 @@ if choose == "Ranking de Jogadores":
                         #####################################################################################################################
                         # LATERAL OFENSIVO
                         # Elaborar Tabela de Abertura com Rating, Ranking, Percentil
-                        tabela_1 = pd.read_excel('PlayerAnalysis_Role_4.xlsx')
+                        tabela_1 = pd.read_csv('PlayerAnalysis_Role_4.csv')
                         tabela_1  = tabela_1.iloc[:, np.r_[17, 22, 34, 38:42, 36, 19]]
                         tabela_1 = tabela_1[(tabela_1['Atleta']==jogadores)&(tabela_1['Código_Posição_Wyscout']==1)&(tabela_1['Versão_Temporada']==temporada)&(tabela_1['Liga']==liga)]
                         clube = tabela_1.iat[0, 8]
@@ -1814,7 +1814,7 @@ if choose == "Ranking de Jogadores":
                         #####################################################################################################################
                         # LATERAL EQUILIBRADO
                         # Elaborar Tabela de Abertura com Rating, Ranking, Percentil
-                        tabela_1 = pd.read_excel('PlayerAnalysis_Role_5.xlsx')
+                        tabela_1 = pd.read_csv('PlayerAnalysis_Role_5.csv')
                         tabela_1  = tabela_1.iloc[:, np.r_[20, 25, 37, 41:45, 39, 22]]
                         tabela_1 = tabela_1[(tabela_1['Atleta']==jogadores)&(tabela_1['Código_Posição_Wyscout']==1)&(tabela_1['Versão_Temporada']==temporada)&(tabela_1['Liga']==liga)]
                         clube = tabela_1.iat[0, 8]
@@ -1846,14 +1846,14 @@ if choose == "Ranking de Jogadores":
                         ##################################################################################################################### 
                         #####################################################################################################################
                         # #Elaborar Tabela com Métricas do Atleta
-                        tabela_2 = pd.read_excel('5_Role_Lateral_Equilibrado.xlsx')
+                        tabela_2 = pd.read_csv('5_Role_Lateral_Equilibrado.csv')
                         tabela_2 = tabela_2.iloc[:, np.r_[1, 18:36, 6, 36, 38]]
                         tabela_2 = tabela_2[(tabela_2['Atleta']==jogadores)&(tabela_2['Código_Posição_Wyscout']==1)&(tabela_2['Versão_Temporada']==temporada)&(tabela_2['Liga']==liga)]
                         tabela_2  = tabela_2.iloc[:, np.r_[0:19]]
                         tabela_2  = pd.DataFrame(tabela_2)
                         tabela_2 = tabela_2.round(decimals=2)
                         # Média da Liga
-                        tabela_b = pd.read_excel('5_Role_Lateral_Equilibrado.xlsx')
+                        tabela_b = pd.read_csv('5_Role_Lateral_Equilibrado.csv')
                         tabela_b = tabela_b.iloc[:, np.r_[1, 18:36, 6, 36, 38]]
                         tabela_b = tabela_b[(tabela_b['Código_Posição_Wyscout']==1)&(tabela_b['Versão_Temporada']==temporada)&(tabela_b['Liga']==liga)]
                         tabela_b = tabela_b.iloc[:, np.r_[1:19, 20]]
@@ -1868,7 +1868,7 @@ if choose == "Ranking de Jogadores":
                         tabela_c['Atleta'] = Atleta 
                         tabela_c.insert(0, 'Atleta', tabela_c.pop('Atleta'))
                         # Percentil na Liga
-                        tabela_d = pd.read_excel('PlayerAnalysis_Role_5.xlsx')
+                        tabela_d = pd.read_csv('PlayerAnalysis_Role_5.csv')
                         tabela_d = tabela_d.iloc[:, np.r_[81:99, 20, 25, 37, 39]]
                         tabela_d = tabela_d[(tabela_d['Atleta']==jogadores)&(tabela_d['Código_Posição_Wyscout']==1)&(tabela_d['Versão_Temporada']==temporada)&(tabela_d['Liga']==liga)]
                         tabela_d = tabela_d.iloc[:, np.r_[0:18]]
@@ -1895,7 +1895,7 @@ if choose == "Ranking de Jogadores":
                         #Plotar Gráfico Alternativo
                         # Player Comparison Data
                         st.markdown("<h4 style='text-align: center;'>Comparativo do Jogador com a Média da Liga</h4>", unsafe_allow_html=True)
-                        Role_5_Mean_Charts = pd.read_excel('5_Role_Lateral_Equilibrado.xlsx')
+                        Role_5_Mean_Charts = pd.read_csv('5_Role_Lateral_Equilibrado.csv')
                         #PLOTTING COMPARISON BETWEEN 1 PLAYER AND LEAGUE MEAN
                         #Determining Club and League 
                         Role_x_Mean_Charts  = Role_5_Mean_Charts.iloc[:, np.r_[1, 3, 36, 38, 18:36]]
@@ -2047,7 +2047,7 @@ if choose == "Ranking de Jogadores":
                         #####################################################################################################################
                         # ZAGUEIRO CLÁSSICO
                         # Elaborar Tabela de Abertura com Rating, Ranking, Percentil
-                        tabela_1 = pd.read_excel('PlayerAnalysis_Role_6.xlsx')
+                        tabela_1 = pd.read_csv('PlayerAnalysis_Role_6.csv')
                         tabela_1  = tabela_1.iloc[:, np.r_[8, 13, 25, 29:33, 27, 10]]
                         tabela_1 = tabela_1[(tabela_1['Atleta']==jogadores)&(tabela_1['Código_Posição_Wyscout']==4)&(tabela_1['Versão_Temporada']==temporada)&(tabela_1['Liga']==liga)]
                         clube = tabela_1.iat[0, 8]
@@ -2066,7 +2066,7 @@ if choose == "Ranking de Jogadores":
                         ##################################################################################################################### 
                         #####################################################################################################################
                         # Dados Básicos do Jogador
-                        tabela_a  = pd.read_excel("PlayerAnalysis_Role_6.xlsx")
+                        tabela_a  = pd.read_csv("PlayerAnalysis_Role_6.csv")
                         tabela_a = tabela_a.iloc[:, np.r_[8, 10, 14:20, 21:24, 13, 25, 27]]
                         tabela_a = tabela_a[(tabela_a['Atleta']==jogadores)&(tabela_a['Código_Posição_Wyscout']==4)&(tabela_a['Versão_Temporada']==temporada)&(tabela_a['Liga']==liga)]
                         tabela_a  = tabela_a.iloc[:, np.r_[0:11]]
@@ -2098,7 +2098,7 @@ if choose == "Ranking de Jogadores":
                         #####################################################################################################################
                         # ZAGUEIRO CONSTRUTOR
                         # Elaborar Tabela de Abertura com Rating, Ranking, Percentil
-                        tabela_1 = pd.read_excel('PlayerAnalysis_Role_7.xlsx')
+                        tabela_1 = pd.read_csv('PlayerAnalysis_Role_7.csv')
                         tabela_1  = tabela_1.iloc[:, np.r_[12, 17, 29, 33:37, 31, 14]]
                         tabela_1 = tabela_1[(tabela_1['Atleta']==jogadores)&(tabela_1['Código_Posição_Wyscout']==4)&(tabela_1['Versão_Temporada']==temporada)&(tabela_1['Liga']==liga)]
                         clube = tabela_1.iat[0, 8]
@@ -2131,7 +2131,7 @@ if choose == "Ranking de Jogadores":
                         #####################################################################################################################
                         # ZAGUEIRO EQUILIBRADO
                         # Elaborar Tabela de Abertura com Rating, Ranking, Percentil
-                        tabela_1 = pd.read_excel('PlayerAnalysis_Role_8.xlsx')
+                        tabela_1 = pd.read_csv('PlayerAnalysis_Role_8.csv')
                         tabela_1  = tabela_1.iloc[:, np.r_[15, 20, 32, 36:40, 34, 17]]
                         tabela_1 = tabela_1[(tabela_1['Atleta']==jogadores)&(tabela_1['Código_Posição_Wyscout']==4)&(tabela_1['Versão_Temporada']==temporada)&(tabela_1['Liga']==liga)]
                         clube = tabela_1.iat[0, 8]
@@ -2163,14 +2163,14 @@ if choose == "Ranking de Jogadores":
                         ##################################################################################################################### 
                         #####################################################################################################################
                         # #Elaborar Tabela com Métricas do Atleta
-                        tabela_2 = pd.read_excel('8_Role_Zagueiro_Equilibrado.xlsx')
+                        tabela_2 = pd.read_csv('8_Role_Zagueiro_Equilibrado.csv')
                         tabela_2 = tabela_2.iloc[:, np.r_[1, 18:31, 6, 31, 33]]
                         tabela_2 = tabela_2[(tabela_2['Atleta']==jogadores)&(tabela_2['Código_Posição_Wyscout']==4)&(tabela_2['Versão_Temporada']==temporada)&(tabela_2['Liga']==liga)]
                         tabela_2  = tabela_2.iloc[:, np.r_[0:14]]
                         tabela_2  = pd.DataFrame(tabela_2)
                         tabela_2 = tabela_2.round(decimals=2)
                         # Média da Liga
-                        tabela_b = pd.read_excel('8_Role_Zagueiro_Equilibrado.xlsx')
+                        tabela_b = pd.read_csv('8_Role_Zagueiro_Equilibrado.csv')
                         tabela_b = tabela_b.iloc[:, np.r_[1, 18:31, 6, 31, 33]]
                         tabela_b = tabela_b[(tabela_b['Código_Posição_Wyscout']==4)&(tabela_b['Versão_Temporada']==temporada)&(tabela_b['Liga']==liga)]
                         tabela_b = tabela_b.iloc[:, np.r_[1:14, 15]]
@@ -2184,7 +2184,7 @@ if choose == "Ranking de Jogadores":
                         tabela_c['Atleta'] = Atleta 
                         tabela_c.insert(0, 'Atleta', tabela_c.pop('Atleta'))
                         # Percentil na Liga
-                        tabela_d = pd.read_excel('PlayerAnalysis_Role_8.xlsx')
+                        tabela_d = pd.read_csv('PlayerAnalysis_Role_8.csv')
                         tabela_d = tabela_d.iloc[:, np.r_[66:79, 15, 20, 32, 34]]
                         tabela_d = tabela_d[(tabela_d['Atleta']==jogadores)&(tabela_d['Código_Posição_Wyscout']==4)&(tabela_d['Versão_Temporada']==temporada)&(tabela_d['Liga']==liga)]
                         tabela_d = tabela_d.iloc[:, np.r_[0:13]]
@@ -2210,7 +2210,7 @@ if choose == "Ranking de Jogadores":
                         #Plotar Gráfico Alternativo
                         # Player Comparison Data
                         st.markdown("<h4 style='text-align: center;'>Comparativo do Jogador com a Média da Liga</h4>", unsafe_allow_html=True)
-                        Role_8_Mean_Charts = pd.read_excel('8_Role_Zagueiro_Equilibrado.xlsx')
+                        Role_8_Mean_Charts = pd.read_csv('8_Role_Zagueiro_Equilibrado.csv')
                         #PLOTTING COMPARISON BETWEEN 1 PLAYER AND LEAGUE MEAN
                         #Determining Club and League 
                         Role_x_Mean_Charts  = Role_8_Mean_Charts.iloc[:, np.r_[1, 3, 31, 33, 18:31]]
@@ -2361,7 +2361,7 @@ if choose == "Ranking de Jogadores":
                         ##################################################################################################################### 
                         #####################################################################################################################
                         # Elaborar Tabela de Abertura com Rating, Ranking, Percentil
-                        tabela_1 = pd.read_excel('PlayerAnalysis_Role_9.xlsx')
+                        tabela_1 = pd.read_csv('PlayerAnalysis_Role_9.csv')
                         tabela_1  = tabela_1.iloc[:, np.r_[6, 11, 23, 27:31, 25, 8]]
                         tabela_1 = tabela_1[(tabela_1['Atleta']==jogadores)&(tabela_1['Código_Posição_Wyscout']==7)&(tabela_1['Versão_Temporada']==temporada)&(tabela_1['Liga']==liga)]
                         clube = tabela_1.iat[0, 8]
@@ -2380,7 +2380,7 @@ if choose == "Ranking de Jogadores":
                         ##################################################################################################################### 
                         #####################################################################################################################
                         # Dados Básicos do Jogador
-                        tabela_a  = pd.read_excel("PlayerAnalysis_Role_9.xlsx")
+                        tabela_a  = pd.read_csv("PlayerAnalysis_Role_9.csv")
                         tabela_a = tabela_a.iloc[:, np.r_[6, 8, 12:18, 19:22, 11, 23, 25]]
                         tabela_a = tabela_a[(tabela_a['Atleta']==jogadores)&(tabela_a['Código_Posição_Wyscout']==7)&(tabela_a['Versão_Temporada']==temporada)&(tabela_a['Liga']==liga)]
                         tabela_a  = tabela_a.iloc[:, np.r_[0:11]]
@@ -2415,7 +2415,7 @@ if choose == "Ranking de Jogadores":
 
                         # PRIMEIRO VOLANTE CONSTRUTOR
                         # Elaborar Tabela de Abertura com Rating, Ranking, Percentil
-                        tabela_1 = pd.read_excel('PlayerAnalysis_Role_10.xlsx')
+                        tabela_1 = pd.read_csv('PlayerAnalysis_Role_10.csv')
                         tabela_1  = tabela_1.iloc[:, np.r_[11, 16, 28, 32:36, 30, 13]]
                         tabela_1 = tabela_1[(tabela_1['Atleta']==jogadores)&(tabela_1['Código_Posição_Wyscout']==7)&(tabela_1['Versão_Temporada']==temporada)&(tabela_1['Liga']==liga)]
                         clube = tabela_1.iat[0, 8]
@@ -2448,7 +2448,7 @@ if choose == "Ranking de Jogadores":
                         #####################################################################################################################
                         # PRIMEIRO VOLANTE EQUILIBRADO
                         # Elaborar Tabela de Abertura com Rating, Ranking, Percentil
-                        tabela_1 = pd.read_excel('PlayerAnalysis_Role_11.xlsx')
+                        tabela_1 = pd.read_csv('PlayerAnalysis_Role_11.csv')
                         tabela_1  = tabela_1.iloc[:, np.r_[13, 18, 30, 34:38, 32, 15]]
                         tabela_1 = tabela_1[(tabela_1['Atleta']==jogadores)&(tabela_1['Código_Posição_Wyscout']==7)&(tabela_1['Versão_Temporada']==temporada)&(tabela_1['Liga']==liga)]
                         clube = tabela_1.iat[0, 8]
@@ -2480,14 +2480,14 @@ if choose == "Ranking de Jogadores":
                         ##################################################################################################################### 
                         #####################################################################################################################
                         # Elaborar Tabela com Métricas do Atleta
-                        tabela_2 = pd.read_excel('11_Role_Volante_Equilibrado.xlsx')
+                        tabela_2 = pd.read_csv('11_Role_Volante_Equilibrado.csv')
                         tabela_2 = tabela_2.iloc[:, np.r_[1, 18:29, 6, 29, 31]]
                         tabela_2 = tabela_2[(tabela_2['Atleta']==jogadores)&(tabela_2['Código_Posição_Wyscout']==7)&(tabela_2['Versão_Temporada']==temporada)&(tabela_2['Liga']==liga)]
                         tabela_2  = tabela_2.iloc[:, np.r_[0:12]]
                         tabela_2  = pd.DataFrame(tabela_2)
                         tabela_2 = tabela_2.round(decimals=2)
                         # Média da Liga
-                        tabela_b = pd.read_excel('11_Role_Volante_Equilibrado.xlsx')
+                        tabela_b = pd.read_csv('11_Role_Volante_Equilibrado.csv')
                         tabela_b = tabela_b.iloc[:, np.r_[1, 18:29, 6, 29, 31]]
                         tabela_b = tabela_b[(tabela_b['Código_Posição_Wyscout']==7)&(tabela_b['Versão_Temporada']==temporada)&(tabela_b['Liga']==liga)]
                         tabela_b = tabela_b.iloc[:, np.r_[1:12, 13]]
@@ -2501,7 +2501,7 @@ if choose == "Ranking de Jogadores":
                         tabela_c['Atleta'] = Atleta 
                         tabela_c.insert(0, 'Atleta', tabela_c.pop('Atleta'))
                         # Percentil na Liga
-                        tabela_d = pd.read_excel('PlayerAnalysis_Role_11.xlsx')
+                        tabela_d = pd.read_csv('PlayerAnalysis_Role_11.csv')
                         tabela_d = tabela_d.iloc[:, np.r_[60:71, 13, 18, 30, 32]]
                         tabela_d = tabela_d[(tabela_d['Atleta']==jogadores)&(tabela_d['Código_Posição_Wyscout']==7)&(tabela_d['Versão_Temporada']==temporada)&(tabela_d['Liga']==liga)]
                         tabela_d = tabela_d.iloc[:, np.r_[0:12]]
@@ -2525,7 +2525,7 @@ if choose == "Ranking de Jogadores":
                         #Plotar Gráfico Alternativo
                         # Player Comparison Data
                         st.markdown("<h4 style='text-align: center;'>Comparativo do Jogador com a Média da Liga</h4>", unsafe_allow_html=True)
-                        Role_11_Mean_Charts = pd.read_excel('11_Role_Volante_Equilibrado.xlsx')
+                        Role_11_Mean_Charts = pd.read_csv('11_Role_Volante_Equilibrado.csv')
                         #PLOTTING COMPARISON BETWEEN 1 PLAYER AND LEAGUE MEAN
                         #Determining Club and League 
                         Role_x_Mean_Charts  = Role_11_Mean_Charts.iloc[:, np.r_[1, 3, 29, 31, 18:29]]
@@ -2671,7 +2671,7 @@ if choose == "Ranking de Jogadores":
                         #####################################################################################################################
                         # SEGUNDO VOLANTE BOX TO BOX
                         # Elaborar Tabela de Abertura com Rating, Ranking, Percentil
-                        tabela_1 = pd.read_excel('PlayerAnalysis_Role_12.xlsx')
+                        tabela_1 = pd.read_csv('PlayerAnalysis_Role_12.csv')
                         tabela_1  = tabela_1.iloc[:, np.r_[15, 20, 32, 36:40, 34, 17]]
                         tabela_1 = tabela_1[(tabela_1['Atleta']==jogadores)&(tabela_1['Código_Posição_Wyscout']==8)&(tabela_1['Versão_Temporada']==temporada)&(tabela_1['Liga']==liga)]
                         clube = tabela_1.iat[0, 8]
@@ -2690,7 +2690,7 @@ if choose == "Ranking de Jogadores":
                         #####################################################################################################################
                         #####################################################################################################################
                         # Dados Básicos do Jogador
-                        tabela_a  = pd.read_excel("PlayerAnalysis_Role_12.xlsx")
+                        tabela_a  = pd.read_csv("PlayerAnalysis_Role_12.csv")
                         tabela_a = tabela_a.iloc[:, np.r_[15, 17, 21:27, 28:31, 20, 32, 34]]
                         tabela_a = tabela_a[(tabela_a['Atleta']==jogadores)&(tabela_a['Código_Posição_Wyscout']==8)&(tabela_a['Versão_Temporada']==temporada)&(tabela_a['Liga']==liga)]
                         tabela_a  = tabela_a.iloc[:, np.r_[0:11]]
@@ -2722,7 +2722,7 @@ if choose == "Ranking de Jogadores":
                         #####################################################################################################################
                         # SEGUNDO VOLANTE ORGANIZADOR
                         # Elaborar Tabela de Abertura com Rating, Ranking, Percentil
-                        tabela_1 = pd.read_excel('PlayerAnalysis_Role_13.xlsx')
+                        tabela_1 = pd.read_csv('PlayerAnalysis_Role_13.csv')
                         tabela_1  = tabela_1.iloc[:, np.r_[12, 17, 29, 33:37, 31, 14]]
                         tabela_1 = tabela_1[(tabela_1['Atleta']==jogadores)&(tabela_1['Código_Posição_Wyscout']==8)&(tabela_1['Versão_Temporada']==temporada)&(tabela_1['Liga']==liga)]
                         clube = tabela_1.iat[0, 8]
@@ -2755,7 +2755,7 @@ if choose == "Ranking de Jogadores":
                         #####################################################################################################################
                         # SEGUNDO VOLANTE EQUILIBRADO
                         # Elaborar Tabela de Abertura com Rating, Ranking, Percentil
-                        tabela_1 = pd.read_excel('PlayerAnalysis_Role_14.xlsx')
+                        tabela_1 = pd.read_csv('PlayerAnalysis_Role_14.csv')
                         tabela_1  = tabela_1.iloc[:, np.r_[15, 20, 32, 36:40, 34, 17]]
                         tabela_1 = tabela_1[(tabela_1['Atleta']==jogadores)&(tabela_1['Código_Posição_Wyscout']==8)&(tabela_1['Versão_Temporada']==temporada)&(tabela_1['Liga']==liga)]
                         clube = tabela_1.iat[0, 8]
@@ -2787,14 +2787,14 @@ if choose == "Ranking de Jogadores":
                         ##################################################################################################################### 
                         #####################################################################################################################
                         # Elaborar Tabela com Métricas do Atleta
-                        tabela_2 = pd.read_excel('14_Role_Segundo_Volante_Equilibrado.xlsx')
+                        tabela_2 = pd.read_csv('14_Role_Segundo_Volante_Equilibrado.csv')
                         tabela_2 = tabela_2.iloc[:, np.r_[1, 18:31, 6, 31, 33]]
                         tabela_2 = tabela_2[(tabela_2['Atleta']==jogadores)&(tabela_2['Código_Posição_Wyscout']==8)&(tabela_2['Versão_Temporada']==temporada)&(tabela_2['Liga']==liga)]
                         tabela_2  = tabela_2.iloc[:, np.r_[0:14]]
                         tabela_2  = pd.DataFrame(tabela_2)
                         tabela_2 = tabela_2.round(decimals=2)
                         # Média da Liga
-                        tabela_b = pd.read_excel('14_Role_Segundo_Volante_Equilibrado.xlsx')
+                        tabela_b = pd.read_csv('14_Role_Segundo_Volante_Equilibrado.csv')
                         tabela_b = tabela_b.iloc[:, np.r_[1, 18:31, 6, 31, 33]]
                         tabela_b = tabela_b[(tabela_b['Código_Posição_Wyscout']==8)&(tabela_b['Versão_Temporada']==temporada)&(tabela_b['Liga']==liga)]
                         tabela_b = tabela_b.iloc[:, np.r_[1:14, 15]]
@@ -2807,7 +2807,7 @@ if choose == "Ranking de Jogadores":
                         tabela_c['Atleta'] = Atleta 
                         tabela_c.insert(0, 'Atleta', tabela_c.pop('Atleta'))
                         # Percentil na Liga
-                        tabela_d = pd.read_excel('PlayerAnalysis_Role_14.xlsx')
+                        tabela_d = pd.read_csv('PlayerAnalysis_Role_14.csv')
                         tabela_d = tabela_d.iloc[:, np.r_[66:79, 15, 20, 32, 34]]
                         tabela_d = tabela_d[(tabela_d['Atleta']==jogadores)&(tabela_d['Código_Posição_Wyscout']==8)&(tabela_d['Versão_Temporada']==temporada)&(tabela_d['Liga']==liga)]
                         tabela_d = tabela_d.iloc[:, np.r_[0:13]]
@@ -2832,7 +2832,7 @@ if choose == "Ranking de Jogadores":
                         #Plotar Gráfico Alternativo
                         # Player Comparison Data
                         st.markdown("<h4 style='text-align: center;'>Comparativo do Jogador com a Média da Liga</h4>", unsafe_allow_html=True)
-                        Role_14_Mean_Charts = pd.read_excel('14_Role_Segundo_Volante_Equilibrado.xlsx')
+                        Role_14_Mean_Charts = pd.read_csv('14_Role_Segundo_Volante_Equilibrado.csv')
                         #PLOTTING COMPARISON BETWEEN 1 PLAYER AND LEAGUE MEAN
                         #Determining Club and League 
                         Role_x_Mean_Charts  = Role_14_Mean_Charts.iloc[:, np.r_[1, 3, 31, 33, 18:31]]
@@ -2981,7 +2981,7 @@ if choose == "Ranking de Jogadores":
                         #####################################################################################################################
                         # MEIA ORGANIZADOR
                         # Elaborar Tabela de Abertura com Rating, Ranking, Percentil
-                        tabela_1 = pd.read_excel('PlayerAnalysis_Role_15.xlsx')
+                        tabela_1 = pd.read_csv('PlayerAnalysis_Role_15.csv')
                         tabela_1  = tabela_1.iloc[:, np.r_[12, 17, 29, 33:37, 31, 14]]
                         tabela_1 = tabela_1[(tabela_1['Atleta']==jogadores)&(tabela_1['Código_Posição_Wyscout']==9)&(tabela_1['Versão_Temporada']==temporada)&(tabela_1['Liga']==liga)]
                         clube = tabela_1.iat[0, 8]
@@ -3000,7 +3000,7 @@ if choose == "Ranking de Jogadores":
                         #####################################################################################################################
                         #####################################################################################################################
                         # Dados Básicos do Jogador
-                        tabela_a  = pd.read_excel("PlayerAnalysis_Role_15.xlsx")
+                        tabela_a  = pd.read_csv("PlayerAnalysis_Role_15.csv")
                         tabela_a = tabela_a.iloc[:, np.r_[12, 14, 19:24, 25:28, 17, 29, 31]]
                         tabela_a = tabela_a[(tabela_a['Atleta']==jogadores)&(tabela_a['Código_Posição_Wyscout']==9)&(tabela_a['Versão_Temporada']==temporada)&(tabela_a['Liga']==liga)]
                         tabela_a  = tabela_a.iloc[:, np.r_[0:10]]
@@ -3031,14 +3031,14 @@ if choose == "Ranking de Jogadores":
                         ##################################################################################################################### 
                         #####################################################################################################################
                         # #Elaborar Tabela com Métricas do Atleta
-                        tabela_2 = pd.read_excel('15_Role_Meia_Organizador.xlsx')
+                        tabela_2 = pd.read_csv('15_Role_Meia_Organizador.csv')
                         tabela_2 = tabela_2.iloc[:, np.r_[1, 18:28, 6, 28, 30]]
                         tabela_2 = tabela_2[(tabela_2['Atleta']==jogadores)&(tabela_2['Código_Posição_Wyscout']==9)&(tabela_2['Versão_Temporada']==temporada)&(tabela_2['Liga']==liga)]
                         tabela_2  = tabela_2.iloc[:, np.r_[0:11]]
                         tabela_2  = pd.DataFrame(tabela_2)
                         tabela_2 = tabela_2.round(decimals=2)
                         # Média da Liga
-                        tabela_b = pd.read_excel('15_Role_Meia_Organizador.xlsx')
+                        tabela_b = pd.read_csv('15_Role_Meia_Organizador.csv')
                         tabela_b = tabela_b.iloc[:, np.r_[1, 18:28, 6, 28, 30]]
                         tabela_b = tabela_b[(tabela_b['Código_Posição_Wyscout']==9)&(tabela_b['Versão_Temporada']==temporada)&(tabela_b['Liga']==liga)]
                         tabela_b = tabela_b.iloc[:, np.r_[0:11, 12]]
@@ -3051,7 +3051,7 @@ if choose == "Ranking de Jogadores":
                         tabela_c['Atleta'] = Atleta 
                         tabela_c.insert(0, 'Atleta', tabela_c.pop('Atleta'))
                         # Percentil na Liga
-                        tabela_d = pd.read_excel('PlayerAnalysis_Role_15.xlsx')
+                        tabela_d = pd.read_csv('PlayerAnalysis_Role_15.csv')
                         tabela_d = tabela_d.iloc[:, np.r_[57:67, 12, 17, 29, 31]]
                         tabela_d = tabela_d[(tabela_d['Atleta']==jogadores)&(tabela_d['Código_Posição_Wyscout']==9)&(tabela_d['Versão_Temporada']==temporada)&(tabela_d['Liga']==liga)]
                         tabela_d = tabela_d.iloc[:, np.r_[0:10]]
@@ -3075,7 +3075,7 @@ if choose == "Ranking de Jogadores":
                         #Plotar Gráfico Alternativo
                         # Player Comparison Data
                         st.markdown("<h4 style='text-align: center;'>Comparativo do Jogador com a Média da Liga</h4>", unsafe_allow_html=True)
-                        Role_15_Mean_Charts = pd.read_excel('15_Role_Meia_Organizador.xlsx')
+                        Role_15_Mean_Charts = pd.read_csv('15_Role_Meia_Organizador.csv')
                         #PLOTTING COMPARISON BETWEEN 1 PLAYER AND LEAGUE MEAN
                         #Determining Club and League 
                         Role_x_Mean_Charts  = Role_15_Mean_Charts.iloc[:, np.r_[1, 3, 28, 30, 18:28]]
@@ -3216,7 +3216,7 @@ if choose == "Ranking de Jogadores":
                         #####################################################################################################################
                         # MEIA ATACANTE
                         # Elaborar Tabela de Abertura com Rating, Ranking, Percentil
-                        tabela_1 = pd.read_excel('PlayerAnalysis_Role_16.xlsx')
+                        tabela_1 = pd.read_csv('PlayerAnalysis_Role_16.csv')
                         tabela_1  = tabela_1.iloc[:, np.r_[19, 24, 36, 40:44, 38, 21]]
                         tabela_1 = tabela_1[(tabela_1['Atleta']==jogadores)&(tabela_1['Código_Posição_Wyscout']==9)&(tabela_1['Versão_Temporada']==temporada)&(tabela_1['Liga']==liga)]
                         clube = tabela_1.iat[0, 8]
@@ -3248,14 +3248,14 @@ if choose == "Ranking de Jogadores":
                         ##################################################################################################################### 
                         #####################################################################################################################
                         # #Elaborar Tabela com Métricas do Atleta
-                        tabela_2 = pd.read_excel('16_Role_Meia_Atacante.xlsx')
+                        tabela_2 = pd.read_csv('16_Role_Meia_Atacante.csv')
                         tabela_2 = tabela_2.iloc[:, np.r_[1, 18:35, 6, 35, 37]]
                         tabela_2 = tabela_2[(tabela_2['Atleta']==jogadores)&(tabela_2['Código_Posição_Wyscout']==9)&(tabela_2['Versão_Temporada']==temporada)&(tabela_2['Liga']==liga)]
                         tabela_2 = tabela_2.iloc[:, np.r_[0:18]]
                         tabela_2  = pd.DataFrame(tabela_2)
                         tabela_2 = tabela_2.round(decimals=2)
                         # Média da Liga
-                        tabela_b = pd.read_excel('16_Role_Meia_Atacante.xlsx')
+                        tabela_b = pd.read_csv('16_Role_Meia_Atacante.csv')
                         tabela_b = tabela_b.iloc[:, np.r_[1, 18:35, 6, 35, 37]]
                         tabela_b = tabela_b[(tabela_b['Código_Posição_Wyscout']==9)&(tabela_b['Versão_Temporada']==temporada)&(tabela_b['Liga']==liga)]
                         tabela_b = tabela_b.iloc[:, np.r_[0:18, 19]]
@@ -3270,7 +3270,7 @@ if choose == "Ranking de Jogadores":
                         tabela_c['Atleta'] = Atleta 
                         tabela_c.insert(0, 'Atleta', tabela_c.pop('Atleta'))
                         # Percentil na Liga
-                        tabela_d = pd.read_excel('PlayerAnalysis_Role_16.xlsx')
+                        tabela_d = pd.read_csv('PlayerAnalysis_Role_16.csv')
                         tabela_d = tabela_d.iloc[:, np.r_[78:95, 19, 24, 36, 38]]
                         tabela_d = tabela_d[(tabela_d['Atleta']==jogadores)&(tabela_d['Código_Posição_Wyscout']==9)&(tabela_d['Versão_Temporada']==temporada)&(tabela_d['Liga']==liga)]
                         tabela_d = tabela_d.iloc[:, np.r_[0:17]]
@@ -3296,7 +3296,7 @@ if choose == "Ranking de Jogadores":
                         #Plotar Gráfico Alternativo
                         # Player Comparison Data
                         st.markdown("<h4 style='text-align: center;'>Comparativo do Jogador com a Média da Liga</h4>", unsafe_allow_html=True)
-                        Role_16_Mean_Charts = pd.read_excel('16_Role_Meia_Atacante.xlsx')
+                        Role_16_Mean_Charts = pd.read_csv('16_Role_Meia_Atacante.csv')
                         #PLOTTING COMPARISON BETWEEN 1 PLAYER AND LEAGUE MEAN
                         #Determining Club and League 
                         Role_x_Mean_Charts  = Role_16_Mean_Charts.iloc[:, np.r_[1, 3, 35, 37, 18:35]]
@@ -3450,7 +3450,7 @@ if choose == "Ranking de Jogadores":
                         # EXTREMO ORGANIZADOR
                         # Texto de Abertura
                         # Elaborar Tabela de Abertura com Rating, Ranking, Percentil
-                        tabela_1 = pd.read_excel('PlayerAnalysis_Role_17.xlsx')
+                        tabela_1 = pd.read_csv('PlayerAnalysis_Role_17.csv')
                         tabela_1  = tabela_1.iloc[:, np.r_[15, 20, 32, 36:40, 34, 17]]
                         tabela_1 = tabela_1[(tabela_1['Atleta']==jogadores)&((tabela_1['Código_Posição_Wyscout']==10)|(tabela_1['Código_Posição_Wyscout']==11))&(tabela_1['Versão_Temporada']==temporada)&(tabela_1['Liga']==liga)]
                         clube = tabela_1.iat[0, 8]
@@ -3470,7 +3470,7 @@ if choose == "Ranking de Jogadores":
                         ##################################################################################################################### 
                         #####################################################################################################################
                         # Dados Básicos do Jogador
-                        tabela_a  = pd.read_excel("PlayerAnalysis_Role_17.xlsx")
+                        tabela_a  = pd.read_csv("PlayerAnalysis_Role_17.csv")
                         tabela_a = tabela_a.iloc[:, np.r_[15, 17, 21:27, 28:31, 20, 32, 34]]
                         tabela_a = tabela_a[(tabela_a['Atleta']==jogadores)&((tabela_a['Código_Posição_Wyscout']==10)|(tabela_a['Código_Posição_Wyscout']==11))&(tabela_a['Versão_Temporada']==temporada)&(tabela_a['Liga']==liga)]
                         tabela_a  = tabela_a.iloc[:, np.r_[0:10]]
@@ -3502,14 +3502,14 @@ if choose == "Ranking de Jogadores":
                         ##################################################################################################################### 
                         #####################################################################################################################
                         # #Elaborar Tabela com Métricas do Atleta
-                        tabela_2 = pd.read_excel('17_Role_Extremo_Organizador.xlsx')
+                        tabela_2 = pd.read_csv('17_Role_Extremo_Organizador.csv')
                         tabela_2 = tabela_2.iloc[:, np.r_[1, 18:31, 6, 31, 33]]
                         tabela_2 = tabela_2[(tabela_2['Atleta']==jogadores)&((tabela_2['Código_Posição_Wyscout']==10)|(tabela_2['Código_Posição_Wyscout']==11))&(tabela_2['Versão_Temporada']==temporada)&(tabela_2['Liga']==liga)]
                         tabela_2 = tabela_2.iloc[:, np.r_[0:14]]
                         tabela_2  = pd.DataFrame(tabela_2)
                         tabela_2 = tabela_2.round(decimals=2)
                         # Média da Liga
-                        tabela_b = pd.read_excel('17_Role_Extremo_Organizador.xlsx')
+                        tabela_b = pd.read_csv('17_Role_Extremo_Organizador.csv')
                         tabela_b = tabela_b.iloc[:, np.r_[1, 18:31, 6, 31, 33]]
                         tabela_b = tabela_b[((tabela_b['Código_Posição_Wyscout']==10)|(tabela_b['Código_Posição_Wyscout']==11))&(tabela_b['Versão_Temporada']==temporada)&(tabela_b['Liga']==liga)]
                         tabela_b = tabela_b.iloc[:, np.r_[1:14, 15]]
@@ -3523,7 +3523,7 @@ if choose == "Ranking de Jogadores":
                         tabela_c['Atleta'] = Atleta 
                         tabela_c.insert(0, 'Atleta', tabela_c.pop('Atleta'))
                         # Percentil na Liga
-                        tabela_d = pd.read_excel('PlayerAnalysis_Role_17.xlsx')
+                        tabela_d = pd.read_csv('PlayerAnalysis_Role_17.csv')
                         tabela_d = tabela_d.iloc[:, np.r_[66:79, 15, 20, 32, 34]]
                         tabela_d = tabela_d[(tabela_d['Atleta']==jogadores)&((tabela_d['Código_Posição_Wyscout']==10)|(tabela_d['Código_Posição_Wyscout']==11))&(tabela_d['Versão_Temporada']==temporada)&(tabela_d['Liga']==liga)]
                         tabela_d = tabela_d.iloc[:, np.r_[0:14]]
@@ -3548,7 +3548,7 @@ if choose == "Ranking de Jogadores":
                         #Plotar Gráfico Alternativo
                         # Player Comparison Data
                         st.markdown("<h4 style='text-align: center;'>Comparativo do Jogador com a Média da Liga</h4>", unsafe_allow_html=True)
-                        Role_17_Mean_Charts = pd.read_excel('17_Role_Extremo_Organizador.xlsx')
+                        Role_17_Mean_Charts = pd.read_csv('17_Role_Extremo_Organizador.csv')
                         #PLOTTING COMPARISON BETWEEN 1 PLAYER AND LEAGUE MEAN
                         #Determining Club and League 
                         Role_x_Mean_Charts  = Role_17_Mean_Charts.iloc[:, np.r_[1, 3, 31, 33, 18:31]]
@@ -3692,7 +3692,7 @@ if choose == "Ranking de Jogadores":
                         #####################################################################################################################
                         # EXTREMO TÁTICO
                         # Elaborar Tabela de Abertura com Rating, Ranking, Percentil
-                        tabela_1 = pd.read_excel('PlayerAnalysis_Role_18.xlsx')
+                        tabela_1 = pd.read_csv('PlayerAnalysis_Role_18.csv')
                         tabela_1  = tabela_1.iloc[:, np.r_[9, 14, 26, 30:34, 28, 11]]
                         tabela_1 = tabela_1[(tabela_1['Atleta']==jogadores)&((tabela_1['Código_Posição_Wyscout']==10)|(tabela_1['Código_Posição_Wyscout']==11))&(tabela_1['Versão_Temporada']==temporada)&(tabela_1['Liga']==liga)]
                         clube = tabela_1.iat[0, 8]
@@ -3724,14 +3724,14 @@ if choose == "Ranking de Jogadores":
                         ##################################################################################################################### 
                         #####################################################################################################################
                         # #Elaborar Tabela com Métricas do Atleta
-                        tabela_2 = pd.read_excel('18_Role_Extremo_Tático.xlsx')
+                        tabela_2 = pd.read_csv('18_Role_Extremo_Tático.csv')
                         tabela_2 = tabela_2.iloc[:, np.r_[1, 18:25, 6, 25, 27]]
                         tabela_2 = tabela_2[(tabela_2['Atleta']==jogadores)&((tabela_2['Código_Posição_Wyscout']==10)|(tabela_2['Código_Posição_Wyscout']==11))&(tabela_2['Versão_Temporada']==temporada)&(tabela_2['Liga']==liga)]
                         tabela_2 = tabela_2.iloc[:, np.r_[0:8]]
                         tabela_2  = pd.DataFrame(tabela_2)
                         tabela_2 = tabela_2.round(decimals=2)
                         # Média da Liga
-                        tabela_b = pd.read_excel('18_Role_Extremo_Tático.xlsx')
+                        tabela_b = pd.read_csv('18_Role_Extremo_Tático.csv')
                         tabela_b = tabela_b.iloc[:, np.r_[1, 18:25, 6, 25, 27]]
                         tabela_b = tabela_b[((tabela_b['Código_Posição_Wyscout']==10)|(tabela_b['Código_Posição_Wyscout']==11))&(tabela_b['Versão_Temporada']==temporada)&(tabela_b['Liga']==liga)]
                         tabela_b = tabela_b.iloc[:, np.r_[1:8, 9]]
@@ -3743,7 +3743,7 @@ if choose == "Ranking de Jogadores":
                         tabela_c['Atleta'] = Atleta 
                         tabela_c.insert(0, 'Atleta', tabela_c.pop('Atleta'))
                         # Percentil na Liga
-                        tabela_d = pd.read_excel('PlayerAnalysis_Role_18.xlsx')
+                        tabela_d = pd.read_csv('PlayerAnalysis_Role_18.csv')
                         tabela_d = tabela_d.iloc[:, np.r_[48:55, 9, 14, 26, 28]]
                         tabela_d = tabela_d[(tabela_d['Atleta']==jogadores)&((tabela_d['Código_Posição_Wyscout']==10)|(tabela_d['Código_Posição_Wyscout']==11))&(tabela_d['Versão_Temporada']==temporada)&(tabela_d['Liga']==liga)]
                         tabela_d = tabela_d.iloc[:, np.r_[0:7]]
@@ -3765,7 +3765,7 @@ if choose == "Ranking de Jogadores":
                         #Plotar Gráfico Alternativo
                         # Player Comparison Data
                         st.markdown("<h4 style='text-align: center;'>Comparativo do Jogador com a Média da Liga</h4>", unsafe_allow_html=True)
-                        Role_18_Mean_Charts = pd.read_excel('18_Role_Extremo_Tático.xlsx')
+                        Role_18_Mean_Charts = pd.read_csv('18_Role_Extremo_Tático.csv')
                         #PLOTTING COMPARISON BETWEEN 1 PLAYER AND LEAGUE MEAN
                         #Determining Club and League 
                         Role_x_Mean_Charts  = Role_18_Mean_Charts.iloc[:, np.r_[1, 3, 25, 27, 18:25]]
@@ -3858,7 +3858,7 @@ if choose == "Ranking de Jogadores":
                         #####################################################################################################################
                         # EXTREMO AGUDO
                         # Elaborar Tabela de Abertura com Rating, Ranking, Percentil
-                        tabela_1 = pd.read_excel('PlayerAnalysis_Role_19.xlsx')
+                        tabela_1 = pd.read_csv('PlayerAnalysis_Role_19.csv')
                         tabela_1  = tabela_1.iloc[:, np.r_[15, 20, 32, 36:40, 34, 17]]
                         tabela_1 = tabela_1[(tabela_1['Atleta']==jogadores)&((tabela_1['Código_Posição_Wyscout']==10)|(tabela_1['Código_Posição_Wyscout']==11))&(tabela_1['Versão_Temporada']==temporada)&(tabela_1['Liga']==liga)]
                         clube = tabela_1.iat[0, 8]
@@ -3890,14 +3890,14 @@ if choose == "Ranking de Jogadores":
                         ##################################################################################################################### 
                         #####################################################################################################################
                         # #Elaborar Tabela com Métricas do Atleta
-                        tabela_2 = pd.read_excel('19_Role_Extremo_Agudo.xlsx')
+                        tabela_2 = pd.read_csv('19_Role_Extremo_Agudo.csv')
                         tabela_2 = tabela_2.iloc[:, np.r_[1, 18:31, 6, 31, 33]]
                         tabela_2 = tabela_2[(tabela_2['Atleta']==jogadores)&((tabela_2['Código_Posição_Wyscout']==10)|(tabela_2['Código_Posição_Wyscout']==11))&(tabela_2['Versão_Temporada']==temporada)&(tabela_2['Liga']==liga)]
                         tabela_2 = tabela_2.iloc[:, np.r_[0:14]]
                         tabela_2  = pd.DataFrame(tabela_2)
                         tabela_2 = tabela_2.round(decimals=2)
                         # Média da Liga
-                        tabela_b = pd.read_excel('19_Role_Extremo_Agudo.xlsx')
+                        tabela_b = pd.read_csv('19_Role_Extremo_Agudo.csv')
                         tabela_b = tabela_b.iloc[:, np.r_[1, 18:31, 6, 31, 33]]
                         tabela_b = tabela_b[((tabela_b['Código_Posição_Wyscout']==10)|(tabela_b['Código_Posição_Wyscout']==11))&(tabela_b['Versão_Temporada']==temporada)&(tabela_b['Liga']==liga)]
                         tabela_b = tabela_b.iloc[:, np.r_[0:14, 15]]
@@ -3910,7 +3910,7 @@ if choose == "Ranking de Jogadores":
                         tabela_c['Atleta'] = Atleta 
                         tabela_c.insert(0, 'Atleta', tabela_c.pop('Atleta'))
                         # Percentil na Liga
-                        tabela_d = pd.read_excel('PlayerAnalysis_Role_19.xlsx')
+                        tabela_d = pd.read_csv('PlayerAnalysis_Role_19.csv')
                         tabela_d = tabela_d.iloc[:, np.r_[66:79, 15, 20, 32, 34]]
                         tabela_d = tabela_d[(tabela_d['Atleta']==jogadores)&((tabela_d['Código_Posição_Wyscout']==10)|(tabela_d['Código_Posição_Wyscout']==11))&(tabela_d['Versão_Temporada']==temporada)&(tabela_d['Liga']==liga)]
                         tabela_d = tabela_d.iloc[:, np.r_[0:13]]
@@ -3935,7 +3935,7 @@ if choose == "Ranking de Jogadores":
                         #Plotar Gráfico Alternativo
                         # Player Comparison Data
                         st.markdown("<h4 style='text-align: center;'>Comparativo do Jogador com a Média da Liga</h4>", unsafe_allow_html=True)
-                        Role_19_Mean_Charts = pd.read_excel('19_Role_Extremo_Agudo.xlsx')
+                        Role_19_Mean_Charts = pd.read_csv('19_Role_Extremo_Agudo.csv')
                         #PLOTTING COMPARISON BETWEEN 1 PLAYER AND LEAGUE MEAN
                         #Determining Club and League 
                         Role_x_Mean_Charts  = Role_19_Mean_Charts.iloc[:, np.r_[1, 3, 31, 33, 18:31]]
@@ -4083,7 +4083,7 @@ if choose == "Ranking de Jogadores":
                         #####################################################################################################################
                         # ATACANTE REFERÊNCIA
                         # Elaborar Tabela de Abertura com Rating, Ranking, Percentil
-                        tabela_1 = pd.read_excel('PlayerAnalysis_Role_20.xlsx')
+                        tabela_1 = pd.read_csv('PlayerAnalysis_Role_20.csv')
                         tabela_1  = tabela_1.iloc[:, np.r_[12, 17, 29, 33:37, 31, 14]]
                         tabela_1 = tabela_1[(tabela_1['Atleta']==jogadores)&(tabela_1['Código_Posição_Wyscout']==12)&(tabela_1['Versão_Temporada']==temporada)&(tabela_1['Liga']==liga)]
                         clube = tabela_1.iat[0, 8]
@@ -4104,7 +4104,7 @@ if choose == "Ranking de Jogadores":
                         ##################################################################################################################### 
                         #####################################################################################################################
                         # Dados Básicos do Jogador
-                        tabela_a  = pd.read_excel("PlayerAnalysis_Role_20.xlsx")
+                        tabela_a  = pd.read_csv("PlayerAnalysis_Role_20.csv")
                         tabela_a = tabela_a.iloc[:, np.r_[12, 14, 19:24, 25:28, 17, 29, 31]]
                         tabela_a = tabela_a[(tabela_a['Atleta']==jogadores)&(tabela_a['Código_Posição_Wyscout']==12)&(tabela_a['Versão_Temporada']==temporada)&(tabela_a['Liga']==liga)]
                         tabela_a  = tabela_a.iloc[:, np.r_[0:10]]
@@ -4137,7 +4137,7 @@ if choose == "Ranking de Jogadores":
                     #Plotar Gráfico Alternativo
                         # Player Comparison Data
                         st.markdown("<h4 style='text-align: center;'>Comparativo do Jogador com a Média da Liga</h4>", unsafe_allow_html=True)
-                        Role_20_Mean_Charts = pd.read_excel('20_Role_Atacante_Referência.xlsx')
+                        Role_20_Mean_Charts = pd.read_csv('20_Role_Atacante_Referência.csv')
                         #PLOTTING COMPARISON BETWEEN 1 PLAYER AND LEAGUE MEAN
                         #Determining Club and League 
                         Role_x_Mean_Charts  = Role_20_Mean_Charts.iloc[:, np.r_[1, 3, 28, 30, 18:28]]
@@ -4233,7 +4233,7 @@ if choose == "Ranking de Jogadores":
                         #####################################################################################################################
                         # SEGUNDO ATACANTE
                         # Elaborar Tabela de Abertura com Rating, Ranking, Percentil
-                        tabela_1 = pd.read_excel('PlayerAnalysis_Role_22.xlsx')
+                        tabela_1 = pd.read_csv('PlayerAnalysis_Role_22.csv')
                         tabela_1  = tabela_1.iloc[:, np.r_[15, 20, 32, 36:40, 34, 17]]
                         tabela_1 = tabela_1[(tabela_1['Atleta']==jogadores)&(tabela_1['Código_Posição_Wyscout']==12)&(tabela_1['Versão_Temporada']==temporada)&(tabela_1['Liga']==liga)]
                         clube = tabela_1.iat[0, 8]
@@ -4265,14 +4265,14 @@ if choose == "Ranking de Jogadores":
                         ##################################################################################################################### 
                         #####################################################################################################################
                         # #Elaborar Tabela com Métricas do Atleta
-                        tabela_2 = pd.read_excel('22_Role_Segundo_Atacante.xlsx')
+                        tabela_2 = pd.read_csv('22_Role_Segundo_Atacante.csv')
                         tabela_2 = tabela_2.iloc[:, np.r_[1, 18:31, 6, 31, 33]]
                         tabela_2 = tabela_2[(tabela_2['Atleta']==jogadores)&(tabela_2['Código_Posição_Wyscout']==12)&(tabela_2['Versão_Temporada']==temporada)&(tabela_2['Liga']==liga)]
                         tabela_2 = tabela_2.iloc[:, np.r_[0:14]]
                         tabela_2  = pd.DataFrame(tabela_2)
                         tabela_2 = tabela_2.round(decimals=2)
                         # Média da Liga
-                        tabela_b = pd.read_excel('22_Role_Segundo_Atacante.xlsx')
+                        tabela_b = pd.read_csv('22_Role_Segundo_Atacante.csv')
                         tabela_b = tabela_b.iloc[:, np.r_[1, 18:31, 6, 31, 33]]
                         tabela_b = tabela_b[(tabela_b['Código_Posição_Wyscout']==12)&(tabela_b['Versão_Temporada']==temporada)&(tabela_b['Liga']==liga)]
                         tabela_b = tabela_b.iloc[:, np.r_[1:14, 15]]
@@ -4285,7 +4285,7 @@ if choose == "Ranking de Jogadores":
                         tabela_c['Atleta'] = Atleta 
                         tabela_c.insert(0, 'Atleta', tabela_c.pop('Atleta'))
                         # Percentil na Liga
-                        tabela_d = pd.read_excel('PlayerAnalysis_Role_22.xlsx')
+                        tabela_d = pd.read_csv('PlayerAnalysis_Role_22.csv')
                         tabela_d = tabela_d.iloc[:, np.r_[66:79, 15, 20, 32, 34]]
                         tabela_d = tabela_d[(tabela_d['Atleta']==jogadores)&(tabela_d['Código_Posição_Wyscout']==12)&(tabela_d['Versão_Temporada']==temporada)&(tabela_d['Liga']==liga)]
                         tabela_d = tabela_d.iloc[:, np.r_[0:13]]
@@ -4310,7 +4310,7 @@ if choose == "Ranking de Jogadores":
                         #Plotar Gráfico Alternativo
                         # Player Comparison Data
                         st.markdown("<h4 style='text-align: center;'>Comparativo do Jogador com a Média da Liga</h4>", unsafe_allow_html=True)
-                        Role_22_Mean_Charts = pd.read_excel('22_Role_Segundo_Atacante.xlsx')
+                        Role_22_Mean_Charts = pd.read_csv('22_Role_Segundo_Atacante.csv')
                         #PLOTTING COMPARISON BETWEEN 1 PLAYER AND LEAGUE MEAN
                         #Determining Club and League 
                         Role_x_Mean_Charts  = Role_22_Mean_Charts.iloc[:, np.r_[1, 3, 31, 33, 18:31]]
@@ -4454,7 +4454,7 @@ if choose == "Ranking de Jogadores":
 
                         # ATACANTE MÓVEL
                         # Elaborar Tabela de Abertura com Rating, Ranking, Percentil
-                        tabela_1 = pd.read_excel('PlayerAnalysis_Role_21.xlsx')
+                        tabela_1 = pd.read_csv('PlayerAnalysis_Role_21.csv')
                         tabela_1  = tabela_1.iloc[:, np.r_[11, 16, 28, 32:36, 30, 13]]
                         tabela_1 = tabela_1[(tabela_1['Atleta']==jogadores)&(tabela_1['Código_Posição_Wyscout']==12)&(tabela_1['Versão_Temporada']==temporada)&(tabela_1['Liga']==liga)]
                         clube = tabela_1.iat[0, 8]
@@ -4486,14 +4486,14 @@ if choose == "Ranking de Jogadores":
                         ##################################################################################################################### 
                         #####################################################################################################################
                         # #Elaborar Tabela com Métricas do Atleta
-                        tabela_2 = pd.read_excel('21_Role_Atacante_Móvel.xlsx')
+                        tabela_2 = pd.read_csv('21_Role_Atacante_Móvel.csv')
                         tabela_2 = tabela_2.iloc[:, np.r_[1, 18:27, 6, 27, 29]]
                         tabela_2 = tabela_2[(tabela_2['Atleta']==jogadores)&(tabela_2['Código_Posição_Wyscout']==12)&(tabela_2['Versão_Temporada']==temporada)&(tabela_2['Liga']==liga)]
                         tabela_2 = tabela_2.iloc[:, np.r_[0:10]]
                         tabela_2  = pd.DataFrame(tabela_2)
                         tabela_2 = tabela_2.round(decimals=2)
                         # Média da Liga
-                        tabela_b = pd.read_excel('21_Role_Atacante_Móvel.xlsx')
+                        tabela_b = pd.read_csv('21_Role_Atacante_Móvel.csv')
                         tabela_b = tabela_b.iloc[:, np.r_[1, 18:27, 6, 27, 29]]
                         tabela_b = tabela_b[(tabela_b['Código_Posição_Wyscout']==12)&(tabela_b['Versão_Temporada']==temporada)&(tabela_b['Liga']==liga)]
                         tabela_b = tabela_b.iloc[:, np.r_[1:10, 11]]
@@ -4506,7 +4506,7 @@ if choose == "Ranking de Jogadores":
                         tabela_c['Atleta'] = Atleta 
                         tabela_c.insert(0, 'Atleta', tabela_c.pop('Atleta'))
                         # Percentil na Liga
-                        tabela_d = pd.read_excel('PlayerAnalysis_Role_21.xlsx')
+                        tabela_d = pd.read_csv('PlayerAnalysis_Role_21.csv')
                         tabela_d = tabela_d.iloc[:, np.r_[54:63, 11, 16, 28, 30]]
                         tabela_d = tabela_d[(tabela_d['Atleta']==jogadores)&(tabela_d['Código_Posição_Wyscout']==12)&(tabela_d['Versão_Temporada']==temporada)&(tabela_d['Liga']==liga)]
                         tabela_d = tabela_d.iloc[:, np.r_[0:9]]
@@ -4529,7 +4529,7 @@ if choose == "Ranking de Jogadores":
                         #Plotar Gráfico Alternativo
                         # Player Comparison Data
                         st.markdown("<h4 style='text-align: center;'>Comparativo do Jogador com a Média da Liga</h4>", unsafe_allow_html=True)
-                        Role_21_Mean_Charts = pd.read_excel('21_Role_Atacante_Móvel.xlsx')
+                        Role_21_Mean_Charts = pd.read_csv('21_Role_Atacante_Móvel.csv')
                         #PLOTTING COMPARISON BETWEEN 1 PLAYER AND LEAGUE MEAN
                         #Determining Club and League 
                         Role_x_Mean_Charts  = Role_21_Mean_Charts.iloc[:, np.r_[1, 3, 27, 29, 18:27]]
@@ -4654,12 +4654,12 @@ if choose == "Jogadores Similares":
                     st.markdown("---")
 
                     #Carregando arquivo de dados
-                    Role_1_data = pd.read_excel('1_Role_Goleiro_Similarity.xlsx')
+                    Role_1_data = pd.read_csv('1_Role_Goleiro_Similarity.csv')
                     Role_1_data = Role_1_data.drop(Role_1_data.columns[0:4], axis=1)
                     Role_1_data.reset_index(drop=True, inplace=True)
 
                     # Step : Defina o atleta-alvo
-                    #base_bruta_similaridade = pd.read_excel("base_bruta_similaridade.xlsx")
+                    #base_bruta_similaridade = pd.read_csv("base_bruta_similaridade.csv")
                     target = Role_1_data.loc[(Role_1_data['Atleta'] == jogador_similar)]
 
                     #Step : Definindo "ID-alvo"
@@ -5121,12 +5121,12 @@ if choose == "Jogadores Similares":
                     st.markdown("---")
 
                     #Carregando arquivo de dados
-                    Role_2_data = pd.read_excel('2_Role_Goleiro_Líbero_Similarity.xlsx')
+                    Role_2_data = pd.read_csv('2_Role_Goleiro_Líbero_Similarity.csv')
                     Role_2_data = Role_2_data.drop(Role_2_data.columns[0:4], axis=1)
                     Role_2_data.reset_index(drop=True, inplace=True)
 
                     # Step : Defina o atleta-alvo
-                    #base_bruta_similaridade = pd.read_excel("base_bruta_similaridade.xlsx")
+                    #base_bruta_similaridade = pd.read_csv("base_bruta_similaridade.csv")
                     target = Role_2_data.loc[(Role_2_data['Atleta'] == jogador_similar)]
 
                     #Step : Definindo "ID-alvo"
@@ -5638,12 +5638,12 @@ if choose == "Jogadores Similares":
                     st.markdown("---")
 
                     #Carregando arquivo de dados
-                    Role_3_data = pd.read_excel('3_Role_Lateral_Defensivo_Similarity.xlsx')
+                    Role_3_data = pd.read_csv('3_Role_Lateral_Defensivo_Similarity.csv')
                     Role_3_data = Role_3_data.drop(Role_3_data.columns[0:4], axis=1)
                     Role_3_data.reset_index(drop=True, inplace=True)
 
                     # Step : Defina o atleta-alvo
-                    #base_bruta_similaridade = pd.read_excel("base_bruta_similaridade.xlsx")
+                    #base_bruta_similaridade = pd.read_csv("base_bruta_similaridade.csv")
                     target = Role_3_data.loc[(Role_3_data['Atleta'] == jogador_similar)]
 
                     #Step : Definindo "ID-alvo"
@@ -6130,12 +6130,12 @@ if choose == "Jogadores Similares":
                     st.markdown("---")
 
                     #Carregando arquivo de dados
-                    Role_4_data = pd.read_excel('4_Role_Lateral_Ofensivo_Similarity.xlsx')
+                    Role_4_data = pd.read_csv('4_Role_Lateral_Ofensivo_Similarity.csv')
                     Role_4_data = Role_4_data.drop(Role_4_data.columns[0:4], axis=1)
                     Role_4_data.reset_index(drop=True, inplace=True)
 
                     # Step : Defina o atleta-alvo
-                    #base_bruta_similaridade = pd.read_excel("base_bruta_similaridade.xlsx")
+                    #base_bruta_similaridade = pd.read_csv("base_bruta_similaridade.csv")
                     target = Role_4_data.loc[(Role_4_data['Atleta'] == jogador_similar)]
 
                     #Step : Definindo "ID-alvo"
@@ -6951,12 +6951,12 @@ if choose == "Jogadores Similares":
                     st.markdown("---")
 
                     #Carregando arquivo de dados
-                    Role_5_data = pd.read_excel('5_Role_Lateral_Equilibrado_Similarity.xlsx')
+                    Role_5_data = pd.read_csv('5_Role_Lateral_Equilibrado_Similarity.csv')
                     Role_5_data = Role_5_data.drop(Role_5_data.columns[0:4], axis=1)
                     Role_5_data.reset_index(drop=True, inplace=True)
 
                     # Step : Defina o atleta-alvo
-                    #base_bruta_similaridade = pd.read_excel("base_bruta_similaridade.xlsx")
+                    #base_bruta_similaridade = pd.read_csv("base_bruta_similaridade.csv")
                     target = Role_5_data.loc[(Role_5_data['Atleta'] == jogador_similar)]
 
                     #Step : Definindo "ID-alvo"
@@ -7835,12 +7835,12 @@ if choose == "Jogadores Similares":
                     st.markdown("---")
 
                     #Carregando arquivo de dados
-                    Role_6_data = pd.read_excel('6_Role_Zagueiro_Defensivo_Similarity.xlsx')
+                    Role_6_data = pd.read_csv('6_Role_Zagueiro_Defensivo_Similarity.csv')
                     Role_6_data = Role_6_data.drop(Role_6_data.columns[0:4], axis=1)
                     Role_6_data.reset_index(drop=True, inplace=True)
 
                     # Step : Defina o atleta-alvo
-                    #base_bruta_similaridade = pd.read_excel("base_bruta_similaridade.xlsx")
+                    #base_bruta_similaridade = pd.read_csv("base_bruta_similaridade.csv")
                     target = Role_6_data.loc[(Role_6_data['Atleta'] == jogador_similar)]
 
                     #Step : Definindo "ID-alvo"
@@ -8305,12 +8305,12 @@ if choose == "Jogadores Similares":
                     st.markdown("---")
 
                     #Carregando arquivo de dados
-                    Role_7_data = pd.read_excel('7_Role_Zagueiro_Construtor_Similarity.xlsx')
+                    Role_7_data = pd.read_csv('7_Role_Zagueiro_Construtor_Similarity.csv')
                     Role_7_data = Role_7_data.drop(Role_7_data.columns[0:4], axis=1)
                     Role_7_data.reset_index(drop=True, inplace=True)
 
                     # Step : Defina o atleta-alvo
-                    #base_bruta_similaridade = pd.read_excel("base_bruta_similaridade.xlsx")
+                    #base_bruta_similaridade = pd.read_csv("base_bruta_similaridade.csv")
                     target = Role_7_data.loc[(Role_7_data['Atleta'] == jogador_similar)]
 
                     #Step : Definindo "ID-alvo"
@@ -9064,12 +9064,12 @@ if choose == "Jogadores Similares":
                     st.markdown("---")
 
                     #Carregando arquivo de dados
-                    Role_8_data = pd.read_excel('8_Role_Zagueiro_Equilibrado_Similarity.xlsx')
+                    Role_8_data = pd.read_csv('8_Role_Zagueiro_Equilibrado_Similarity.csv')
                     Role_8_data = Role_8_data.drop(Role_8_data.columns[0:4], axis=1)
                     Role_8_data.reset_index(drop=True, inplace=True)
 
                     # Step : Defina o atleta-alvo
-                    #base_bruta_similaridade = pd.read_excel("base_bruta_similaridade.xlsx")
+                    #base_bruta_similaridade = pd.read_csv("base_bruta_similaridade.csv")
                     target = Role_8_data.loc[(Role_8_data['Atleta'] == jogador_similar)]
 
                     #Step : Definindo "ID-alvo"
@@ -9861,12 +9861,12 @@ if choose == "Jogadores Similares":
                     st.markdown("---")
 
                     #Carregando arquivo de dados
-                    Role_9_data = pd.read_excel('9_Role_Volante_Defensivo_Similarity.xlsx')
+                    Role_9_data = pd.read_csv('9_Role_Volante_Defensivo_Similarity.csv')
                     Role_9_data = Role_9_data.drop(Role_9_data.columns[0:4], axis=1)
                     Role_9_data.reset_index(drop=True, inplace=True)
 
                     # Step : Defina o atleta-alvo
-                    #base_bruta_similaridade = pd.read_excel("base_bruta_similaridade.xlsx")
+                    #base_bruta_similaridade = pd.read_csv("base_bruta_similaridade.csv")
                     target = Role_9_data.loc[(Role_9_data['Atleta'] == jogador_similar)]
 
                     #Step : Definindo "ID-alvo"
@@ -10325,12 +10325,12 @@ if choose == "Jogadores Similares":
                     st.markdown("---")
 
                     #Carregando arquivo de dados
-                    Role_10_data = pd.read_excel('10_Role_Volante_Construtor_Similarity.xlsx')
+                    Role_10_data = pd.read_csv('10_Role_Volante_Construtor_Similarity.csv')
                     Role_10_data = Role_10_data.drop(Role_10_data.columns[0:4], axis=1)
                     Role_10_data.reset_index(drop=True, inplace=True)
 
                     # Step : Defina o atleta-alvo
-                    #base_bruta_similaridade = pd.read_excel("base_bruta_similaridade.xlsx")
+                    #base_bruta_similaridade = pd.read_csv("base_bruta_similaridade.csv")
                     target = Role_10_data.loc[(Role_10_data['Atleta'] == jogador_similar)]
 
                     #Step : Definindo "ID-alvo"
@@ -10848,12 +10848,12 @@ if choose == "Jogadores Similares":
                     st.markdown("---")
 
                     #Carregando arquivo de dados
-                    Role_11_data = pd.read_excel('11_Role_Volante_Equilibrado_Similarity.xlsx')
+                    Role_11_data = pd.read_csv('11_Role_Volante_Equilibrado_Similarity.csv')
                     Role_11_data = Role_11_data.drop(Role_11_data.columns[0:4], axis=1)
                     Role_11_data.reset_index(drop=True, inplace=True)
 
                     # Step : Defina o atleta-alvo
-                    #base_bruta_similaridade = pd.read_excel("base_bruta_similaridade.xlsx")
+                    #base_bruta_similaridade = pd.read_csv("base_bruta_similaridade.csv")
                     target = Role_11_data.loc[(Role_11_data['Atleta'] == jogador_similar)]
 
                     #Step : Definindo "ID-alvo"
@@ -11657,12 +11657,12 @@ if choose == "Jogadores Similares":
                     st.markdown("---")
 
                     #Carregando arquivo de dados
-                    Role_12_data = pd.read_excel('12_Role_Segundo_Volante_Box_to_Box_Similarity.xlsx')
+                    Role_12_data = pd.read_csv('12_Role_Segundo_Volante_Box_to_Box_Similarity.csv')
                     Role_12_data = Role_12_data.drop(Role_12_data.columns[0:4], axis=1)
                     Role_12_data.reset_index(drop=True, inplace=True)
 
                     # Step : Defina o atleta-alvo
-                    #base_bruta_similaridade = pd.read_excel("base_bruta_similaridade.xlsx")
+                    #base_bruta_similaridade = pd.read_csv("base_bruta_similaridade.csv")
                     target = Role_12_data.loc[(Role_12_data['Atleta'] == jogador_similar)]
 
                     #Step : Definindo "ID-alvo"
@@ -12499,12 +12499,12 @@ if choose == "Jogadores Similares":
                     st.markdown("---")
 
                     #Carregando arquivo de dados
-                    Role_13_data = pd.read_excel('13_Role_Segundo_Volante_Organizador_Similarity.xlsx')
+                    Role_13_data = pd.read_csv('13_Role_Segundo_Volante_Organizador_Similarity.csv')
                     Role_13_data = Role_13_data.drop(Role_13_data.columns[0:4], axis=1)
                     Role_13_data.reset_index(drop=True, inplace=True)
 
                     # Step : Defina o atleta-alvo
-                    #base_bruta_similaridade = pd.read_excel("base_bruta_similaridade.xlsx")
+                    #base_bruta_similaridade = pd.read_csv("base_bruta_similaridade.csv")
                     target = Role_13_data.loc[(Role_13_data['Atleta'] == jogador_similar)]
 
                     #Step : Definindo "ID-alvo"
@@ -13272,12 +13272,12 @@ if choose == "Jogadores Similares":
                     st.markdown("---")
 
                     #Carregando arquivo de dados
-                    Role_14_data = pd.read_excel('14_Role_Segundo_Volante_Equilibrado_Similarity.xlsx')
+                    Role_14_data = pd.read_csv('14_Role_Segundo_Volante_Equilibrado_Similarity.csv')
                     Role_14_data = Role_14_data.drop(Role_14_data.columns[0:4], axis=1)
                     Role_14_data.reset_index(drop=True, inplace=True)
 
                     # Step : Defina o atleta-alvo
-                    #base_bruta_similaridade = pd.read_excel("base_bruta_similaridade.xlsx")
+                    #base_bruta_similaridade = pd.read_csv("base_bruta_similaridade.csv")
                     target = Role_14_data.loc[(Role_14_data['Atleta'] == jogador_similar)]
 
                     #Step : Definindo "ID-alvo"
@@ -14066,12 +14066,12 @@ if choose == "Jogadores Similares":
                     st.markdown("---")
 
                     #Carregando arquivo de dados
-                    Role_15_data = pd.read_excel('15_Role_Meia_Organizador_Similarity.xlsx')
+                    Role_15_data = pd.read_csv('15_Role_Meia_Organizador_Similarity.csv')
                     Role_15_data = Role_15_data.drop(Role_15_data.columns[0:4], axis=1)
                     Role_15_data.reset_index(drop=True, inplace=True)
 
                     # Step : Defina o atleta-alvo
-                    #base_bruta_similaridade = pd.read_excel("base_bruta_similaridade.xlsx")
+                    #base_bruta_similaridade = pd.read_csv("base_bruta_similaridade.csv")
                     target = Role_15_data.loc[(Role_15_data['Atleta'] == jogador_similar)]
 
                     #Step : Definindo "ID-alvo"
@@ -14845,12 +14845,12 @@ if choose == "Jogadores Similares":
                     st.markdown("---")
 
                     #Carregando arquivo de dados
-                    Role_16_data = pd.read_excel('16_Role_Meia_Atacante_Similarity.xlsx')
+                    Role_16_data = pd.read_csv('16_Role_Meia_Atacante_Similarity.csv')
                     Role_16_data = Role_16_data.drop(Role_16_data.columns[0:4], axis=1)
                     Role_16_data.reset_index(drop=True, inplace=True)
 
                     # Step : Defina o atleta-alvo
-                    #base_bruta_similaridade = pd.read_excel("base_bruta_similaridade.xlsx")
+                    #base_bruta_similaridade = pd.read_csv("base_bruta_similaridade.csv")
                     target = Role_16_data.loc[(Role_16_data['Atleta'] == jogador_similar)]
 
                     #Step : Definindo "ID-alvo"
@@ -15728,12 +15728,12 @@ if choose == "Jogadores Similares":
                     st.markdown("---")
 
                     #Carregando arquivo de dados
-                    Role_17_data = pd.read_excel('17_Role_Extremo_Organizador_Similarity.xlsx')
+                    Role_17_data = pd.read_csv('17_Role_Extremo_Organizador_Similarity.csv')
                     Role_17_data = Role_17_data.drop(Role_17_data.columns[0:4], axis=1)
                     Role_17_data.reset_index(drop=True, inplace=True)
 
                     # Step : Defina o atleta-alvo
-                    #base_bruta_similaridade = pd.read_excel("base_bruta_similaridade.xlsx")
+                    #base_bruta_similaridade = pd.read_csv("base_bruta_similaridade.csv")
                     target = Role_17_data.loc[(Role_17_data['Atleta'] == jogador_similar)]
 
                     #Step : Definindo "ID-alvo"
@@ -16525,12 +16525,12 @@ if choose == "Jogadores Similares":
                     st.markdown("---")
 
                     #Carregando arquivo de dados
-                    Role_18_data = pd.read_excel('18_Role_Extremo_Tático_Similarity.xlsx')
+                    Role_18_data = pd.read_csv('18_Role_Extremo_Tático_Similarity.csv')
                     Role_18_data = Role_18_data.drop(Role_18_data.columns[0:4], axis=1)
                     Role_18_data.reset_index(drop=True, inplace=True)
 
                     # Step : Defina o atleta-alvo
-                    #base_bruta_similaridade = pd.read_excel("base_bruta_similaridade.xlsx")
+                    #base_bruta_similaridade = pd.read_csv("base_bruta_similaridade.csv")
                     target = Role_18_data.loc[(Role_18_data['Atleta'] == jogador_similar)]
 
                     #Step : Definindo "ID-alvo"
@@ -17016,12 +17016,12 @@ if choose == "Jogadores Similares":
                     st.markdown("---")
 
                     #Carregando arquivo de dados
-                    Role_19_data = pd.read_excel('19_Role_Extremo_Agudo_Similarity.xlsx')
+                    Role_19_data = pd.read_csv('19_Role_Extremo_Agudo_Similarity.csv')
                     Role_19_data = Role_19_data.drop(Role_19_data.columns[0:4], axis=1)
                     Role_19_data.reset_index(drop=True, inplace=True)
 
                     # Step : Defina o atleta-alvo
-                    #base_bruta_similaridade = pd.read_excel("base_bruta_similaridade.xlsx")
+                    #base_bruta_similaridade = pd.read_csv("base_bruta_similaridade.csv")
                     target = Role_19_data.loc[(Role_19_data['Atleta'] == jogador_similar)]
 
                     #Step : Definindo "ID-alvo"
@@ -17812,12 +17812,12 @@ if choose == "Jogadores Similares":
                     st.markdown("---")
 
                     #Carregando arquivo de dados
-                    Role_20_data = pd.read_excel('20_Role_Atacante_Referência_Similarity.xlsx')
+                    Role_20_data = pd.read_csv('20_Role_Atacante_Referência_Similarity.csv')
                     Role_20_data = Role_20_data.drop(Role_20_data.columns[0:4], axis=1)
                     Role_20_data.reset_index(drop=True, inplace=True)
 
                     # Step : Defina o atleta-alvo
-                    #base_bruta_similaridade = pd.read_excel("base_bruta_similaridade.xlsx")
+                    #base_bruta_similaridade = pd.read_csv("base_bruta_similaridade.csv")
                     target = Role_20_data.loc[(Role_20_data['Atleta'] == jogador_similar)]
 
                     #Step : Definindo "ID-alvo"
@@ -18608,12 +18608,12 @@ if choose == "Jogadores Similares":
                     st.markdown("---")
 
                     #Carregando arquivo de dados
-                    Role_21_data = pd.read_excel('21_Role_Atacante_Móvel_Similarity.xlsx')
+                    Role_21_data = pd.read_csv('21_Role_Atacante_Móvel_Similarity.csv')
                     Role_21_data = Role_21_data.drop(Role_21_data.columns[0:4], axis=1)
                     Role_21_data.reset_index(drop=True, inplace=True)
 
                     # Step : Defina o atleta-alvo
-                    #base_bruta_similaridade = pd.read_excel("base_bruta_similaridade.xlsx")
+                    #base_bruta_similaridade = pd.read_csv("base_bruta_similaridade.csv")
                     target = Role_21_data.loc[(Role_21_data['Atleta'] == jogador_similar)]
 
                     #Step : Definindo "ID-alvo"
@@ -19167,12 +19167,12 @@ if choose == "Jogadores Similares":
                     st.markdown("---")
 
                     #Carregando arquivo de dados
-                    Role_22_data = pd.read_excel('22_Role_Segundo_Atacante_Similarity.xlsx')
+                    Role_22_data = pd.read_csv('22_Role_Segundo_Atacante_Similarity.csv')
                     Role_22_data = Role_22_data.drop(Role_22_data.columns[0:4], axis=1)
                     Role_22_data.reset_index(drop=True, inplace=True)
 
                     # Step : Defina o atleta-alvo
-                    #base_bruta_similaridade = pd.read_excel("base_bruta_similaridade.xlsx")
+                    #base_bruta_similaridade = pd.read_csv("base_bruta_similaridade.csv")
                     target = Role_22_data.loc[(Role_22_data['Atleta'] == jogador_similar)]
 
                     #Step : Definindo "ID-alvo"
