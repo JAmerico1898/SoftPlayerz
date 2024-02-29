@@ -17975,7 +17975,6 @@ if choose == "Jogadores Similares":
 
                     # Rebuilding Full Training Set
                     selected = selected.join(Similarity)
-                    st.dataframe(selected)
 
                     ##############################################################
                     ##############################################################
