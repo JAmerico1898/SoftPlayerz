@@ -11,7 +11,7 @@ import matplotlib.pyplot as plt
 from soccerplots.radar_chart import Radar
 from sklearn.decomposition import PCA
 from PIL import Image
-
+   
 #CABEÇALHO DO FORM
 st.markdown("<h1 style='text-align: center;'>Ranking de Jogadores de Futebol</h1>", unsafe_allow_html=True)
 st.markdown("<h6 style='text-align: center;'>app by @JAmerico1898</h6>", unsafe_allow_html=True)
@@ -55,8 +55,62 @@ if choose == "Histórico do Jogador":
         historico = pd.read_csv("base_bruta.csv")
         historico = historico.loc[(historico['Atleta']==jogadores)&(historico['Nacionalidade']==nacionalidade)]
         historico = historico.iloc[:, np.r_[0, 2, 9, 10, 13, 15, 16]]
-        st.dataframe(historico, use_container_width=True, hide_index=True)
-        #0, 2, 17, 9, 10, 14, 15
+        historico = historico.rename(columns={"Equipe_Janela_Análise": "Equipe",
+                                    "Versão_Temporada": "Temporada",
+                                    "Posição.1": "Posição" 
+                                    })
+            
+        #st.dataframe(historico, use_container_width=True, hide_index=True)
+
+        # Styling DataFrame using Pandas
+        def style_table(df):
+            df = df.reset_index(drop=True)
+            return df.style.format().set_table_styles(
+                [{
+                    'selector': 'thead th',
+                    'props': [('font-weight', 'bold'),
+                            ('border-style', 'solid'),
+                            ('border-width', '0px 0px 2px 0px'),
+                            ('border-color', 'black')]
+                }, {
+                    'selector': 'thead th:not(:first-child)',
+                    'props': [('text-align', 'center')]  # Centering all headers except the first
+                }, {
+                    'selector': 'thead th:last-child',
+                    'props': [('color', 'black')]  # Make last column header black
+                }, {
+                    'selector': 'td',
+                    'props': [('border-style', 'solid'),
+                            ('border-width', '0px 0px 1px 0px'),
+                            ('border-color', 'black'),
+                            ('text-align', 'center')]
+                }, {
+                    'selector': 'th',
+                    'props': [('border-style', 'solid'),
+                            ('border-width', '0px 0px 1px 0px'),
+                            ('border-color', 'black'),
+                            ('text-align', 'left')]
+                }]
+            ).set_properties(**{'padding': '8px'})
+
+        # Displaying in Streamlit
+        def main():
+            #st.title("Your DataFrame")
+
+            # Convert the styled DataFrame to HTML without the index and display it
+            styled_html = style_table(historico).to_html(escape=False, index=False, hide_index=True)
+            st.markdown(styled_html, unsafe_allow_html=True)
+
+        if __name__ == '__main__':
+            main()
+
+
+
+
+
+
+
+
 ###############################################################################################################################
 ###############################################################################################################################
 
@@ -675,7 +729,7 @@ if choose == "Free Agents pelo Mundo":
         st.markdown("<h4 style='text-align: center;'>Free Agents Nacionais Mais Bem Ranqueados<br>Goleiros</b></h4>", unsafe_allow_html=True)
         tabela_7 = pd.read_csv("1_Role_Goleiro_Full.csv")
         tabela_7 = tabela_7.loc[(tabela_7['Nacionalidade']==nacionalidade)&(tabela_7['Fim_Contrato']<=contrato)&(tabela_7['Versão_Temporada']==temporada)]   
-        tabela_7 = tabela_7.iloc[:, np.r_[1, 3, 7, 15, 8:12, 25, 26, 27]]
+        tabela_7 = tabela_7.iloc[:, np.r_[1, 3, 7, 15, 8:12, 25]]
         tabela_7 = tabela_7[(tabela_7['Liga'] == 'ENG1') | (tabela_7['Liga'] == 'ENG2') | (tabela_7['Liga'] == 'FRA1') | (tabela_7['Liga'] == 'FRA2') 
             | (tabela_7['Liga'] == 'SPA1') | (tabela_7['Liga'] == 'ITA1') | (tabela_7['Liga'] == 'GER1') | (tabela_7['Liga'] == 'POR1') 
             | (tabela_7['Liga'] == 'SWZ') | (tabela_7['Liga'] == 'RUS') | (tabela_7['Liga'] == 'UKR') | (tabela_7['Liga'] == 'BEL1') 
@@ -699,14 +753,59 @@ if choose == "Free Agents pelo Mundo":
 
         tabela_7 = pd.merge(tabela_7, tabela_8[['Atleta', 'L_Rating', 'L_Ranking', 'L_Percentil', 'Size']], on="Atleta", how="left")
         tabela_7 = tabela_7.rename(columns={'Equipe_Janela_Análise':'Equipe', 'Versão_Temporada':'Janela de Análise', 
-                                            'L_Rating':'Rating', 'L_Ranking':'Ranking', 'L_Percentil':'Percentil', 'Size':'Qtde Atletas'})
-        st.markdown("<h4 style='text-align: center;'>Goleiros Clássicos </b></h4>", unsafe_allow_html=True)
-        st.dataframe(tabela_7, use_container_width=True, hide_index=True)
+                                            'L_Rating':'Rating', 'L_Ranking':'Ranking', 'L_Percentil':'Percentil', 'Size':'Qtde Atletas',
+                                            'Valor_Mercado':'Valor'})
+        st.markdown("<h4 style='text-align: center;'><b>Goleiros Clássicos </b></h4>", unsafe_allow_html=True)
+        #st.dataframe(tabela_7, use_container_width=True, hide_index=True)
 
+        # Styling DataFrame using Pandas
+        def style_table(df):
+            df = df.reset_index(drop=True)
+            # Ensure 'Rating' is rounded and formatted to 3 decimal places during styling
+            formatter = {"Rating": "{:.3f}"}  # Format the 'Rating' column to 3 decimal places
+            return df.style.format(formatter).set_table_styles(
+                [{
+                    'selector': 'thead th',
+                    'props': [('font-weight', 'bold'),
+                            ('border-style', 'solid'),
+                            ('border-width', '0px 0px 2px 0px'),
+                            ('border-color', 'black')]
+                }, {
+                    'selector': 'thead th:not(:first-child)',
+                    'props': [('text-align', 'center')]  # Centering all headers except the first
+                }, {
+                    'selector': 'thead th:last-child',
+                    'props': [('color', 'black')]  # Make last column header black
+                }, {
+                    'selector': 'td',
+                    'props': [('border-style', 'solid'),
+                            ('border-width', '0px 0px 1px 0px'),
+                            ('border-color', 'black'),
+                            ('text-align', 'center')]
+                }, {
+                    'selector': 'th',
+                    'props': [('border-style', 'solid'),
+                            ('border-width', '0px 0px 1px 0px'),
+                            ('border-color', 'black'),
+                            ('text-align', 'left')]
+                }]
+            ).set_properties(**{'padding': '2px',
+                                'font-size': '15px'})
+
+        # Displaying in Streamlit
+        def main():
+            #st.title("Your DataFrame")
+
+            # Convert the styled DataFrame to HTML without the index and display it
+            styled_html = style_table(tabela_7).to_html(escape=False, index=False, hide_index=True)
+            st.markdown(styled_html, unsafe_allow_html=True)
+
+        if __name__ == '__main__':
+            main()
 
         tabela_8 = pd.read_csv("2_Role_Goleiro_Líbero_Full.csv")
         tabela_8 = tabela_8.loc[(tabela_8['Nacionalidade']==nacionalidade)&(tabela_8['Fim_Contrato']<=contrato)&(tabela_8['Versão_Temporada']==temporada)]   
-        tabela_8 = tabela_8.iloc[:, np.r_[1, 3, 7, 15, 8:12, 28, 30]]
+        tabela_8 = tabela_8.iloc[:, np.r_[1, 3, 7, 15, 8:12, 28]]
         tabela_8 = tabela_8[(tabela_8['Liga'] == 'ENG1') | (tabela_8['Liga'] == 'ENG2') | (tabela_8['Liga'] == 'FRA1') | (tabela_8['Liga'] == 'FRA2') 
             | (tabela_8['Liga'] == 'SPA1') | (tabela_8['Liga'] == 'ITA1') | (tabela_8['Liga'] == 'GER1') | (tabela_8['Liga'] == 'POR1') 
             | (tabela_8['Liga'] == 'SWZ') | (tabela_8['Liga'] == 'RUS') | (tabela_8['Liga'] == 'UKR') | (tabela_8['Liga'] == 'BEL1') 
@@ -730,9 +829,56 @@ if choose == "Free Agents pelo Mundo":
 
         tabela_8 = pd.merge(tabela_8, tabela_9[['Atleta', 'L_Rating', 'L_Ranking', 'L_Percentil', 'Size']], on="Atleta", how="left")
         tabela_8 = tabela_8.rename(columns={'Equipe_Janela_Análise':'Equipe', 'Versão_Temporada':'Janela de Análise', 
-                                            'L_Rating':'Rating', 'L_Ranking':'Ranking', 'L_Percentil':'Percentil', 'Size':'Qtde Atletas'})
-        st.markdown("<h4 style='text-align: center;'>Goleiros Líberos </b></h4>", unsafe_allow_html=True)
-        st.dataframe(tabela_8, use_container_width=True, hide_index=True)
+                                            'L_Rating':'Rating', 'L_Ranking':'Ranking', 'L_Percentil':'Percentil', 'Size':'Qtde Atletas',
+                                            'Valor_Mercado':'Valor'})
+        tabela_8['Rating'] = tabela_8['Rating'].round(3)
+        st.markdown("<h4 style='text-align: center;'><br><b>Goleiros Líberos</b></h4>", unsafe_allow_html=True)
+        #st.dataframe(tabela_8, use_container_width=True, hide_index=True)
+
+        # Styling DataFrame using Pandas
+        def style_table(df):
+            df = df.reset_index(drop=True)
+            # Ensure 'Rating' is rounded and formatted to 3 decimal places during styling
+            formatter = {"Rating": "{:.3f}"}  # Format the 'Rating' column to 3 decimal places
+            return df.style.format(formatter).set_table_styles(
+                [{
+                    'selector': 'thead th',
+                    'props': [('font-weight', 'bold'),
+                            ('border-style', 'solid'),
+                            ('border-width', '0px 0px 2px 0px'),
+                            ('border-color', 'black')]
+                }, {
+                    'selector': 'thead th:not(:first-child)',
+                    'props': [('text-align', 'center')]  # Centering all headers except the first
+                }, {
+                    'selector': 'thead th:last-child',
+                    'props': [('color', 'black')]  # Make last column header black
+                }, {
+                    'selector': 'td',
+                    'props': [('border-style', 'solid'),
+                            ('border-width', '0px 0px 1px 0px'),
+                            ('border-color', 'black'),
+                            ('text-align', 'center')]
+                }, {
+                    'selector': 'th',
+                    'props': [('border-style', 'solid'),
+                            ('border-width', '0px 0px 1px 0px'),
+                            ('border-color', 'black'),
+                            ('text-align', 'left')]
+                }]
+            ).set_properties(**{'padding': '2px',
+                                'font-size': '15px'})
+
+        # Displaying in Streamlit
+        def main():
+            #st.title("Your DataFrame")
+
+            # Convert the styled DataFrame to HTML without the index and display it
+            styled_html = style_table(tabela_8).to_html(escape=False, index=False, hide_index=True)
+            st.markdown(styled_html, unsafe_allow_html=True)
+
+        if __name__ == '__main__':
+            main()
 
     elif posição == ("Lateral"):
         st.markdown("<h4 style='text-align: center;'>Free Agents Nacionais Mais Bem Ranqueados<br>Laterais </b></h4>", unsafe_allow_html=True)
@@ -763,8 +909,53 @@ if choose == "Free Agents pelo Mundo":
         tabela_9 = pd.merge(tabela_9, tabela_10[['Atleta', 'L_Rating', 'L_Ranking', 'L_Percentil', 'Size']], on="Atleta", how="left")
         tabela_9 = tabela_9.rename(columns={'Equipe_Janela_Análise':'Equipe', 'Versão_Temporada':'Janela de Análise', 
                                             'L_Rating':'Rating', 'L_Ranking':'Ranking', 'L_Percentil':'Percentil', 'Size':'Qtde Atletas'})
-        st.markdown("<h4 style='text-align: center;'>Laterais Defensivos </b></h4>", unsafe_allow_html=True)
-        st.dataframe(tabela_9, use_container_width=True, hide_index=True)
+        st.markdown("<h4 style='text-align: center;'><b>Laterais Defensivos </b></h4>", unsafe_allow_html=True)
+        #st.dataframe(tabela_9, use_container_width=True, hide_index=True)
+
+        # Styling DataFrame using Pandas
+        def style_table(df):
+            df = df.reset_index(drop=True)
+            # Ensure 'Rating' is rounded and formatted to 3 decimal places during styling
+            formatter = {"Rating": "{:.3f}"}  # Format the 'Rating' column to 3 decimal places
+            return df.style.format(formatter).set_table_styles(
+                [{
+                    'selector': 'thead th',
+                    'props': [('font-weight', 'bold'),
+                            ('border-style', 'solid'),
+                            ('border-width', '0px 0px 2px 0px'),
+                            ('border-color', 'black')]
+                }, {
+                    'selector': 'thead th:not(:first-child)',
+                    'props': [('text-align', 'center')]  # Centering all headers except the first
+                }, {
+                    'selector': 'thead th:last-child',
+                    'props': [('color', 'black')]  # Make last column header black
+                }, {
+                    'selector': 'td',
+                    'props': [('border-style', 'solid'),
+                            ('border-width', '0px 0px 1px 0px'),
+                            ('border-color', 'black'),
+                            ('text-align', 'center')]
+                }, {
+                    'selector': 'th',
+                    'props': [('border-style', 'solid'),
+                            ('border-width', '0px 0px 1px 0px'),
+                            ('border-color', 'black'),
+                            ('text-align', 'left')]
+                }]
+            ).set_properties(**{'padding': '2px',
+                                'font-size': '15px'})
+
+        # Displaying in Streamlit
+        def main():
+            #st.title("Your DataFrame")
+
+            # Convert the styled DataFrame to HTML without the index and display it
+            styled_html = style_table(tabela_9).to_html(escape=False, index=False, hide_index=True)
+            st.markdown(styled_html, unsafe_allow_html=True)
+
+        if __name__ == '__main__':
+            main()
 
 
         tabela_11 = pd.read_csv("4_Role_Lateral_Ofensivo_Full.csv")
@@ -795,8 +986,52 @@ if choose == "Free Agents pelo Mundo":
         tabela_11 = tabela_11.rename(columns={'Equipe_Janela_Análise':'Equipe', 'Versão_Temporada':'Janela de Análise', 
                                             'L_Rating':'Rating', 'L_Ranking':'Ranking', 'L_Percentil':'Percentil', 'Size':'Qtde Atletas'})
 
-        st.markdown("<h4 style='text-align: center;'>Laterais Ofensivos </b></h4>", unsafe_allow_html=True)
-        st.dataframe(tabela_11, use_container_width=True, hide_index=True)
+        st.markdown("<h4 style='text-align: center;'><br><b>Laterais Ofensivos </b></h4>", unsafe_allow_html=True)
+        #st.dataframe(tabela_11, use_container_width=True, hide_index=True)
+        # Styling DataFrame using Pandas
+        def style_table(df):
+            df = df.reset_index(drop=True)
+            # Ensure 'Rating' is rounded and formatted to 3 decimal places during styling
+            formatter = {"Rating": "{:.3f}"}  # Format the 'Rating' column to 3 decimal places
+            return df.style.format(formatter).set_table_styles(
+                [{
+                    'selector': 'thead th',
+                    'props': [('font-weight', 'bold'),
+                            ('border-style', 'solid'),
+                            ('border-width', '0px 0px 2px 0px'),
+                            ('border-color', 'black')]
+                }, {
+                    'selector': 'thead th:not(:first-child)',
+                    'props': [('text-align', 'center')]  # Centering all headers except the first
+                }, {
+                    'selector': 'thead th:last-child',
+                    'props': [('color', 'black')]  # Make last column header black
+                }, {
+                    'selector': 'td',
+                    'props': [('border-style', 'solid'),
+                            ('border-width', '0px 0px 1px 0px'),
+                            ('border-color', 'black'),
+                            ('text-align', 'center')]
+                }, {
+                    'selector': 'th',
+                    'props': [('border-style', 'solid'),
+                            ('border-width', '0px 0px 1px 0px'),
+                            ('border-color', 'black'),
+                            ('text-align', 'left')]
+                }]
+            ).set_properties(**{'padding': '0px',
+                                'font-size': '15px'})
+
+        # Displaying in Streamlit
+        def main():
+            #st.title("Your DataFrame")
+
+            # Convert the styled DataFrame to HTML without the index and display it
+            styled_html = style_table(tabela_11).to_html(escape=False, index=False, hide_index=True)
+            st.markdown(styled_html, unsafe_allow_html=True)
+
+        if __name__ == '__main__':
+            main()
 
 
         tabela_13 = pd.read_csv("5_Role_Lateral_Equilibrado_Full.csv")
@@ -826,8 +1061,54 @@ if choose == "Free Agents pelo Mundo":
         tabela_13 = pd.merge(tabela_13, tabela_14[['Atleta', 'L_Rating', 'L_Ranking', 'L_Percentil', 'Size']], on="Atleta", how="left")
         tabela_13 = tabela_13.rename(columns={'Equipe_Janela_Análise':'Equipe', 'Versão_Temporada':'Janela de Análise', 
                                             'L_Rating':'Rating', 'L_Ranking':'Ranking', 'L_Percentil':'Percentil', 'Size':'Qtde Atletas'})
-        st.markdown("<h4 style='text-align: center;'>Laterais Equilibrados </b></h4>", unsafe_allow_html=True)
-        st.dataframe(tabela_13, use_container_width=True, hide_index=True)
+        st.markdown("<h4 style='text-align: center;'><br><b>Laterais Equilibrados </b></h4>", unsafe_allow_html=True)
+        #st.dataframe(tabela_13, use_container_width=True, hide_index=True)
+
+        # Styling DataFrame using Pandas
+        def style_table(df):
+            df = df.reset_index(drop=True)
+            # Ensure 'Rating' is rounded and formatted to 3 decimal places during styling
+            formatter = {"Rating": "{:.3f}"}  # Format the 'Rating' column to 3 decimal places
+            return df.style.format(formatter).set_table_styles(
+                [{
+                    'selector': 'thead th',
+                    'props': [('font-weight', 'bold'),
+                            ('border-style', 'solid'),
+                            ('border-width', '0px 0px 2px 0px'),
+                            ('border-color', 'black')]
+                }, {
+                    'selector': 'thead th:not(:first-child)',
+                    'props': [('text-align', 'center')]  # Centering all headers except the first
+                }, {
+                    'selector': 'thead th:last-child',
+                    'props': [('color', 'black')]  # Make last column header black
+                }, {
+                    'selector': 'td',
+                    'props': [('border-style', 'solid'),
+                            ('border-width', '0px 0px 1px 0px'),
+                            ('border-color', 'black'),
+                            ('text-align', 'center')]
+                }, {
+                    'selector': 'th',
+                    'props': [('border-style', 'solid'),
+                            ('border-width', '0px 0px 1px 0px'),
+                            ('border-color', 'black'),
+                            ('text-align', 'left')]
+                }]
+            ).set_properties(**{'padding': '2px',
+                                'font-size': '15px'})
+
+        # Displaying in Streamlit
+        def main():
+            #st.title("Your DataFrame")
+
+            # Convert the styled DataFrame to HTML without the index and display it
+            styled_html = style_table(tabela_13).to_html(escape=False, index=False, hide_index=True)
+            st.markdown(styled_html, unsafe_allow_html=True)
+
+        if __name__ == '__main__':
+            main()
+
 
     elif posição == ("Zagueiro"):
         st.markdown("<h4 style='text-align: center;'>Free Agents Nacionais Mais Bem Ranqueados<br>Zagueiros </b></h4>", unsafe_allow_html=True)
@@ -857,9 +1138,56 @@ if choose == "Free Agents pelo Mundo":
 
         tabela_9 = pd.merge(tabela_9, tabela_10[['Atleta', 'L_Rating', 'L_Ranking', 'L_Percentil', 'Size']], on="Atleta", how="left")
         tabela_9 = tabela_9.rename(columns={'Equipe_Janela_Análise':'Equipe', 'Versão_Temporada':'Janela de Análise', 
-                                            'L_Rating':'Rating', 'L_Ranking':'Ranking', 'L_Percentil':'Percentil', 'Size':'Qtde Atletas'})
-        st.markdown("<h4 style='text-align: center;'>Zagueiros Clássicos </b></h4>", unsafe_allow_html=True)
-        st.dataframe(tabela_9, use_container_width=True, hide_index=True)
+                                            'L_Rating':'Rating', 'L_Ranking':'Ranking', 'L_Percentil':'Percentil', 'Size':'Qtde Atletas',
+                                            'Valor_Mercado': 'Valor'})
+        st.markdown("<h4 style='text-align: center;'><br><b>Zagueiros Clássicos </b></h4>", unsafe_allow_html=True)
+        #st.dataframe(tabela_9, use_container_width=True, hide_index=True)
+
+        # Styling DataFrame using Pandas
+        def style_table(df):
+            df = df.reset_index(drop=True)
+            # Ensure 'Rating' is rounded and formatted to 3 decimal places during styling
+            formatter = {"Rating": "{:.3f}", "Idade": "{:.0f}"}  # Format the 'Rating' column to 3 decimal places
+            #formatter = {"Idade": "{:.0f}"}
+            return df.style.format(formatter).set_table_styles(
+                [{
+                    'selector': 'thead th',
+                    'props': [('font-weight', 'bold'),
+                            ('border-style', 'solid'),
+                            ('border-width', '0px 0px 2px 0px'),
+                            ('border-color', 'black')]
+                }, {
+                    'selector': 'thead th:not(:first-child)',
+                    'props': [('text-align', 'center')]  # Centering all headers except the first
+                }, {
+                    'selector': 'thead th:last-child',
+                    'props': [('color', 'black')]  # Make last column header black
+                }, {
+                    'selector': 'td',
+                    'props': [('border-style', 'solid'),
+                            ('border-width', '0px 0px 1px 0px'),
+                            ('border-color', 'black'),
+                            ('text-align', 'center')]
+                }, {
+                    'selector': 'th',
+                    'props': [('border-style', 'solid'),
+                            ('border-width', '0px 0px 1px 0px'),
+                            ('border-color', 'black'),
+                            ('text-align', 'left')]
+                }]
+            ).set_properties(**{'padding': '2px',
+                                'font-size': '15px'})
+
+        # Displaying in Streamlit
+        def main():
+            #st.title("Your DataFrame")
+
+            # Convert the styled DataFrame to HTML without the index and display it
+            styled_html = style_table(tabela_9).to_html(escape=False, index=False, hide_index=True)
+            st.markdown(styled_html, unsafe_allow_html=True)
+
+        if __name__ == '__main__':
+            main()
 
 
         tabela_11 = pd.read_csv("7_Role_Zagueiro_Construtor_Full.csv")
@@ -888,10 +1216,57 @@ if choose == "Free Agents pelo Mundo":
 
         tabela_11 = pd.merge(tabela_11, tabela_12[['Atleta', 'L_Rating', 'L_Ranking', 'L_Percentil', 'Size']], on="Atleta", how="left")
         tabela_11 = tabela_11.rename(columns={'Equipe_Janela_Análise':'Equipe', 'Versão_Temporada':'Janela de Análise', 
-                                            'L_Rating':'Rating', 'L_Ranking':'Ranking', 'L_Percentil':'Percentil', 'Size':'Qtde Atletas'})
+                                            'L_Rating':'Rating', 'L_Ranking':'Ranking', 'L_Percentil':'Percentil', 'Size':'Qtde Atletas',
+                                            'Valor_Mercado': 'Valor'})
 
-        st.markdown("<h4 style='text-align: center;'>Zagueiros Construtores </b></h4>", unsafe_allow_html=True)
-        st.dataframe(tabela_11, use_container_width=True, hide_index=True)
+        st.markdown("<h4 style='text-align: center;'><br><b>Zagueiros Construtores </b></h4>", unsafe_allow_html=True)
+        #st.dataframe(tabela_11, use_container_width=True, hide_index=True)
+
+        # Styling DataFrame using Pandas
+        def style_table(df):
+            df = df.reset_index(drop=True)
+            # Ensure 'Rating' is rounded and formatted to 3 decimal places during styling
+            formatter = {"Rating": "{:.3f}", "Idade": "{:.0f}"}  # Format the 'Rating' column to 3 decimal places
+            #formatter = {"Idade": "{:.0f}"}
+            return df.style.format(formatter).set_table_styles(
+                [{
+                    'selector': 'thead th',
+                    'props': [('font-weight', 'bold'),
+                            ('border-style', 'solid'),
+                            ('border-width', '0px 0px 2px 0px'),
+                            ('border-color', 'black')]
+                }, {
+                    'selector': 'thead th:not(:first-child)',
+                    'props': [('text-align', 'center')]  # Centering all headers except the first
+                }, {
+                    'selector': 'thead th:last-child',
+                    'props': [('color', 'black')]  # Make last column header black
+                }, {
+                    'selector': 'td',
+                    'props': [('border-style', 'solid'),
+                            ('border-width', '0px 0px 1px 0px'),
+                            ('border-color', 'black'),
+                            ('text-align', 'center')]
+                }, {
+                    'selector': 'th',
+                    'props': [('border-style', 'solid'),
+                            ('border-width', '0px 0px 1px 0px'),
+                            ('border-color', 'black'),
+                            ('text-align', 'left')]
+                }]
+            ).set_properties(**{'padding': '2px',
+                                'font-size': '15px'})
+
+        # Displaying in Streamlit
+        def main():
+            #st.title("Your DataFrame")
+
+            # Convert the styled DataFrame to HTML without the index and display it
+            styled_html = style_table(tabela_11).to_html(escape=False, index=False, hide_index=True)
+            st.markdown(styled_html, unsafe_allow_html=True)
+
+        if __name__ == '__main__':
+            main()
 
 
         tabela_13 = pd.read_csv("8_Role_Zagueiro_Equilibrado_Full.csv")
@@ -920,9 +1295,56 @@ if choose == "Free Agents pelo Mundo":
 
         tabela_13 = pd.merge(tabela_13, tabela_14[['Atleta', 'L_Rating', 'L_Ranking', 'L_Percentil', 'Size']], on="Atleta", how="left")
         tabela_13 = tabela_13.rename(columns={'Equipe_Janela_Análise':'Equipe', 'Versão_Temporada':'Janela de Análise', 
-                                            'L_Rating':'Rating', 'L_Ranking':'Ranking', 'L_Percentil':'Percentil', 'Size':'Qtde Atletas'})
-        st.markdown("<h4 style='text-align: center;'>Zagueiros Equilibrados </b></h4>", unsafe_allow_html=True)
-        st.dataframe(tabela_13, use_container_width=True, hide_index=True)
+                                            'L_Rating':'Rating', 'L_Ranking':'Ranking', 'L_Percentil':'Percentil', 'Size':'Qtde Atletas',
+                                            'Valor_Mercado': 'Valor'})
+        st.markdown("<h4 style='text-align: center;'><br><b>Zagueiros Equilibrados </b></h4>", unsafe_allow_html=True)
+        #st.dataframe(tabela_13, use_container_width=True, hide_index=True)
+
+        # Styling DataFrame using Pandas
+        def style_table(df):
+            df = df.reset_index(drop=True)
+            # Ensure 'Rating' is rounded and formatted to 3 decimal places during styling
+            formatter = {"Rating": "{:.3f}", "Idade": "{:.0f}"}  # Format the 'Rating' column to 3 decimal places
+            #formatter = {"Idade": "{:.0f}"}
+            return df.style.format(formatter).set_table_styles(
+                [{
+                    'selector': 'thead th',
+                    'props': [('font-weight', 'bold'),
+                            ('border-style', 'solid'),
+                            ('border-width', '0px 0px 2px 0px'),
+                            ('border-color', 'black')]
+                }, {
+                    'selector': 'thead th:not(:first-child)',
+                    'props': [('text-align', 'center')]  # Centering all headers except the first
+                }, {
+                    'selector': 'thead th:last-child',
+                    'props': [('color', 'black')]  # Make last column header black
+                }, {
+                    'selector': 'td',
+                    'props': [('border-style', 'solid'),
+                            ('border-width', '0px 0px 1px 0px'),
+                            ('border-color', 'black'),
+                            ('text-align', 'center')]
+                }, {
+                    'selector': 'th',
+                    'props': [('border-style', 'solid'),
+                            ('border-width', '0px 0px 1px 0px'),
+                            ('border-color', 'black'),
+                            ('text-align', 'left')]
+                }]
+            ).set_properties(**{'padding': '2px',
+                                'font-size': '15px'})
+
+        # Displaying in Streamlit
+        def main():
+            #st.title("Your DataFrame")
+
+            # Convert the styled DataFrame to HTML without the index and display it
+            styled_html = style_table(tabela_13).to_html(escape=False, index=False, hide_index=True)
+            st.markdown(styled_html, unsafe_allow_html=True)
+
+        if __name__ == '__main__':
+            main()
 
 ###############################################################################################################################
 ###############################################################################################################################
@@ -955,9 +1377,56 @@ if choose == "Free Agents pelo Mundo":
 
         tabela_9 = pd.merge(tabela_9, tabela_10[['Atleta', 'L_Rating', 'L_Ranking', 'L_Percentil', 'Size']], on="Atleta", how="left")
         tabela_9 = tabela_9.rename(columns={'Equipe_Janela_Análise':'Equipe', 'Versão_Temporada':'Janela de Análise', 
-                                            'L_Rating':'Rating', 'L_Ranking':'Ranking', 'L_Percentil':'Percentil', 'Size':'Qtde Atletas'})
-        st.markdown("<h4 style='text-align: center;'>Primeiros Volantes Defensivos </b></h4>", unsafe_allow_html=True)
-        st.dataframe(tabela_9, use_container_width=True, hide_index=True)
+                                            'L_Rating':'Rating', 'L_Ranking':'Ranking', 'L_Percentil':'Percentil', 'Size':'Qtde Atletas',
+                                            'Valor_Mercado': 'Valor'})
+        st.markdown("<h4 style='text-align: center;'><br><b>Primeiros Volantes Defensivos </b></h4>", unsafe_allow_html=True)
+        #st.dataframe(tabela_9, use_container_width=True, hide_index=True)
+
+        # Styling DataFrame using Pandas
+        def style_table(df):
+            df = df.reset_index(drop=True)
+            # Ensure 'Rating' is rounded and formatted to 3 decimal places during styling
+            formatter = {"Rating": "{:.3f}", "Idade": "{:.0f}"}  # Format the 'Rating' column to 3 decimal places
+            #formatter = {"Idade": "{:.0f}"}
+            return df.style.format(formatter).set_table_styles(
+                [{
+                    'selector': 'thead th',
+                    'props': [('font-weight', 'bold'),
+                            ('border-style', 'solid'),
+                            ('border-width', '0px 0px 2px 0px'),
+                            ('border-color', 'black')]
+                }, {
+                    'selector': 'thead th:not(:first-child)',
+                    'props': [('text-align', 'center')]  # Centering all headers except the first
+                }, {
+                    'selector': 'thead th:last-child',
+                    'props': [('color', 'black')]  # Make last column header black
+                }, {
+                    'selector': 'td',
+                    'props': [('border-style', 'solid'),
+                            ('border-width', '0px 0px 1px 0px'),
+                            ('border-color', 'black'),
+                            ('text-align', 'center')]
+                }, {
+                    'selector': 'th',
+                    'props': [('border-style', 'solid'),
+                            ('border-width', '0px 0px 1px 0px'),
+                            ('border-color', 'black'),
+                            ('text-align', 'left')]
+                }]
+            ).set_properties(**{'padding': '2px',
+                                'font-size': '15px'})
+
+        # Displaying in Streamlit
+        def main():
+            #st.title("Your DataFrame")
+
+            # Convert the styled DataFrame to HTML without the index and display it
+            styled_html = style_table(tabela_9).to_html(escape=False, index=False, hide_index=True)
+            st.markdown(styled_html, unsafe_allow_html=True)
+
+        if __name__ == '__main__':
+            main()
 
 
         tabela_11 = pd.read_csv("10_Role_Volante_Construtor_Full.csv")
@@ -986,10 +1455,57 @@ if choose == "Free Agents pelo Mundo":
 
         tabela_11 = pd.merge(tabela_11, tabela_12[['Atleta', 'L_Rating', 'L_Ranking', 'L_Percentil', 'Size']], on="Atleta", how="left")
         tabela_11 = tabela_11.rename(columns={'Equipe_Janela_Análise':'Equipe', 'Versão_Temporada':'Janela de Análise', 
-                                            'L_Rating':'Rating', 'L_Ranking':'Ranking', 'L_Percentil':'Percentil', 'Size':'Qtde Atletas'})
+                                            'L_Rating':'Rating', 'L_Ranking':'Ranking', 'L_Percentil':'Percentil', 'Size':'Qtde Atletas',
+                                            'Valor_Mercado': 'Valor'})
 
-        st.markdown("<h4 style='text-align: center;'>Primeiros Volantes Construtores </b></h4>", unsafe_allow_html=True)
-        st.dataframe(tabela_11, use_container_width=True, hide_index=True)
+        st.markdown("<h4 style='text-align: center;'><br><b>Primeiros Volantes Construtores </b></h4>", unsafe_allow_html=True)
+        #st.dataframe(tabela_11, use_container_width=True, hide_index=True)
+
+        # Styling DataFrame using Pandas
+        def style_table(df):
+            df = df.reset_index(drop=True)
+            # Ensure 'Rating' is rounded and formatted to 3 decimal places during styling
+            formatter = {"Rating": "{:.3f}", "Idade": "{:.0f}"}  # Format the 'Rating' column to 3 decimal places
+            #formatter = {"Idade": "{:.0f}"}
+            return df.style.format(formatter).set_table_styles(
+                [{
+                    'selector': 'thead th',
+                    'props': [('font-weight', 'bold'),
+                            ('border-style', 'solid'),
+                            ('border-width', '0px 0px 2px 0px'),
+                            ('border-color', 'black')]
+                }, {
+                    'selector': 'thead th:not(:first-child)',
+                    'props': [('text-align', 'center')]  # Centering all headers except the first
+                }, {
+                    'selector': 'thead th:last-child',
+                    'props': [('color', 'black')]  # Make last column header black
+                }, {
+                    'selector': 'td',
+                    'props': [('border-style', 'solid'),
+                            ('border-width', '0px 0px 1px 0px'),
+                            ('border-color', 'black'),
+                            ('text-align', 'center')]
+                }, {
+                    'selector': 'th',
+                    'props': [('border-style', 'solid'),
+                            ('border-width', '0px 0px 1px 0px'),
+                            ('border-color', 'black'),
+                            ('text-align', 'left')]
+                }]
+            ).set_properties(**{'padding': '2px',
+                                'font-size': '15px'})
+
+        # Displaying in Streamlit
+        def main():
+            #st.title("Your DataFrame")
+
+            # Convert the styled DataFrame to HTML without the index and display it
+            styled_html = style_table(tabela_11).to_html(escape=False, index=False, hide_index=True)
+            st.markdown(styled_html, unsafe_allow_html=True)
+
+        if __name__ == '__main__':
+            main()
 
 
         tabela_13 = pd.read_csv("11_Role_Volante_Equilibrado_Full.csv")
@@ -1018,15 +1534,62 @@ if choose == "Free Agents pelo Mundo":
 
         tabela_13 = pd.merge(tabela_13, tabela_14[['Atleta', 'L_Rating', 'L_Ranking', 'L_Percentil', 'Size']], on="Atleta", how="left")
         tabela_13 = tabela_13.rename(columns={'Equipe_Janela_Análise':'Equipe', 'Versão_Temporada':'Janela de Análise', 
-                                            'L_Rating':'Rating', 'L_Ranking':'Ranking', 'L_Percentil':'Percentil', 'Size':'Qtde Atletas'})
-        st.markdown("<h4 style='text-align: center;'>Primeiros Volantes Equilibrados </b></h4>", unsafe_allow_html=True)
-        st.dataframe(tabela_13, use_container_width=True, hide_index=True)
+                                            'L_Rating':'Rating', 'L_Ranking':'Ranking', 'L_Percentil':'Percentil', 'Size':'Qtde Atletas',
+                                            'Valor_Mercado': 'Valor'})
+        st.markdown("<h4 style='text-align: center;'><br><b>Primeiros Volantes Equilibrados </b></h4>", unsafe_allow_html=True)
+        #st.dataframe(tabela_13, use_container_width=True, hide_index=True)
+
+        # Styling DataFrame using Pandas
+        def style_table(df):
+            df = df.reset_index(drop=True)
+            # Ensure 'Rating' is rounded and formatted to 3 decimal places during styling
+            formatter = {"Rating": "{:.3f}", "Idade": "{:.0f}"}  # Format the 'Rating' column to 3 decimal places
+            #formatter = {"Idade": "{:.0f}"}
+            return df.style.format(formatter).set_table_styles(
+                [{
+                    'selector': 'thead th',
+                    'props': [('font-weight', 'bold'),
+                            ('border-style', 'solid'),
+                            ('border-width', '0px 0px 2px 0px'),
+                            ('border-color', 'black')]
+                }, {
+                    'selector': 'thead th:not(:first-child)',
+                    'props': [('text-align', 'center')]  # Centering all headers except the first
+                }, {
+                    'selector': 'thead th:last-child',
+                    'props': [('color', 'black')]  # Make last column header black
+                }, {
+                    'selector': 'td',
+                    'props': [('border-style', 'solid'),
+                            ('border-width', '0px 0px 1px 0px'),
+                            ('border-color', 'black'),
+                            ('text-align', 'center')]
+                }, {
+                    'selector': 'th',
+                    'props': [('border-style', 'solid'),
+                            ('border-width', '0px 0px 1px 0px'),
+                            ('border-color', 'black'),
+                            ('text-align', 'left')]
+                }]
+            ).set_properties(**{'padding': '2px',
+                                'font-size': '15px'})
+
+        # Displaying in Streamlit
+        def main():
+            #st.title("Your DataFrame")
+
+            # Convert the styled DataFrame to HTML without the index and display it
+            styled_html = style_table(tabela_13).to_html(escape=False, index=False, hide_index=True)
+            st.markdown(styled_html, unsafe_allow_html=True)
+
+        if __name__ == '__main__':
+            main()
 
 ###############################################################################################################################
 ###############################################################################################################################
 
     elif posição == ("Segundo Volante"):
-        st.markdown("<h4 style='text-align: center;'>Free Agents Nacionais Mais Bem Ranqueados<br>Segundos Volantes </b></h4>", unsafe_allow_html=True)
+        st.markdown("<h4 style='text-align: center;'>Free Agents Nacionais Mais Bem Ranqueados<br><br>Segundos Volantes </b></h4>", unsafe_allow_html=True)
         tabela_9 = pd.read_csv("12_Role_Segundo_Volante_Box_to_Box_Full.csv")
         tabela_9 = tabela_9.loc[(tabela_9['Nacionalidade']==nacionalidade)&(tabela_9['Fim_Contrato']<=contrato)&(tabela_9['Versão_Temporada']==temporada)]   
         tabela_9 = tabela_9.iloc[:, np.r_[1, 3, 4, 7, 15, 8:12, 31]]
@@ -1053,9 +1616,54 @@ if choose == "Free Agents pelo Mundo":
 
         tabela_9 = pd.merge(tabela_9, tabela_10[['Atleta', 'L_Rating', 'L_Ranking', 'L_Percentil', 'Size']], on="Atleta", how="left")
         tabela_9 = tabela_9.rename(columns={'Equipe_Janela_Análise':'Equipe', 'Versão_Temporada':'Janela de Análise', 
-                                            'L_Rating':'Rating', 'L_Ranking':'Ranking', 'L_Percentil':'Percentil', 'Size':'Qtde Atletas'})
-        st.markdown("<h4 style='text-align: center;'>Segundos Volantes Box-to-Box </b></h4>", unsafe_allow_html=True)
-        st.dataframe(tabela_9, use_container_width=True, hide_index=True)
+                                            'L_Rating':'Rating', 'L_Ranking':'Ranking', 'L_Percentil':'Percentil', 'Size':'Qtde Atletas',
+                                            'Valor_Mercado': 'Valor'})
+        st.markdown("<h4 style='text-align: center;'><br><b>Segundos Volantes Box-to-Box </b></h4>", unsafe_allow_html=True)
+
+        # Styling DataFrame using Pandas
+        def style_table(df):
+            df = df.reset_index(drop=True)
+            # Ensure 'Rating' is rounded and formatted to 3 decimal places during styling
+            formatter = {"Rating": "{:.3f}", "Idade": "{:.0f}"}  # Format the 'Rating' column to 3 decimal places
+            return df.style.format(formatter).set_table_styles(
+                [{
+                    'selector': 'thead th',
+                    'props': [('font-weight', 'bold'),
+                            ('border-style', 'solid'),
+                            ('border-width', '0px 0px 2px 0px'),
+                            ('border-color', 'black')]
+                }, {
+                    'selector': 'thead th:not(:first-child)',
+                    'props': [('text-align', 'center')]  # Centering all headers except the first
+                }, {
+                    'selector': 'thead th:last-child',
+                    'props': [('color', 'black')]  # Make last column header black
+                }, {
+                    'selector': 'td',
+                    'props': [('border-style', 'solid'),
+                            ('border-width', '0px 0px 1px 0px'),
+                            ('border-color', 'black'),
+                            ('text-align', 'center')]
+                }, {
+                    'selector': 'th',
+                    'props': [('border-style', 'solid'),
+                            ('border-width', '0px 0px 1px 0px'),
+                            ('border-color', 'black'),
+                            ('text-align', 'left')]
+                }]
+            ).set_properties(**{'padding': '2px',
+                                'font-size': '15px'})
+
+        # Displaying in Streamlit
+        def main():
+            #st.title("Your DataFrame")
+
+            # Convert the styled DataFrame to HTML without the index and display it
+            styled_html = style_table(tabela_9).to_html(escape=False, index=False, hide_index=True)
+            st.markdown(styled_html, unsafe_allow_html=True)
+
+        if __name__ == '__main__':
+            main()
 
 
         tabela_11 = pd.read_csv("13_Role_Segundo_Volante_Organizador_Full.csv")
@@ -1084,10 +1692,57 @@ if choose == "Free Agents pelo Mundo":
 
         tabela_11 = pd.merge(tabela_11, tabela_12[['Atleta', 'L_Rating', 'L_Ranking', 'L_Percentil', 'Size']], on="Atleta", how="left")
         tabela_11 = tabela_11.rename(columns={'Equipe_Janela_Análise':'Equipe', 'Versão_Temporada':'Janela de Análise', 
-                                            'L_Rating':'Rating', 'L_Ranking':'Ranking', 'L_Percentil':'Percentil', 'Size':'Qtde Atletas'})
+                                            'L_Rating':'Rating', 'L_Ranking':'Ranking', 'L_Percentil':'Percentil', 'Size':'Qtde Atletas',
+                                            'Valor_Mercado': 'Valor'})
 
-        st.markdown("<h4 style='text-align: center;'>Segundos Volantes Organizadores </b></h4>", unsafe_allow_html=True)
-        st.dataframe(tabela_11, use_container_width=True, hide_index=True)
+        st.markdown("<h4 style='text-align: center;'><br><b>Segundos Volantes Organizadores </b></h4>", unsafe_allow_html=True)
+        #st.dataframe(tabela_11, use_container_width=True, hide_index=True)
+
+        # Styling DataFrame using Pandas
+        def style_table(df):
+            df = df.reset_index(drop=True)
+            # Ensure 'Rating' is rounded and formatted to 3 decimal places during styling
+            formatter = {"Rating": "{:.3f}", "Idade": "{:.0f}"}  # Format the 'Rating' column to 3 decimal places
+            #formatter = {"Idade": "{:.0f}"}
+            return df.style.format(formatter).set_table_styles(
+                [{
+                    'selector': 'thead th',
+                    'props': [('font-weight', 'bold'),
+                            ('border-style', 'solid'),
+                            ('border-width', '0px 0px 2px 0px'),
+                            ('border-color', 'black')]
+                }, {
+                    'selector': 'thead th:not(:first-child)',
+                    'props': [('text-align', 'center')]  # Centering all headers except the first
+                }, {
+                    'selector': 'thead th:last-child',
+                    'props': [('color', 'black')]  # Make last column header black
+                }, {
+                    'selector': 'td',
+                    'props': [('border-style', 'solid'),
+                            ('border-width', '0px 0px 1px 0px'),
+                            ('border-color', 'black'),
+                            ('text-align', 'center')]
+                }, {
+                    'selector': 'th',
+                    'props': [('border-style', 'solid'),
+                            ('border-width', '0px 0px 1px 0px'),
+                            ('border-color', 'black'),
+                            ('text-align', 'left')]
+                }]
+            ).set_properties(**{'padding': '2px',
+                                'font-size': '15px'})
+
+        # Displaying in Streamlit
+        def main():
+            #st.title("Your DataFrame")
+
+            # Convert the styled DataFrame to HTML without the index and display it
+            styled_html = style_table(tabela_11).to_html(escape=False, index=False, hide_index=True)
+            st.markdown(styled_html, unsafe_allow_html=True)
+
+        if __name__ == '__main__':
+            main()
 
 
         tabela_13 = pd.read_csv("14_Role_Segundo_Volante_Equilibrado_Full.csv")
@@ -1116,9 +1771,56 @@ if choose == "Free Agents pelo Mundo":
 
         tabela_13 = pd.merge(tabela_13, tabela_14[['Atleta', 'L_Rating', 'L_Ranking', 'L_Percentil', 'Size']], on="Atleta", how="left")
         tabela_13 = tabela_13.rename(columns={'Equipe_Janela_Análise':'Equipe', 'Versão_Temporada':'Janela de Análise', 
-                                            'L_Rating':'Rating', 'L_Ranking':'Ranking', 'L_Percentil':'Percentil', 'Size':'Qtde Atletas'})
-        st.markdown("<h4 style='text-align: center;'>Segundos Volantes Equilibrados </b></h4>", unsafe_allow_html=True)
-        st.dataframe(tabela_13, use_container_width=True, hide_index=True)
+                                            'L_Rating':'Rating', 'L_Ranking':'Ranking', 'L_Percentil':'Percentil', 'Size':'Qtde Atletas',
+                                            'Valor_Mercado': 'Valor'})
+        st.markdown("<h4 style='text-align: center;'><br><b>Segundos Volantes Equilibrados </b></h4>", unsafe_allow_html=True)
+        #st.dataframe(tabela_13, use_container_width=True, hide_index=True)
+
+        # Styling DataFrame using Pandas
+        def style_table(df):
+            df = df.reset_index(drop=True)
+            # Ensure 'Rating' is rounded and formatted to 3 decimal places during styling
+            formatter = {"Rating": "{:.3f}", "Idade": "{:.0f}"}  # Format the 'Rating' column to 3 decimal places
+            #formatter = {"Idade": "{:.0f}"}
+            return df.style.format(formatter).set_table_styles(
+                [{
+                    'selector': 'thead th',
+                    'props': [('font-weight', 'bold'),
+                            ('border-style', 'solid'),
+                            ('border-width', '0px 0px 2px 0px'),
+                            ('border-color', 'black')]
+                }, {
+                    'selector': 'thead th:not(:first-child)',
+                    'props': [('text-align', 'center')]  # Centering all headers except the first
+                }, {
+                    'selector': 'thead th:last-child',
+                    'props': [('color', 'black')]  # Make last column header black
+                }, {
+                    'selector': 'td',
+                    'props': [('border-style', 'solid'),
+                            ('border-width', '0px 0px 1px 0px'),
+                            ('border-color', 'black'),
+                            ('text-align', 'center')]
+                }, {
+                    'selector': 'th',
+                    'props': [('border-style', 'solid'),
+                            ('border-width', '0px 0px 1px 0px'),
+                            ('border-color', 'black'),
+                            ('text-align', 'left')]
+                }]
+            ).set_properties(**{'padding': '2px',
+                                'font-size': '15px'})
+
+        # Displaying in Streamlit
+        def main():
+            #st.title("Your DataFrame")
+
+            # Convert the styled DataFrame to HTML without the index and display it
+            styled_html = style_table(tabela_13).to_html(escape=False, index=False, hide_index=True)
+            st.markdown(styled_html, unsafe_allow_html=True)
+
+        if __name__ == '__main__':
+            main()
 
 ###############################################################################################################################
 ###############################################################################################################################
@@ -1151,9 +1853,56 @@ if choose == "Free Agents pelo Mundo":
 
         tabela_9 = pd.merge(tabela_9, tabela_10[['Atleta', 'L_Rating', 'L_Ranking', 'L_Percentil', 'Size']], on="Atleta", how="left")
         tabela_9 = tabela_9.rename(columns={'Equipe_Janela_Análise':'Equipe', 'Versão_Temporada':'Janela de Análise', 
-                                            'L_Rating':'Rating', 'L_Ranking':'Ranking', 'L_Percentil':'Percentil', 'Size':'Qtde Atletas'})
-        st.markdown("<h4 style='text-align: center;'>Meias Organizadores </b></h4>", unsafe_allow_html=True)
-        st.dataframe(tabela_9, use_container_width=True, hide_index=True)
+                                            'L_Rating':'Rating', 'L_Ranking':'Ranking', 'L_Percentil':'Percentil', 'Size':'Qtde Atletas',
+                                            'Valor_Mercado': 'Valor'})
+        st.markdown("<h4 style='text-align: center;'><br><b>Meias Organizadores </b></h4>", unsafe_allow_html=True)
+        #st.dataframe(tabela_9, use_container_width=True, hide_index=True)
+
+        # Styling DataFrame using Pandas
+        def style_table(df):
+            df = df.reset_index(drop=True)
+            # Ensure 'Rating' is rounded and formatted to 3 decimal places during styling
+            formatter = {"Rating": "{:.3f}", "Idade": "{:.0f}"}  # Format the 'Rating' column to 3 decimal places
+            #formatter = {"Idade": "{:.0f}"}
+            return df.style.format(formatter).set_table_styles(
+                [{
+                    'selector': 'thead th',
+                    'props': [('font-weight', 'bold'),
+                            ('border-style', 'solid'),
+                            ('border-width', '0px 0px 2px 0px'),
+                            ('border-color', 'black')]
+                }, {
+                    'selector': 'thead th:not(:first-child)',
+                    'props': [('text-align', 'center')]  # Centering all headers except the first
+                }, {
+                    'selector': 'thead th:last-child',
+                    'props': [('color', 'black')]  # Make last column header black
+                }, {
+                    'selector': 'td',
+                    'props': [('border-style', 'solid'),
+                            ('border-width', '0px 0px 1px 0px'),
+                            ('border-color', 'black'),
+                            ('text-align', 'center')]
+                }, {
+                    'selector': 'th',
+                    'props': [('border-style', 'solid'),
+                            ('border-width', '0px 0px 1px 0px'),
+                            ('border-color', 'black'),
+                            ('text-align', 'left')]
+                }]
+            ).set_properties(**{'padding': '2px',
+                                'font-size': '15px'})
+
+        # Displaying in Streamlit
+        def main():
+            #st.title("Your DataFrame")
+
+            # Convert the styled DataFrame to HTML without the index and display it
+            styled_html = style_table(tabela_9).to_html(escape=False, index=False, hide_index=True)
+            st.markdown(styled_html, unsafe_allow_html=True)
+
+        if __name__ == '__main__':
+            main()
 
 
         tabela_11 = pd.read_csv("16_Role_Meia_Atacante_Full.csv")
@@ -1182,11 +1931,57 @@ if choose == "Free Agents pelo Mundo":
 
         tabela_11 = pd.merge(tabela_11, tabela_12[['Atleta', 'L_Rating', 'L_Ranking', 'L_Percentil', 'Size']], on="Atleta", how="left")
         tabela_11 = tabela_11.rename(columns={'Equipe_Janela_Análise':'Equipe', 'Versão_Temporada':'Janela de Análise', 
-                                            'L_Rating':'Rating', 'L_Ranking':'Ranking', 'L_Percentil':'Percentil', 'Size':'Qtde Atletas'})
+                                            'L_Rating':'Rating', 'L_Ranking':'Ranking', 'L_Percentil':'Percentil', 'Size':'Qtde Atletas',
+                                            'Valor_Mercado': 'Valor'})
 
-        st.markdown("<h4 style='text-align: center;'>Meias Atacantes </b></h4>", unsafe_allow_html=True)
-        st.dataframe(tabela_11, use_container_width=True, hide_index=True)
+        st.markdown("<h4 style='text-align: center;'><br><b>Meias Atacantes </b></h4>", unsafe_allow_html=True)
+        #st.dataframe(tabela_11, use_container_width=True, hide_index=True)
 
+        # Styling DataFrame using Pandas
+        def style_table(df):
+            df = df.reset_index(drop=True)
+            # Ensure 'Rating' is rounded and formatted to 3 decimal places during styling
+            formatter = {"Rating": "{:.3f}", "Idade": "{:.0f}"}  # Format the 'Rating' column to 3 decimal places
+            #formatter = {"Idade": "{:.0f}"}
+            return df.style.format(formatter).set_table_styles(
+                [{
+                    'selector': 'thead th',
+                    'props': [('font-weight', 'bold'),
+                            ('border-style', 'solid'),
+                            ('border-width', '0px 0px 2px 0px'),
+                            ('border-color', 'black')]
+                }, {
+                    'selector': 'thead th:not(:first-child)',
+                    'props': [('text-align', 'center')]  # Centering all headers except the first
+                }, {
+                    'selector': 'thead th:last-child',
+                    'props': [('color', 'black')]  # Make last column header black
+                }, {
+                    'selector': 'td',
+                    'props': [('border-style', 'solid'),
+                            ('border-width', '0px 0px 1px 0px'),
+                            ('border-color', 'black'),
+                            ('text-align', 'center')]
+                }, {
+                    'selector': 'th',
+                    'props': [('border-style', 'solid'),
+                            ('border-width', '0px 0px 1px 0px'),
+                            ('border-color', 'black'),
+                            ('text-align', 'left')]
+                }]
+            ).set_properties(**{'padding': '2px',
+                                'font-size': '15px'})
+
+        # Displaying in Streamlit
+        def main():
+            #st.title("Your DataFrame")
+
+            # Convert the styled DataFrame to HTML without the index and display it
+            styled_html = style_table(tabela_11).to_html(escape=False, index=False, hide_index=True)
+            st.markdown(styled_html, unsafe_allow_html=True)
+
+        if __name__ == '__main__':
+            main()
 
 ###############################################################################################################################
 ###############################################################################################################################
@@ -1219,9 +2014,56 @@ if choose == "Free Agents pelo Mundo":
 
         tabela_9 = pd.merge(tabela_9, tabela_10[['Atleta', 'L_Rating', 'L_Ranking', 'L_Percentil', 'Size']], on="Atleta", how="left")
         tabela_9 = tabela_9.rename(columns={'Equipe_Janela_Análise':'Equipe', 'Versão_Temporada':'Janela de Análise', 
-                                            'L_Rating':'Rating', 'L_Ranking':'Ranking', 'L_Percentil':'Percentil', 'Size':'Qtde Atletas'})
-        st.markdown("<h4 style='text-align: center;'>Extremos Organizadores </b></h4>", unsafe_allow_html=True)
-        st.dataframe(tabela_9, use_container_width=True, hide_index=True)
+                                            'L_Rating':'Rating', 'L_Ranking':'Ranking', 'L_Percentil':'Percentil', 'Size':'Qtde Atletas',
+                                            'Valor_Mercado': 'Valor'})
+        st.markdown("<h4 style='text-align: center;'><b>Extremos Organizadores </b></h4>", unsafe_allow_html=True)
+        #st.dataframe(tabela_9, use_container_width=True, hide_index=True)
+
+        # Styling DataFrame using Pandas
+        def style_table(df):
+            df = df.reset_index(drop=True)
+            # Ensure 'Rating' is rounded and formatted to 3 decimal places during styling
+            formatter = {"Rating": "{:.3f}", "Idade": "{:.0f}"}  # Format the 'Rating' column to 3 decimal places
+            #formatter = {"Idade": "{:.0f}"}
+            return df.style.format(formatter).set_table_styles(
+                [{
+                    'selector': 'thead th',
+                    'props': [('font-weight', 'bold'),
+                            ('border-style', 'solid'),
+                            ('border-width', '0px 0px 2px 0px'),
+                            ('border-color', 'black')]
+                }, {
+                    'selector': 'thead th:not(:first-child)',
+                    'props': [('text-align', 'center')]  # Centering all headers except the first
+                }, {
+                    'selector': 'thead th:last-child',
+                    'props': [('color', 'black')]  # Make last column header black
+                }, {
+                    'selector': 'td',
+                    'props': [('border-style', 'solid'),
+                            ('border-width', '0px 0px 1px 0px'),
+                            ('border-color', 'black'),
+                            ('text-align', 'center')]
+                }, {
+                    'selector': 'th',
+                    'props': [('border-style', 'solid'),
+                            ('border-width', '0px 0px 1px 0px'),
+                            ('border-color', 'black'),
+                            ('text-align', 'left')]
+                }]
+            ).set_properties(**{'padding': '2px',
+                                'font-size': '15px'})
+
+        # Displaying in Streamlit
+        def main():
+            #st.title("Your DataFrame")
+
+            # Convert the styled DataFrame to HTML without the index and display it
+            styled_html = style_table(tabela_9).to_html(escape=False, index=False, hide_index=True)
+            st.markdown(styled_html, unsafe_allow_html=True)
+
+        if __name__ == '__main__':
+            main()
 
 
         tabela_11 = pd.read_csv("18_Role_Extremo_Tático_Full.csv")
@@ -1250,11 +2092,57 @@ if choose == "Free Agents pelo Mundo":
 
         tabela_11 = pd.merge(tabela_11, tabela_12[['Atleta', 'L_Rating', 'L_Ranking', 'L_Percentil', 'Size']], on="Atleta", how="left")
         tabela_11 = tabela_11.rename(columns={'Equipe_Janela_Análise':'Equipe', 'Versão_Temporada':'Janela de Análise', 
-                                            'L_Rating':'Rating', 'L_Ranking':'Ranking', 'L_Percentil':'Percentil', 'Size':'Qtde Atletas'})
+                                            'L_Rating':'Rating', 'L_Ranking':'Ranking', 'L_Percentil':'Percentil', 'Size':'Qtde Atletas',
+                                            'Valor_Mercado': 'Valor'})
 
-        st.markdown("<h4 style='text-align: center;'>Extremos Táticos </b></h4>", unsafe_allow_html=True)
-        st.dataframe(tabela_11, use_container_width=True, hide_index=True)
+        st.markdown("<h4 style='text-align: center;'><br><b>Extremos Táticos </b></h4>", unsafe_allow_html=True)
+        #st.dataframe(tabela_11, use_container_width=True, hide_index=True)
 
+        # Styling DataFrame using Pandas
+        def style_table(df):
+            df = df.reset_index(drop=True)
+            # Ensure 'Rating' is rounded and formatted to 3 decimal places during styling
+            formatter = {"Rating": "{:.3f}", "Idade": "{:.0f}"}  # Format the 'Rating' column to 3 decimal places
+            #formatter = {"Idade": "{:.0f}"}
+            return df.style.format(formatter).set_table_styles(
+                [{
+                    'selector': 'thead th',
+                    'props': [('font-weight', 'bold'),
+                            ('border-style', 'solid'),
+                            ('border-width', '0px 0px 2px 0px'),
+                            ('border-color', 'black')]
+                }, {
+                    'selector': 'thead th:not(:first-child)',
+                    'props': [('text-align', 'center')]  # Centering all headers except the first
+                }, {
+                    'selector': 'thead th:last-child',
+                    'props': [('color', 'black')]  # Make last column header black
+                }, {
+                    'selector': 'td',
+                    'props': [('border-style', 'solid'),
+                            ('border-width', '0px 0px 1px 0px'),
+                            ('border-color', 'black'),
+                            ('text-align', 'center')]
+                }, {
+                    'selector': 'th',
+                    'props': [('border-style', 'solid'),
+                            ('border-width', '0px 0px 1px 0px'),
+                            ('border-color', 'black'),
+                            ('text-align', 'left')]
+                }]
+            ).set_properties(**{'padding': '2px',
+                                'font-size': '15px'})
+
+        # Displaying in Streamlit
+        def main():
+            #st.title("Your DataFrame")
+
+            # Convert the styled DataFrame to HTML without the index and display it
+            styled_html = style_table(tabela_11).to_html(escape=False, index=False, hide_index=True)
+            st.markdown(styled_html, unsafe_allow_html=True)
+
+        if __name__ == '__main__':
+            main()
 
         tabela_13 = pd.read_csv("19_Role_Extremo_Agudo_Full.csv")
         tabela_13 = tabela_13.loc[(tabela_13['Nacionalidade']==nacionalidade)&(tabela_13['Fim_Contrato']<=contrato)&(tabela_13['Versão_Temporada']==temporada)]   
@@ -1282,9 +2170,56 @@ if choose == "Free Agents pelo Mundo":
 
         tabela_13 = pd.merge(tabela_13, tabela_14[['Atleta', 'L_Rating', 'L_Ranking', 'L_Percentil', 'Size']], on="Atleta", how="left")
         tabela_13 = tabela_13.rename(columns={'Equipe_Janela_Análise':'Equipe', 'Versão_Temporada':'Janela de Análise', 
-                                            'L_Rating':'Rating', 'L_Ranking':'Ranking', 'L_Percentil':'Percentil', 'Size':'Qtde Atletas'})
-        st.markdown("<h4 style='text-align: center;'>Extremos Agudos </b></h4>", unsafe_allow_html=True)
-        st.dataframe(tabela_13, use_container_width=True, hide_index=True)
+                                            'L_Rating':'Rating', 'L_Ranking':'Ranking', 'L_Percentil':'Percentil', 'Size':'Qtde Atletas',
+                                            'Valor_Mercado': 'Valor'})
+        st.markdown("<h4 style='text-align: center;'><br><b>Extremos Agudos </b></h4>", unsafe_allow_html=True)
+        #st.dataframe(tabela_13, use_container_width=True, hide_index=True)
+
+        # Styling DataFrame using Pandas
+        def style_table(df):
+            df = df.reset_index(drop=True)
+            # Ensure 'Rating' is rounded and formatted to 3 decimal places during styling
+            formatter = {"Rating": "{:.3f}", "Idade": "{:.0f}"}  # Format the 'Rating' column to 3 decimal places
+            #formatter = {"Idade": "{:.0f}"}
+            return df.style.format(formatter).set_table_styles(
+                [{
+                    'selector': 'thead th',
+                    'props': [('font-weight', 'bold'),
+                            ('border-style', 'solid'),
+                            ('border-width', '0px 0px 2px 0px'),
+                            ('border-color', 'black')]
+                }, {
+                    'selector': 'thead th:not(:first-child)',
+                    'props': [('text-align', 'center')]  # Centering all headers except the first
+                }, {
+                    'selector': 'thead th:last-child',
+                    'props': [('color', 'black')]  # Make last column header black
+                }, {
+                    'selector': 'td',
+                    'props': [('border-style', 'solid'),
+                            ('border-width', '0px 0px 1px 0px'),
+                            ('border-color', 'black'),
+                            ('text-align', 'center')]
+                }, {
+                    'selector': 'th',
+                    'props': [('border-style', 'solid'),
+                            ('border-width', '0px 0px 1px 0px'),
+                            ('border-color', 'black'),
+                            ('text-align', 'left')]
+                }]
+            ).set_properties(**{'padding': '2px',
+                                'font-size': '15px'})
+
+        # Displaying in Streamlit
+        def main():
+            #st.title("Your DataFrame")
+
+            # Convert the styled DataFrame to HTML without the index and display it
+            styled_html = style_table(tabela_13).to_html(escape=False, index=False, hide_index=True)
+            st.markdown(styled_html, unsafe_allow_html=True)
+
+        if __name__ == '__main__':
+            main()
 
 ###############################################################################################################################
 ###############################################################################################################################
@@ -1317,9 +2252,56 @@ if choose == "Free Agents pelo Mundo":
 
         tabela_9 = pd.merge(tabela_9, tabela_10[['Atleta', 'L_Rating', 'L_Ranking', 'L_Percentil', 'Size']], on="Atleta", how="left")
         tabela_9 = tabela_9.rename(columns={'Equipe_Janela_Análise':'Equipe', 'Versão_Temporada':'Janela de Análise', 
-                                            'L_Rating':'Rating', 'L_Ranking':'Ranking', 'L_Percentil':'Percentil', 'Size':'Qtde Atletas'})
+                                            'L_Rating':'Rating', 'L_Ranking':'Ranking', 'L_Percentil':'Percentil', 'Size':'Qtde Atletas',
+                                            'Valor_Mercado': 'Valor'})
         st.markdown("<h4 style='text-align: center;'>Atacantes Referência </b></h4>", unsafe_allow_html=True)
-        st.dataframe(tabela_9, use_container_width=True, hide_index=True)
+        #st.dataframe(tabela_9, use_container_width=True, hide_index=True)
+
+        # Styling DataFrame using Pandas
+        def style_table(df):
+            df = df.reset_index(drop=True)
+            # Ensure 'Rating' is rounded and formatted to 3 decimal places during styling
+            formatter = {"Rating": "{:.3f}", "Idade": "{:.0f}"}  # Format the 'Rating' column to 3 decimal places
+            #formatter = {"Idade": "{:.0f}"}
+            return df.style.format(formatter).set_table_styles(
+                [{
+                    'selector': 'thead th',
+                    'props': [('font-weight', 'bold'),
+                            ('border-style', 'solid'),
+                            ('border-width', '0px 0px 2px 0px'),
+                            ('border-color', 'black')]
+                }, {
+                    'selector': 'thead th:not(:first-child)',
+                    'props': [('text-align', 'center')]  # Centering all headers except the first
+                }, {
+                    'selector': 'thead th:last-child',
+                    'props': [('color', 'black')]  # Make last column header black
+                }, {
+                    'selector': 'td',
+                    'props': [('border-style', 'solid'),
+                            ('border-width', '0px 0px 1px 0px'),
+                            ('border-color', 'black'),
+                            ('text-align', 'center')]
+                }, {
+                    'selector': 'th',
+                    'props': [('border-style', 'solid'),
+                            ('border-width', '0px 0px 1px 0px'),
+                            ('border-color', 'black'),
+                            ('text-align', 'left')]
+                }]
+            ).set_properties(**{'padding': '2px',
+                                'font-size': '15px'})
+
+        # Displaying in Streamlit
+        def main():
+            #st.title("Your DataFrame")
+
+            # Convert the styled DataFrame to HTML without the index and display it
+            styled_html = style_table(tabela_9).to_html(escape=False, index=False, hide_index=True)
+            st.markdown(styled_html, unsafe_allow_html=True)
+
+        if __name__ == '__main__':
+            main()
 
 
         tabela_11 = pd.read_csv("21_Role_Atacante_Móvel_Full.csv")
@@ -1348,10 +2330,57 @@ if choose == "Free Agents pelo Mundo":
 
         tabela_11 = pd.merge(tabela_11, tabela_12[['Atleta', 'L_Rating', 'L_Ranking', 'L_Percentil', 'Size']], on="Atleta", how="left")
         tabela_11 = tabela_11.rename(columns={'Equipe_Janela_Análise':'Equipe', 'Versão_Temporada':'Janela de Análise', 
-                                            'L_Rating':'Rating', 'L_Ranking':'Ranking', 'L_Percentil':'Percentil', 'Size':'Qtde Atletas'})
+                                            'L_Rating':'Rating', 'L_Ranking':'Ranking', 'L_Percentil':'Percentil', 'Size':'Qtde Atletas',
+                                            'Valor_Mercado': 'Valor'})
 
-        st.markdown("<h4 style='text-align: center;'>Atacantes Móveis </b></h4>", unsafe_allow_html=True)
-        st.dataframe(tabela_11, use_container_width=True, hide_index=True)
+        st.markdown("<h4 style='text-align: center;'><br><b>Atacantes Móveis </b></h4>", unsafe_allow_html=True)
+        #st.dataframe(tabela_11, use_container_width=True, hide_index=True)
+
+        # Styling DataFrame using Pandas
+        def style_table(df):
+            df = df.reset_index(drop=True)
+            # Ensure 'Rating' is rounded and formatted to 3 decimal places during styling
+            formatter = {"Rating": "{:.3f}", "Idade": "{:.0f}"}  # Format the 'Rating' column to 3 decimal places
+            #formatter = {"Idade": "{:.0f}"}
+            return df.style.format(formatter).set_table_styles(
+                [{
+                    'selector': 'thead th',
+                    'props': [('font-weight', 'bold'),
+                            ('border-style', 'solid'),
+                            ('border-width', '0px 0px 2px 0px'),
+                            ('border-color', 'black')]
+                }, {
+                    'selector': 'thead th:not(:first-child)',
+                    'props': [('text-align', 'center')]  # Centering all headers except the first
+                }, {
+                    'selector': 'thead th:last-child',
+                    'props': [('color', 'black')]  # Make last column header black
+                }, {
+                    'selector': 'td',
+                    'props': [('border-style', 'solid'),
+                            ('border-width', '0px 0px 1px 0px'),
+                            ('border-color', 'black'),
+                            ('text-align', 'center')]
+                }, {
+                    'selector': 'th',
+                    'props': [('border-style', 'solid'),
+                            ('border-width', '0px 0px 1px 0px'),
+                            ('border-color', 'black'),
+                            ('text-align', 'left')]
+                }]
+            ).set_properties(**{'padding': '2px',
+                                'font-size': '15px'})
+
+        # Displaying in Streamlit
+        def main():
+            #st.title("Your DataFrame")
+
+            # Convert the styled DataFrame to HTML without the index and display it
+            styled_html = style_table(tabela_11).to_html(escape=False, index=False, hide_index=True)
+            st.markdown(styled_html, unsafe_allow_html=True)
+
+        if __name__ == '__main__':
+            main()
 
 
         tabela_13 = pd.read_csv("22_Role_Segundo_Atacante_Full.csv")
@@ -1380,9 +2409,56 @@ if choose == "Free Agents pelo Mundo":
 
         tabela_13 = pd.merge(tabela_13, tabela_14[['Atleta', 'L_Rating', 'L_Ranking', 'L_Percentil', 'Size']], on="Atleta", how="left")
         tabela_13 = tabela_13.rename(columns={'Equipe_Janela_Análise':'Equipe', 'Versão_Temporada':'Janela de Análise', 
-                                            'L_Rating':'Rating', 'L_Ranking':'Ranking', 'L_Percentil':'Percentil', 'Size':'Qtde Atletas'})
-        st.markdown("<h4 style='text-align: center;'>Segundos Atacantes </b></h4>", unsafe_allow_html=True)
-        st.dataframe(tabela_13, use_container_width=True, hide_index=True)
+                                            'L_Rating':'Rating', 'L_Ranking':'Ranking', 'L_Percentil':'Percentil', 'Size':'Qtde Atletas',
+                                            'Valor_Mercado': 'Valor'})
+        st.markdown("<h4 style='text-align: center;'><br><b>Segundos Atacantes </b></h4>", unsafe_allow_html=True)
+        #st.dataframe(tabela_13, use_container_width=True, hide_index=True)
+
+        # Styling DataFrame using Pandas
+        def style_table(df):
+            df = df.reset_index(drop=True)
+            # Ensure 'Rating' is rounded and formatted to 3 decimal places during styling
+            formatter = {"Rating": "{:.3f}", "Idade": "{:.0f}"}  # Format the 'Rating' column to 3 decimal places
+            #formatter = {"Idade": "{:.0f}"}
+            return df.style.format(formatter).set_table_styles(
+                [{
+                    'selector': 'thead th',
+                    'props': [('font-weight', 'bold'),
+                            ('border-style', 'solid'),
+                            ('border-width', '0px 0px 2px 0px'),
+                            ('border-color', 'black')]
+                }, {
+                    'selector': 'thead th:not(:first-child)',
+                    'props': [('text-align', 'center')]  # Centering all headers except the first
+                }, {
+                    'selector': 'thead th:last-child',
+                    'props': [('color', 'black')]  # Make last column header black
+                }, {
+                    'selector': 'td',
+                    'props': [('border-style', 'solid'),
+                            ('border-width', '0px 0px 1px 0px'),
+                            ('border-color', 'black'),
+                            ('text-align', 'center')]
+                }, {
+                    'selector': 'th',
+                    'props': [('border-style', 'solid'),
+                            ('border-width', '0px 0px 1px 0px'),
+                            ('border-color', 'black'),
+                            ('text-align', 'left')]
+                }]
+            ).set_properties(**{'padding': '2px',
+                                'font-size': '15px'})
+
+        # Displaying in Streamlit
+        def main():
+            #st.title("Your DataFrame")
+
+            # Convert the styled DataFrame to HTML without the index and display it
+            styled_html = style_table(tabela_13).to_html(escape=False, index=False, hide_index=True)
+            st.markdown(styled_html, unsafe_allow_html=True)
+
+        if __name__ == '__main__':
+            main()
 
 ###############################################################################################################################
 ###############################################################################################################################
