@@ -17,9 +17,10 @@ import seaborn as sns
 
    
 #CABEÇALHO DO FORM
-st.markdown("<h1 style='text-align: center;'>Ranking de Jogadores de Futebol</h1>", unsafe_allow_html=True)
+st.markdown("<h1 style='text-align: center;'>Plataforma de Scouting</h1>", unsafe_allow_html=True)
+st.markdown("<h2 style='text-align: center;'>Mapeamento de Jogadores</h2>", unsafe_allow_html=True)
 st.markdown("<h6 style='text-align: center;'>app by @JAmerico1898</h6>", unsafe_allow_html=True)
-st.markdown("<h6 style='text-align: center;'>A análise contempla +40.000 jogadores atuando em 62 ligas, em 22 funções diferentes<br> e +900 minutos em campo nas 3 últimas temporadas. Dados do Wyscout.<br>Atualizado em 10Dez2023.</h6>", unsafe_allow_html=True)
+st.markdown("<h6 style='text-align: center;'>Atualizado em 26Maio2024 (dados do Wyscout).</h6>", unsafe_allow_html=True)
 st.markdown("---")
 
 df = pd.read_csv("jogadores.csv")
@@ -31,12 +32,13 @@ df7 = pd.read_csv("temporadas.csv")
 df8 = pd.read_csv("nacionalidades.csv")
 df9 = pd.read_csv("contratos.csv")
 df10 = pd.read_csv('jogadores_similares_2.csv')
+df14 = pd.read_csv("performance_historica.csv")
 
 with st.sidebar:
 
     jogadores = df1["Atleta"]
-    choose = option_menu("Galeria de Apps", ["Ranking de Jogadores", "Jogadores Similares", "10 Melhores da Liga", "Nacionais pelo Mundo", "Free Agents pelo Mundo", "Histórico do Jogador", "Sobre o APP"],
-                         icons=['graph-up-arrow', 'arrows-collapse-vertical', 'sort-numeric-down', 'globe2', 'search', 'mortarboard', 'book'],
+    choose = option_menu("Galeria de Apps", ["Ranking de Jogadores", "Jogadores Similares", "10 Melhores da Liga", "Nacionais pelo Mundo", "Free Agents pelo Mundo", "Histórico do Jogador", "Histórico de Performance", "Sobre o APP"],
+                         icons=['graph-up-arrow', 'arrows-collapse-vertical', 'sort-numeric-down', 'globe2', 'search', 'mortarboard', 'clock-history', 'book'],
                          menu_icon="universal-access", default_index=0, 
                          styles={
                          "container": {"padding": "5!important", "background-color": "#fafafa"},
@@ -45,6 +47,300 @@ with st.sidebar:
                          "nav-link-selected": {"background-color": "#02ab21"},    
                          }
                          )
+###############################################################################################################################
+###############################################################################################################################
+###############################################################################################################################
+###############################################################################################################################
+
+if choose == "Histórico de Performance":
+    st.markdown("<h2 style='text-align: center;'>Histórico de Performance de Jogadores</h2>", unsafe_allow_html=True)
+    st.markdown("<h3 style='text-align: center;'>2020-2024</h3>", unsafe_allow_html=True)
+    jogadores = st.selectbox("Digite o nome do seu jogador. A grafia deve ser exata!", options=jogadores, index=None, placeholder="Jogador")
+    if jogadores:
+        #Determinar a Equipe
+        df50 = df14.loc[(df14['Atleta']==jogadores)]
+        equipes = df50['Equipe atual'].unique()
+        equipe_atual = st.selectbox("Equipe em que o Jogador atua (junho/2024)", options=equipes)
+        if equipe_atual:
+            performance_historica = df14.loc[(df14['Atleta']==jogadores) & (df14['Equipe atual']==equipe_atual)]
+            unique_ids = performance_historica['ID'].unique()
+            if len(unique_ids) != 1:
+                ids = st.selectbox("Escolha o ID do Jogador.", options=unique_ids)
+                if ids:
+                    performance_historica = df14.loc[(df14['Atleta']==jogadores) & (df14['Equipe atual']==equipe_atual) & (df14['ID']==ids)]
+                    st.markdown("<h4 style='text-align: center;'>Performance do Jogador</b></h4>", unsafe_allow_html=True)
+                    st.markdown("<h5 style='text-align: center;'>Temporadas 2020-2024</b></h5>", unsafe_allow_html=True)
+                    fontsize=25
+                    markdown_amount_1 = f"<div style='text-align:center; font-size:{fontsize}px; font-weight:bold'>{jogadores}</div>"
+                    st.markdown(markdown_amount_1, unsafe_allow_html=True)
+                    st.markdown("---")
+
+                    def plot_percentil_for_atleta(df, atleta_name):
+                        # Filter the dataframe for the given Atleta
+                        atleta_df = df[df['Atleta'] == atleta_name].copy()
+
+                        # Replace 'nihil' in 'Percentil' with 0 and convert to numeric
+                        atleta_df['Percentil'] = atleta_df['Percentil'].replace('nihil', 0).astype(float).astype(int)
+                        atleta_df['Minutagem'] = atleta_df['Minutagem'].replace('nihil', 0).astype(float).astype(int)
+
+                        # Group by Temporada to get the highest Percentil for each combination
+                        atleta_df = atleta_df.groupby(['Temporada', 'Equipe', 'Liga', 'Perfil']).agg({
+                            'Percentil': 'max',
+                            'Ranking': 'max',  # Assuming the highest ranking is preferred
+                            'Size': 'max',     # Assuming the highest size is preferred
+                            'Minutagem': 'max',  # Keep max for calculating Minutagem
+                        }).reset_index()
+
+                        # Ensure Temporada is treated as an integer
+                        atleta_df['Temporada'] = atleta_df['Temporada'].astype(int)
+                        
+                        # Sort the data by Temporada and Percentil (descending)
+                        atleta_df_sorted = atleta_df.sort_values(by=['Temporada', 'Percentil', 'Equipe'], ascending=[True, False, True]).drop_duplicates(subset=['Temporada', 'Equipe'])
+
+                        #First Club Detection
+                        first_club = atleta_df_sorted.sort_values(by=['Temporada', 'Percentil'], ascending=[True, False]).drop_duplicates(subset=['Temporada'])
+
+                        #Second Club Detection
+                        # Convert DataFrames to sets of tuples
+                        set_1 = set(atleta_df_sorted.itertuples(index=False, name=None))
+                        set_2 = set(first_club.itertuples(index=False, name=None))
+
+                        # Get the difference between the first set and the second set
+                        difference_set = set_1 - set_2
+
+                        # Convert the result back to a DataFrame
+                        second_club = pd.DataFrame(list(difference_set), columns=atleta_df_sorted.columns)
+
+                        # Plotting
+                        fig, ax = plt.subplots(figsize=(10, 6))
+
+                        prev_equipe = None
+                        prev_temporada = None
+                        prev_percentil = None
+
+                        colors = ['blue', 'red', 'green', 'purple', 'orange']  # List of colors to alternate
+                        color_index = 0
+
+                        for i, row in first_club.iterrows():
+                            temporada = row['Temporada']
+                            equipe = row['Equipe']
+                            percentil = row['Percentil']
+                            ranking = row['Ranking']
+                            size = row['Size']
+                            minutagem = row['Minutagem']
+                            liga = row['Liga']
+                            perfil = row['Perfil']
+
+                            # Change color based on team switch
+                            if equipe != prev_equipe and prev_equipe is not None:
+                                color_index = (color_index + 1) % len(colors)
+                            color = colors[color_index]
+
+                            # Plot the current point
+                            ax.plot(temporada, percentil, 'o', color=color)
+                            
+                            # Annotate the current point
+                            if perfil == 'nihil':
+                                annotation = ""
+                            else:
+                                annotation = f"Percentil: {percentil}\nRanking: {ranking}/{size}\n{minutagem} min/jogo"
+                            
+                            ax.annotate(annotation, (temporada, percentil), textcoords="offset points", xytext=(0,15), ha='center', fontsize=11, color=color)
+
+                            # Annotate Liga below the x-ticks based on Perfil
+                            if perfil == 'nihil':
+                                below_annotation = "<900min\n jogados"
+                            else:
+                                below_annotation = f"{liga}\n{equipe}\n{perfil}"
+                            
+                            ax.annotate(below_annotation, (temporada, 0), textcoords="offset points", xytext=(0,-55), ha='center', fontsize=11, color=color)
+
+                            # Connect the current point with the previous point, if exists
+                            if prev_temporada is not None:
+                                ax.plot([prev_temporada, temporada], [prev_percentil, percentil], color=color)
+
+                            # Update previous values
+                            prev_equipe = equipe
+                            prev_temporada = temporada
+                            prev_percentil = percentil
+
+                        # Add the second club's data points (loose points)
+                        for i, row in second_club.iterrows():
+                            temporada = row['Temporada']
+                            equipe = row['Equipe']
+                            percentil = row['Percentil']
+                            ranking = row['Ranking']
+                            size = row['Size']
+                            minutagem = row['Minutagem']
+                            liga = row['Liga']
+                            perfil = row['Perfil']
+
+                            if temporada in first_club['Temporada'].values and equipe != first_club[first_club['Temporada'] == temporada]['Equipe'].values[0]:
+                                # Plot the second club's data point
+                                ax.plot(temporada, percentil, 'o', color='black')  # Use a different color for the second club's data point
+                                
+                                # Annotate the second club's data point
+                                annotation = f"Percentil: {percentil}\n{equipe}\n{perfil}\n{minutagem} min/jogo"
+                                ax.annotate(annotation, (temporada, percentil), textcoords="offset points", xytext=(0,-50), ha='center', fontsize=11, color='black')
+
+                        # Add labels and title
+                        ax.set_ylabel('Percentil', fontsize=14, fontweight='bold')
+                        ax.set_title(f'', pad=70)  # Increase the pad value to increase the distance
+                        ax.set_ylim(0, 100)  # Set y-axis range from 0 to 100
+
+                        # Adjust the left spine to create padding
+                        ax.spines['left'].set_position(('outward', 18))  # Adjust this value as needed
+                        ax.spines['left'].set_visible(False)
+                        ax.set_xticks([2020, 2021, 2022, 2023, 2024])  # Set x-ticks to the desired years
+                        ax.tick_params(axis='x', labelsize=12)
+                        plt.setp(ax.get_xticklabels(), fontweight='bold')
+                        ax.tick_params(axis='y', labelsize=12, length=0)
+                        plt.setp(ax.get_yticklabels(), fontweight='bold')
+                        ax.spines['top'].set_visible(False)
+                        ax.spines['right'].set_visible(False)
+                        st.pyplot(fig)
+
+                    # Assuming performance_historica is already loaded and processed
+                    # Replace 'ATLETA_NAME' with the actual name of the Atleta you want to plot
+                    plot_percentil_for_atleta(performance_historica, jogadores)
+            else:
+                performance_historica = df14.loc[(df14['Atleta']==jogadores) & (df14['Equipe atual']==equipe_atual)]
+                st.markdown("<h4 style='text-align: center;'>Performance do Jogador</b></h4>", unsafe_allow_html=True)
+                st.markdown("<h5 style='text-align: center;'>Temporadas 2020-2024</b></h5>", unsafe_allow_html=True)
+                fontsize=25
+                markdown_amount_1 = f"<div style='text-align:center; font-size:{fontsize}px; font-weight:bold'>{jogadores}</div>"
+                st.markdown(markdown_amount_1, unsafe_allow_html=True)
+                st.markdown("---")
+
+                def plot_percentil_for_atleta(df, atleta_name):
+                    # Filter the dataframe for the given Atleta
+                    atleta_df = df[df['Atleta'] == atleta_name].copy()
+
+                    # Replace 'nihil' in 'Percentil' with 0 and convert to numeric
+                    atleta_df['Percentil'] = atleta_df['Percentil'].replace('nihil', 0).astype(float).astype(int)
+                    atleta_df['Minutagem'] = atleta_df['Minutagem'].replace('nihil', 0).astype(float).astype(int)
+
+                    # Group by Temporada to get the highest Percentil for each combination
+                    atleta_df = atleta_df.groupby(['Temporada', 'Equipe', 'Liga', 'Perfil']).agg({
+                        'Percentil': 'max',
+                        'Ranking': 'max',  # Assuming the highest ranking is preferred
+                        'Size': 'max',     # Assuming the highest size is preferred
+                        'Minutagem': 'max',  # Keep max for calculating Minutagem
+                    }).reset_index()
+
+                    # Ensure Temporada is treated as an integer
+                    atleta_df['Temporada'] = atleta_df['Temporada'].astype(int)
+                    
+                    # Sort the data by Temporada and Percentil (descending)
+                    atleta_df_sorted = atleta_df.sort_values(by=['Temporada', 'Percentil', 'Equipe'], ascending=[True, False, True]).drop_duplicates(subset=['Temporada', 'Equipe'])
+
+                    #First Club Detection
+                    first_club = atleta_df_sorted.sort_values(by=['Temporada', 'Percentil'], ascending=[True, False]).drop_duplicates(subset=['Temporada'])
+
+                    #Second Club Detection
+                    # Convert DataFrames to sets of tuples
+                    set_1 = set(atleta_df_sorted.itertuples(index=False, name=None))
+                    set_2 = set(first_club.itertuples(index=False, name=None))
+
+                    # Get the difference between the first set and the second set
+                    difference_set = set_1 - set_2
+
+                    # Convert the result back to a DataFrame
+                    second_club = pd.DataFrame(list(difference_set), columns=atleta_df_sorted.columns)
+
+                    # Plotting
+                    fig, ax = plt.subplots(figsize=(10, 6))
+
+                    prev_equipe = None
+                    prev_temporada = None
+                    prev_percentil = None
+
+                    colors = ['blue', 'red', 'green', 'purple', 'orange']  # List of colors to alternate
+                    color_index = 0
+
+                    for i, row in first_club.iterrows():
+                        temporada = row['Temporada']
+                        equipe = row['Equipe']
+                        percentil = row['Percentil']
+                        ranking = row['Ranking']
+                        size = row['Size']
+                        minutagem = row['Minutagem']
+                        liga = row['Liga']
+                        perfil = row['Perfil']
+
+                        # Change color based on team switch
+                        if equipe != prev_equipe and prev_equipe is not None:
+                            color_index = (color_index + 1) % len(colors)
+                        color = colors[color_index]
+
+                        # Plot the current point
+                        ax.plot(temporada, percentil, 'o', color=color)
+                        
+                        # Annotate the current point
+                        if perfil == 'nihil':
+                            annotation = ""
+                        else:
+                            annotation = f"Percentil: {percentil}\nRanking: {ranking}/{size}\n{minutagem} min/jogo"
+                        
+                        ax.annotate(annotation, (temporada, percentil), textcoords="offset points", xytext=(0,15), ha='center', fontsize=11, color=color)
+
+                        # Annotate Liga below the x-ticks based on Perfil
+                        if perfil == 'nihil':
+                            below_annotation = "<900min\n jogados"
+                        else:
+                            below_annotation = f"{liga}\n{equipe}\n{perfil}"
+                        
+                        ax.annotate(below_annotation, (temporada, 0), textcoords="offset points", xytext=(0,-55), ha='center', fontsize=11, color=color)
+
+                        # Connect the current point with the previous point, if exists
+                        if prev_temporada is not None:
+                            ax.plot([prev_temporada, temporada], [prev_percentil, percentil], color=color)
+
+                        # Update previous values
+                        prev_equipe = equipe
+                        prev_temporada = temporada
+                        prev_percentil = percentil
+
+                    # Add the second club's data points (loose points)
+                    for i, row in second_club.iterrows():
+                        temporada = row['Temporada']
+                        equipe = row['Equipe']
+                        percentil = row['Percentil']
+                        ranking = row['Ranking']
+                        size = row['Size']
+                        minutagem = row['Minutagem']
+                        liga = row['Liga']
+                        perfil = row['Perfil']
+
+                        if temporada in first_club['Temporada'].values and equipe != first_club[first_club['Temporada'] == temporada]['Equipe'].values[0]:
+                            # Plot the second club's data point
+                            ax.plot(temporada, percentil, 'o', color='black')  # Use a different color for the second club's data point
+                            
+                            # Annotate the second club's data point
+                            annotation = f"Percentil: {percentil}\n{equipe}\n{perfil}\n{minutagem} min/jogo"
+                            ax.annotate(annotation, (temporada, percentil), textcoords="offset points", xytext=(0,-50), ha='center', fontsize=11, color='black')
+
+                    # Add labels and title
+                    ax.set_ylabel('Percentil', fontsize=14, fontweight='bold')
+                    ax.set_title(f'', pad=70)  # Increase the pad value to increase the distance
+                    ax.set_ylim(0, 100)  # Set y-axis range from 0 to 100
+
+                    # Adjust the left spine to create padding
+                    ax.spines['left'].set_position(('outward', 18))  # Adjust this value as needed
+                    ax.spines['left'].set_visible(False)
+                    ax.set_xticks([2020, 2021, 2022, 2023, 2024])  # Set x-ticks to the desired years
+                    ax.tick_params(axis='x', labelsize=12)
+                    plt.setp(ax.get_xticklabels(), fontweight='bold')
+                    ax.tick_params(axis='y', labelsize=12, length=0)
+                    plt.setp(ax.get_yticklabels(), fontweight='bold')
+                    ax.spines['top'].set_visible(False)
+                    ax.spines['right'].set_visible(False)
+                    st.pyplot(fig)
+
+                # Assuming performance_historica is already loaded and processed
+                # Replace 'ATLETA_NAME' with the actual name of the Atleta you want to plot
+                plot_percentil_for_atleta(performance_historica, jogadores)
+
 ###############################################################################################################################
 ###############################################################################################################################
 ###############################################################################################################################
@@ -61,7 +357,7 @@ if choose == "Histórico do Jogador":
         nacionalidade = st.selectbox("Escolha a Nacionalidade do Jogador", options=nacionalidades)
    
 #    if jogadores and nacionalidade:
-        st.markdown("<h4 style='text-align: center;'>Histórico do Jogador<br>Temporadas 2021/2022/2023<br>ou<br>Temporadas 2020-21/2021-22/2022-23</b></h4>", unsafe_allow_html=True)
+        st.markdown("<h4 style='text-align: center;'>Histórico do Jogador<br>Temporadas 2020/2021/2022/2023/2024</b></h4>", unsafe_allow_html=True)
         historico = historico.loc[(historico['Atleta']==jogadores)&(historico['Nacionalidade']==nacionalidade)]
         historico = historico.iloc[:, np.r_[0, 2, 9, 10, 13, 15, 16]]
         historico = historico.rename(columns={"Equipe_Janela_Análise": "Equipe",
@@ -69,7 +365,7 @@ if choose == "Histórico do Jogador":
                                     "Posição.1": "Posição" 
                                     })
             
-        #st.dataframe(historico, use_container_width=True, hide_index=True)
+        historico = historico.sort_values(by='Temporada', ascending=False)
 
         # Styling DataFrame using Pandas
         def style_table(df):
@@ -131,6 +427,7 @@ if choose == "10 Melhores da Liga":
             tabela_3 = tabela_3[(tabela_3['Liga']==liga)&(tabela_3['Versão_Temporada']==temporada)]
             tabela_3 = tabela_3.iloc[:, np.r_[1, 30, 3, 7, 9:12, 15]]
             tabela_3 = tabela_3.rename(columns={'Equipe_Janela_Análise':'Equipe', 'Posição_Wyscout':'Posição', 'Versão_Temporada':'Janela de Análise', 'Interceptações.1':'Interceptações'})
+            tabela_3 = tabela_3.sort_values(by='Rating', ascending=False)
             tabela_3 = tabela_3.head(10)
             #st.dataframe(tabela_3, use_container_width=True, hide_index=True)
 
@@ -185,6 +482,7 @@ if choose == "10 Melhores da Liga":
             tabela_4 = tabela_4[(tabela_4['Liga']==liga)&(tabela_4['Versão_Temporada']==temporada)]
             tabela_4 = tabela_4.iloc[:, np.r_[1, 33, 3, 7, 9:12, 15]]
             tabela_4 = tabela_4.rename(columns={'Equipe_Janela_Análise':'Equipe', 'Posição_Wyscout':'Posição', 'Versão_Temporada':'Janela de Análise', 'Interceptações.1':'Interceptações'})
+            tabela_4 = tabela_4.sort_values(by='Rating', ascending=False)
             tabela_4 = tabela_4.head(10)
             #st.dataframe(tabela_4, use_container_width=True, hide_index=True)
 
@@ -241,6 +539,7 @@ if choose == "10 Melhores da Liga":
             tabela_3 = tabela_3[(tabela_3['Liga']==liga)&(tabela_3['Versão_Temporada']==temporada)]
             tabela_3 = tabela_3.iloc[:, np.r_[1, 29, 3, 7, 9:12, 15]]
             tabela_3 = tabela_3.rename(columns={'Equipe_Janela_Análise':'Equipe'})
+            tabela_3 = tabela_3.sort_values(by='Rating', ascending=False)
             tabela_3 = tabela_3.head(10)
             #st.dataframe(tabela_3, use_container_width=True, hide_index=True)
 
@@ -294,6 +593,7 @@ if choose == "10 Melhores da Liga":
             tabela_4 = tabela_4[(tabela_4['Liga']==liga)&(tabela_4['Versão_Temporada']==temporada)]
             tabela_4 = tabela_4.iloc[:, np.r_[1, 38, 3, 7, 9:12, 15]]
             tabela_4 = tabela_4.rename(columns={'Equipe_Janela_Análise':'Equipe'})
+            tabela_4 = tabela_4.sort_values(by='Rating', ascending=False)
             tabela_4 = tabela_4.head(10)
             #st.dataframe(tabela_4, use_container_width=True, hide_index=True)
 
@@ -347,6 +647,7 @@ if choose == "10 Melhores da Liga":
             tabela_5 = tabela_5[(tabela_5['Liga']==liga)&(tabela_5['Versão_Temporada']==temporada)]
             tabela_5 = tabela_5.iloc[:, np.r_[1, 41, 3, 7, 9:12, 15]]
             tabela_5 = tabela_5.rename(columns={'Equipe_Janela_Análise':'Equipe'})
+            tabela_5 = tabela_5.sort_values(by='Rating', ascending=False)
             tabela_5 = tabela_5.head(10)
             #st.dataframe(tabela_5, use_container_width=True, hide_index=True)
 
@@ -401,6 +702,7 @@ if choose == "10 Melhores da Liga":
             tabela_6 = tabela_6[(tabela_6['Liga']==liga)&(tabela_6['Versão_Temporada']==temporada)]
             tabela_6 = tabela_6.iloc[:, np.r_[1, 29, 3, 7, 9:12, 15]]
             tabela_6 = tabela_6.rename(columns={'Equipe_Janela_Análise':'Equipe'})
+            tabela_6 = tabela_6.sort_values(by='Rating', ascending=False)
             tabela_6 = tabela_6.head(10)
             #st.dataframe(tabela_6, use_container_width=True, hide_index=True)
 
@@ -454,6 +756,7 @@ if choose == "10 Melhores da Liga":
             tabela_7 = tabela_7[(tabela_7['Liga']==liga)&(tabela_7['Versão_Temporada']==temporada)]
             tabela_7 = tabela_7.iloc[:, np.r_[1, 33, 3, 7, 9:12, 15]]
             tabela_7 = tabela_7.rename(columns={'Equipe_Janela_Análise':'Equipe'})
+            tabela_7 = tabela_7.sort_values(by='Rating', ascending=False)
             tabela_7 = tabela_7.head(10)
             #st.dataframe(tabela_7, use_container_width=True, hide_index=True)
 
@@ -507,6 +810,7 @@ if choose == "10 Melhores da Liga":
             tabela_8 = tabela_8[(tabela_8['Liga']==liga)&(tabela_8['Versão_Temporada']==temporada)]
             tabela_8 = tabela_8.iloc[:, np.r_[1, 36, 3, 7, 9:12, 15]]
             tabela_8 = tabela_8.rename(columns={'Equipe_Janela_Análise':'Equipe'})
+            tabela_8 = tabela_8.sort_values(by='Rating', ascending=False)
             tabela_8 = tabela_8.head(10)
             #st.dataframe(tabela_8, use_container_width=True, hide_index=True)
 
@@ -562,6 +866,7 @@ if choose == "10 Melhores da Liga":
             tabela_12 = tabela_12[(tabela_12['Liga']==liga)&(tabela_12['Versão_Temporada']==temporada)]
             tabela_12 = tabela_12.iloc[:, np.r_[1, 27, 3, 7, 9:12, 15]]
             tabela_12 = tabela_12.rename(columns={'Equipe_Janela_Análise':'Equipe'})
+            tabela_12 = tabela_12.sort_values(by='Rating', ascending=False)
             tabela_12 = tabela_12.head(10)
             #st.dataframe(tabela_12, use_container_width=True, hide_index=True)
 
@@ -615,6 +920,7 @@ if choose == "10 Melhores da Liga":
             tabela_13 = tabela_13[(tabela_13['Liga']==liga)&(tabela_13['Versão_Temporada']==temporada)]
             tabela_13 = tabela_13.iloc[:, np.r_[1, 32, 3, 7, 9:12, 15]]
             tabela_13 = tabela_13.rename(columns={'Equipe_Janela_Análise':'Equipe'})
+            tabela_13 = tabela_13.sort_values(by='Rating', ascending=False)
             tabela_13 = tabela_13.head(10)
             #st.dataframe(tabela_13, use_container_width=True, hide_index=True)
 
@@ -668,6 +974,7 @@ if choose == "10 Melhores da Liga":
             tabela_14 = tabela_14[(tabela_14['Liga']==liga)&(tabela_14['Versão_Temporada']==temporada)]
             tabela_14 = tabela_14.iloc[:, np.r_[1, 34, 3, 7, 9:12, 15]]
             tabela_14 = tabela_14.rename(columns={'Equipe_Janela_Análise':'Equipe'})
+            tabela_14 = tabela_14.sort_values(by='Rating', ascending=False)
             tabela_14 = tabela_14.head(10)
             #st.dataframe(tabela_14, use_container_width=True, hide_index=True)
 
@@ -722,6 +1029,7 @@ if choose == "10 Melhores da Liga":
             tabela_12 = tabela_12[(tabela_12['Liga']==liga)&(tabela_12['Versão_Temporada']==temporada)]
             tabela_12 = tabela_12.iloc[:, np.r_[1, 36, 3, 7, 9:12, 15]]
             tabela_12 = tabela_12.rename(columns={'Equipe_Janela_Análise':'Equipe'})
+            tabela_12 = tabela_12.sort_values(by='Rating', ascending=False)
             tabela_12 = tabela_12.head(10)
             #st.dataframe(tabela_12, use_container_width=True, hide_index=True)
 
@@ -775,6 +1083,7 @@ if choose == "10 Melhores da Liga":
             tabela_13 = tabela_13[(tabela_13['Liga']==liga)&(tabela_13['Versão_Temporada']==temporada)]
             tabela_13 = tabela_13.iloc[:, np.r_[1, 33, 3, 7, 9:12, 15]]
             tabela_13 = tabela_13.rename(columns={'Equipe_Janela_Análise':'Equipe'})
+            tabela_13 = tabela_13.sort_values(by='Rating', ascending=False)
             tabela_13 = tabela_13.head(10)
             #st.dataframe(tabela_13, use_container_width=True, hide_index=True)
 
@@ -828,6 +1137,7 @@ if choose == "10 Melhores da Liga":
             tabela_14 = tabela_14[(tabela_14['Liga']==liga)&(tabela_14['Versão_Temporada']==temporada)]
             tabela_14 = tabela_14.iloc[:, np.r_[1, 36, 3, 7, 9:12, 15]]
             tabela_14 = tabela_14.rename(columns={'Equipe_Janela_Análise':'Equipe'})
+            tabela_14 = tabela_14.sort_values(by='Rating', ascending=False)
             tabela_14 = tabela_14.head(10)
             #st.dataframe(tabela_14, use_container_width=True, hide_index=True)
 
@@ -882,6 +1192,7 @@ if choose == "10 Melhores da Liga":
             tabela_15 = tabela_15[(tabela_15['Liga']==liga)&(tabela_15['Versão_Temporada']==temporada)]
             tabela_15 = tabela_15.iloc[:, np.r_[1, 33, 3, 7, 9:12, 15]]
             tabela_15 = tabela_15.rename(columns={'Equipe_Janela_Análise':'Equipe'})
+            tabela_15 = tabela_15.sort_values(by='Rating', ascending=False)
             tabela_15 = tabela_15.head(10)
             #st.dataframe(tabela_15, use_container_width=True, hide_index=True)
 
@@ -935,6 +1246,7 @@ if choose == "10 Melhores da Liga":
             tabela_16 = tabela_16[(tabela_16['Liga']==liga)&(tabela_16['Versão_Temporada']==temporada)]
             tabela_16 = tabela_16.iloc[:, np.r_[1, 40, 3, 7, 9:12, 15]]
             tabela_16 = tabela_16.rename(columns={'Equipe_Janela_Análise':'Equipe'})
+            tabela_16 = tabela_16.sort_values(by='Rating', ascending=False)
             tabela_16 = tabela_16.head(10)
             #st.dataframe(tabela_16, use_container_width=True, hide_index=True)
 
@@ -989,6 +1301,7 @@ if choose == "10 Melhores da Liga":
             tabela_17 = tabela_17[(tabela_17['Liga']==liga)&(tabela_17['Versão_Temporada']==temporada)]
             tabela_17 = tabela_17.iloc[:, np.r_[1, 36, 3, 7, 9:12, 15]]
             tabela_17 = tabela_17.rename(columns={'Equipe_Janela_Análise':'Equipe'})
+            tabela_17 = tabela_17.sort_values(by='Rating', ascending=False)
             tabela_17 = tabela_17.head(10)
             #st.dataframe(tabela_17, use_container_width=True, hide_index=True)
 
@@ -1042,6 +1355,7 @@ if choose == "10 Melhores da Liga":
             tabela_18 = tabela_18[(tabela_18['Liga']==liga)&(tabela_18['Versão_Temporada']==temporada)]
             tabela_18 = tabela_18.iloc[:, np.r_[1, 30, 3, 7, 9:12, 15]]
             tabela_18 = tabela_18.rename(columns={'Equipe_Janela_Análise':'Equipe'})
+            tabela_18 = tabela_18.sort_values(by='Rating', ascending=False)
             tabela_18 = tabela_18.head(10)
             #st.dataframe(tabela_18, use_container_width=True, hide_index=True)
 
@@ -1095,6 +1409,7 @@ if choose == "10 Melhores da Liga":
             tabela_19 = tabela_19[(tabela_19['Liga']==liga)&(tabela_19['Versão_Temporada']==temporada)]
             tabela_19 = tabela_19.iloc[:, np.r_[1, 36, 3, 7, 9:12, 15]]
             tabela_19 = tabela_19.rename(columns={'Equipe_Janela_Análise':'Equipe'})
+            tabela_19 = tabela_19.sort_values(by='Rating', ascending=False)
             tabela_19 = tabela_19.head(10)
             #st.dataframe(tabela_19, use_container_width=True, hide_index=True)
 
@@ -1149,6 +1464,7 @@ if choose == "10 Melhores da Liga":
             tabela_17 = tabela_17[(tabela_17['Liga']==liga)&(tabela_17['Versão_Temporada']==temporada)]
             tabela_17 = tabela_17.iloc[:, np.r_[1, 33, 3, 7, 9:12, 15]]
             tabela_17 = tabela_17.rename(columns={'Equipe_Janela_Análise':'Equipe'})
+            tabela_17 = tabela_17.sort_values(by='Rating', ascending=False)
             tabela_17 = tabela_17.head(10)
             #st.dataframe(tabela_17, use_container_width=True, hide_index=True)
 
@@ -1202,6 +1518,7 @@ if choose == "10 Melhores da Liga":
             tabela_18 = tabela_18[(tabela_18['Liga']==liga)&(tabela_18['Versão_Temporada']==temporada)]
             tabela_18 = tabela_18.iloc[:, np.r_[1, 32, 3, 7, 9:12, 15]]
             tabela_18 = tabela_18.rename(columns={'Equipe_Janela_Análise':'Equipe'})
+            tabela_18 = tabela_18.sort_values(by='Rating', ascending=False)
             tabela_18 = tabela_18.head(10)
             #st.dataframe(tabela_18, use_container_width=True, hide_index=True)
 
@@ -1255,6 +1572,7 @@ if choose == "10 Melhores da Liga":
             tabela_19 = tabela_19[(tabela_19['Liga']==liga)&(tabela_19['Versão_Temporada']==temporada)]
             tabela_19 = tabela_19.iloc[:, np.r_[1, 36, 3, 7, 9:12, 15]]
             tabela_19 = tabela_19.rename(columns={'Equipe_Janela_Análise':'Equipe'})
+            tabela_19 = tabela_19.sort_values(by='Rating', ascending=False)
             tabela_19 = tabela_19.head(10)
             #st.dataframe(tabela_19, use_container_width=True, hide_index=True)
 
@@ -1316,7 +1634,7 @@ if choose == "Nacionais pelo Mundo":
              'DEN', 'GRE', 'HOL', 'JAP', 'MEX', 'SAUD', 'SCT', 'TUR', 'UAE', 'USA', 'BUL', 'AUT', 'QAT']
     nacionalidade = st.selectbox("Escolha a Nacionalidade do Atleta", options=nacionalidades)
     posição = st.selectbox("Escolha a Posição do Atleta", options=posições)
-    temporada = 2023
+    temporada = 2024
     
     if nacionalidade and temporada:
         if posição == "Goleiro":
@@ -1334,6 +1652,7 @@ if choose == "Nacionais pelo Mundo":
                                 | (tabela_5['Liga'] == 'POR2') | (tabela_5['Liga'] == 'BUL') | (tabela_5['Liga'] == 'AUT') | (tabela_5['Liga'] == 'QAT')
                                 | (tabela_5['Liga'] == 'CRO') | (tabela_5['Liga'] == 'CZH') | (tabela_5['Liga'] == 'NOR') | (tabela_5['Liga'] == 'POL')
                                 | (tabela_5['Liga'] == 'SCT') | (tabela_5['Liga'] == 'SER') | (tabela_5['Liga'] == 'SPA2')]
+            tabela_5 = tabela_5.sort_values(by='Rating', ascending=False)
             tabela_5 = tabela_5.head(50)
             #st.dataframe(tabela_5, use_container_width=True, hide_index=True)
 
@@ -1397,6 +1716,7 @@ if choose == "Nacionais pelo Mundo":
                                 | (tabela_6['Liga'] == 'POR2') | (tabela_6['Liga'] == 'BUL') | (tabela_6['Liga'] == 'AUT') | (tabela_6['Liga'] == 'QAT')
                                 | (tabela_6['Liga'] == 'CRO') | (tabela_6['Liga'] == 'CZH') | (tabela_6['Liga'] == 'NOR') | (tabela_6['Liga'] == 'POL')
                                 | (tabela_6['Liga'] == 'SCT') | (tabela_6['Liga'] == 'SER') | (tabela_6['Liga'] == 'SPA2')]
+            tabela_6 = tabela_6.sort_values(by='Rating', ascending=False)
             tabela_6 = tabela_6.head(50)
             #st.dataframe(tabela_6, use_container_width=True, hide_index=True)
 
@@ -1461,6 +1781,7 @@ if choose == "Nacionais pelo Mundo":
                                 | (tabela_5['Liga'] == 'POR2') | (tabela_5['Liga'] == 'BUL') | (tabela_5['Liga'] == 'AUT') | (tabela_5['Liga'] == 'QAT')
                                 | (tabela_5['Liga'] == 'CRO') | (tabela_5['Liga'] == 'CZH') | (tabela_5['Liga'] == 'NOR') | (tabela_5['Liga'] == 'POL')
                                 | (tabela_5['Liga'] == 'SCT') | (tabela_5['Liga'] == 'SER') | (tabela_5['Liga'] == 'SPA2')]
+            tabela_5 = tabela_5.sort_values(by='Rating', ascending=False)
             tabela_5 = tabela_5.head(50)
             #st.dataframe(tabela_5, use_container_width=True, hide_index=True)
 
@@ -1524,6 +1845,7 @@ if choose == "Nacionais pelo Mundo":
                                 | (tabela_6['Liga'] == 'POR2') | (tabela_6['Liga'] == 'BUL') | (tabela_6['Liga'] == 'AUT') | (tabela_6['Liga'] == 'QAT')
                                 | (tabela_6['Liga'] == 'CRO') | (tabela_6['Liga'] == 'CZH') | (tabela_6['Liga'] == 'NOR') | (tabela_6['Liga'] == 'POL')
                                 | (tabela_6['Liga'] == 'SCT') | (tabela_6['Liga'] == 'SER') | (tabela_6['Liga'] == 'SPA2')]
+            tabela_6 = tabela_6.sort_values(by='Rating', ascending=False)
             tabela_6 = tabela_6.head(50)
             #st.dataframe(tabela_6, use_container_width=True, hide_index=True)
 
@@ -1586,6 +1908,7 @@ if choose == "Nacionais pelo Mundo":
                                 | (tabela_7['Liga'] == 'POR2') | (tabela_7['Liga'] == 'BUL') | (tabela_7['Liga'] == 'AUT') | (tabela_7['Liga'] == 'QAT')
                                 | (tabela_7['Liga'] == 'CRO') | (tabela_7['Liga'] == 'CZH') | (tabela_7['Liga'] == 'NOR') | (tabela_7['Liga'] == 'POL')
                                 | (tabela_7['Liga'] == 'SCT') | (tabela_7['Liga'] == 'SER') | (tabela_7['Liga'] == 'SPA2')]
+            tabela_7 = tabela_7.sort_values(by='Rating', ascending=False)
             tabela_7 = tabela_7.head(50)
             #st.dataframe(tabela_7, use_container_width=True, hide_index=True)
 
@@ -1649,6 +1972,7 @@ if choose == "Nacionais pelo Mundo":
                                 | (tabela_8['Liga'] == 'POR2') | (tabela_8['Liga'] == 'BUL') | (tabela_8['Liga'] == 'AUT') | (tabela_8['Liga'] == 'QAT')
                                 | (tabela_8['Liga'] == 'CRO') | (tabela_8['Liga'] == 'CZH') | (tabela_8['Liga'] == 'NOR') | (tabela_8['Liga'] == 'POL')
                                 | (tabela_8['Liga'] == 'SCT') | (tabela_8['Liga'] == 'SER') | (tabela_8['Liga'] == 'SPA2')]
+            tabela_8 = tabela_8.sort_values(by='Rating', ascending=False)
             tabela_8 = tabela_8.head(50)
             #st.dataframe(tabela_8, use_container_width=True, hide_index=True)
 
@@ -1711,6 +2035,7 @@ if choose == "Nacionais pelo Mundo":
                                 | (tabela_9['Liga'] == 'POR2') | (tabela_9['Liga'] == 'BUL') | (tabela_9['Liga'] == 'AUT') | (tabela_9['Liga'] == 'QAT')
                                 | (tabela_9['Liga'] == 'CRO') | (tabela_9['Liga'] == 'CZH') | (tabela_9['Liga'] == 'NOR') | (tabela_9['Liga'] == 'POL')
                                 | (tabela_9['Liga'] == 'SCT') | (tabela_9['Liga'] == 'SER') | (tabela_9['Liga'] == 'SPA2')]
+            tabela_9 = tabela_9.sort_values(by='Rating', ascending=False)
             tabela_9 = tabela_9.head(50)
             #st.dataframe(tabela_9, use_container_width=True, hide_index=True)
 
@@ -1773,6 +2098,7 @@ if choose == "Nacionais pelo Mundo":
                                 | (tabela_10['Liga'] == 'POR2') | (tabela_10['Liga'] == 'BUL') | (tabela_10['Liga'] == 'AUT') | (tabela_10['Liga'] == 'QAT')
                                 | (tabela_10['Liga'] == 'CRO') | (tabela_10['Liga'] == 'CZH') | (tabela_10['Liga'] == 'NOR') | (tabela_10['Liga'] == 'POL')
                                 | (tabela_10['Liga'] == 'SCT') | (tabela_10['Liga'] == 'SER') | (tabela_10['Liga'] == 'SPA2')]
+            tabela_10 = tabela_10.sort_values(by='Rating', ascending=False)
             tabela_10 = tabela_10.head(50)
             #st.dataframe(tabela_10, use_container_width=True, hide_index=True)
 
@@ -1836,6 +2162,7 @@ if choose == "Nacionais pelo Mundo":
                                 | (tabela_11['Liga'] == 'POR2') | (tabela_11['Liga'] == 'BUL') | (tabela_11['Liga'] == 'AUT') | (tabela_11['Liga'] == 'QAT')
                                 | (tabela_11['Liga'] == 'CRO') | (tabela_11['Liga'] == 'CZH') | (tabela_11['Liga'] == 'NOR') | (tabela_11['Liga'] == 'POL')
                                 | (tabela_11['Liga'] == 'SCT') | (tabela_11['Liga'] == 'SER') | (tabela_11['Liga'] == 'SPA2')]
+            tabela_11 = tabela_11.sort_values(by='Rating', ascending=False)
             tabela_11 = tabela_11.head(50)
             #st.dataframe(tabela_11, use_container_width=True, hide_index=True)
 
@@ -1899,6 +2226,7 @@ if choose == "Nacionais pelo Mundo":
                                 | (tabela_12['Liga'] == 'POR2') | (tabela_12['Liga'] == 'BUL') | (tabela_12['Liga'] == 'AUT') | (tabela_12['Liga'] == 'QAT')
                                 | (tabela_12['Liga'] == 'CRO') | (tabela_12['Liga'] == 'CZH') | (tabela_12['Liga'] == 'NOR') | (tabela_12['Liga'] == 'POL')
                                 | (tabela_12['Liga'] == 'SCT') | (tabela_12['Liga'] == 'SER') | (tabela_12['Liga'] == 'SPA2')]
+            tabela_12 = tabela_12.sort_values(by='Rating', ascending=False)
             tabela_12 = tabela_12.head(50)
             #st.dataframe(tabela_12, use_container_width=True, hide_index=True)
 
@@ -1961,6 +2289,7 @@ if choose == "Nacionais pelo Mundo":
                                 | (tabela_13['Liga'] == 'POR2') | (tabela_13['Liga'] == 'BUL') | (tabela_13['Liga'] == 'AUT') | (tabela_13['Liga'] == 'QAT')
                                 | (tabela_13['Liga'] == 'CRO') | (tabela_13['Liga'] == 'CZH') | (tabela_13['Liga'] == 'NOR') | (tabela_13['Liga'] == 'POL')
                                 | (tabela_13['Liga'] == 'SCT') | (tabela_13['Liga'] == 'SER') | (tabela_13['Liga'] == 'SPA2')]
+            tabela_13 = tabela_13.sort_values(by='Rating', ascending=False)
             tabela_13 = tabela_13.head(50)
             #st.dataframe(tabela_13, use_container_width=True, hide_index=True)
 
@@ -2024,6 +2353,7 @@ if choose == "Nacionais pelo Mundo":
                                 | (tabela_11['Liga'] == 'POR2') | (tabela_11['Liga'] == 'BUL') | (tabela_11['Liga'] == 'AUT') | (tabela_11['Liga'] == 'QAT')
                                 | (tabela_11['Liga'] == 'CRO') | (tabela_11['Liga'] == 'CZH') | (tabela_11['Liga'] == 'NOR') | (tabela_11['Liga'] == 'POL')
                                 | (tabela_11['Liga'] == 'SCT') | (tabela_11['Liga'] == 'SER') | (tabela_11['Liga'] == 'SPA2')]
+            tabela_11 = tabela_11.sort_values(by='Rating', ascending=False)
             tabela_11 = tabela_11.head(50)
             #st.dataframe(tabela_11, use_container_width=True, hide_index=True)
 
@@ -2086,6 +2416,7 @@ if choose == "Nacionais pelo Mundo":
                                 | (tabela_12['Liga'] == 'POR2') | (tabela_12['Liga'] == 'BUL') | (tabela_12['Liga'] == 'AUT') | (tabela_12['Liga'] == 'QAT')
                                 | (tabela_12['Liga'] == 'CRO') | (tabela_12['Liga'] == 'CZH') | (tabela_12['Liga'] == 'NOR') | (tabela_12['Liga'] == 'POL')
                                 | (tabela_12['Liga'] == 'SCT') | (tabela_12['Liga'] == 'SER') | (tabela_12['Liga'] == 'SPA2')]
+            tabela_12 = tabela_12.sort_values(by='Rating', ascending=False)
             tabela_12 = tabela_12.head(50)
             #st.dataframe(tabela_12, use_container_width=True, hide_index=True)
 
@@ -2149,6 +2480,7 @@ if choose == "Nacionais pelo Mundo":
                                 | (tabela_13['Liga'] == 'POR2') | (tabela_13['Liga'] == 'BUL') | (tabela_13['Liga'] == 'AUT') | (tabela_13['Liga'] == 'QAT')
                                 | (tabela_13['Liga'] == 'CRO') | (tabela_13['Liga'] == 'CZH') | (tabela_13['Liga'] == 'NOR') | (tabela_13['Liga'] == 'POL')
                                 | (tabela_13['Liga'] == 'SCT') | (tabela_13['Liga'] == 'SER') | (tabela_13['Liga'] == 'SPA2')]
+            tabela_13 = tabela_13.sort_values(by='Rating', ascending=False)
             tabela_13 = tabela_13.head(50)
             #st.dataframe(tabela_13, use_container_width=True, hide_index=True)
 
@@ -2213,6 +2545,7 @@ if choose == "Nacionais pelo Mundo":
                                 | (tabela_14['Liga'] == 'POR2') | (tabela_14['Liga'] == 'BUL') | (tabela_14['Liga'] == 'AUT') | (tabela_14['Liga'] == 'QAT')
                                 | (tabela_14['Liga'] == 'CRO') | (tabela_14['Liga'] == 'CZH') | (tabela_14['Liga'] == 'NOR') | (tabela_14['Liga'] == 'POL')
                                 | (tabela_14['Liga'] == 'SCT') | (tabela_14['Liga'] == 'SER') | (tabela_14['Liga'] == 'SPA2')]
+            tabela_14 = tabela_14.sort_values(by='Rating', ascending=False)
             tabela_14 = tabela_14.head(50)
             #st.dataframe(tabela_14, use_container_width=True, hide_index=True)
 
@@ -2276,6 +2609,7 @@ if choose == "Nacionais pelo Mundo":
                                 | (tabela_15['Liga'] == 'POR2') | (tabela_15['Liga'] == 'BUL') | (tabela_15['Liga'] == 'AUT') | (tabela_15['Liga'] == 'QAT')
                                 | (tabela_15['Liga'] == 'CRO') | (tabela_15['Liga'] == 'CZH') | (tabela_15['Liga'] == 'NOR') | (tabela_15['Liga'] == 'POL')
                                 | (tabela_15['Liga'] == 'SCT') | (tabela_15['Liga'] == 'SER') | (tabela_15['Liga'] == 'SPA2')]
+            tabela_15 = tabela_15.sort_values(by='Rating', ascending=False)
             tabela_15 = tabela_15.head(50)
             #st.dataframe(tabela_15, use_container_width=True, hide_index=True)
 
@@ -2339,6 +2673,7 @@ if choose == "Nacionais pelo Mundo":
                                 | (tabela_16['Liga'] == 'POR2') | (tabela_16['Liga'] == 'BUL') | (tabela_16['Liga'] == 'AUT') | (tabela_16['Liga'] == 'QAT')
                                 | (tabela_16['Liga'] == 'CRO') | (tabela_16['Liga'] == 'CZH') | (tabela_16['Liga'] == 'NOR') | (tabela_16['Liga'] == 'POL')
                                 | (tabela_16['Liga'] == 'SCT') | (tabela_16['Liga'] == 'SER') | (tabela_16['Liga'] == 'SPA2')]
+            tabela_16 = tabela_16.sort_values(by='Rating', ascending=False)
             tabela_16 = tabela_16.head(50)
             #st.dataframe(tabela_16, use_container_width=True, hide_index=True)
 
@@ -2401,6 +2736,7 @@ if choose == "Nacionais pelo Mundo":
                                 | (tabela_17['Liga'] == 'POR2') | (tabela_17['Liga'] == 'BUL') | (tabela_17['Liga'] == 'AUT') | (tabela_17['Liga'] == 'QAT')
                                 | (tabela_17['Liga'] == 'CRO') | (tabela_17['Liga'] == 'CZH') | (tabela_17['Liga'] == 'NOR') | (tabela_17['Liga'] == 'POL')
                                 | (tabela_17['Liga'] == 'SCT') | (tabela_17['Liga'] == 'SER') | (tabela_17['Liga'] == 'SPA2')]
+            tabela_17 = tabela_17.sort_values(by='Rating', ascending=False)
             tabela_17 = tabela_17.head(50)
             #st.dataframe(tabela_17, use_container_width=True, hide_index=True)
 
@@ -2463,6 +2799,7 @@ if choose == "Nacionais pelo Mundo":
                                 | (tabela_18['Liga'] == 'POR2') | (tabela_18['Liga'] == 'BUL') | (tabela_18['Liga'] == 'AUT') | (tabela_18['Liga'] == 'QAT')
                                 | (tabela_18['Liga'] == 'CRO') | (tabela_18['Liga'] == 'CZH') | (tabela_18['Liga'] == 'NOR') | (tabela_18['Liga'] == 'POL')
                                 | (tabela_18['Liga'] == 'SCT') | (tabela_18['Liga'] == 'SER') | (tabela_18['Liga'] == 'SPA2')]
+            tabela_18 = tabela_18.sort_values(by='Rating', ascending=False)
             tabela_18 = tabela_18.head(50)
             #st.dataframe(tabela_18, use_container_width=True, hide_index=True)
 
@@ -2526,6 +2863,7 @@ if choose == "Nacionais pelo Mundo":
                                 | (tabela_19['Liga'] == 'POR2') | (tabela_19['Liga'] == 'BUL') | (tabela_19['Liga'] == 'AUT') | (tabela_19['Liga'] == 'QAT')
                                 | (tabela_19['Liga'] == 'CRO') | (tabela_19['Liga'] == 'CZH') | (tabela_19['Liga'] == 'NOR') | (tabela_19['Liga'] == 'POL')
                                 | (tabela_19['Liga'] == 'SCT') | (tabela_19['Liga'] == 'SER') | (tabela_19['Liga'] == 'SPA2')]
+            tabela_19 = tabela_19.sort_values(by='Rating', ascending=False)
             tabela_19 = tabela_19.head(50)
             #st.dataframe(tabela_19, use_container_width=True, hide_index=True)
 
@@ -2589,6 +2927,7 @@ if choose == "Nacionais pelo Mundo":
                                 | (tabela_20['Liga'] == 'POR2') | (tabela_20['Liga'] == 'BUL') | (tabela_20['Liga'] == 'AUT') | (tabela_20['Liga'] == 'QAT')
                                 | (tabela_20['Liga'] == 'CRO') | (tabela_20['Liga'] == 'CZH') | (tabela_20['Liga'] == 'NOR') | (tabela_20['Liga'] == 'POL')
                                 | (tabela_20['Liga'] == 'SCT') | (tabela_20['Liga'] == 'SER') | (tabela_20['Liga'] == 'SPA2')]
+            tabela_20 = tabela_20.sort_values(by='Rating', ascending=False)
             tabela_20 = tabela_20.head(50)
             #st.dataframe(tabela_20, use_container_width=True, hide_index=True)
 
@@ -2652,6 +2991,7 @@ if choose == "Nacionais pelo Mundo":
                                 | (tabela_21['Liga'] == 'POR2') | (tabela_21['Liga'] == 'BUL') | (tabela_21['Liga'] == 'AUT') | (tabela_21['Liga'] == 'QAT')
                                 | (tabela_21['Liga'] == 'CRO') | (tabela_21['Liga'] == 'CZH') | (tabela_21['Liga'] == 'NOR') | (tabela_21['Liga'] == 'POL')
                                 | (tabela_21['Liga'] == 'SCT') | (tabela_21['Liga'] == 'SER') | (tabela_21['Liga'] == 'SPA2')]
+            tabela_21 = tabela_21.sort_values(by='Rating', ascending=False)
             tabela_21 = tabela_21.head(50)
             #st.dataframe(tabela_21, use_container_width=True, hide_index=True)
 
@@ -2709,8 +3049,8 @@ if choose == "Nacionais pelo Mundo":
 if choose == "Free Agents pelo Mundo":
     nacionalidades = df8["Nacionalidade"]
     posições = df6["Posição"]
-    contratos = ["2023-12-31", "2024-01-31", "2024-02-29", "2024-03-31", "2024-04-30", "2024-05-31", "2024-06-30"]
-    temporada = 2023
+    contratos = ["2024-06-30", "2024-07-31", "2024-08-31", "2024-09-30", "2024-10-31", "2024-11-30", "2024-12-31"]
+    temporada = 2024
     mundo_options = ['BRA1', 'ARG1', 'ENG1', 'ENG2', 'FRA1', 'FRA2', 'SPA1', 'SPA2', 'ITA1', 'ITA2', 'GER1', 'POR1', 'POR2', 'SWZ', 'CZH', 'CRO', 'SER', 'RUS', 'UKR', 'BEL1', 'BEL2', 'CHN',
              'DEN', 'GRE', 'HOL', 'JAP', 'MEX', 'SAUD', 'SCT', 'TUR', 'UAE', 'USA', 'BUL', 'AUT', 'QAT']
     nacionalidade = st.selectbox("Escolha a Nacionalidade do Atleta", options=nacionalidades)
@@ -2748,6 +3088,7 @@ if choose == "Free Agents pelo Mundo":
         tabela_7 = tabela_7.rename(columns={'Equipe_Janela_Análise':'Equipe', 'Versão_Temporada':'Janela de Análise', 
                                             'L_Rating':'Rating', 'L_Ranking':'Ranking', 'L_Percentil':'Percentil', 'Size':'Qtde Atletas',
                                             'Valor_Mercado':'Valor'})
+        tabela_7 = tabela_7.sort_values(by='Rating', ascending=False)
         st.markdown("<h4 style='text-align: center;'><b>Goleiros Clássicos </b></h4>", unsafe_allow_html=True)
         #st.dataframe(tabela_7, use_container_width=True, hide_index=True)
 
@@ -2902,6 +3243,7 @@ if choose == "Free Agents pelo Mundo":
         tabela_9 = pd.merge(tabela_9, tabela_10[['Atleta', 'L_Rating', 'L_Ranking', 'L_Percentil', 'Size']], on="Atleta", how="left")
         tabela_9 = tabela_9.rename(columns={'Equipe_Janela_Análise':'Equipe', 'Versão_Temporada':'Janela de Análise', 
                                             'L_Rating':'Rating', 'L_Ranking':'Ranking', 'L_Percentil':'Percentil', 'Size':'Qtde Atletas'})
+        tabela_9 = tabela_9.sort_values(by='Rating', ascending=False)
         st.markdown("<h4 style='text-align: center;'><b>Laterais Defensivos </b></h4>", unsafe_allow_html=True)
         #st.dataframe(tabela_9, use_container_width=True, hide_index=True)
 
@@ -2978,7 +3320,7 @@ if choose == "Free Agents pelo Mundo":
         tabela_11 = pd.merge(tabela_11, tabela_12[['Atleta', 'L_Rating', 'L_Ranking', 'L_Percentil', 'Size']], on="Atleta", how="left")
         tabela_11 = tabela_11.rename(columns={'Equipe_Janela_Análise':'Equipe', 'Versão_Temporada':'Janela de Análise', 
                                             'L_Rating':'Rating', 'L_Ranking':'Ranking', 'L_Percentil':'Percentil', 'Size':'Qtde Atletas'})
-
+        tabela_11 = tabela_11.sort_values(by='Rating', ascending=False)
         st.markdown("<h4 style='text-align: center;'><br><b>Laterais Ofensivos </b></h4>", unsafe_allow_html=True)
         #st.dataframe(tabela_11, use_container_width=True, hide_index=True)
         # Styling DataFrame using Pandas
@@ -3054,6 +3396,7 @@ if choose == "Free Agents pelo Mundo":
         tabela_13 = pd.merge(tabela_13, tabela_14[['Atleta', 'L_Rating', 'L_Ranking', 'L_Percentil', 'Size']], on="Atleta", how="left")
         tabela_13 = tabela_13.rename(columns={'Equipe_Janela_Análise':'Equipe', 'Versão_Temporada':'Janela de Análise', 
                                             'L_Rating':'Rating', 'L_Ranking':'Ranking', 'L_Percentil':'Percentil', 'Size':'Qtde Atletas'})
+        tabela_13 = tabela_13.sort_values(by='Rating', ascending=False)
         st.markdown("<h4 style='text-align: center;'><br><b>Laterais Equilibrados </b></h4>", unsafe_allow_html=True)
         #st.dataframe(tabela_13, use_container_width=True, hide_index=True)
 
@@ -3133,6 +3476,7 @@ if choose == "Free Agents pelo Mundo":
         tabela_9 = tabela_9.rename(columns={'Equipe_Janela_Análise':'Equipe', 'Versão_Temporada':'Janela de Análise', 
                                             'L_Rating':'Rating', 'L_Ranking':'Ranking', 'L_Percentil':'Percentil', 'Size':'Qtde Atletas',
                                             'Valor_Mercado': 'Valor'})
+        tabela_9 = tabela_9.sort_values(by='Rating', ascending=False)
         st.markdown("<h4 style='text-align: center;'><br><b>Zagueiros Clássicos </b></h4>", unsafe_allow_html=True)
         #st.dataframe(tabela_9, use_container_width=True, hide_index=True)
 
@@ -3212,6 +3556,7 @@ if choose == "Free Agents pelo Mundo":
                                             'L_Rating':'Rating', 'L_Ranking':'Ranking', 'L_Percentil':'Percentil', 'Size':'Qtde Atletas',
                                             'Valor_Mercado': 'Valor'})
 
+        tabela_11 = tabela_11.sort_values(by='Rating', ascending=False)
         st.markdown("<h4 style='text-align: center;'><br><b>Zagueiros Construtores </b></h4>", unsafe_allow_html=True)
         #st.dataframe(tabela_11, use_container_width=True, hide_index=True)
 
@@ -3290,6 +3635,7 @@ if choose == "Free Agents pelo Mundo":
         tabela_13 = tabela_13.rename(columns={'Equipe_Janela_Análise':'Equipe', 'Versão_Temporada':'Janela de Análise', 
                                             'L_Rating':'Rating', 'L_Ranking':'Ranking', 'L_Percentil':'Percentil', 'Size':'Qtde Atletas',
                                             'Valor_Mercado': 'Valor'})
+        tabela_13 = tabela_13.sort_values(by='Rating', ascending=False)
         st.markdown("<h4 style='text-align: center;'><br><b>Zagueiros Equilibrados </b></h4>", unsafe_allow_html=True)
         #st.dataframe(tabela_13, use_container_width=True, hide_index=True)
 
@@ -3372,6 +3718,7 @@ if choose == "Free Agents pelo Mundo":
         tabela_9 = tabela_9.rename(columns={'Equipe_Janela_Análise':'Equipe', 'Versão_Temporada':'Janela de Análise', 
                                             'L_Rating':'Rating', 'L_Ranking':'Ranking', 'L_Percentil':'Percentil', 'Size':'Qtde Atletas',
                                             'Valor_Mercado': 'Valor'})
+        tabela_9 = tabela_9.sort_values(by='Rating', ascending=False)
         st.markdown("<h4 style='text-align: center;'><br><b>Primeiros Volantes Defensivos </b></h4>", unsafe_allow_html=True)
         #st.dataframe(tabela_9, use_container_width=True, hide_index=True)
 
@@ -3451,6 +3798,7 @@ if choose == "Free Agents pelo Mundo":
                                             'L_Rating':'Rating', 'L_Ranking':'Ranking', 'L_Percentil':'Percentil', 'Size':'Qtde Atletas',
                                             'Valor_Mercado': 'Valor'})
 
+        tabela_11 = tabela_11.sort_values(by='Rating', ascending=False)
         st.markdown("<h4 style='text-align: center;'><br><b>Primeiros Volantes Construtores </b></h4>", unsafe_allow_html=True)
         #st.dataframe(tabela_11, use_container_width=True, hide_index=True)
 
@@ -3529,6 +3877,7 @@ if choose == "Free Agents pelo Mundo":
         tabela_13 = tabela_13.rename(columns={'Equipe_Janela_Análise':'Equipe', 'Versão_Temporada':'Janela de Análise', 
                                             'L_Rating':'Rating', 'L_Ranking':'Ranking', 'L_Percentil':'Percentil', 'Size':'Qtde Atletas',
                                             'Valor_Mercado': 'Valor'})
+        tabela_13 = tabela_13.sort_values(by='Rating', ascending=False)
         st.markdown("<h4 style='text-align: center;'><br><b>Primeiros Volantes Equilibrados </b></h4>", unsafe_allow_html=True)
         #st.dataframe(tabela_13, use_container_width=True, hide_index=True)
 
@@ -3611,6 +3960,7 @@ if choose == "Free Agents pelo Mundo":
         tabela_9 = tabela_9.rename(columns={'Equipe_Janela_Análise':'Equipe', 'Versão_Temporada':'Janela de Análise', 
                                             'L_Rating':'Rating', 'L_Ranking':'Ranking', 'L_Percentil':'Percentil', 'Size':'Qtde Atletas',
                                             'Valor_Mercado': 'Valor'})
+        tabela_9 = tabela_9.sort_values(by='Rating', ascending=False)
         st.markdown("<h4 style='text-align: center;'><br><b>Segundos Volantes Box-to-Box </b></h4>", unsafe_allow_html=True)
 
         # Styling DataFrame using Pandas
@@ -3688,6 +4038,7 @@ if choose == "Free Agents pelo Mundo":
                                             'L_Rating':'Rating', 'L_Ranking':'Ranking', 'L_Percentil':'Percentil', 'Size':'Qtde Atletas',
                                             'Valor_Mercado': 'Valor'})
 
+        tabela_11 = tabela_11.sort_values(by='Rating', ascending=False)
         st.markdown("<h4 style='text-align: center;'><br><b>Segundos Volantes Organizadores </b></h4>", unsafe_allow_html=True)
         #st.dataframe(tabela_11, use_container_width=True, hide_index=True)
 
@@ -3766,6 +4117,7 @@ if choose == "Free Agents pelo Mundo":
         tabela_13 = tabela_13.rename(columns={'Equipe_Janela_Análise':'Equipe', 'Versão_Temporada':'Janela de Análise', 
                                             'L_Rating':'Rating', 'L_Ranking':'Ranking', 'L_Percentil':'Percentil', 'Size':'Qtde Atletas',
                                             'Valor_Mercado': 'Valor'})
+        tabela_13 = tabela_13.sort_values(by='Rating', ascending=False)
         st.markdown("<h4 style='text-align: center;'><br><b>Segundos Volantes Equilibrados </b></h4>", unsafe_allow_html=True)
         #st.dataframe(tabela_13, use_container_width=True, hide_index=True)
 
@@ -3848,6 +4200,7 @@ if choose == "Free Agents pelo Mundo":
         tabela_9 = tabela_9.rename(columns={'Equipe_Janela_Análise':'Equipe', 'Versão_Temporada':'Janela de Análise', 
                                             'L_Rating':'Rating', 'L_Ranking':'Ranking', 'L_Percentil':'Percentil', 'Size':'Qtde Atletas',
                                             'Valor_Mercado': 'Valor'})
+        tabela_9 = tabela_9.sort_values(by='Rating', ascending=False)
         st.markdown("<h4 style='text-align: center;'><br><b>Meias Organizadores </b></h4>", unsafe_allow_html=True)
         #st.dataframe(tabela_9, use_container_width=True, hide_index=True)
 
@@ -3927,6 +4280,7 @@ if choose == "Free Agents pelo Mundo":
                                             'L_Rating':'Rating', 'L_Ranking':'Ranking', 'L_Percentil':'Percentil', 'Size':'Qtde Atletas',
                                             'Valor_Mercado': 'Valor'})
 
+        tabela_11 = tabela_11.sort_values(by='Rating', ascending=False)
         st.markdown("<h4 style='text-align: center;'><br><b>Meias Atacantes </b></h4>", unsafe_allow_html=True)
         #st.dataframe(tabela_11, use_container_width=True, hide_index=True)
 
@@ -4009,6 +4363,7 @@ if choose == "Free Agents pelo Mundo":
         tabela_9 = tabela_9.rename(columns={'Equipe_Janela_Análise':'Equipe', 'Versão_Temporada':'Janela de Análise', 
                                             'L_Rating':'Rating', 'L_Ranking':'Ranking', 'L_Percentil':'Percentil', 'Size':'Qtde Atletas',
                                             'Valor_Mercado': 'Valor'})
+        tabela_9 = tabela_9.sort_values(by='Rating', ascending=False)
         st.markdown("<h4 style='text-align: center;'><b>Extremos Organizadores </b></h4>", unsafe_allow_html=True)
         #st.dataframe(tabela_9, use_container_width=True, hide_index=True)
 
@@ -4088,6 +4443,7 @@ if choose == "Free Agents pelo Mundo":
                                             'L_Rating':'Rating', 'L_Ranking':'Ranking', 'L_Percentil':'Percentil', 'Size':'Qtde Atletas',
                                             'Valor_Mercado': 'Valor'})
 
+        tabela_11 = tabela_11.sort_values(by='Rating', ascending=False)
         st.markdown("<h4 style='text-align: center;'><br><b>Extremos Táticos </b></h4>", unsafe_allow_html=True)
         #st.dataframe(tabela_11, use_container_width=True, hide_index=True)
 
@@ -4165,6 +4521,7 @@ if choose == "Free Agents pelo Mundo":
         tabela_13 = tabela_13.rename(columns={'Equipe_Janela_Análise':'Equipe', 'Versão_Temporada':'Janela de Análise', 
                                             'L_Rating':'Rating', 'L_Ranking':'Ranking', 'L_Percentil':'Percentil', 'Size':'Qtde Atletas',
                                             'Valor_Mercado': 'Valor'})
+        tabela_13 = tabela_13.sort_values(by='Rating', ascending=False)
         st.markdown("<h4 style='text-align: center;'><br><b>Extremos Agudos </b></h4>", unsafe_allow_html=True)
         #st.dataframe(tabela_13, use_container_width=True, hide_index=True)
 
@@ -4247,6 +4604,7 @@ if choose == "Free Agents pelo Mundo":
         tabela_9 = tabela_9.rename(columns={'Equipe_Janela_Análise':'Equipe', 'Versão_Temporada':'Janela de Análise', 
                                             'L_Rating':'Rating', 'L_Ranking':'Ranking', 'L_Percentil':'Percentil', 'Size':'Qtde Atletas',
                                             'Valor_Mercado': 'Valor'})
+        tabela_9 = tabela_9.sort_values(by='Rating', ascending=False)
         st.markdown("<h4 style='text-align: center;'>Atacantes Referência </b></h4>", unsafe_allow_html=True)
         #st.dataframe(tabela_9, use_container_width=True, hide_index=True)
 
@@ -4326,6 +4684,7 @@ if choose == "Free Agents pelo Mundo":
                                             'L_Rating':'Rating', 'L_Ranking':'Ranking', 'L_Percentil':'Percentil', 'Size':'Qtde Atletas',
                                             'Valor_Mercado': 'Valor'})
 
+        tabela_11 = tabela_11.sort_values(by='Rating', ascending=False)
         st.markdown("<h4 style='text-align: center;'><br><b>Atacantes Móveis </b></h4>", unsafe_allow_html=True)
         #st.dataframe(tabela_11, use_container_width=True, hide_index=True)
 
@@ -4404,6 +4763,7 @@ if choose == "Free Agents pelo Mundo":
         tabela_13 = tabela_13.rename(columns={'Equipe_Janela_Análise':'Equipe', 'Versão_Temporada':'Janela de Análise', 
                                             'L_Rating':'Rating', 'L_Ranking':'Ranking', 'L_Percentil':'Percentil', 'Size':'Qtde Atletas',
                                             'Valor_Mercado': 'Valor'})
+        tabela_13 = tabela_13.sort_values(by='Rating', ascending=False)
         st.markdown("<h4 style='text-align: center;'><br><b>Segundos Atacantes </b></h4>", unsafe_allow_html=True)
         #st.dataframe(tabela_13, use_container_width=True, hide_index=True)
 
@@ -8645,7 +9005,7 @@ if choose == "Ranking de Jogadores":
                     st.markdown("---")
                     ##################################################################################################################### 
                     #####################################################################################################################
-                #Plotar Gráfico Alternativo
+                    #Plotar Gráfico Alternativo
                     # Player Comparison Data
                     st.markdown("<h4 style='text-align: center;'><br>Comparativo do Jogador com a Média da Liga</h4>", unsafe_allow_html=True)
                     Role_20_Mean_Charts = pd.read_csv('20_Role_Atacante_Referência.csv')
