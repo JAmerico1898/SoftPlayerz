@@ -37,8 +37,8 @@ df14 = pd.read_csv("performance_historica.csv")
 with st.sidebar:
 
     jogadores = df1["Atleta"]
-    choose = option_menu("Galeria de Apps", ["Ranking de Jogadores", "Jogadores Similares", "10 Melhores da Liga", "Nacionais pelo Mundo", "Free Agents pelo Mundo", "Histórico do Jogador", "Histórico de Performance", "Sobre o APP"],
-                         icons=['graph-up-arrow', 'arrows-collapse-vertical', 'sort-numeric-down', 'globe2', 'search', 'mortarboard', 'clock-history', 'book'],
+    choose = option_menu("Galeria de Apps", ["Ranking de Jogadores", "10 Melhores da Liga", "Nacionais pelo Mundo", "Free Agents pelo Mundo", "Histórico de Performance", "Jogadores Similares", "Histórico do Jogador", "Sobre o APP"],
+                         icons=['graph-up-arrow', 'sort-numeric-down', 'globe2', 'search', 'clock-history', 'arrows-collapse-vertical', 'mortarboard', 'book'],
                          menu_icon="universal-access", default_index=0, 
                          styles={
                          "container": {"padding": "5!important", "background-color": "#fafafa"},
@@ -347,6 +347,8 @@ if choose == "Histórico de Performance":
 ###############################################################################################################################
 
 if choose == "Histórico do Jogador":
+    st.markdown("<h2 style='text-align: center;'>Histórico do Jogador</h2>", unsafe_allow_html=True)
+    st.markdown("<h3 style='text-align: center;'>2020-2024</h3>", unsafe_allow_html=True)
     nacionalidades = df8["Nacionalidade"]
     historico = pd.read_csv("base_bruta.csv")
     jogadores = st.selectbox("Digite o nome do seu jogador. A grafia deve ser exata!", options=jogadores, index=None, placeholder="Jogador")
@@ -413,6 +415,8 @@ if choose == "Histórico do Jogador":
 ###############################################################################################################################
 
 if choose == "10 Melhores da Liga":
+    st.markdown("<h2 style='text-align: center;'>10 Melhores da Liga</h2>", unsafe_allow_html=True)
+    st.markdown("<h3 style='text-align: center;'>2020-2024</h3>", unsafe_allow_html=True)
     ligas = df5["Liga"]
     posições = df6["Posição"]
     temporadas = df7["Versão_Temporada"]
@@ -1627,6 +1631,8 @@ if choose == "10 Melhores da Liga":
 ###############################################################################################################################
 
 if choose == "Nacionais pelo Mundo":
+    st.markdown("<h2 style='text-align: center;'>Nacionais pelo Mundo</h2>", unsafe_allow_html=True)
+    st.markdown("<h3 style='text-align: center;'>2024</h3>", unsafe_allow_html=True)
     nacionalidades = df8["Nacionalidade"]
     posições = df6["Posição"]
     temporadas = df7["Versão_Temporada"]
@@ -3047,6 +3053,7 @@ if choose == "Nacionais pelo Mundo":
 ###############################################################################################################################
 
 if choose == "Free Agents pelo Mundo":
+    st.markdown("<h2 style='text-align: center;'>Free Agents pelo Mundo</h2>", unsafe_allow_html=True)
     nacionalidades = df8["Nacionalidade"]
     posições = df6["Posição"]
     contratos = ["2024-06-30", "2024-07-31", "2024-08-31", "2024-09-30", "2024-10-31", "2024-11-30", "2024-12-31"]
@@ -4819,6 +4826,8 @@ if choose == "Free Agents pelo Mundo":
 ###############################################################################################################################
 
 if choose == "Ranking de Jogadores":
+    st.markdown("<h2 style='text-align: center;'>Ranking de Jogadores</h2>", unsafe_allow_html=True)
+    st.markdown("<h3 style='text-align: center;'>2020-2024</h3>", unsafe_allow_html=True)
     jogadores = st.selectbox("Digite o nome de seu jogador. A grafia deve ser exata!", options=jogadores, index=None, placeholder="Jogador")
     if jogadores:
         #Determinar Temporada
@@ -9777,6 +9786,8 @@ if choose == "Ranking de Jogadores":
 jogadores_similares = df10["Atleta"].unique()
 fontsize = 20
 if choose == "Jogadores Similares":
+    st.markdown("<h2 style='text-align: center;'>Jogadores Similares</h2>", unsafe_allow_html=True)
+    st.markdown("<h3 style='text-align: center;'>Ligas Selecionadas - 2024</h3>", unsafe_allow_html=True)
     jogador_similar = st.selectbox("Digite o nome de seu jogador. A grafia deve ser exata!", options=jogadores_similares, index=None, placeholder="Jogador")
     if jogador_similar:
         #Determinar a Liga (pode haver duplicidades)
