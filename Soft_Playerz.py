@@ -26129,6 +26129,28 @@ if choose == "Jogadores Similares":
                     #####################################################################################################################
                     #####################################################################################################################
                     #####################################################################################################################
+if choose == "Sobre o APP":
+    st.markdown("<h4 style='text-align: center;  color: black;'>Sobre o APP</b></h4>", unsafe_allow_html=True)
+    st.markdown("---")
+
+    #Downloading Transparency Index Methodology
+    button = st.link_button("Resumo da Metodologia", 'https://github.com/JAmerico1898/SoftPlayerz/blob/bf20a140c76a6bb59926e0e479262e87b246352a/Manuscrito%20-%20FAME.pdf')
+    def main2():
+
+        # URL of the PDF document
+        # Make sure to use a raw string for the file path
+        pdf_url = 'https://github.com/JAmerico1898/SoftPlayerz/blob/bf20a140c76a6bb59926e0e479262e87b246352a/Manuscrito%20-%20FAME.pdf'
+
+        # Button to open PDF in a new tab
+        if st.link_button('Resumo da Metodologia'):
+            # Open URL in a new tab using JavaScript
+            js = f"window.open('{pdf_url}')"  # JavaScript to open a new window/tab
+            st.markdown(f'<img src onerror="{js}">', unsafe_allow_html=True)
+
+    if __name__ == '__main2__':
+        main2()    
+
+
 
 
 
