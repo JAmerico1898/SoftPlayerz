@@ -3058,8 +3058,8 @@ if choose == "Free Agents pelo Mundo":
     posições = df6["Posição"]
     contratos = ["2024-06-30", "2024-07-31", "2024-08-31", "2024-09-30", "2024-10-31", "2024-11-30", "2024-12-31"]
     temporada = 2024
-    mundo_options = ['BRA1', 'ARG1', 'ENG1', 'ENG2', 'FRA1', 'FRA2', 'SPA1', 'SPA2', 'ITA1', 'ITA2', 'GER1', 'POR1', 'POR2', 'SWZ', 'CZH', 'CRO', 'SER', 'RUS', 'UKR', 'BEL1', 'BEL2', 'CHN',
-             'DEN', 'GRE', 'HOL', 'JAP', 'MEX', 'SAUD', 'SCT', 'TUR', 'UAE', 'USA', 'BUL', 'AUT', 'QAT']
+    #mundo_options = df5["Liga"]#['BRA1', 'ARG1', 'ENG1', 'ENG2', 'FRA1', 'FRA2', 'SPA1', 'SPA2', 'ITA1', 'ITA2', 'GER1', 'POR1', 'POR2', 'SWZ', 'CZH', 'CRO', 'SER', 'RUS', 'UKR', 'BEL1', 'BEL2', 'CHN',
+             #'DEN', 'GRE', 'HOL', 'JAP', 'MEX', 'SAUD', 'SCT', 'TUR', 'UAE', 'USA', 'BUL', 'AUT', 'QAT']
     nacionalidade = st.selectbox("Escolha a Nacionalidade do Atleta", options=nacionalidades)
     posição = st.selectbox("Escolha a Posição do Atleta", options=posições)
     #função = st.selectbox("Escolha a Posição", options=funções)
@@ -3070,26 +3070,40 @@ if choose == "Free Agents pelo Mundo":
         tabela_7 = pd.read_csv("1_Role_Goleiro_Full.csv")
         tabela_7 = tabela_7.loc[(tabela_7['Nacionalidade']==nacionalidade)&(tabela_7['Fim_Contrato']<=contrato)&(tabela_7['Versão_Temporada']==temporada)]   
         tabela_7 = tabela_7.iloc[:, np.r_[1, 3, 7, 15, 9:12, 25]]
-        tabela_7 = tabela_7[(tabela_7['Liga'] == 'ENG1') | (tabela_7['Liga'] == 'ENG2') | (tabela_7['Liga'] == 'FRA1') | (tabela_7['Liga'] == 'FRA2') 
-            | (tabela_7['Liga'] == 'SPA1') | (tabela_7['Liga'] == 'ITA1') | (tabela_7['Liga'] == 'GER1') | (tabela_7['Liga'] == 'POR1') 
-            | (tabela_7['Liga'] == 'SWZ') | (tabela_7['Liga'] == 'RUS') | (tabela_7['Liga'] == 'UKR') | (tabela_7['Liga'] == 'BEL1') 
-            | (tabela_7['Liga'] == 'CHN') | (tabela_7['Liga'] == 'DEN') | (tabela_7['Liga'] == 'GRE') | (tabela_7['Liga'] == 'HOL') 
-            | (tabela_7['Liga'] == 'JAP') | (tabela_7['Liga'] == 'MEX') | (tabela_7['Liga'] == 'SAUD') | (tabela_7['Liga'] == 'TUR') 
-            | (tabela_7['Liga'] == 'UAE') | (tabela_7['Liga'] == 'USA') | (tabela_7['Liga'] == 'ITA2') | (tabela_7['Liga'] == 'GER2') 
-            | (tabela_7['Liga'] == 'POR2') | (tabela_7['Liga'] == 'BUL') | (tabela_7['Liga'] == 'AUT') | (tabela_7['Liga'] == 'QAT')
-            | (tabela_7['Liga'] == 'BRA1') | (tabela_7['Liga'] == 'ARG1')]
+        tabela_7 = tabela_7[(tabela_7['Liga'] == 'ARG1') | (tabela_7['Liga'] == 'AUS') | (tabela_7['Liga'] == 'AUT') 
+            | (tabela_7['Liga'] == 'BEL1') | (tabela_7['Liga'] == 'BEL2') | (tabela_7['Liga'] == 'BOL') 
+            | (tabela_7['Liga'] == 'BRA1') | (tabela_7['Liga'] == 'BRA2') | (tabela_7['Liga'] == 'BUL') | (tabela_7['Liga'] == 'CHI')
+            | (tabela_7['Liga'] == 'CHN') | (tabela_7['Liga'] == 'COL') | (tabela_7['Liga'] == 'CRO') | (tabela_7['Liga'] == 'CZH')
+            | (tabela_7['Liga'] == 'DEN') | (tabela_7['Liga'] == 'ECU') | (tabela_7['Liga'] == 'ENG1') | (tabela_7['Liga'] == 'ENG2') 
+            | (tabela_7['Liga'] == 'FIN') | (tabela_7['Liga'] == 'FRA1') | (tabela_7['Liga'] == 'FRA2') | (tabela_7['Liga'] == 'GEO')  
+            | (tabela_7['Liga'] == 'GER1') | (tabela_7['Liga'] == 'GER2') | (tabela_7['Liga'] == 'GRE') | (tabela_7['Liga'] == 'HOL') 
+            | (tabela_7['Liga'] == 'IND') | (tabela_7['Liga'] == 'INDO') | (tabela_7['Liga'] == 'ITA1') | (tabela_7['Liga'] == 'ITA2') 
+            | (tabela_7['Liga'] == 'JAP') | (tabela_7['Liga'] == 'KOR') | (tabela_7['Liga'] == 'MEX') | (tabela_7['Liga'] == 'MOR') 
+            | (tabela_7['Liga'] == 'NOR') | (tabela_7['Liga'] == 'PAR') | (tabela_7['Liga'] == 'PER') | (tabela_7['Liga'] == 'POL') 
+            | (tabela_7['Liga'] == 'POR1') | (tabela_7['Liga'] == 'POR2') | (tabela_7['Liga'] == 'QAT') | (tabela_7['Liga'] == 'ROM') 
+            | (tabela_7['Liga'] == 'RUS') | (tabela_7['Liga'] == 'SAUD') | (tabela_7['Liga'] == 'SCT') | (tabela_7['Liga'] == 'SER') 
+            | (tabela_7['Liga'] == 'SPA1') | (tabela_7['Liga'] == 'SPA2') | (tabela_7['Liga'] == 'SWE') | (tabela_7['Liga'] == 'SWZ') 
+            | (tabela_7['Liga'] == 'TUR') | (tabela_7['Liga'] == 'UAE') | (tabela_7['Liga'] == 'UKR')  | (tabela_7['Liga'] == 'URU')
+            | (tabela_7['Liga'] == 'USA') | (tabela_7['Liga'] == 'UZB') | (tabela_7['Liga'] == 'VEN')]
 
         tabela_8 = pd.read_csv("PlayerAnalysis_Role_1_Full.csv")
         tabela_8 = tabela_8.loc[(tabela_8['Nacionalidade']==nacionalidade)&(tabela_8['Fim_Contrato']<=contrato)&(tabela_8['Versão_Temporada']==temporada)]
         tabela_8 = tabela_8.iloc[:, np.r_[9, 30:34, 26, 28]]
-        tabela_8 = tabela_8[(tabela_8['Liga'] == 'ENG1') | (tabela_8['Liga'] == 'ENG2') | (tabela_8['Liga'] == 'FRA1') | (tabela_8['Liga'] == 'FRA2') 
-            | (tabela_8['Liga'] == 'SPA1') | (tabela_8['Liga'] == 'ITA1') | (tabela_8['Liga'] == 'GER1') | (tabela_8['Liga'] == 'POR1') 
-            | (tabela_8['Liga'] == 'SWZ') | (tabela_8['Liga'] == 'RUS') | (tabela_8['Liga'] == 'UKR') | (tabela_8['Liga'] == 'BEL1') 
-            | (tabela_8['Liga'] == 'CHN') | (tabela_8['Liga'] == 'DEN') | (tabela_8['Liga'] == 'GRE') | (tabela_8['Liga'] == 'HOL') 
-            | (tabela_8['Liga'] == 'JAP') | (tabela_8['Liga'] == 'MEX') | (tabela_8['Liga'] == 'SAUD') | (tabela_8['Liga'] == 'TUR') 
-            | (tabela_8['Liga'] == 'UAE') | (tabela_8['Liga'] == 'USA') | (tabela_8['Liga'] == 'ITA2') | (tabela_8['Liga'] == 'GER2') 
-            | (tabela_8['Liga'] == 'POR2') | (tabela_8['Liga'] == 'BUL') | (tabela_8['Liga'] == 'AUT') | (tabela_8['Liga'] == 'QAT') 
-            | (tabela_8['Liga'] == 'BRA1') | (tabela_8['Liga'] == 'ARG1')]
+        tabela_8 = tabela_8[(tabela_8['Liga'] == 'ARG1') | (tabela_8['Liga'] == 'AUS') | (tabela_8['Liga'] == 'AUT') 
+            | (tabela_8['Liga'] == 'BEL1') | (tabela_8['Liga'] == 'BEL2') | (tabela_8['Liga'] == 'BOL') 
+            | (tabela_8['Liga'] == 'BRA1') | (tabela_8['Liga'] == 'BRA2') | (tabela_8['Liga'] == 'BUL') | (tabela_8['Liga'] == 'CHI')
+            | (tabela_8['Liga'] == 'CHN') | (tabela_8['Liga'] == 'COL') | (tabela_8['Liga'] == 'CRO') | (tabela_8['Liga'] == 'CZH')
+            | (tabela_8['Liga'] == 'DEN') | (tabela_8['Liga'] == 'ECU') | (tabela_8['Liga'] == 'ENG1') | (tabela_8['Liga'] == 'ENG2') 
+            | (tabela_8['Liga'] == 'FIN') | (tabela_8['Liga'] == 'FRA1') | (tabela_8['Liga'] == 'FRA2') | (tabela_8['Liga'] == 'GEO')  
+            | (tabela_8['Liga'] == 'GER1') | (tabela_8['Liga'] == 'GER2') | (tabela_8['Liga'] == 'GRE') | (tabela_8['Liga'] == 'HOL') 
+            | (tabela_8['Liga'] == 'IND') | (tabela_8['Liga'] == 'INDO') | (tabela_8['Liga'] == 'ITA1') | (tabela_8['Liga'] == 'ITA2') 
+            | (tabela_8['Liga'] == 'JAP') | (tabela_8['Liga'] == 'KOR') | (tabela_8['Liga'] == 'MEX') | (tabela_8['Liga'] == 'MOR') 
+            | (tabela_8['Liga'] == 'NOR') | (tabela_8['Liga'] == 'PAR') | (tabela_8['Liga'] == 'PER') | (tabela_8['Liga'] == 'POL') 
+            | (tabela_8['Liga'] == 'POR1') | (tabela_8['Liga'] == 'POR2') | (tabela_8['Liga'] == 'QAT') | (tabela_8['Liga'] == 'ROM') 
+            | (tabela_8['Liga'] == 'RUS') | (tabela_8['Liga'] == 'SAUD') | (tabela_8['Liga'] == 'SCT') | (tabela_8['Liga'] == 'SER') 
+            | (tabela_8['Liga'] == 'SPA1') | (tabela_8['Liga'] == 'SPA2') | (tabela_8['Liga'] == 'SWE') | (tabela_8['Liga'] == 'SWZ') 
+            | (tabela_8['Liga'] == 'TUR') | (tabela_8['Liga'] == 'UAE') | (tabela_8['Liga'] == 'UKR')  | (tabela_8['Liga'] == 'URU')
+            | (tabela_8['Liga'] == 'USA') | (tabela_8['Liga'] == 'UZB') | (tabela_8['Liga'] == 'VEN')]
 
         tabela_7 = pd.merge(tabela_7, tabela_8[['Atleta', 'L_Rating', 'L_Ranking', 'L_Percentil', 'Size']], on="Atleta", how="left")
         tabela_7 = tabela_7.rename(columns={'Equipe_Janela_Análise':'Equipe', 'Versão_Temporada':'Janela de Análise', 
@@ -3147,26 +3161,40 @@ if choose == "Free Agents pelo Mundo":
         tabela_8 = pd.read_csv("2_Role_Goleiro_Líbero_Full.csv")
         tabela_8 = tabela_8.loc[(tabela_8['Nacionalidade']==nacionalidade)&(tabela_8['Fim_Contrato']<=contrato)&(tabela_8['Versão_Temporada']==temporada)]   
         tabela_8 = tabela_8.iloc[:, np.r_[1, 3, 7, 15, 9:12, 28]]
-        tabela_8 = tabela_8[(tabela_8['Liga'] == 'ENG1') | (tabela_8['Liga'] == 'ENG2') | (tabela_8['Liga'] == 'FRA1') | (tabela_8['Liga'] == 'FRA2') 
-            | (tabela_8['Liga'] == 'SPA1') | (tabela_8['Liga'] == 'ITA1') | (tabela_8['Liga'] == 'GER1') | (tabela_8['Liga'] == 'POR1') 
-            | (tabela_8['Liga'] == 'SWZ') | (tabela_8['Liga'] == 'RUS') | (tabela_8['Liga'] == 'UKR') | (tabela_8['Liga'] == 'BEL1') 
-            | (tabela_8['Liga'] == 'CHN') | (tabela_8['Liga'] == 'DEN') | (tabela_8['Liga'] == 'GRE') | (tabela_8['Liga'] == 'HOL') 
-            | (tabela_8['Liga'] == 'JAP') | (tabela_8['Liga'] == 'MEX') | (tabela_8['Liga'] == 'SAUD') | (tabela_8['Liga'] == 'TUR') 
-            | (tabela_8['Liga'] == 'UAE') | (tabela_8['Liga'] == 'USA') | (tabela_8['Liga'] == 'ITA2') | (tabela_8['Liga'] == 'GER2') 
-            | (tabela_8['Liga'] == 'POR2') | (tabela_8['Liga'] == 'BUL') | (tabela_8['Liga'] == 'AUT') | (tabela_8['Liga'] == 'QAT')
-            | (tabela_8['Liga'] == 'BRA1') | (tabela_8['Liga'] == 'ARG1')]
+        tabela_8 = tabela_8[(tabela_8['Liga'] == 'ARG1') | (tabela_8['Liga'] == 'AUS') | (tabela_8['Liga'] == 'AUT') 
+            | (tabela_8['Liga'] == 'BEL1') | (tabela_8['Liga'] == 'BEL2') | (tabela_8['Liga'] == 'BOL') 
+            | (tabela_8['Liga'] == 'BRA1') | (tabela_8['Liga'] == 'BRA2') | (tabela_8['Liga'] == 'BUL') | (tabela_8['Liga'] == 'CHI')
+            | (tabela_8['Liga'] == 'CHN') | (tabela_8['Liga'] == 'COL') | (tabela_8['Liga'] == 'CRO') | (tabela_8['Liga'] == 'CZH')
+            | (tabela_8['Liga'] == 'DEN') | (tabela_8['Liga'] == 'ECU') | (tabela_8['Liga'] == 'ENG1') | (tabela_8['Liga'] == 'ENG2') 
+            | (tabela_8['Liga'] == 'FIN') | (tabela_8['Liga'] == 'FRA1') | (tabela_8['Liga'] == 'FRA2') | (tabela_8['Liga'] == 'GEO')  
+            | (tabela_8['Liga'] == 'GER1') | (tabela_8['Liga'] == 'GER2') | (tabela_8['Liga'] == 'GRE') | (tabela_8['Liga'] == 'HOL') 
+            | (tabela_8['Liga'] == 'IND') | (tabela_8['Liga'] == 'INDO') | (tabela_8['Liga'] == 'ITA1') | (tabela_8['Liga'] == 'ITA2') 
+            | (tabela_8['Liga'] == 'JAP') | (tabela_8['Liga'] == 'KOR') | (tabela_8['Liga'] == 'MEX') | (tabela_8['Liga'] == 'MOR') 
+            | (tabela_8['Liga'] == 'NOR') | (tabela_8['Liga'] == 'PAR') | (tabela_8['Liga'] == 'PER') | (tabela_8['Liga'] == 'POL') 
+            | (tabela_8['Liga'] == 'POR1') | (tabela_8['Liga'] == 'POR2') | (tabela_8['Liga'] == 'QAT') | (tabela_8['Liga'] == 'ROM') 
+            | (tabela_8['Liga'] == 'RUS') | (tabela_8['Liga'] == 'SAUD') | (tabela_8['Liga'] == 'SCT') | (tabela_8['Liga'] == 'SER') 
+            | (tabela_8['Liga'] == 'SPA1') | (tabela_8['Liga'] == 'SPA2') | (tabela_8['Liga'] == 'SWE') | (tabela_8['Liga'] == 'SWZ') 
+            | (tabela_8['Liga'] == 'TUR') | (tabela_8['Liga'] == 'UAE') | (tabela_8['Liga'] == 'UKR')  | (tabela_8['Liga'] == 'URU')
+            | (tabela_8['Liga'] == 'USA') | (tabela_8['Liga'] == 'UZB') | (tabela_8['Liga'] == 'VEN')]
 
         tabela_9 = pd.read_csv("PlayerAnalysis_Role_2_Full.csv")
         tabela_9 = tabela_9.loc[(tabela_9['Nacionalidade']==nacionalidade)&(tabela_9['Fim_Contrato']<=contrato)&(tabela_9['Versão_Temporada']==temporada)]
         tabela_9 = tabela_9.iloc[:, np.r_[12, 33:37, 29, 31]]
-        tabela_9 = tabela_9[(tabela_9['Liga'] == 'ENG1') | (tabela_9['Liga'] == 'ENG2') | (tabela_9['Liga'] == 'FRA1') | (tabela_9['Liga'] == 'FRA2') 
-            | (tabela_9['Liga'] == 'SPA1') | (tabela_9['Liga'] == 'ITA1') | (tabela_9['Liga'] == 'GER1') | (tabela_9['Liga'] == 'POR1') 
-            | (tabela_9['Liga'] == 'SWZ') | (tabela_9['Liga'] == 'RUS') | (tabela_9['Liga'] == 'UKR') | (tabela_9['Liga'] == 'BEL1') 
-            | (tabela_9['Liga'] == 'CHN') | (tabela_9['Liga'] == 'DEN') | (tabela_9['Liga'] == 'GRE') | (tabela_9['Liga'] == 'HOL') 
-            | (tabela_9['Liga'] == 'JAP') | (tabela_9['Liga'] == 'MEX') | (tabela_9['Liga'] == 'SAUD') | (tabela_9['Liga'] == 'TUR') 
-            | (tabela_9['Liga'] == 'UAE') | (tabela_9['Liga'] == 'USA') | (tabela_9['Liga'] == 'ITA2') | (tabela_9['Liga'] == 'GER2') 
-            | (tabela_9['Liga'] == 'POR2') | (tabela_9['Liga'] == 'BUL') | (tabela_9['Liga'] == 'AUT') | (tabela_9['Liga'] == 'QAT') 
-            | (tabela_9['Liga'] == 'BRA1') | (tabela_9['Liga'] == 'ARG1')]
+        tabela_9 = tabela_9[(tabela_9['Liga'] == 'ARG1') | (tabela_9['Liga'] == 'AUS') | (tabela_9['Liga'] == 'AUT') 
+            | (tabela_9['Liga'] == 'BEL1') | (tabela_9['Liga'] == 'BEL2') | (tabela_9['Liga'] == 'BOL') 
+            | (tabela_9['Liga'] == 'BRA1') | (tabela_9['Liga'] == 'BRA2') | (tabela_9['Liga'] == 'BUL') | (tabela_9['Liga'] == 'CHI')
+            | (tabela_9['Liga'] == 'CHN') | (tabela_9['Liga'] == 'COL') | (tabela_9['Liga'] == 'CRO') | (tabela_9['Liga'] == 'CZH')
+            | (tabela_9['Liga'] == 'DEN') | (tabela_9['Liga'] == 'ECU') | (tabela_9['Liga'] == 'ENG1') | (tabela_9['Liga'] == 'ENG2') 
+            | (tabela_9['Liga'] == 'FIN') | (tabela_9['Liga'] == 'FRA1') | (tabela_9['Liga'] == 'FRA2') | (tabela_9['Liga'] == 'GEO')  
+            | (tabela_9['Liga'] == 'GER1') | (tabela_9['Liga'] == 'GER2') | (tabela_9['Liga'] == 'GRE') | (tabela_9['Liga'] == 'HOL') 
+            | (tabela_9['Liga'] == 'IND') | (tabela_9['Liga'] == 'INDO') | (tabela_9['Liga'] == 'ITA1') | (tabela_9['Liga'] == 'ITA2') 
+            | (tabela_9['Liga'] == 'JAP') | (tabela_9['Liga'] == 'KOR') | (tabela_9['Liga'] == 'MEX') | (tabela_9['Liga'] == 'MOR') 
+            | (tabela_9['Liga'] == 'NOR') | (tabela_9['Liga'] == 'PAR') | (tabela_9['Liga'] == 'PER') | (tabela_9['Liga'] == 'POL') 
+            | (tabela_9['Liga'] == 'POR1') | (tabela_9['Liga'] == 'POR2') | (tabela_9['Liga'] == 'QAT') | (tabela_9['Liga'] == 'ROM') 
+            | (tabela_9['Liga'] == 'RUS') | (tabela_9['Liga'] == 'SAUD') | (tabela_9['Liga'] == 'SCT') | (tabela_9['Liga'] == 'SER') 
+            | (tabela_9['Liga'] == 'SPA1') | (tabela_9['Liga'] == 'SPA2') | (tabela_9['Liga'] == 'SWE') | (tabela_9['Liga'] == 'SWZ') 
+            | (tabela_9['Liga'] == 'TUR') | (tabela_9['Liga'] == 'UAE') | (tabela_9['Liga'] == 'UKR')  | (tabela_9['Liga'] == 'URU')
+            | (tabela_9['Liga'] == 'USA') | (tabela_9['Liga'] == 'UZB') | (tabela_9['Liga'] == 'VEN')]
 
         tabela_8 = pd.merge(tabela_8, tabela_9[['Atleta', 'L_Rating', 'L_Ranking', 'L_Percentil', 'Size']], on="Atleta", how="left")
         tabela_8 = tabela_8.rename(columns={'Equipe_Janela_Análise':'Equipe', 'Versão_Temporada':'Janela de Análise', 
@@ -3226,26 +3254,40 @@ if choose == "Free Agents pelo Mundo":
         tabela_9 = pd.read_csv("3_Role_Lateral_Defensivo_Full.csv")
         tabela_9 = tabela_9.loc[(tabela_9['Nacionalidade']==nacionalidade)&(tabela_9['Fim_Contrato']<=contrato)&(tabela_9['Versão_Temporada']==temporada)]   
         tabela_9 = tabela_9.iloc[:, np.r_[1, 3, 4, 7, 15, 9:12, 24]]
-        tabela_9 = tabela_9[(tabela_9['Liga'] == 'ENG1') | (tabela_9['Liga'] == 'ENG2') | (tabela_9['Liga'] == 'FRA1') | (tabela_9['Liga'] == 'FRA2') 
-            | (tabela_9['Liga'] == 'SPA1') | (tabela_9['Liga'] == 'ITA1') | (tabela_9['Liga'] == 'GER1') | (tabela_9['Liga'] == 'POR1') 
-            | (tabela_9['Liga'] == 'SWZ') | (tabela_9['Liga'] == 'RUS') | (tabela_9['Liga'] == 'UKR') | (tabela_9['Liga'] == 'BEL1') 
-            | (tabela_9['Liga'] == 'CHN') | (tabela_9['Liga'] == 'DEN') | (tabela_9['Liga'] == 'GRE') | (tabela_9['Liga'] == 'HOL') 
-            | (tabela_9['Liga'] == 'JAP') | (tabela_9['Liga'] == 'MEX') | (tabela_9['Liga'] == 'SAUD') | (tabela_9['Liga'] == 'TUR') 
-            | (tabela_9['Liga'] == 'UAE') | (tabela_9['Liga'] == 'USA') | (tabela_9['Liga'] == 'ITA2') | (tabela_9['Liga'] == 'GER2') 
-            | (tabela_9['Liga'] == 'POR2') | (tabela_9['Liga'] == 'BUL') | (tabela_9['Liga'] == 'AUT') | (tabela_9['Liga'] == 'QAT')
-            | (tabela_9['Liga'] == 'BRA1') | (tabela_9['Liga'] == 'ARG1')]
+        tabela_9 = tabela_9[(tabela_9['Liga'] == 'ARG1') | (tabela_9['Liga'] == 'AUS') | (tabela_9['Liga'] == 'AUT') 
+            | (tabela_9['Liga'] == 'BEL1') | (tabela_9['Liga'] == 'BEL2') | (tabela_9['Liga'] == 'BOL') 
+            | (tabela_9['Liga'] == 'BRA1') | (tabela_9['Liga'] == 'BRA2') | (tabela_9['Liga'] == 'BUL') | (tabela_9['Liga'] == 'CHI')
+            | (tabela_9['Liga'] == 'CHN') | (tabela_9['Liga'] == 'COL') | (tabela_9['Liga'] == 'CRO') | (tabela_9['Liga'] == 'CZH')
+            | (tabela_9['Liga'] == 'DEN') | (tabela_9['Liga'] == 'ECU') | (tabela_9['Liga'] == 'ENG1') | (tabela_9['Liga'] == 'ENG2') 
+            | (tabela_9['Liga'] == 'FIN') | (tabela_9['Liga'] == 'FRA1') | (tabela_9['Liga'] == 'FRA2') | (tabela_9['Liga'] == 'GEO')  
+            | (tabela_9['Liga'] == 'GER1') | (tabela_9['Liga'] == 'GER2') | (tabela_9['Liga'] == 'GRE') | (tabela_9['Liga'] == 'HOL') 
+            | (tabela_9['Liga'] == 'IND') | (tabela_9['Liga'] == 'INDO') | (tabela_9['Liga'] == 'ITA1') | (tabela_9['Liga'] == 'ITA2') 
+            | (tabela_9['Liga'] == 'JAP') | (tabela_9['Liga'] == 'KOR') | (tabela_9['Liga'] == 'MEX') | (tabela_9['Liga'] == 'MOR') 
+            | (tabela_9['Liga'] == 'NOR') | (tabela_9['Liga'] == 'PAR') | (tabela_9['Liga'] == 'PER') | (tabela_9['Liga'] == 'POL') 
+            | (tabela_9['Liga'] == 'POR1') | (tabela_9['Liga'] == 'POR2') | (tabela_9['Liga'] == 'QAT') | (tabela_9['Liga'] == 'ROM') 
+            | (tabela_9['Liga'] == 'RUS') | (tabela_9['Liga'] == 'SAUD') | (tabela_9['Liga'] == 'SCT') | (tabela_9['Liga'] == 'SER') 
+            | (tabela_9['Liga'] == 'SPA1') | (tabela_9['Liga'] == 'SPA2') | (tabela_9['Liga'] == 'SWE') | (tabela_9['Liga'] == 'SWZ') 
+            | (tabela_9['Liga'] == 'TUR') | (tabela_9['Liga'] == 'UAE') | (tabela_9['Liga'] == 'UKR')  | (tabela_9['Liga'] == 'URU')
+            | (tabela_9['Liga'] == 'USA') | (tabela_9['Liga'] == 'UZB') | (tabela_9['Liga'] == 'VEN')]
 
         tabela_10 = pd.read_csv("PlayerAnalysis_Role_3_Full.csv")
         tabela_10 = tabela_10.loc[(tabela_10['Nacionalidade']==nacionalidade)&(tabela_10['Fim_Contrato']<=contrato)&(tabela_10['Versão_Temporada']==temporada)]
         tabela_10 = tabela_10.iloc[:, np.r_[8, 25, 29:33]]
-        tabela_10 = tabela_10[(tabela_10['Liga'] == 'ENG1') | (tabela_10['Liga'] == 'ENG2') | (tabela_10['Liga'] == 'FRA1') | (tabela_10['Liga'] == 'FRA2') 
-            | (tabela_10['Liga'] == 'SPA1') | (tabela_10['Liga'] == 'ITA1') | (tabela_10['Liga'] == 'GER1') | (tabela_10['Liga'] == 'POR1') 
-            | (tabela_10['Liga'] == 'SWZ') | (tabela_10['Liga'] == 'RUS') | (tabela_10['Liga'] == 'UKR') | (tabela_10['Liga'] == 'BEL1') 
-            | (tabela_10['Liga'] == 'CHN') | (tabela_10['Liga'] == 'DEN') | (tabela_10['Liga'] == 'GRE') | (tabela_10['Liga'] == 'HOL') 
-            | (tabela_10['Liga'] == 'JAP') | (tabela_10['Liga'] == 'MEX') | (tabela_10['Liga'] == 'SAUD') | (tabela_10['Liga'] == 'TUR') 
-            | (tabela_10['Liga'] == 'UAE') | (tabela_10['Liga'] == 'USA') | (tabela_10['Liga'] == 'ITA2') | (tabela_10['Liga'] == 'GER2') 
-            | (tabela_10['Liga'] == 'POR2') | (tabela_10['Liga'] == 'BUL') | (tabela_10['Liga'] == 'AUT') | (tabela_10['Liga'] == 'QAT') 
-            | (tabela_10['Liga'] == 'BRA1') | (tabela_10['Liga'] == 'ARG1')]
+        tabela_10 = tabela_10[(tabela_10['Liga'] == 'ARG1') | (tabela_10['Liga'] == 'AUS') | (tabela_10['Liga'] == 'AUT') 
+            | (tabela_10['Liga'] == 'BEL1') | (tabela_10['Liga'] == 'BEL2') | (tabela_10['Liga'] == 'BOL') 
+            | (tabela_10['Liga'] == 'BRA1') | (tabela_10['Liga'] == 'BRA2') | (tabela_10['Liga'] == 'BUL') | (tabela_10['Liga'] == 'CHI')
+            | (tabela_10['Liga'] == 'CHN') | (tabela_10['Liga'] == 'COL') | (tabela_10['Liga'] == 'CRO') | (tabela_10['Liga'] == 'CZH')
+            | (tabela_10['Liga'] == 'DEN') | (tabela_10['Liga'] == 'ECU') | (tabela_10['Liga'] == 'ENG1') | (tabela_10['Liga'] == 'ENG2') 
+            | (tabela_10['Liga'] == 'FIN') | (tabela_10['Liga'] == 'FRA1') | (tabela_10['Liga'] == 'FRA2') | (tabela_10['Liga'] == 'GEO')  
+            | (tabela_10['Liga'] == 'GER1') | (tabela_10['Liga'] == 'GER2') | (tabela_10['Liga'] == 'GRE') | (tabela_10['Liga'] == 'HOL') 
+            | (tabela_10['Liga'] == 'IND') | (tabela_10['Liga'] == 'INDO') | (tabela_10['Liga'] == 'ITA1') | (tabela_10['Liga'] == 'ITA2') 
+            | (tabela_10['Liga'] == 'JAP') | (tabela_10['Liga'] == 'KOR') | (tabela_10['Liga'] == 'MEX') | (tabela_10['Liga'] == 'MOR') 
+            | (tabela_10['Liga'] == 'NOR') | (tabela_10['Liga'] == 'PAR') | (tabela_10['Liga'] == 'PER') | (tabela_10['Liga'] == 'POL') 
+            | (tabela_10['Liga'] == 'POR1') | (tabela_10['Liga'] == 'POR2') | (tabela_10['Liga'] == 'QAT') | (tabela_10['Liga'] == 'ROM') 
+            | (tabela_10['Liga'] == 'RUS') | (tabela_10['Liga'] == 'SAUD') | (tabela_10['Liga'] == 'SCT') | (tabela_10['Liga'] == 'SER') 
+            | (tabela_10['Liga'] == 'SPA1') | (tabela_10['Liga'] == 'SPA2') | (tabela_10['Liga'] == 'SWE') | (tabela_10['Liga'] == 'SWZ') 
+            | (tabela_10['Liga'] == 'TUR') | (tabela_10['Liga'] == 'UAE') | (tabela_10['Liga'] == 'UKR')  | (tabela_10['Liga'] == 'URU')
+            | (tabela_10['Liga'] == 'USA') | (tabela_10['Liga'] == 'UZB') | (tabela_10['Liga'] == 'VEN')]
 
         tabela_9 = pd.merge(tabela_9, tabela_10[['Atleta', 'L_Rating', 'L_Ranking', 'L_Percentil', 'Size']], on="Atleta", how="left")
         tabela_9 = tabela_9.rename(columns={'Equipe_Janela_Análise':'Equipe', 'Versão_Temporada':'Janela de Análise', 
@@ -3303,26 +3345,40 @@ if choose == "Free Agents pelo Mundo":
         tabela_11 = pd.read_csv("4_Role_Lateral_Ofensivo_Full.csv")
         tabela_11 = tabela_11.loc[(tabela_11['Nacionalidade']==nacionalidade)&(tabela_11['Fim_Contrato']<=contrato)&(tabela_11['Versão_Temporada']==temporada)]   
         tabela_11 = tabela_11.iloc[:, np.r_[1, 3, 4, 7, 15, 9:12, 33]]
-        tabela_11 = tabela_11[(tabela_11['Liga'] == 'ENG1') | (tabela_11['Liga'] == 'ENG2') | (tabela_11['Liga'] == 'FRA1') | (tabela_11['Liga'] == 'FRA2') 
-            | (tabela_11['Liga'] == 'SPA1') | (tabela_11['Liga'] == 'ITA1') | (tabela_11['Liga'] == 'GER1') | (tabela_11['Liga'] == 'POR1') 
-            | (tabela_11['Liga'] == 'SWZ') | (tabela_11['Liga'] == 'RUS') | (tabela_11['Liga'] == 'UKR') | (tabela_11['Liga'] == 'BEL1') 
-            | (tabela_11['Liga'] == 'CHN') | (tabela_11['Liga'] == 'DEN') | (tabela_11['Liga'] == 'GRE') | (tabela_11['Liga'] == 'HOL') 
-            | (tabela_11['Liga'] == 'JAP') | (tabela_11['Liga'] == 'MEX') | (tabela_11['Liga'] == 'SAUD') | (tabela_11['Liga'] == 'TUR') 
-            | (tabela_11['Liga'] == 'UAE') | (tabela_11['Liga'] == 'USA') | (tabela_11['Liga'] == 'ITA2') | (tabela_11['Liga'] == 'GER2') 
-            | (tabela_11['Liga'] == 'POR2') | (tabela_11['Liga'] == 'BUL') | (tabela_11['Liga'] == 'AUT') | (tabela_11['Liga'] == 'QAT') 
-            | (tabela_11['Liga'] == 'BRA1') | (tabela_11['Liga'] == 'ARG1')]
+        tabela_11 = tabela_11[(tabela_11['Liga'] == 'ARG1') | (tabela_11['Liga'] == 'AUS') | (tabela_11['Liga'] == 'AUT') 
+            | (tabela_11['Liga'] == 'BEL1') | (tabela_11['Liga'] == 'BEL2') | (tabela_11['Liga'] == 'BOL') 
+            | (tabela_11['Liga'] == 'BRA1') | (tabela_11['Liga'] == 'BRA2') | (tabela_11['Liga'] == 'BUL') | (tabela_11['Liga'] == 'CHI')
+            | (tabela_11['Liga'] == 'CHN') | (tabela_11['Liga'] == 'COL') | (tabela_11['Liga'] == 'CRO') | (tabela_11['Liga'] == 'CZH')
+            | (tabela_11['Liga'] == 'DEN') | (tabela_11['Liga'] == 'ECU') | (tabela_11['Liga'] == 'ENG1') | (tabela_11['Liga'] == 'ENG2') 
+            | (tabela_11['Liga'] == 'FIN') | (tabela_11['Liga'] == 'FRA1') | (tabela_11['Liga'] == 'FRA2') | (tabela_11['Liga'] == 'GEO')  
+            | (tabela_11['Liga'] == 'GER1') | (tabela_11['Liga'] == 'GER2') | (tabela_11['Liga'] == 'GRE') | (tabela_11['Liga'] == 'HOL') 
+            | (tabela_11['Liga'] == 'IND') | (tabela_11['Liga'] == 'INDO') | (tabela_11['Liga'] == 'ITA1') | (tabela_11['Liga'] == 'ITA2') 
+            | (tabela_11['Liga'] == 'JAP') | (tabela_11['Liga'] == 'KOR') | (tabela_11['Liga'] == 'MEX') | (tabela_11['Liga'] == 'MOR') 
+            | (tabela_11['Liga'] == 'NOR') | (tabela_11['Liga'] == 'PAR') | (tabela_11['Liga'] == 'PER') | (tabela_11['Liga'] == 'POL') 
+            | (tabela_11['Liga'] == 'POR1') | (tabela_11['Liga'] == 'POR2') | (tabela_11['Liga'] == 'QAT') | (tabela_11['Liga'] == 'ROM') 
+            | (tabela_11['Liga'] == 'RUS') | (tabela_11['Liga'] == 'SAUD') | (tabela_11['Liga'] == 'SCT') | (tabela_11['Liga'] == 'SER') 
+            | (tabela_11['Liga'] == 'SPA1') | (tabela_11['Liga'] == 'SPA2') | (tabela_11['Liga'] == 'SWE') | (tabela_11['Liga'] == 'SWZ') 
+            | (tabela_11['Liga'] == 'TUR') | (tabela_11['Liga'] == 'UAE') | (tabela_11['Liga'] == 'UKR')  | (tabela_11['Liga'] == 'URU')
+            | (tabela_11['Liga'] == 'USA') | (tabela_11['Liga'] == 'UZB') | (tabela_11['Liga'] == 'VEN')]
 
         tabela_12 = pd.read_csv("PlayerAnalysis_Role_4_Full.csv")
         tabela_12 = tabela_12.loc[(tabela_12['Nacionalidade']==nacionalidade)&(tabela_12['Fim_Contrato']<=contrato)&(tabela_12['Versão_Temporada']==temporada)]
         tabela_12 = tabela_12.iloc[:, np.r_[17, 34, 38:42]]
-        tabela_12 = tabela_12[(tabela_12['Liga'] == 'ENG1') | (tabela_12['Liga'] == 'ENG2') | (tabela_12['Liga'] == 'FRA1') | (tabela_12['Liga'] == 'FRA2') 
-            | (tabela_12['Liga'] == 'SPA1') | (tabela_12['Liga'] == 'ITA1') | (tabela_12['Liga'] == 'GER1') | (tabela_12['Liga'] == 'POR1') 
-            | (tabela_12['Liga'] == 'SWZ') | (tabela_12['Liga'] == 'RUS') | (tabela_12['Liga'] == 'UKR') | (tabela_12['Liga'] == 'BEL1') 
-            | (tabela_12['Liga'] == 'CHN') | (tabela_12['Liga'] == 'DEN') | (tabela_12['Liga'] == 'GRE') | (tabela_12['Liga'] == 'HOL') 
-            | (tabela_12['Liga'] == 'JAP') | (tabela_12['Liga'] == 'MEX') | (tabela_12['Liga'] == 'SAUD') | (tabela_12['Liga'] == 'TUR') 
-            | (tabela_12['Liga'] == 'UAE') | (tabela_12['Liga'] == 'USA') | (tabela_12['Liga'] == 'ITA2') | (tabela_12['Liga'] == 'GER2') 
-            | (tabela_12['Liga'] == 'POR2') | (tabela_12['Liga'] == 'BUL') | (tabela_12['Liga'] == 'AUT') | (tabela_12['Liga'] == 'QAT') 
-            | (tabela_12['Liga'] == 'BRA1') | (tabela_12['Liga'] == 'ARG1')]
+        tabela_12 = tabela_12[(tabela_12['Liga'] == 'ARG1') | (tabela_12['Liga'] == 'AUS') | (tabela_12['Liga'] == 'AUT') 
+            | (tabela_12['Liga'] == 'BEL1') | (tabela_12['Liga'] == 'BEL2') | (tabela_12['Liga'] == 'BOL') 
+            | (tabela_12['Liga'] == 'BRA1') | (tabela_12['Liga'] == 'BRA2') | (tabela_12['Liga'] == 'BUL') | (tabela_12['Liga'] == 'CHI')
+            | (tabela_12['Liga'] == 'CHN') | (tabela_12['Liga'] == 'COL') | (tabela_12['Liga'] == 'CRO') | (tabela_12['Liga'] == 'CZH')
+            | (tabela_12['Liga'] == 'DEN') | (tabela_12['Liga'] == 'ECU') | (tabela_12['Liga'] == 'ENG1') | (tabela_12['Liga'] == 'ENG2') 
+            | (tabela_12['Liga'] == 'FIN') | (tabela_12['Liga'] == 'FRA1') | (tabela_12['Liga'] == 'FRA2') | (tabela_12['Liga'] == 'GEO')  
+            | (tabela_12['Liga'] == 'GER1') | (tabela_12['Liga'] == 'GER2') | (tabela_12['Liga'] == 'GRE') | (tabela_12['Liga'] == 'HOL') 
+            | (tabela_12['Liga'] == 'IND') | (tabela_12['Liga'] == 'INDO') | (tabela_12['Liga'] == 'ITA1') | (tabela_12['Liga'] == 'ITA2') 
+            | (tabela_12['Liga'] == 'JAP') | (tabela_12['Liga'] == 'KOR') | (tabela_12['Liga'] == 'MEX') | (tabela_12['Liga'] == 'MOR') 
+            | (tabela_12['Liga'] == 'NOR') | (tabela_12['Liga'] == 'PAR') | (tabela_12['Liga'] == 'PER') | (tabela_12['Liga'] == 'POL') 
+            | (tabela_12['Liga'] == 'POR1') | (tabela_12['Liga'] == 'POR2') | (tabela_12['Liga'] == 'QAT') | (tabela_12['Liga'] == 'ROM') 
+            | (tabela_12['Liga'] == 'RUS') | (tabela_12['Liga'] == 'SAUD') | (tabela_12['Liga'] == 'SCT') | (tabela_12['Liga'] == 'SER') 
+            | (tabela_12['Liga'] == 'SPA1') | (tabela_12['Liga'] == 'SPA2') | (tabela_12['Liga'] == 'SWE') | (tabela_12['Liga'] == 'SWZ') 
+            | (tabela_12['Liga'] == 'TUR') | (tabela_12['Liga'] == 'UAE') | (tabela_12['Liga'] == 'UKR')  | (tabela_12['Liga'] == 'URU')
+            | (tabela_12['Liga'] == 'USA') | (tabela_12['Liga'] == 'UZB') | (tabela_12['Liga'] == 'VEN')]
 
         tabela_11 = pd.merge(tabela_11, tabela_12[['Atleta', 'L_Rating', 'L_Ranking', 'L_Percentil', 'Size']], on="Atleta", how="left")
         tabela_11 = tabela_11.rename(columns={'Equipe_Janela_Análise':'Equipe', 'Versão_Temporada':'Janela de Análise', 
@@ -3379,26 +3435,40 @@ if choose == "Free Agents pelo Mundo":
         tabela_13 = pd.read_csv("5_Role_Lateral_Equilibrado_Full.csv")
         tabela_13 = tabela_13.loc[(tabela_13['Nacionalidade']==nacionalidade)&(tabela_13['Fim_Contrato']<=contrato)&(tabela_13['Versão_Temporada']==temporada)]   
         tabela_13 = tabela_13.iloc[:, np.r_[1, 3, 4, 7, 15, 9:12, 36]]
-        tabela_13 = tabela_13[(tabela_13['Liga'] == 'ENG1') | (tabela_13['Liga'] == 'ENG2') | (tabela_13['Liga'] == 'FRA1') | (tabela_13['Liga'] == 'FRA2') 
-            | (tabela_13['Liga'] == 'SPA1') | (tabela_13['Liga'] == 'ITA1') | (tabela_13['Liga'] == 'GER1') | (tabela_13['Liga'] == 'POR1') 
-            | (tabela_13['Liga'] == 'SWZ') | (tabela_13['Liga'] == 'RUS') | (tabela_13['Liga'] == 'UKR') | (tabela_13['Liga'] == 'BEL1') 
-            | (tabela_13['Liga'] == 'CHN') | (tabela_13['Liga'] == 'DEN') | (tabela_13['Liga'] == 'GRE') | (tabela_13['Liga'] == 'HOL') 
-            | (tabela_13['Liga'] == 'JAP') | (tabela_13['Liga'] == 'MEX') | (tabela_13['Liga'] == 'SAUD') | (tabela_13['Liga'] == 'TUR') 
-            | (tabela_13['Liga'] == 'UAE') | (tabela_13['Liga'] == 'USA') | (tabela_13['Liga'] == 'ITA2') | (tabela_13['Liga'] == 'GER2') 
-            | (tabela_13['Liga'] == 'POR2') | (tabela_13['Liga'] == 'BUL') | (tabela_13['Liga'] == 'AUT') | (tabela_13['Liga'] == 'QAT') 
-            | (tabela_13['Liga'] == 'BRA1') | (tabela_13['Liga'] == 'ARG1')]
+        tabela_13 = tabela_13[(tabela_13['Liga'] == 'ARG1') | (tabela_13['Liga'] == 'AUS') | (tabela_13['Liga'] == 'AUT') 
+            | (tabela_13['Liga'] == 'BEL1') | (tabela_13['Liga'] == 'BEL2') | (tabela_13['Liga'] == 'BOL') 
+            | (tabela_13['Liga'] == 'BRA1') | (tabela_13['Liga'] == 'BRA2') | (tabela_13['Liga'] == 'BUL') | (tabela_13['Liga'] == 'CHI')
+            | (tabela_13['Liga'] == 'CHN') | (tabela_13['Liga'] == 'COL') | (tabela_13['Liga'] == 'CRO') | (tabela_13['Liga'] == 'CZH')
+            | (tabela_13['Liga'] == 'DEN') | (tabela_13['Liga'] == 'ECU') | (tabela_13['Liga'] == 'ENG1') | (tabela_13['Liga'] == 'ENG2') 
+            | (tabela_13['Liga'] == 'FIN') | (tabela_13['Liga'] == 'FRA1') | (tabela_13['Liga'] == 'FRA2') | (tabela_13['Liga'] == 'GEO')  
+            | (tabela_13['Liga'] == 'GER1') | (tabela_13['Liga'] == 'GER2') | (tabela_13['Liga'] == 'GRE') | (tabela_13['Liga'] == 'HOL') 
+            | (tabela_13['Liga'] == 'IND') | (tabela_13['Liga'] == 'INDO') | (tabela_13['Liga'] == 'ITA1') | (tabela_13['Liga'] == 'ITA2') 
+            | (tabela_13['Liga'] == 'JAP') | (tabela_13['Liga'] == 'KOR') | (tabela_13['Liga'] == 'MEX') | (tabela_13['Liga'] == 'MOR') 
+            | (tabela_13['Liga'] == 'NOR') | (tabela_13['Liga'] == 'PAR') | (tabela_13['Liga'] == 'PER') | (tabela_13['Liga'] == 'POL') 
+            | (tabela_13['Liga'] == 'POR1') | (tabela_13['Liga'] == 'POR2') | (tabela_13['Liga'] == 'QAT') | (tabela_13['Liga'] == 'ROM') 
+            | (tabela_13['Liga'] == 'RUS') | (tabela_13['Liga'] == 'SAUD') | (tabela_13['Liga'] == 'SCT') | (tabela_13['Liga'] == 'SER') 
+            | (tabela_13['Liga'] == 'SPA1') | (tabela_13['Liga'] == 'SPA2') | (tabela_13['Liga'] == 'SWE') | (tabela_13['Liga'] == 'SWZ') 
+            | (tabela_13['Liga'] == 'TUR') | (tabela_13['Liga'] == 'UAE') | (tabela_13['Liga'] == 'UKR')  | (tabela_13['Liga'] == 'URU')
+            | (tabela_13['Liga'] == 'USA') | (tabela_13['Liga'] == 'UZB') | (tabela_13['Liga'] == 'VEN')]
 
         tabela_14 = pd.read_csv("PlayerAnalysis_Role_5_Full.csv")
         tabela_14 = tabela_14.loc[(tabela_14['Nacionalidade']==nacionalidade)&(tabela_14['Fim_Contrato']<=contrato)&(tabela_14['Versão_Temporada']==temporada)]
         tabela_14 = tabela_14.iloc[:, np.r_[20, 37, 41:45]]
-        tabela_14 = tabela_14[(tabela_14['Liga'] == 'ENG1') | (tabela_14['Liga'] == 'ENG2') | (tabela_14['Liga'] == 'FRA1') | (tabela_14['Liga'] == 'FRA2') 
-            | (tabela_14['Liga'] == 'SPA1') | (tabela_14['Liga'] == 'ITA1') | (tabela_14['Liga'] == 'GER1') | (tabela_14['Liga'] == 'POR1') 
-            | (tabela_14['Liga'] == 'SWZ') | (tabela_14['Liga'] == 'RUS') | (tabela_14['Liga'] == 'UKR') | (tabela_14['Liga'] == 'BEL1') 
-            | (tabela_14['Liga'] == 'CHN') | (tabela_14['Liga'] == 'DEN') | (tabela_14['Liga'] == 'GRE') | (tabela_14['Liga'] == 'HOL') 
-            | (tabela_14['Liga'] == 'JAP') | (tabela_14['Liga'] == 'MEX') | (tabela_14['Liga'] == 'SAUD') | (tabela_14['Liga'] == 'TUR') 
-            | (tabela_14['Liga'] == 'UAE') | (tabela_14['Liga'] == 'USA') | (tabela_14['Liga'] == 'ITA2') | (tabela_14['Liga'] == 'GER2') 
-            | (tabela_14['Liga'] == 'POR2') | (tabela_14['Liga'] == 'BUL') | (tabela_14['Liga'] == 'AUT') | (tabela_14['Liga'] == 'QAT') 
-            | (tabela_14['Liga'] == 'BRA1') | (tabela_14['Liga'] == 'ARG1')]
+        tabela_14 = tabela_14[(tabela_14['Liga'] == 'ARG1') | (tabela_14['Liga'] == 'AUS') | (tabela_14['Liga'] == 'AUT') 
+            | (tabela_14['Liga'] == 'BEL1') | (tabela_14['Liga'] == 'BEL2') | (tabela_14['Liga'] == 'BOL') 
+            | (tabela_14['Liga'] == 'BRA1') | (tabela_14['Liga'] == 'BRA2') | (tabela_14['Liga'] == 'BUL') | (tabela_14['Liga'] == 'CHI')
+            | (tabela_14['Liga'] == 'CHN') | (tabela_14['Liga'] == 'COL') | (tabela_14['Liga'] == 'CRO') | (tabela_14['Liga'] == 'CZH')
+            | (tabela_14['Liga'] == 'DEN') | (tabela_14['Liga'] == 'ECU') | (tabela_14['Liga'] == 'ENG1') | (tabela_14['Liga'] == 'ENG2') 
+            | (tabela_14['Liga'] == 'FIN') | (tabela_14['Liga'] == 'FRA1') | (tabela_14['Liga'] == 'FRA2') | (tabela_14['Liga'] == 'GEO')  
+            | (tabela_14['Liga'] == 'GER1') | (tabela_14['Liga'] == 'GER2') | (tabela_14['Liga'] == 'GRE') | (tabela_14['Liga'] == 'HOL') 
+            | (tabela_14['Liga'] == 'IND') | (tabela_14['Liga'] == 'INDO') | (tabela_14['Liga'] == 'ITA1') | (tabela_14['Liga'] == 'ITA2') 
+            | (tabela_14['Liga'] == 'JAP') | (tabela_14['Liga'] == 'KOR') | (tabela_14['Liga'] == 'MEX') | (tabela_14['Liga'] == 'MOR') 
+            | (tabela_14['Liga'] == 'NOR') | (tabela_14['Liga'] == 'PAR') | (tabela_14['Liga'] == 'PER') | (tabela_14['Liga'] == 'POL') 
+            | (tabela_14['Liga'] == 'POR1') | (tabela_14['Liga'] == 'POR2') | (tabela_14['Liga'] == 'QAT') | (tabela_14['Liga'] == 'ROM') 
+            | (tabela_14['Liga'] == 'RUS') | (tabela_14['Liga'] == 'SAUD') | (tabela_14['Liga'] == 'SCT') | (tabela_14['Liga'] == 'SER') 
+            | (tabela_14['Liga'] == 'SPA1') | (tabela_14['Liga'] == 'SPA2') | (tabela_14['Liga'] == 'SWE') | (tabela_14['Liga'] == 'SWZ') 
+            | (tabela_14['Liga'] == 'TUR') | (tabela_14['Liga'] == 'UAE') | (tabela_14['Liga'] == 'UKR')  | (tabela_14['Liga'] == 'URU')
+            | (tabela_14['Liga'] == 'USA') | (tabela_14['Liga'] == 'UZB') | (tabela_14['Liga'] == 'VEN')]
 
         tabela_13 = pd.merge(tabela_13, tabela_14[['Atleta', 'L_Rating', 'L_Ranking', 'L_Percentil', 'Size']], on="Atleta", how="left")
         tabela_13 = tabela_13.rename(columns={'Equipe_Janela_Análise':'Equipe', 'Versão_Temporada':'Janela de Análise', 
@@ -3458,26 +3528,40 @@ if choose == "Free Agents pelo Mundo":
         tabela_9 = pd.read_csv("6_Role_Zagueiro_Defensivo_Full.csv")
         tabela_9 = tabela_9.loc[(tabela_9['Nacionalidade']==nacionalidade)&(tabela_9['Fim_Contrato']<=contrato)&(tabela_9['Versão_Temporada']==temporada)]   
         tabela_9 = tabela_9.iloc[:, np.r_[1, 3, 4, 7, 15, 9:12, 24]]
-        tabela_9 = tabela_9[(tabela_9['Liga'] == 'ENG1') | (tabela_9['Liga'] == 'ENG2') | (tabela_9['Liga'] == 'FRA1') | (tabela_9['Liga'] == 'FRA2') 
-            | (tabela_9['Liga'] == 'SPA1') | (tabela_9['Liga'] == 'ITA1') | (tabela_9['Liga'] == 'GER1') | (tabela_9['Liga'] == 'POR1') 
-            | (tabela_9['Liga'] == 'SWZ') | (tabela_9['Liga'] == 'RUS') | (tabela_9['Liga'] == 'UKR') | (tabela_9['Liga'] == 'BEL1') 
-            | (tabela_9['Liga'] == 'CHN') | (tabela_9['Liga'] == 'DEN') | (tabela_9['Liga'] == 'GRE') | (tabela_9['Liga'] == 'HOL') 
-            | (tabela_9['Liga'] == 'JAP') | (tabela_9['Liga'] == 'MEX') | (tabela_9['Liga'] == 'SAUD') | (tabela_9['Liga'] == 'TUR') 
-            | (tabela_9['Liga'] == 'UAE') | (tabela_9['Liga'] == 'USA') | (tabela_9['Liga'] == 'ITA2') | (tabela_9['Liga'] == 'GER2') 
-            | (tabela_9['Liga'] == 'POR2') | (tabela_9['Liga'] == 'BUL') | (tabela_9['Liga'] == 'AUT') | (tabela_9['Liga'] == 'QAT') 
-            | (tabela_9['Liga'] == 'BRA1') | (tabela_9['Liga'] == 'ARG1')]
+        tabela_9 = tabela_9[(tabela_9['Liga'] == 'ARG1') | (tabela_9['Liga'] == 'AUS') | (tabela_9['Liga'] == 'AUT') 
+            | (tabela_9['Liga'] == 'BEL1') | (tabela_9['Liga'] == 'BEL2') | (tabela_9['Liga'] == 'BOL') 
+            | (tabela_9['Liga'] == 'BRA1') | (tabela_9['Liga'] == 'BRA2') | (tabela_9['Liga'] == 'BUL') | (tabela_9['Liga'] == 'CHI')
+            | (tabela_9['Liga'] == 'CHN') | (tabela_9['Liga'] == 'COL') | (tabela_9['Liga'] == 'CRO') | (tabela_9['Liga'] == 'CZH')
+            | (tabela_9['Liga'] == 'DEN') | (tabela_9['Liga'] == 'ECU') | (tabela_9['Liga'] == 'ENG1') | (tabela_9['Liga'] == 'ENG2') 
+            | (tabela_9['Liga'] == 'FIN') | (tabela_9['Liga'] == 'FRA1') | (tabela_9['Liga'] == 'FRA2') | (tabela_9['Liga'] == 'GEO')  
+            | (tabela_9['Liga'] == 'GER1') | (tabela_9['Liga'] == 'GER2') | (tabela_9['Liga'] == 'GRE') | (tabela_9['Liga'] == 'HOL') 
+            | (tabela_9['Liga'] == 'IND') | (tabela_9['Liga'] == 'INDO') | (tabela_9['Liga'] == 'ITA1') | (tabela_9['Liga'] == 'ITA2') 
+            | (tabela_9['Liga'] == 'JAP') | (tabela_9['Liga'] == 'KOR') | (tabela_9['Liga'] == 'MEX') | (tabela_9['Liga'] == 'MOR') 
+            | (tabela_9['Liga'] == 'NOR') | (tabela_9['Liga'] == 'PAR') | (tabela_9['Liga'] == 'PER') | (tabela_9['Liga'] == 'POL') 
+            | (tabela_9['Liga'] == 'POR1') | (tabela_9['Liga'] == 'POR2') | (tabela_9['Liga'] == 'QAT') | (tabela_9['Liga'] == 'ROM') 
+            | (tabela_9['Liga'] == 'RUS') | (tabela_9['Liga'] == 'SAUD') | (tabela_9['Liga'] == 'SCT') | (tabela_9['Liga'] == 'SER') 
+            | (tabela_9['Liga'] == 'SPA1') | (tabela_9['Liga'] == 'SPA2') | (tabela_9['Liga'] == 'SWE') | (tabela_9['Liga'] == 'SWZ') 
+            | (tabela_9['Liga'] == 'TUR') | (tabela_9['Liga'] == 'UAE') | (tabela_9['Liga'] == 'UKR')  | (tabela_9['Liga'] == 'URU')
+            | (tabela_9['Liga'] == 'USA') | (tabela_9['Liga'] == 'UZB') | (tabela_9['Liga'] == 'VEN')]
 
         tabela_10 = pd.read_csv("PlayerAnalysis_Role_6_Full.csv")
         tabela_10 = tabela_10.loc[(tabela_10['Nacionalidade']==nacionalidade)&(tabela_10['Fim_Contrato']<=contrato)&(tabela_10['Versão_Temporada']==temporada)]
         tabela_10 = tabela_10.iloc[:, np.r_[8, 25, 29:33]]
-        tabela_10 = tabela_10[(tabela_10['Liga'] == 'ENG1') | (tabela_10['Liga'] == 'ENG2') | (tabela_10['Liga'] == 'FRA1') | (tabela_10['Liga'] == 'FRA2') 
-            | (tabela_10['Liga'] == 'SPA1') | (tabela_10['Liga'] == 'ITA1') | (tabela_10['Liga'] == 'GER1') | (tabela_10['Liga'] == 'POR1') 
-            | (tabela_10['Liga'] == 'SWZ') | (tabela_10['Liga'] == 'RUS') | (tabela_10['Liga'] == 'UKR') | (tabela_10['Liga'] == 'BEL1') 
-            | (tabela_10['Liga'] == 'CHN') | (tabela_10['Liga'] == 'DEN') | (tabela_10['Liga'] == 'GRE') | (tabela_10['Liga'] == 'HOL') 
-            | (tabela_10['Liga'] == 'JAP') | (tabela_10['Liga'] == 'MEX') | (tabela_10['Liga'] == 'SAUD') | (tabela_10['Liga'] == 'TUR') 
-            | (tabela_10['Liga'] == 'UAE') | (tabela_10['Liga'] == 'USA') | (tabela_10['Liga'] == 'ITA2') | (tabela_10['Liga'] == 'GER2') 
-            | (tabela_10['Liga'] == 'POR2') | (tabela_10['Liga'] == 'BUL') | (tabela_10['Liga'] == 'AUT') | (tabela_10['Liga'] == 'QAT') 
-            | (tabela_10['Liga'] == 'BRA1') | (tabela_10['Liga'] == 'ARG1')]
+        tabela_10 = tabela_10[(tabela_10['Liga'] == 'ARG1') | (tabela_10['Liga'] == 'AUS') | (tabela_10['Liga'] == 'AUT') 
+            | (tabela_10['Liga'] == 'BEL1') | (tabela_10['Liga'] == 'BEL2') | (tabela_10['Liga'] == 'BOL') 
+            | (tabela_10['Liga'] == 'BRA1') | (tabela_10['Liga'] == 'BRA2') | (tabela_10['Liga'] == 'BUL') | (tabela_10['Liga'] == 'CHI')
+            | (tabela_10['Liga'] == 'CHN') | (tabela_10['Liga'] == 'COL') | (tabela_10['Liga'] == 'CRO') | (tabela_10['Liga'] == 'CZH')
+            | (tabela_10['Liga'] == 'DEN') | (tabela_10['Liga'] == 'ECU') | (tabela_10['Liga'] == 'ENG1') | (tabela_10['Liga'] == 'ENG2') 
+            | (tabela_10['Liga'] == 'FIN') | (tabela_10['Liga'] == 'FRA1') | (tabela_10['Liga'] == 'FRA2') | (tabela_10['Liga'] == 'GEO')  
+            | (tabela_10['Liga'] == 'GER1') | (tabela_10['Liga'] == 'GER2') | (tabela_10['Liga'] == 'GRE') | (tabela_10['Liga'] == 'HOL') 
+            | (tabela_10['Liga'] == 'IND') | (tabela_10['Liga'] == 'INDO') | (tabela_10['Liga'] == 'ITA1') | (tabela_10['Liga'] == 'ITA2') 
+            | (tabela_10['Liga'] == 'JAP') | (tabela_10['Liga'] == 'KOR') | (tabela_10['Liga'] == 'MEX') | (tabela_10['Liga'] == 'MOR') 
+            | (tabela_10['Liga'] == 'NOR') | (tabela_10['Liga'] == 'PAR') | (tabela_10['Liga'] == 'PER') | (tabela_10['Liga'] == 'POL') 
+            | (tabela_10['Liga'] == 'POR1') | (tabela_10['Liga'] == 'POR2') | (tabela_10['Liga'] == 'QAT') | (tabela_10['Liga'] == 'ROM') 
+            | (tabela_10['Liga'] == 'RUS') | (tabela_10['Liga'] == 'SAUD') | (tabela_10['Liga'] == 'SCT') | (tabela_10['Liga'] == 'SER') 
+            | (tabela_10['Liga'] == 'SPA1') | (tabela_10['Liga'] == 'SPA2') | (tabela_10['Liga'] == 'SWE') | (tabela_10['Liga'] == 'SWZ') 
+            | (tabela_10['Liga'] == 'TUR') | (tabela_10['Liga'] == 'UAE') | (tabela_10['Liga'] == 'UKR')  | (tabela_10['Liga'] == 'URU')
+            | (tabela_10['Liga'] == 'USA') | (tabela_10['Liga'] == 'UZB') | (tabela_10['Liga'] == 'VEN')]
 
         tabela_9 = pd.merge(tabela_9, tabela_10[['Atleta', 'L_Rating', 'L_Ranking', 'L_Percentil', 'Size']], on="Atleta", how="left")
         tabela_9 = tabela_9.rename(columns={'Equipe_Janela_Análise':'Equipe', 'Versão_Temporada':'Janela de Análise', 
@@ -3537,26 +3621,40 @@ if choose == "Free Agents pelo Mundo":
         tabela_11 = pd.read_csv("7_Role_Zagueiro_Construtor_Full.csv")
         tabela_11 = tabela_11.loc[(tabela_11['Nacionalidade']==nacionalidade)&(tabela_11['Fim_Contrato']<=contrato)&(tabela_11['Versão_Temporada']==temporada)]   
         tabela_11 = tabela_11.iloc[:, np.r_[1, 3, 4, 7, 15, 9:12, 28]]
-        tabela_11 = tabela_11[(tabela_11['Liga'] == 'ENG1') | (tabela_11['Liga'] == 'ENG2') | (tabela_11['Liga'] == 'FRA1') | (tabela_11['Liga'] == 'FRA2') 
-            | (tabela_11['Liga'] == 'SPA1') | (tabela_11['Liga'] == 'ITA1') | (tabela_11['Liga'] == 'GER1') | (tabela_11['Liga'] == 'POR1') 
-            | (tabela_11['Liga'] == 'SWZ') | (tabela_11['Liga'] == 'RUS') | (tabela_11['Liga'] == 'UKR') | (tabela_11['Liga'] == 'BEL1') 
-            | (tabela_11['Liga'] == 'CHN') | (tabela_11['Liga'] == 'DEN') | (tabela_11['Liga'] == 'GRE') | (tabela_11['Liga'] == 'HOL') 
-            | (tabela_11['Liga'] == 'JAP') | (tabela_11['Liga'] == 'MEX') | (tabela_11['Liga'] == 'SAUD') | (tabela_11['Liga'] == 'TUR') 
-            | (tabela_11['Liga'] == 'UAE') | (tabela_11['Liga'] == 'USA') | (tabela_11['Liga'] == 'ITA2') | (tabela_11['Liga'] == 'GER2') 
-            | (tabela_11['Liga'] == 'POR2') | (tabela_11['Liga'] == 'BUL') | (tabela_11['Liga'] == 'AUT') | (tabela_11['Liga'] == 'QAT') 
-            | (tabela_11['Liga'] == 'BRA1') | (tabela_11['Liga'] == 'ARG1')]
+        tabela_11 = tabela_11[(tabela_11['Liga'] == 'ARG1') | (tabela_11['Liga'] == 'AUS') | (tabela_11['Liga'] == 'AUT') 
+            | (tabela_11['Liga'] == 'BEL1') | (tabela_11['Liga'] == 'BEL2') | (tabela_11['Liga'] == 'BOL') 
+            | (tabela_11['Liga'] == 'BRA1') | (tabela_11['Liga'] == 'BRA2') | (tabela_11['Liga'] == 'BUL') | (tabela_11['Liga'] == 'CHI')
+            | (tabela_11['Liga'] == 'CHN') | (tabela_11['Liga'] == 'COL') | (tabela_11['Liga'] == 'CRO') | (tabela_11['Liga'] == 'CZH')
+            | (tabela_11['Liga'] == 'DEN') | (tabela_11['Liga'] == 'ECU') | (tabela_11['Liga'] == 'ENG1') | (tabela_11['Liga'] == 'ENG2') 
+            | (tabela_11['Liga'] == 'FIN') | (tabela_11['Liga'] == 'FRA1') | (tabela_11['Liga'] == 'FRA2') | (tabela_11['Liga'] == 'GEO')  
+            | (tabela_11['Liga'] == 'GER1') | (tabela_11['Liga'] == 'GER2') | (tabela_11['Liga'] == 'GRE') | (tabela_11['Liga'] == 'HOL') 
+            | (tabela_11['Liga'] == 'IND') | (tabela_11['Liga'] == 'INDO') | (tabela_11['Liga'] == 'ITA1') | (tabela_11['Liga'] == 'ITA2') 
+            | (tabela_11['Liga'] == 'JAP') | (tabela_11['Liga'] == 'KOR') | (tabela_11['Liga'] == 'MEX') | (tabela_11['Liga'] == 'MOR') 
+            | (tabela_11['Liga'] == 'NOR') | (tabela_11['Liga'] == 'PAR') | (tabela_11['Liga'] == 'PER') | (tabela_11['Liga'] == 'POL') 
+            | (tabela_11['Liga'] == 'POR1') | (tabela_11['Liga'] == 'POR2') | (tabela_11['Liga'] == 'QAT') | (tabela_11['Liga'] == 'ROM') 
+            | (tabela_11['Liga'] == 'RUS') | (tabela_11['Liga'] == 'SAUD') | (tabela_11['Liga'] == 'SCT') | (tabela_11['Liga'] == 'SER') 
+            | (tabela_11['Liga'] == 'SPA1') | (tabela_11['Liga'] == 'SPA2') | (tabela_11['Liga'] == 'SWE') | (tabela_11['Liga'] == 'SWZ') 
+            | (tabela_11['Liga'] == 'TUR') | (tabela_11['Liga'] == 'UAE') | (tabela_11['Liga'] == 'UKR')  | (tabela_11['Liga'] == 'URU')
+            | (tabela_11['Liga'] == 'USA') | (tabela_11['Liga'] == 'UZB') | (tabela_11['Liga'] == 'VEN')]
 
         tabela_12 = pd.read_csv("PlayerAnalysis_Role_7_Full.csv")
         tabela_12 = tabela_12.loc[(tabela_12['Nacionalidade']==nacionalidade)&(tabela_12['Fim_Contrato']<=contrato)&(tabela_12['Versão_Temporada']==temporada)]
         tabela_12 = tabela_12.iloc[:, np.r_[12, 29, 33:37]]
-        tabela_12 = tabela_12[(tabela_12['Liga'] == 'ENG1') | (tabela_12['Liga'] == 'ENG2') | (tabela_12['Liga'] == 'FRA1') | (tabela_12['Liga'] == 'FRA2') 
-            | (tabela_12['Liga'] == 'SPA1') | (tabela_12['Liga'] == 'ITA1') | (tabela_12['Liga'] == 'GER1') | (tabela_12['Liga'] == 'POR1') 
-            | (tabela_12['Liga'] == 'SWZ') | (tabela_12['Liga'] == 'RUS') | (tabela_12['Liga'] == 'UKR') | (tabela_12['Liga'] == 'BEL1') 
-            | (tabela_12['Liga'] == 'CHN') | (tabela_12['Liga'] == 'DEN') | (tabela_12['Liga'] == 'GRE') | (tabela_12['Liga'] == 'HOL') 
-            | (tabela_12['Liga'] == 'JAP') | (tabela_12['Liga'] == 'MEX') | (tabela_12['Liga'] == 'SAUD') | (tabela_12['Liga'] == 'TUR') 
-            | (tabela_12['Liga'] == 'UAE') | (tabela_12['Liga'] == 'USA') | (tabela_12['Liga'] == 'ITA2') | (tabela_12['Liga'] == 'GER2') 
-            | (tabela_12['Liga'] == 'POR2') | (tabela_12['Liga'] == 'BUL') | (tabela_12['Liga'] == 'AUT') | (tabela_12['Liga'] == 'QAT') 
-            | (tabela_12['Liga'] == 'BRA1') | (tabela_12['Liga'] == 'ARG1')]
+        tabela_12 = tabela_12[(tabela_12['Liga'] == 'ARG1') | (tabela_12['Liga'] == 'AUS') | (tabela_12['Liga'] == 'AUT') 
+            | (tabela_12['Liga'] == 'BEL1') | (tabela_12['Liga'] == 'BEL2') | (tabela_12['Liga'] == 'BOL') 
+            | (tabela_12['Liga'] == 'BRA1') | (tabela_12['Liga'] == 'BRA2') | (tabela_12['Liga'] == 'BUL') | (tabela_12['Liga'] == 'CHI')
+            | (tabela_12['Liga'] == 'CHN') | (tabela_12['Liga'] == 'COL') | (tabela_12['Liga'] == 'CRO') | (tabela_12['Liga'] == 'CZH')
+            | (tabela_12['Liga'] == 'DEN') | (tabela_12['Liga'] == 'ECU') | (tabela_12['Liga'] == 'ENG1') | (tabela_12['Liga'] == 'ENG2') 
+            | (tabela_12['Liga'] == 'FIN') | (tabela_12['Liga'] == 'FRA1') | (tabela_12['Liga'] == 'FRA2') | (tabela_12['Liga'] == 'GEO')  
+            | (tabela_12['Liga'] == 'GER1') | (tabela_12['Liga'] == 'GER2') | (tabela_12['Liga'] == 'GRE') | (tabela_12['Liga'] == 'HOL') 
+            | (tabela_12['Liga'] == 'IND') | (tabela_12['Liga'] == 'INDO') | (tabela_12['Liga'] == 'ITA1') | (tabela_12['Liga'] == 'ITA2') 
+            | (tabela_12['Liga'] == 'JAP') | (tabela_12['Liga'] == 'KOR') | (tabela_12['Liga'] == 'MEX') | (tabela_12['Liga'] == 'MOR') 
+            | (tabela_12['Liga'] == 'NOR') | (tabela_12['Liga'] == 'PAR') | (tabela_12['Liga'] == 'PER') | (tabela_12['Liga'] == 'POL') 
+            | (tabela_12['Liga'] == 'POR1') | (tabela_12['Liga'] == 'POR2') | (tabela_12['Liga'] == 'QAT') | (tabela_12['Liga'] == 'ROM') 
+            | (tabela_12['Liga'] == 'RUS') | (tabela_12['Liga'] == 'SAUD') | (tabela_12['Liga'] == 'SCT') | (tabela_12['Liga'] == 'SER') 
+            | (tabela_12['Liga'] == 'SPA1') | (tabela_12['Liga'] == 'SPA2') | (tabela_12['Liga'] == 'SWE') | (tabela_12['Liga'] == 'SWZ') 
+            | (tabela_12['Liga'] == 'TUR') | (tabela_12['Liga'] == 'UAE') | (tabela_12['Liga'] == 'UKR')  | (tabela_12['Liga'] == 'URU')
+            | (tabela_12['Liga'] == 'USA') | (tabela_12['Liga'] == 'UZB') | (tabela_12['Liga'] == 'VEN')]
 
         tabela_11 = pd.merge(tabela_11, tabela_12[['Atleta', 'L_Rating', 'L_Ranking', 'L_Percentil', 'Size']], on="Atleta", how="left")
         tabela_11 = tabela_11.rename(columns={'Equipe_Janela_Análise':'Equipe', 'Versão_Temporada':'Janela de Análise', 
@@ -3617,26 +3715,40 @@ if choose == "Free Agents pelo Mundo":
         tabela_13 = pd.read_csv("8_Role_Zagueiro_Equilibrado_Full.csv")
         tabela_13 = tabela_13.loc[(tabela_13['Nacionalidade']==nacionalidade)&(tabela_13['Fim_Contrato']<=contrato)&(tabela_13['Versão_Temporada']==temporada)]   
         tabela_13 = tabela_13.iloc[:, np.r_[1, 3, 4, 7, 15, 9:12, 31]]
-        tabela_13 = tabela_13[(tabela_13['Liga'] == 'ENG1') | (tabela_13['Liga'] == 'ENG2') | (tabela_13['Liga'] == 'FRA1') | (tabela_13['Liga'] == 'FRA2') 
-            | (tabela_13['Liga'] == 'SPA1') | (tabela_13['Liga'] == 'ITA1') | (tabela_13['Liga'] == 'GER1') | (tabela_13['Liga'] == 'POR1') 
-            | (tabela_13['Liga'] == 'SWZ') | (tabela_13['Liga'] == 'RUS') | (tabela_13['Liga'] == 'UKR') | (tabela_13['Liga'] == 'BEL1') 
-            | (tabela_13['Liga'] == 'CHN') | (tabela_13['Liga'] == 'DEN') | (tabela_13['Liga'] == 'GRE') | (tabela_13['Liga'] == 'HOL') 
-            | (tabela_13['Liga'] == 'JAP') | (tabela_13['Liga'] == 'MEX') | (tabela_13['Liga'] == 'SAUD') | (tabela_13['Liga'] == 'TUR') 
-            | (tabela_13['Liga'] == 'UAE') | (tabela_13['Liga'] == 'USA') | (tabela_13['Liga'] == 'ITA2') | (tabela_13['Liga'] == 'GER2') 
-            | (tabela_13['Liga'] == 'POR2') | (tabela_13['Liga'] == 'BUL') | (tabela_13['Liga'] == 'AUT') | (tabela_13['Liga'] == 'QAT') 
-            | (tabela_13['Liga'] == 'BRA1') | (tabela_13['Liga'] == 'ARG1')]
+        tabela_13 = tabela_13[(tabela_13['Liga'] == 'ARG1') | (tabela_13['Liga'] == 'AUS') | (tabela_13['Liga'] == 'AUT') 
+            | (tabela_13['Liga'] == 'BEL1') | (tabela_13['Liga'] == 'BEL2') | (tabela_13['Liga'] == 'BOL') 
+            | (tabela_13['Liga'] == 'BRA1') | (tabela_13['Liga'] == 'BRA2') | (tabela_13['Liga'] == 'BUL') | (tabela_13['Liga'] == 'CHI')
+            | (tabela_13['Liga'] == 'CHN') | (tabela_13['Liga'] == 'COL') | (tabela_13['Liga'] == 'CRO') | (tabela_13['Liga'] == 'CZH')
+            | (tabela_13['Liga'] == 'DEN') | (tabela_13['Liga'] == 'ECU') | (tabela_13['Liga'] == 'ENG1') | (tabela_13['Liga'] == 'ENG2') 
+            | (tabela_13['Liga'] == 'FIN') | (tabela_13['Liga'] == 'FRA1') | (tabela_13['Liga'] == 'FRA2') | (tabela_13['Liga'] == 'GEO')  
+            | (tabela_13['Liga'] == 'GER1') | (tabela_13['Liga'] == 'GER2') | (tabela_13['Liga'] == 'GRE') | (tabela_13['Liga'] == 'HOL') 
+            | (tabela_13['Liga'] == 'IND') | (tabela_13['Liga'] == 'INDO') | (tabela_13['Liga'] == 'ITA1') | (tabela_13['Liga'] == 'ITA2') 
+            | (tabela_13['Liga'] == 'JAP') | (tabela_13['Liga'] == 'KOR') | (tabela_13['Liga'] == 'MEX') | (tabela_13['Liga'] == 'MOR') 
+            | (tabela_13['Liga'] == 'NOR') | (tabela_13['Liga'] == 'PAR') | (tabela_13['Liga'] == 'PER') | (tabela_13['Liga'] == 'POL') 
+            | (tabela_13['Liga'] == 'POR1') | (tabela_13['Liga'] == 'POR2') | (tabela_13['Liga'] == 'QAT') | (tabela_13['Liga'] == 'ROM') 
+            | (tabela_13['Liga'] == 'RUS') | (tabela_13['Liga'] == 'SAUD') | (tabela_13['Liga'] == 'SCT') | (tabela_13['Liga'] == 'SER') 
+            | (tabela_13['Liga'] == 'SPA1') | (tabela_13['Liga'] == 'SPA2') | (tabela_13['Liga'] == 'SWE') | (tabela_13['Liga'] == 'SWZ') 
+            | (tabela_13['Liga'] == 'TUR') | (tabela_13['Liga'] == 'UAE') | (tabela_13['Liga'] == 'UKR')  | (tabela_13['Liga'] == 'URU')
+            | (tabela_13['Liga'] == 'USA') | (tabela_13['Liga'] == 'UZB') | (tabela_13['Liga'] == 'VEN')]
 
         tabela_14 = pd.read_csv("PlayerAnalysis_Role_8_Full.csv")
         tabela_14 = tabela_14.loc[(tabela_14['Nacionalidade']==nacionalidade)&(tabela_14['Fim_Contrato']<=contrato)&(tabela_14['Versão_Temporada']==temporada)]
         tabela_14 = tabela_14.iloc[:, np.r_[15, 32, 36:40]]
-        tabela_14 = tabela_14[(tabela_14['Liga'] == 'ENG1') | (tabela_14['Liga'] == 'ENG2') | (tabela_14['Liga'] == 'FRA1') | (tabela_14['Liga'] == 'FRA2') 
-            | (tabela_14['Liga'] == 'SPA1') | (tabela_14['Liga'] == 'ITA1') | (tabela_14['Liga'] == 'GER1') | (tabela_14['Liga'] == 'POR1') 
-            | (tabela_14['Liga'] == 'SWZ') | (tabela_14['Liga'] == 'RUS') | (tabela_14['Liga'] == 'UKR') | (tabela_14['Liga'] == 'BEL1') 
-            | (tabela_14['Liga'] == 'CHN') | (tabela_14['Liga'] == 'DEN') | (tabela_14['Liga'] == 'GRE') | (tabela_14['Liga'] == 'HOL') 
-            | (tabela_14['Liga'] == 'JAP') | (tabela_14['Liga'] == 'MEX') | (tabela_14['Liga'] == 'SAUD') | (tabela_14['Liga'] == 'TUR') 
-            | (tabela_14['Liga'] == 'UAE') | (tabela_14['Liga'] == 'USA') | (tabela_14['Liga'] == 'ITA2') | (tabela_14['Liga'] == 'GER2') 
-            | (tabela_14['Liga'] == 'POR2') | (tabela_14['Liga'] == 'BUL') | (tabela_14['Liga'] == 'AUT') | (tabela_14['Liga'] == 'QAT') 
-            | (tabela_14['Liga'] == 'BRA1') | (tabela_14['Liga'] == 'ARG1')]
+        tabela_14 = tabela_14[(tabela_14['Liga'] == 'ARG1') | (tabela_14['Liga'] == 'AUS') | (tabela_14['Liga'] == 'AUT') 
+            | (tabela_14['Liga'] == 'BEL1') | (tabela_14['Liga'] == 'BEL2') | (tabela_14['Liga'] == 'BOL') 
+            | (tabela_14['Liga'] == 'BRA1') | (tabela_14['Liga'] == 'BRA2') | (tabela_14['Liga'] == 'BUL') | (tabela_14['Liga'] == 'CHI')
+            | (tabela_14['Liga'] == 'CHN') | (tabela_14['Liga'] == 'COL') | (tabela_14['Liga'] == 'CRO') | (tabela_14['Liga'] == 'CZH')
+            | (tabela_14['Liga'] == 'DEN') | (tabela_14['Liga'] == 'ECU') | (tabela_14['Liga'] == 'ENG1') | (tabela_14['Liga'] == 'ENG2') 
+            | (tabela_14['Liga'] == 'FIN') | (tabela_14['Liga'] == 'FRA1') | (tabela_14['Liga'] == 'FRA2') | (tabela_14['Liga'] == 'GEO')  
+            | (tabela_14['Liga'] == 'GER1') | (tabela_14['Liga'] == 'GER2') | (tabela_14['Liga'] == 'GRE') | (tabela_14['Liga'] == 'HOL') 
+            | (tabela_14['Liga'] == 'IND') | (tabela_14['Liga'] == 'INDO') | (tabela_14['Liga'] == 'ITA1') | (tabela_14['Liga'] == 'ITA2') 
+            | (tabela_14['Liga'] == 'JAP') | (tabela_14['Liga'] == 'KOR') | (tabela_14['Liga'] == 'MEX') | (tabela_14['Liga'] == 'MOR') 
+            | (tabela_14['Liga'] == 'NOR') | (tabela_14['Liga'] == 'PAR') | (tabela_14['Liga'] == 'PER') | (tabela_14['Liga'] == 'POL') 
+            | (tabela_14['Liga'] == 'POR1') | (tabela_14['Liga'] == 'POR2') | (tabela_14['Liga'] == 'QAT') | (tabela_14['Liga'] == 'ROM') 
+            | (tabela_14['Liga'] == 'RUS') | (tabela_14['Liga'] == 'SAUD') | (tabela_14['Liga'] == 'SCT') | (tabela_14['Liga'] == 'SER') 
+            | (tabela_14['Liga'] == 'SPA1') | (tabela_14['Liga'] == 'SPA2') | (tabela_14['Liga'] == 'SWE') | (tabela_14['Liga'] == 'SWZ') 
+            | (tabela_14['Liga'] == 'TUR') | (tabela_14['Liga'] == 'UAE') | (tabela_14['Liga'] == 'UKR')  | (tabela_14['Liga'] == 'URU')
+            | (tabela_14['Liga'] == 'USA') | (tabela_14['Liga'] == 'UZB') | (tabela_14['Liga'] == 'VEN')]
 
         tabela_13 = pd.merge(tabela_13, tabela_14[['Atleta', 'L_Rating', 'L_Ranking', 'L_Percentil', 'Size']], on="Atleta", how="left")
         tabela_13 = tabela_13.rename(columns={'Equipe_Janela_Análise':'Equipe', 'Versão_Temporada':'Janela de Análise', 
@@ -3700,26 +3812,40 @@ if choose == "Free Agents pelo Mundo":
         tabela_9 = pd.read_csv("9_Role_Volante_Defensivo_Full.csv")
         tabela_9 = tabela_9.loc[(tabela_9['Nacionalidade']==nacionalidade)&(tabela_9['Fim_Contrato']<=contrato)&(tabela_9['Versão_Temporada']==temporada)]   
         tabela_9 = tabela_9.iloc[:, np.r_[1, 3, 4, 7, 15, 9:12, 22]]
-        tabela_9 = tabela_9[(tabela_9['Liga'] == 'ENG1') | (tabela_9['Liga'] == 'ENG2') | (tabela_9['Liga'] == 'FRA1') | (tabela_9['Liga'] == 'FRA2') 
-            | (tabela_9['Liga'] == 'SPA1') | (tabela_9['Liga'] == 'ITA1') | (tabela_9['Liga'] == 'GER1') | (tabela_9['Liga'] == 'POR1') 
-            | (tabela_9['Liga'] == 'SWZ') | (tabela_9['Liga'] == 'RUS') | (tabela_9['Liga'] == 'UKR') | (tabela_9['Liga'] == 'BEL1') 
-            | (tabela_9['Liga'] == 'CHN') | (tabela_9['Liga'] == 'DEN') | (tabela_9['Liga'] == 'GRE') | (tabela_9['Liga'] == 'HOL') 
-            | (tabela_9['Liga'] == 'JAP') | (tabela_9['Liga'] == 'MEX') | (tabela_9['Liga'] == 'SAUD') | (tabela_9['Liga'] == 'TUR') 
-            | (tabela_9['Liga'] == 'UAE') | (tabela_9['Liga'] == 'USA') | (tabela_9['Liga'] == 'ITA2') | (tabela_9['Liga'] == 'GER2') 
-            | (tabela_9['Liga'] == 'POR2') | (tabela_9['Liga'] == 'BUL') | (tabela_9['Liga'] == 'AUT') | (tabela_9['Liga'] == 'QAT')
-            | (tabela_9['Liga'] == 'BRA1') | (tabela_9['Liga'] == 'ARG1')]
+        tabela_9 = tabela_9[(tabela_9['Liga'] == 'ARG1') | (tabela_9['Liga'] == 'AUS') | (tabela_9['Liga'] == 'AUT') 
+            | (tabela_9['Liga'] == 'BEL1') | (tabela_9['Liga'] == 'BEL2') | (tabela_9['Liga'] == 'BOL') 
+            | (tabela_9['Liga'] == 'BRA1') | (tabela_9['Liga'] == 'BRA2') | (tabela_9['Liga'] == 'BUL') | (tabela_9['Liga'] == 'CHI')
+            | (tabela_9['Liga'] == 'CHN') | (tabela_9['Liga'] == 'COL') | (tabela_9['Liga'] == 'CRO') | (tabela_9['Liga'] == 'CZH')
+            | (tabela_9['Liga'] == 'DEN') | (tabela_9['Liga'] == 'ECU') | (tabela_9['Liga'] == 'ENG1') | (tabela_9['Liga'] == 'ENG2') 
+            | (tabela_9['Liga'] == 'FIN') | (tabela_9['Liga'] == 'FRA1') | (tabela_9['Liga'] == 'FRA2') | (tabela_9['Liga'] == 'GEO')  
+            | (tabela_9['Liga'] == 'GER1') | (tabela_9['Liga'] == 'GER2') | (tabela_9['Liga'] == 'GRE') | (tabela_9['Liga'] == 'HOL') 
+            | (tabela_9['Liga'] == 'IND') | (tabela_9['Liga'] == 'INDO') | (tabela_9['Liga'] == 'ITA1') | (tabela_9['Liga'] == 'ITA2') 
+            | (tabela_9['Liga'] == 'JAP') | (tabela_9['Liga'] == 'KOR') | (tabela_9['Liga'] == 'MEX') | (tabela_9['Liga'] == 'MOR') 
+            | (tabela_9['Liga'] == 'NOR') | (tabela_9['Liga'] == 'PAR') | (tabela_9['Liga'] == 'PER') | (tabela_9['Liga'] == 'POL') 
+            | (tabela_9['Liga'] == 'POR1') | (tabela_9['Liga'] == 'POR2') | (tabela_9['Liga'] == 'QAT') | (tabela_9['Liga'] == 'ROM') 
+            | (tabela_9['Liga'] == 'RUS') | (tabela_9['Liga'] == 'SAUD') | (tabela_9['Liga'] == 'SCT') | (tabela_9['Liga'] == 'SER') 
+            | (tabela_9['Liga'] == 'SPA1') | (tabela_9['Liga'] == 'SPA2') | (tabela_9['Liga'] == 'SWE') | (tabela_9['Liga'] == 'SWZ') 
+            | (tabela_9['Liga'] == 'TUR') | (tabela_9['Liga'] == 'UAE') | (tabela_9['Liga'] == 'UKR')  | (tabela_9['Liga'] == 'URU')
+            | (tabela_9['Liga'] == 'USA') | (tabela_9['Liga'] == 'UZB') | (tabela_9['Liga'] == 'VEN')]
 
         tabela_10 = pd.read_csv("PlayerAnalysis_Role_9_Full.csv")
         tabela_10 = tabela_10.loc[(tabela_10['Nacionalidade']==nacionalidade)&(tabela_10['Fim_Contrato']<=contrato)&(tabela_10['Versão_Temporada']==temporada)]
         tabela_10 = tabela_10.iloc[:, np.r_[6, 23, 27:31]]
-        tabela_10 = tabela_10[(tabela_10['Liga'] == 'ENG1') | (tabela_10['Liga'] == 'ENG2') | (tabela_10['Liga'] == 'FRA1') | (tabela_10['Liga'] == 'FRA2') 
-            | (tabela_10['Liga'] == 'SPA1') | (tabela_10['Liga'] == 'ITA1') | (tabela_10['Liga'] == 'GER1') | (tabela_10['Liga'] == 'POR1') 
-            | (tabela_10['Liga'] == 'SWZ') | (tabela_10['Liga'] == 'RUS') | (tabela_10['Liga'] == 'UKR') | (tabela_10['Liga'] == 'BEL1') 
-            | (tabela_10['Liga'] == 'CHN') | (tabela_10['Liga'] == 'DEN') | (tabela_10['Liga'] == 'GRE') | (tabela_10['Liga'] == 'HOL') 
-            | (tabela_10['Liga'] == 'JAP') | (tabela_10['Liga'] == 'MEX') | (tabela_10['Liga'] == 'SAUD') | (tabela_10['Liga'] == 'TUR') 
-            | (tabela_10['Liga'] == 'UAE') | (tabela_10['Liga'] == 'USA') | (tabela_10['Liga'] == 'ITA2') | (tabela_10['Liga'] == 'GER2') 
-            | (tabela_10['Liga'] == 'POR2') | (tabela_10['Liga'] == 'BUL') | (tabela_10['Liga'] == 'AUT') | (tabela_10['Liga'] == 'QAT')
-            | (tabela_10['Liga'] == 'BRA1') | (tabela_10['Liga'] == 'ARG1')]
+        tabela_10 = tabela_10[(tabela_10['Liga'] == 'ARG1') | (tabela_10['Liga'] == 'AUS') | (tabela_10['Liga'] == 'AUT') 
+            | (tabela_10['Liga'] == 'BEL1') | (tabela_10['Liga'] == 'BEL2') | (tabela_10['Liga'] == 'BOL') 
+            | (tabela_10['Liga'] == 'BRA1') | (tabela_10['Liga'] == 'BRA2') | (tabela_10['Liga'] == 'BUL') | (tabela_10['Liga'] == 'CHI')
+            | (tabela_10['Liga'] == 'CHN') | (tabela_10['Liga'] == 'COL') | (tabela_10['Liga'] == 'CRO') | (tabela_10['Liga'] == 'CZH')
+            | (tabela_10['Liga'] == 'DEN') | (tabela_10['Liga'] == 'ECU') | (tabela_10['Liga'] == 'ENG1') | (tabela_10['Liga'] == 'ENG2') 
+            | (tabela_10['Liga'] == 'FIN') | (tabela_10['Liga'] == 'FRA1') | (tabela_10['Liga'] == 'FRA2') | (tabela_10['Liga'] == 'GEO')  
+            | (tabela_10['Liga'] == 'GER1') | (tabela_10['Liga'] == 'GER2') | (tabela_10['Liga'] == 'GRE') | (tabela_10['Liga'] == 'HOL') 
+            | (tabela_10['Liga'] == 'IND') | (tabela_10['Liga'] == 'INDO') | (tabela_10['Liga'] == 'ITA1') | (tabela_10['Liga'] == 'ITA2') 
+            | (tabela_10['Liga'] == 'JAP') | (tabela_10['Liga'] == 'KOR') | (tabela_10['Liga'] == 'MEX') | (tabela_10['Liga'] == 'MOR') 
+            | (tabela_10['Liga'] == 'NOR') | (tabela_10['Liga'] == 'PAR') | (tabela_10['Liga'] == 'PER') | (tabela_10['Liga'] == 'POL') 
+            | (tabela_10['Liga'] == 'POR1') | (tabela_10['Liga'] == 'POR2') | (tabela_10['Liga'] == 'QAT') | (tabela_10['Liga'] == 'ROM') 
+            | (tabela_10['Liga'] == 'RUS') | (tabela_10['Liga'] == 'SAUD') | (tabela_10['Liga'] == 'SCT') | (tabela_10['Liga'] == 'SER') 
+            | (tabela_10['Liga'] == 'SPA1') | (tabela_10['Liga'] == 'SPA2') | (tabela_10['Liga'] == 'SWE') | (tabela_10['Liga'] == 'SWZ') 
+            | (tabela_10['Liga'] == 'TUR') | (tabela_10['Liga'] == 'UAE') | (tabela_10['Liga'] == 'UKR')  | (tabela_10['Liga'] == 'URU')
+            | (tabela_10['Liga'] == 'USA') | (tabela_10['Liga'] == 'UZB') | (tabela_10['Liga'] == 'VEN')]
 
         tabela_9 = pd.merge(tabela_9, tabela_10[['Atleta', 'L_Rating', 'L_Ranking', 'L_Percentil', 'Size']], on="Atleta", how="left")
         tabela_9 = tabela_9.rename(columns={'Equipe_Janela_Análise':'Equipe', 'Versão_Temporada':'Janela de Análise', 
@@ -3779,26 +3905,40 @@ if choose == "Free Agents pelo Mundo":
         tabela_11 = pd.read_csv("10_Role_Volante_Construtor_Full.csv")
         tabela_11 = tabela_11.loc[(tabela_11['Nacionalidade']==nacionalidade)&(tabela_11['Fim_Contrato']<=contrato)&(tabela_11['Versão_Temporada']==temporada)]   
         tabela_11 = tabela_11.iloc[:, np.r_[1, 3, 4, 7, 15, 9:12, 27]]
-        tabela_11 = tabela_11[(tabela_11['Liga'] == 'ENG1') | (tabela_11['Liga'] == 'ENG2') | (tabela_11['Liga'] == 'FRA1') | (tabela_11['Liga'] == 'FRA2') 
-            | (tabela_11['Liga'] == 'SPA1') | (tabela_11['Liga'] == 'ITA1') | (tabela_11['Liga'] == 'GER1') | (tabela_11['Liga'] == 'POR1') 
-            | (tabela_11['Liga'] == 'SWZ') | (tabela_11['Liga'] == 'RUS') | (tabela_11['Liga'] == 'UKR') | (tabela_11['Liga'] == 'BEL1') 
-            | (tabela_11['Liga'] == 'CHN') | (tabela_11['Liga'] == 'DEN') | (tabela_11['Liga'] == 'GRE') | (tabela_11['Liga'] == 'HOL') 
-            | (tabela_11['Liga'] == 'JAP') | (tabela_11['Liga'] == 'MEX') | (tabela_11['Liga'] == 'SAUD') | (tabela_11['Liga'] == 'TUR') 
-            | (tabela_11['Liga'] == 'UAE') | (tabela_11['Liga'] == 'USA') | (tabela_11['Liga'] == 'ITA2') | (tabela_11['Liga'] == 'GER2') 
-            | (tabela_11['Liga'] == 'POR2') | (tabela_11['Liga'] == 'BUL') | (tabela_11['Liga'] == 'AUT') | (tabela_11['Liga'] == 'QAT')
-            | (tabela_11['Liga'] == 'BRA1') | (tabela_11['Liga'] == 'ARG1')]
+        tabela_11 = tabela_11[(tabela_11['Liga'] == 'ARG1') | (tabela_11['Liga'] == 'AUS') | (tabela_11['Liga'] == 'AUT') 
+            | (tabela_11['Liga'] == 'BEL1') | (tabela_11['Liga'] == 'BEL2') | (tabela_11['Liga'] == 'BOL') 
+            | (tabela_11['Liga'] == 'BRA1') | (tabela_11['Liga'] == 'BRA2') | (tabela_11['Liga'] == 'BUL') | (tabela_11['Liga'] == 'CHI')
+            | (tabela_11['Liga'] == 'CHN') | (tabela_11['Liga'] == 'COL') | (tabela_11['Liga'] == 'CRO') | (tabela_11['Liga'] == 'CZH')
+            | (tabela_11['Liga'] == 'DEN') | (tabela_11['Liga'] == 'ECU') | (tabela_11['Liga'] == 'ENG1') | (tabela_11['Liga'] == 'ENG2') 
+            | (tabela_11['Liga'] == 'FIN') | (tabela_11['Liga'] == 'FRA1') | (tabela_11['Liga'] == 'FRA2') | (tabela_11['Liga'] == 'GEO')  
+            | (tabela_11['Liga'] == 'GER1') | (tabela_11['Liga'] == 'GER2') | (tabela_11['Liga'] == 'GRE') | (tabela_11['Liga'] == 'HOL') 
+            | (tabela_11['Liga'] == 'IND') | (tabela_11['Liga'] == 'INDO') | (tabela_11['Liga'] == 'ITA1') | (tabela_11['Liga'] == 'ITA2') 
+            | (tabela_11['Liga'] == 'JAP') | (tabela_11['Liga'] == 'KOR') | (tabela_11['Liga'] == 'MEX') | (tabela_11['Liga'] == 'MOR') 
+            | (tabela_11['Liga'] == 'NOR') | (tabela_11['Liga'] == 'PAR') | (tabela_11['Liga'] == 'PER') | (tabela_11['Liga'] == 'POL') 
+            | (tabela_11['Liga'] == 'POR1') | (tabela_11['Liga'] == 'POR2') | (tabela_11['Liga'] == 'QAT') | (tabela_11['Liga'] == 'ROM') 
+            | (tabela_11['Liga'] == 'RUS') | (tabela_11['Liga'] == 'SAUD') | (tabela_11['Liga'] == 'SCT') | (tabela_11['Liga'] == 'SER') 
+            | (tabela_11['Liga'] == 'SPA1') | (tabela_11['Liga'] == 'SPA2') | (tabela_11['Liga'] == 'SWE') | (tabela_11['Liga'] == 'SWZ') 
+            | (tabela_11['Liga'] == 'TUR') | (tabela_11['Liga'] == 'UAE') | (tabela_11['Liga'] == 'UKR')  | (tabela_11['Liga'] == 'URU')
+            | (tabela_11['Liga'] == 'USA') | (tabela_11['Liga'] == 'UZB') | (tabela_11['Liga'] == 'VEN')]
 
         tabela_12 = pd.read_csv("PlayerAnalysis_Role_10_Full.csv")
         tabela_12 = tabela_12.loc[(tabela_12['Nacionalidade']==nacionalidade)&(tabela_12['Fim_Contrato']<=contrato)&(tabela_12['Versão_Temporada']==temporada)]
         tabela_12 = tabela_12.iloc[:, np.r_[11, 28, 32:36]]
-        tabela_12 = tabela_12[(tabela_12['Liga'] == 'ENG1') | (tabela_12['Liga'] == 'ENG2') | (tabela_12['Liga'] == 'FRA1') | (tabela_12['Liga'] == 'FRA2') 
-            | (tabela_12['Liga'] == 'SPA1') | (tabela_12['Liga'] == 'ITA1') | (tabela_12['Liga'] == 'GER1') | (tabela_12['Liga'] == 'POR1') 
-            | (tabela_12['Liga'] == 'SWZ') | (tabela_12['Liga'] == 'RUS') | (tabela_12['Liga'] == 'UKR') | (tabela_12['Liga'] == 'BEL1') 
-            | (tabela_12['Liga'] == 'CHN') | (tabela_12['Liga'] == 'DEN') | (tabela_12['Liga'] == 'GRE') | (tabela_12['Liga'] == 'HOL') 
-            | (tabela_12['Liga'] == 'JAP') | (tabela_12['Liga'] == 'MEX') | (tabela_12['Liga'] == 'SAUD') | (tabela_12['Liga'] == 'TUR') 
-            | (tabela_12['Liga'] == 'UAE') | (tabela_12['Liga'] == 'USA') | (tabela_12['Liga'] == 'ITA2') | (tabela_12['Liga'] == 'GER2') 
-            | (tabela_12['Liga'] == 'POR2') | (tabela_12['Liga'] == 'BUL') | (tabela_12['Liga'] == 'AUT') | (tabela_12['Liga'] == 'QAT')
-            | (tabela_12['Liga'] == 'BRA1') | (tabela_12['Liga'] == 'ARG1')]
+        tabela_12 = tabela_12[(tabela_12['Liga'] == 'ARG1') | (tabela_12['Liga'] == 'AUS') | (tabela_12['Liga'] == 'AUT') 
+            | (tabela_12['Liga'] == 'BEL1') | (tabela_12['Liga'] == 'BEL2') | (tabela_12['Liga'] == 'BOL') 
+            | (tabela_12['Liga'] == 'BRA1') | (tabela_12['Liga'] == 'BRA2') | (tabela_12['Liga'] == 'BUL') | (tabela_12['Liga'] == 'CHI')
+            | (tabela_12['Liga'] == 'CHN') | (tabela_12['Liga'] == 'COL') | (tabela_12['Liga'] == 'CRO') | (tabela_12['Liga'] == 'CZH')
+            | (tabela_12['Liga'] == 'DEN') | (tabela_12['Liga'] == 'ECU') | (tabela_12['Liga'] == 'ENG1') | (tabela_12['Liga'] == 'ENG2') 
+            | (tabela_12['Liga'] == 'FIN') | (tabela_12['Liga'] == 'FRA1') | (tabela_12['Liga'] == 'FRA2') | (tabela_12['Liga'] == 'GEO')  
+            | (tabela_12['Liga'] == 'GER1') | (tabela_12['Liga'] == 'GER2') | (tabela_12['Liga'] == 'GRE') | (tabela_12['Liga'] == 'HOL') 
+            | (tabela_12['Liga'] == 'IND') | (tabela_12['Liga'] == 'INDO') | (tabela_12['Liga'] == 'ITA1') | (tabela_12['Liga'] == 'ITA2') 
+            | (tabela_12['Liga'] == 'JAP') | (tabela_12['Liga'] == 'KOR') | (tabela_12['Liga'] == 'MEX') | (tabela_12['Liga'] == 'MOR') 
+            | (tabela_12['Liga'] == 'NOR') | (tabela_12['Liga'] == 'PAR') | (tabela_12['Liga'] == 'PER') | (tabela_12['Liga'] == 'POL') 
+            | (tabela_12['Liga'] == 'POR1') | (tabela_12['Liga'] == 'POR2') | (tabela_12['Liga'] == 'QAT') | (tabela_12['Liga'] == 'ROM') 
+            | (tabela_12['Liga'] == 'RUS') | (tabela_12['Liga'] == 'SAUD') | (tabela_12['Liga'] == 'SCT') | (tabela_12['Liga'] == 'SER') 
+            | (tabela_12['Liga'] == 'SPA1') | (tabela_12['Liga'] == 'SPA2') | (tabela_12['Liga'] == 'SWE') | (tabela_12['Liga'] == 'SWZ') 
+            | (tabela_12['Liga'] == 'TUR') | (tabela_12['Liga'] == 'UAE') | (tabela_12['Liga'] == 'UKR')  | (tabela_12['Liga'] == 'URU')
+            | (tabela_12['Liga'] == 'USA') | (tabela_12['Liga'] == 'UZB') | (tabela_12['Liga'] == 'VEN')]
 
         tabela_11 = pd.merge(tabela_11, tabela_12[['Atleta', 'L_Rating', 'L_Ranking', 'L_Percentil', 'Size']], on="Atleta", how="left")
         tabela_11 = tabela_11.rename(columns={'Equipe_Janela_Análise':'Equipe', 'Versão_Temporada':'Janela de Análise', 
@@ -3859,26 +3999,40 @@ if choose == "Free Agents pelo Mundo":
         tabela_13 = pd.read_csv("11_Role_Volante_Equilibrado_Full.csv")
         tabela_13 = tabela_13.loc[(tabela_13['Nacionalidade']==nacionalidade)&(tabela_13['Fim_Contrato']<=contrato)&(tabela_13['Versão_Temporada']==temporada)]   
         tabela_13 = tabela_13.iloc[:, np.r_[1, 3, 4, 7, 15, 9:12, 29]]
-        tabela_13 = tabela_13[(tabela_13['Liga'] == 'ENG1') | (tabela_13['Liga'] == 'ENG2') | (tabela_13['Liga'] == 'FRA1') | (tabela_13['Liga'] == 'FRA2') 
-            | (tabela_13['Liga'] == 'SPA1') | (tabela_13['Liga'] == 'ITA1') | (tabela_13['Liga'] == 'GER1') | (tabela_13['Liga'] == 'POR1') 
-            | (tabela_13['Liga'] == 'SWZ') | (tabela_13['Liga'] == 'RUS') | (tabela_13['Liga'] == 'UKR') | (tabela_13['Liga'] == 'BEL1') 
-            | (tabela_13['Liga'] == 'CHN') | (tabela_13['Liga'] == 'DEN') | (tabela_13['Liga'] == 'GRE') | (tabela_13['Liga'] == 'HOL') 
-            | (tabela_13['Liga'] == 'JAP') | (tabela_13['Liga'] == 'MEX') | (tabela_13['Liga'] == 'SAUD') | (tabela_13['Liga'] == 'TUR') 
-            | (tabela_13['Liga'] == 'UAE') | (tabela_13['Liga'] == 'USA') | (tabela_13['Liga'] == 'ITA2') | (tabela_13['Liga'] == 'GER2') 
-            | (tabela_13['Liga'] == 'POR2') | (tabela_13['Liga'] == 'BUL') | (tabela_13['Liga'] == 'AUT') | (tabela_13['Liga'] == 'QAT')
-            | (tabela_13['Liga'] == 'BRA1') | (tabela_13['Liga'] == 'ARG1')]
+        tabela_13 = tabela_13[(tabela_13['Liga'] == 'ARG1') | (tabela_13['Liga'] == 'AUS') | (tabela_13['Liga'] == 'AUT') 
+            | (tabela_13['Liga'] == 'BEL1') | (tabela_13['Liga'] == 'BEL2') | (tabela_13['Liga'] == 'BOL') 
+            | (tabela_13['Liga'] == 'BRA1') | (tabela_13['Liga'] == 'BRA2') | (tabela_13['Liga'] == 'BUL') | (tabela_13['Liga'] == 'CHI')
+            | (tabela_13['Liga'] == 'CHN') | (tabela_13['Liga'] == 'COL') | (tabela_13['Liga'] == 'CRO') | (tabela_13['Liga'] == 'CZH')
+            | (tabela_13['Liga'] == 'DEN') | (tabela_13['Liga'] == 'ECU') | (tabela_13['Liga'] == 'ENG1') | (tabela_13['Liga'] == 'ENG2') 
+            | (tabela_13['Liga'] == 'FIN') | (tabela_13['Liga'] == 'FRA1') | (tabela_13['Liga'] == 'FRA2') | (tabela_13['Liga'] == 'GEO')  
+            | (tabela_13['Liga'] == 'GER1') | (tabela_13['Liga'] == 'GER2') | (tabela_13['Liga'] == 'GRE') | (tabela_13['Liga'] == 'HOL') 
+            | (tabela_13['Liga'] == 'IND') | (tabela_13['Liga'] == 'INDO') | (tabela_13['Liga'] == 'ITA1') | (tabela_13['Liga'] == 'ITA2') 
+            | (tabela_13['Liga'] == 'JAP') | (tabela_13['Liga'] == 'KOR') | (tabela_13['Liga'] == 'MEX') | (tabela_13['Liga'] == 'MOR') 
+            | (tabela_13['Liga'] == 'NOR') | (tabela_13['Liga'] == 'PAR') | (tabela_13['Liga'] == 'PER') | (tabela_13['Liga'] == 'POL') 
+            | (tabela_13['Liga'] == 'POR1') | (tabela_13['Liga'] == 'POR2') | (tabela_13['Liga'] == 'QAT') | (tabela_13['Liga'] == 'ROM') 
+            | (tabela_13['Liga'] == 'RUS') | (tabela_13['Liga'] == 'SAUD') | (tabela_13['Liga'] == 'SCT') | (tabela_13['Liga'] == 'SER') 
+            | (tabela_13['Liga'] == 'SPA1') | (tabela_13['Liga'] == 'SPA2') | (tabela_13['Liga'] == 'SWE') | (tabela_13['Liga'] == 'SWZ') 
+            | (tabela_13['Liga'] == 'TUR') | (tabela_13['Liga'] == 'UAE') | (tabela_13['Liga'] == 'UKR')  | (tabela_13['Liga'] == 'URU')
+            | (tabela_13['Liga'] == 'USA') | (tabela_13['Liga'] == 'UZB') | (tabela_13['Liga'] == 'VEN')]
 
         tabela_14 = pd.read_csv("PlayerAnalysis_Role_11_Full.csv")
         tabela_14 = tabela_14.loc[(tabela_14['Nacionalidade']==nacionalidade)&(tabela_14['Fim_Contrato']<=contrato)&(tabela_14['Versão_Temporada']==temporada)]
         tabela_14 = tabela_14.iloc[:, np.r_[13, 30, 34:38]]
-        tabela_14 = tabela_14[(tabela_14['Liga'] == 'ENG1') | (tabela_14['Liga'] == 'ENG2') | (tabela_14['Liga'] == 'FRA1') | (tabela_14['Liga'] == 'FRA2') 
-            | (tabela_14['Liga'] == 'SPA1') | (tabela_14['Liga'] == 'ITA1') | (tabela_14['Liga'] == 'GER1') | (tabela_14['Liga'] == 'POR1') 
-            | (tabela_14['Liga'] == 'SWZ') | (tabela_14['Liga'] == 'RUS') | (tabela_14['Liga'] == 'UKR') | (tabela_14['Liga'] == 'BEL1') 
-            | (tabela_14['Liga'] == 'CHN') | (tabela_14['Liga'] == 'DEN') | (tabela_14['Liga'] == 'GRE') | (tabela_14['Liga'] == 'HOL') 
-            | (tabela_14['Liga'] == 'JAP') | (tabela_14['Liga'] == 'MEX') | (tabela_14['Liga'] == 'SAUD') | (tabela_14['Liga'] == 'TUR') 
-            | (tabela_14['Liga'] == 'UAE') | (tabela_14['Liga'] == 'USA') | (tabela_14['Liga'] == 'ITA2') | (tabela_14['Liga'] == 'GER2') 
-            | (tabela_14['Liga'] == 'POR2') | (tabela_14['Liga'] == 'BUL') | (tabela_14['Liga'] == 'AUT') | (tabela_14['Liga'] == 'QAT')
-            | (tabela_14['Liga'] == 'BRA1') | (tabela_14['Liga'] == 'ARG1')]
+        tabela_14 = tabela_14[(tabela_14['Liga'] == 'ARG1') | (tabela_14['Liga'] == 'AUS') | (tabela_14['Liga'] == 'AUT') 
+            | (tabela_14['Liga'] == 'BEL1') | (tabela_14['Liga'] == 'BEL2') | (tabela_14['Liga'] == 'BOL') 
+            | (tabela_14['Liga'] == 'BRA1') | (tabela_14['Liga'] == 'BRA2') | (tabela_14['Liga'] == 'BUL') | (tabela_14['Liga'] == 'CHI')
+            | (tabela_14['Liga'] == 'CHN') | (tabela_14['Liga'] == 'COL') | (tabela_14['Liga'] == 'CRO') | (tabela_14['Liga'] == 'CZH')
+            | (tabela_14['Liga'] == 'DEN') | (tabela_14['Liga'] == 'ECU') | (tabela_14['Liga'] == 'ENG1') | (tabela_14['Liga'] == 'ENG2') 
+            | (tabela_14['Liga'] == 'FIN') | (tabela_14['Liga'] == 'FRA1') | (tabela_14['Liga'] == 'FRA2') | (tabela_14['Liga'] == 'GEO')  
+            | (tabela_14['Liga'] == 'GER1') | (tabela_14['Liga'] == 'GER2') | (tabela_14['Liga'] == 'GRE') | (tabela_14['Liga'] == 'HOL') 
+            | (tabela_14['Liga'] == 'IND') | (tabela_14['Liga'] == 'INDO') | (tabela_14['Liga'] == 'ITA1') | (tabela_14['Liga'] == 'ITA2') 
+            | (tabela_14['Liga'] == 'JAP') | (tabela_14['Liga'] == 'KOR') | (tabela_14['Liga'] == 'MEX') | (tabela_14['Liga'] == 'MOR') 
+            | (tabela_14['Liga'] == 'NOR') | (tabela_14['Liga'] == 'PAR') | (tabela_14['Liga'] == 'PER') | (tabela_14['Liga'] == 'POL') 
+            | (tabela_14['Liga'] == 'POR1') | (tabela_14['Liga'] == 'POR2') | (tabela_14['Liga'] == 'QAT') | (tabela_14['Liga'] == 'ROM') 
+            | (tabela_14['Liga'] == 'RUS') | (tabela_14['Liga'] == 'SAUD') | (tabela_14['Liga'] == 'SCT') | (tabela_14['Liga'] == 'SER') 
+            | (tabela_14['Liga'] == 'SPA1') | (tabela_14['Liga'] == 'SPA2') | (tabela_14['Liga'] == 'SWE') | (tabela_14['Liga'] == 'SWZ') 
+            | (tabela_14['Liga'] == 'TUR') | (tabela_14['Liga'] == 'UAE') | (tabela_14['Liga'] == 'UKR')  | (tabela_14['Liga'] == 'URU')
+            | (tabela_14['Liga'] == 'USA') | (tabela_14['Liga'] == 'UZB') | (tabela_14['Liga'] == 'VEN')]
 
         tabela_13 = pd.merge(tabela_13, tabela_14[['Atleta', 'L_Rating', 'L_Ranking', 'L_Percentil', 'Size']], on="Atleta", how="left")
         tabela_13 = tabela_13.rename(columns={'Equipe_Janela_Análise':'Equipe', 'Versão_Temporada':'Janela de Análise', 
@@ -3942,26 +4096,40 @@ if choose == "Free Agents pelo Mundo":
         tabela_9 = pd.read_csv("12_Role_Segundo_Volante_Box_to_Box_Full.csv")
         tabela_9 = tabela_9.loc[(tabela_9['Nacionalidade']==nacionalidade)&(tabela_9['Fim_Contrato']<=contrato)&(tabela_9['Versão_Temporada']==temporada)]   
         tabela_9 = tabela_9.iloc[:, np.r_[1, 3, 4, 7, 15, 9:12, 31]]
-        tabela_9 = tabela_9[(tabela_9['Liga'] == 'ENG1') | (tabela_9['Liga'] == 'ENG2') | (tabela_9['Liga'] == 'FRA1') | (tabela_9['Liga'] == 'FRA2') 
-            | (tabela_9['Liga'] == 'SPA1') | (tabela_9['Liga'] == 'ITA1') | (tabela_9['Liga'] == 'GER1') | (tabela_9['Liga'] == 'POR1') 
-            | (tabela_9['Liga'] == 'SWZ') | (tabela_9['Liga'] == 'RUS') | (tabela_9['Liga'] == 'UKR') | (tabela_9['Liga'] == 'BEL1') 
-            | (tabela_9['Liga'] == 'CHN') | (tabela_9['Liga'] == 'DEN') | (tabela_9['Liga'] == 'GRE') | (tabela_9['Liga'] == 'HOL') 
-            | (tabela_9['Liga'] == 'JAP') | (tabela_9['Liga'] == 'MEX') | (tabela_9['Liga'] == 'SAUD') | (tabela_9['Liga'] == 'TUR') 
-            | (tabela_9['Liga'] == 'UAE') | (tabela_9['Liga'] == 'USA') | (tabela_9['Liga'] == 'ITA2') | (tabela_9['Liga'] == 'GER2') 
-            | (tabela_9['Liga'] == 'POR2') | (tabela_9['Liga'] == 'BUL') | (tabela_9['Liga'] == 'AUT') | (tabela_9['Liga'] == 'QAT')
-            | (tabela_9['Liga'] == 'BRA1') | (tabela_9['Liga'] == 'ARG1')]
+        tabela_9 = tabela_9[(tabela_9['Liga'] == 'ARG1') | (tabela_9['Liga'] == 'AUS') | (tabela_9['Liga'] == 'AUT') 
+            | (tabela_9['Liga'] == 'BEL1') | (tabela_9['Liga'] == 'BEL2') | (tabela_9['Liga'] == 'BOL') 
+            | (tabela_9['Liga'] == 'BRA1') | (tabela_9['Liga'] == 'BRA2') | (tabela_9['Liga'] == 'BUL') | (tabela_9['Liga'] == 'CHI')
+            | (tabela_9['Liga'] == 'CHN') | (tabela_9['Liga'] == 'COL') | (tabela_9['Liga'] == 'CRO') | (tabela_9['Liga'] == 'CZH')
+            | (tabela_9['Liga'] == 'DEN') | (tabela_9['Liga'] == 'ECU') | (tabela_9['Liga'] == 'ENG1') | (tabela_9['Liga'] == 'ENG2') 
+            | (tabela_9['Liga'] == 'FIN') | (tabela_9['Liga'] == 'FRA1') | (tabela_9['Liga'] == 'FRA2') | (tabela_9['Liga'] == 'GEO')  
+            | (tabela_9['Liga'] == 'GER1') | (tabela_9['Liga'] == 'GER2') | (tabela_9['Liga'] == 'GRE') | (tabela_9['Liga'] == 'HOL') 
+            | (tabela_9['Liga'] == 'IND') | (tabela_9['Liga'] == 'INDO') | (tabela_9['Liga'] == 'ITA1') | (tabela_9['Liga'] == 'ITA2') 
+            | (tabela_9['Liga'] == 'JAP') | (tabela_9['Liga'] == 'KOR') | (tabela_9['Liga'] == 'MEX') | (tabela_9['Liga'] == 'MOR') 
+            | (tabela_9['Liga'] == 'NOR') | (tabela_9['Liga'] == 'PAR') | (tabela_9['Liga'] == 'PER') | (tabela_9['Liga'] == 'POL') 
+            | (tabela_9['Liga'] == 'POR1') | (tabela_9['Liga'] == 'POR2') | (tabela_9['Liga'] == 'QAT') | (tabela_9['Liga'] == 'ROM') 
+            | (tabela_9['Liga'] == 'RUS') | (tabela_9['Liga'] == 'SAUD') | (tabela_9['Liga'] == 'SCT') | (tabela_9['Liga'] == 'SER') 
+            | (tabela_9['Liga'] == 'SPA1') | (tabela_9['Liga'] == 'SPA2') | (tabela_9['Liga'] == 'SWE') | (tabela_9['Liga'] == 'SWZ') 
+            | (tabela_9['Liga'] == 'TUR') | (tabela_9['Liga'] == 'UAE') | (tabela_9['Liga'] == 'UKR')  | (tabela_9['Liga'] == 'URU')
+            | (tabela_9['Liga'] == 'USA') | (tabela_9['Liga'] == 'UZB') | (tabela_9['Liga'] == 'VEN')]
 
         tabela_10 = pd.read_csv("PlayerAnalysis_Role_12_Full.csv")
         tabela_10 = tabela_10.loc[(tabela_10['Nacionalidade']==nacionalidade)&(tabela_10['Fim_Contrato']<=contrato)&(tabela_10['Versão_Temporada']==temporada)]
         tabela_10 = tabela_10.iloc[:, np.r_[15, 32, 36:40]]
-        tabela_10 = tabela_10[(tabela_10['Liga'] == 'ENG1') | (tabela_10['Liga'] == 'ENG2') | (tabela_10['Liga'] == 'FRA1') | (tabela_10['Liga'] == 'FRA2') 
-            | (tabela_10['Liga'] == 'SPA1') | (tabela_10['Liga'] == 'ITA1') | (tabela_10['Liga'] == 'GER1') | (tabela_10['Liga'] == 'POR1') 
-            | (tabela_10['Liga'] == 'SWZ') | (tabela_10['Liga'] == 'RUS') | (tabela_10['Liga'] == 'UKR') | (tabela_10['Liga'] == 'BEL1') 
-            | (tabela_10['Liga'] == 'CHN') | (tabela_10['Liga'] == 'DEN') | (tabela_10['Liga'] == 'GRE') | (tabela_10['Liga'] == 'HOL') 
-            | (tabela_10['Liga'] == 'JAP') | (tabela_10['Liga'] == 'MEX') | (tabela_10['Liga'] == 'SAUD') | (tabela_10['Liga'] == 'TUR') 
-            | (tabela_10['Liga'] == 'UAE') | (tabela_10['Liga'] == 'USA') | (tabela_10['Liga'] == 'ITA2') | (tabela_10['Liga'] == 'GER2') 
-            | (tabela_10['Liga'] == 'POR2') | (tabela_10['Liga'] == 'BUL') | (tabela_10['Liga'] == 'AUT') | (tabela_10['Liga'] == 'QAT')
-            | (tabela_10['Liga'] == 'BRA1') | (tabela_10['Liga'] == 'ARG1')]
+        tabela_10 = tabela_10[(tabela_10['Liga'] == 'ARG1') | (tabela_10['Liga'] == 'AUS') | (tabela_10['Liga'] == 'AUT') 
+            | (tabela_10['Liga'] == 'BEL1') | (tabela_10['Liga'] == 'BEL2') | (tabela_10['Liga'] == 'BOL') 
+            | (tabela_10['Liga'] == 'BRA1') | (tabela_10['Liga'] == 'BRA2') | (tabela_10['Liga'] == 'BUL') | (tabela_10['Liga'] == 'CHI')
+            | (tabela_10['Liga'] == 'CHN') | (tabela_10['Liga'] == 'COL') | (tabela_10['Liga'] == 'CRO') | (tabela_10['Liga'] == 'CZH')
+            | (tabela_10['Liga'] == 'DEN') | (tabela_10['Liga'] == 'ECU') | (tabela_10['Liga'] == 'ENG1') | (tabela_10['Liga'] == 'ENG2') 
+            | (tabela_10['Liga'] == 'FIN') | (tabela_10['Liga'] == 'FRA1') | (tabela_10['Liga'] == 'FRA2') | (tabela_10['Liga'] == 'GEO')  
+            | (tabela_10['Liga'] == 'GER1') | (tabela_10['Liga'] == 'GER2') | (tabela_10['Liga'] == 'GRE') | (tabela_10['Liga'] == 'HOL') 
+            | (tabela_10['Liga'] == 'IND') | (tabela_10['Liga'] == 'INDO') | (tabela_10['Liga'] == 'ITA1') | (tabela_10['Liga'] == 'ITA2') 
+            | (tabela_10['Liga'] == 'JAP') | (tabela_10['Liga'] == 'KOR') | (tabela_10['Liga'] == 'MEX') | (tabela_10['Liga'] == 'MOR') 
+            | (tabela_10['Liga'] == 'NOR') | (tabela_10['Liga'] == 'PAR') | (tabela_10['Liga'] == 'PER') | (tabela_10['Liga'] == 'POL') 
+            | (tabela_10['Liga'] == 'POR1') | (tabela_10['Liga'] == 'POR2') | (tabela_10['Liga'] == 'QAT') | (tabela_10['Liga'] == 'ROM') 
+            | (tabela_10['Liga'] == 'RUS') | (tabela_10['Liga'] == 'SAUD') | (tabela_10['Liga'] == 'SCT') | (tabela_10['Liga'] == 'SER') 
+            | (tabela_10['Liga'] == 'SPA1') | (tabela_10['Liga'] == 'SPA2') | (tabela_10['Liga'] == 'SWE') | (tabela_10['Liga'] == 'SWZ') 
+            | (tabela_10['Liga'] == 'TUR') | (tabela_10['Liga'] == 'UAE') | (tabela_10['Liga'] == 'UKR')  | (tabela_10['Liga'] == 'URU')
+            | (tabela_10['Liga'] == 'USA') | (tabela_10['Liga'] == 'UZB') | (tabela_10['Liga'] == 'VEN')]
 
         tabela_9 = pd.merge(tabela_9, tabela_10[['Atleta', 'L_Rating', 'L_Ranking', 'L_Percentil', 'Size']], on="Atleta", how="left")
         tabela_9 = tabela_9.rename(columns={'Equipe_Janela_Análise':'Equipe', 'Versão_Temporada':'Janela de Análise', 
@@ -4019,26 +4187,40 @@ if choose == "Free Agents pelo Mundo":
         tabela_11 = pd.read_csv("13_Role_Segundo_Volante_Organizador_Full.csv")
         tabela_11 = tabela_11.loc[(tabela_11['Nacionalidade']==nacionalidade)&(tabela_11['Fim_Contrato']<=contrato)&(tabela_11['Versão_Temporada']==temporada)]   
         tabela_11 = tabela_11.iloc[:, np.r_[1, 3, 4, 7, 15, 9:12, 28]]
-        tabela_11 = tabela_11[(tabela_11['Liga'] == 'ENG1') | (tabela_11['Liga'] == 'ENG2') | (tabela_11['Liga'] == 'FRA1') | (tabela_11['Liga'] == 'FRA2') 
-            | (tabela_11['Liga'] == 'SPA1') | (tabela_11['Liga'] == 'ITA1') | (tabela_11['Liga'] == 'GER1') | (tabela_11['Liga'] == 'POR1') 
-            | (tabela_11['Liga'] == 'SWZ') | (tabela_11['Liga'] == 'RUS') | (tabela_11['Liga'] == 'UKR') | (tabela_11['Liga'] == 'BEL1') 
-            | (tabela_11['Liga'] == 'CHN') | (tabela_11['Liga'] == 'DEN') | (tabela_11['Liga'] == 'GRE') | (tabela_11['Liga'] == 'HOL') 
-            | (tabela_11['Liga'] == 'JAP') | (tabela_11['Liga'] == 'MEX') | (tabela_11['Liga'] == 'SAUD') | (tabela_11['Liga'] == 'TUR') 
-            | (tabela_11['Liga'] == 'UAE') | (tabela_11['Liga'] == 'USA') | (tabela_11['Liga'] == 'ITA2') | (tabela_11['Liga'] == 'GER2') 
-            | (tabela_11['Liga'] == 'POR2') | (tabela_11['Liga'] == 'BUL') | (tabela_11['Liga'] == 'AUT') | (tabela_11['Liga'] == 'QAT') 
-            | (tabela_11['Liga'] == 'BRA1') | (tabela_11['Liga'] == 'ARG1')]
+        tabela_11 = tabela_11[(tabela_11['Liga'] == 'ARG1') | (tabela_11['Liga'] == 'AUS') | (tabela_11['Liga'] == 'AUT') 
+            | (tabela_11['Liga'] == 'BEL1') | (tabela_11['Liga'] == 'BEL2') | (tabela_11['Liga'] == 'BOL') 
+            | (tabela_11['Liga'] == 'BRA1') | (tabela_11['Liga'] == 'BRA2') | (tabela_11['Liga'] == 'BUL') | (tabela_11['Liga'] == 'CHI')
+            | (tabela_11['Liga'] == 'CHN') | (tabela_11['Liga'] == 'COL') | (tabela_11['Liga'] == 'CRO') | (tabela_11['Liga'] == 'CZH')
+            | (tabela_11['Liga'] == 'DEN') | (tabela_11['Liga'] == 'ECU') | (tabela_11['Liga'] == 'ENG1') | (tabela_11['Liga'] == 'ENG2') 
+            | (tabela_11['Liga'] == 'FIN') | (tabela_11['Liga'] == 'FRA1') | (tabela_11['Liga'] == 'FRA2') | (tabela_11['Liga'] == 'GEO')  
+            | (tabela_11['Liga'] == 'GER1') | (tabela_11['Liga'] == 'GER2') | (tabela_11['Liga'] == 'GRE') | (tabela_11['Liga'] == 'HOL') 
+            | (tabela_11['Liga'] == 'IND') | (tabela_11['Liga'] == 'INDO') | (tabela_11['Liga'] == 'ITA1') | (tabela_11['Liga'] == 'ITA2') 
+            | (tabela_11['Liga'] == 'JAP') | (tabela_11['Liga'] == 'KOR') | (tabela_11['Liga'] == 'MEX') | (tabela_11['Liga'] == 'MOR') 
+            | (tabela_11['Liga'] == 'NOR') | (tabela_11['Liga'] == 'PAR') | (tabela_11['Liga'] == 'PER') | (tabela_11['Liga'] == 'POL') 
+            | (tabela_11['Liga'] == 'POR1') | (tabela_11['Liga'] == 'POR2') | (tabela_11['Liga'] == 'QAT') | (tabela_11['Liga'] == 'ROM') 
+            | (tabela_11['Liga'] == 'RUS') | (tabela_11['Liga'] == 'SAUD') | (tabela_11['Liga'] == 'SCT') | (tabela_11['Liga'] == 'SER') 
+            | (tabela_11['Liga'] == 'SPA1') | (tabela_11['Liga'] == 'SPA2') | (tabela_11['Liga'] == 'SWE') | (tabela_11['Liga'] == 'SWZ') 
+            | (tabela_11['Liga'] == 'TUR') | (tabela_11['Liga'] == 'UAE') | (tabela_11['Liga'] == 'UKR')  | (tabela_11['Liga'] == 'URU')
+            | (tabela_11['Liga'] == 'USA') | (tabela_11['Liga'] == 'UZB') | (tabela_11['Liga'] == 'VEN')]
 
         tabela_12 = pd.read_csv("PlayerAnalysis_Role_13_Full.csv")
         tabela_12 = tabela_12.loc[(tabela_12['Nacionalidade']==nacionalidade)&(tabela_12['Fim_Contrato']<=contrato)&(tabela_12['Versão_Temporada']==temporada)]
         tabela_12 = tabela_12.iloc[:, np.r_[12, 29, 33:37]]
-        tabela_12 = tabela_12[(tabela_12['Liga'] == 'ENG1') | (tabela_12['Liga'] == 'ENG2') | (tabela_12['Liga'] == 'FRA1') | (tabela_12['Liga'] == 'FRA2') 
-            | (tabela_12['Liga'] == 'SPA1') | (tabela_12['Liga'] == 'ITA1') | (tabela_12['Liga'] == 'GER1') | (tabela_12['Liga'] == 'POR1') 
-            | (tabela_12['Liga'] == 'SWZ') | (tabela_12['Liga'] == 'RUS') | (tabela_12['Liga'] == 'UKR') | (tabela_12['Liga'] == 'BEL1') 
-            | (tabela_12['Liga'] == 'CHN') | (tabela_12['Liga'] == 'DEN') | (tabela_12['Liga'] == 'GRE') | (tabela_12['Liga'] == 'HOL') 
-            | (tabela_12['Liga'] == 'JAP') | (tabela_12['Liga'] == 'MEX') | (tabela_12['Liga'] == 'SAUD') | (tabela_12['Liga'] == 'TUR') 
-            | (tabela_12['Liga'] == 'UAE') | (tabela_12['Liga'] == 'USA') | (tabela_12['Liga'] == 'ITA2') | (tabela_12['Liga'] == 'GER2') 
-            | (tabela_12['Liga'] == 'POR2') | (tabela_12['Liga'] == 'BUL') | (tabela_12['Liga'] == 'AUT') | (tabela_12['Liga'] == 'QAT') 
-            | (tabela_12['Liga'] == 'BRA1') | (tabela_12['Liga'] == 'ARG1')]
+        tabela_12 = tabela_12[(tabela_12['Liga'] == 'ARG1') | (tabela_12['Liga'] == 'AUS') | (tabela_12['Liga'] == 'AUT') 
+            | (tabela_12['Liga'] == 'BEL1') | (tabela_12['Liga'] == 'BEL2') | (tabela_12['Liga'] == 'BOL') 
+            | (tabela_12['Liga'] == 'BRA1') | (tabela_12['Liga'] == 'BRA2') | (tabela_12['Liga'] == 'BUL') | (tabela_12['Liga'] == 'CHI')
+            | (tabela_12['Liga'] == 'CHN') | (tabela_12['Liga'] == 'COL') | (tabela_12['Liga'] == 'CRO') | (tabela_12['Liga'] == 'CZH')
+            | (tabela_12['Liga'] == 'DEN') | (tabela_12['Liga'] == 'ECU') | (tabela_12['Liga'] == 'ENG1') | (tabela_12['Liga'] == 'ENG2') 
+            | (tabela_12['Liga'] == 'FIN') | (tabela_12['Liga'] == 'FRA1') | (tabela_12['Liga'] == 'FRA2') | (tabela_12['Liga'] == 'GEO')  
+            | (tabela_12['Liga'] == 'GER1') | (tabela_12['Liga'] == 'GER2') | (tabela_12['Liga'] == 'GRE') | (tabela_12['Liga'] == 'HOL') 
+            | (tabela_12['Liga'] == 'IND') | (tabela_12['Liga'] == 'INDO') | (tabela_12['Liga'] == 'ITA1') | (tabela_12['Liga'] == 'ITA2') 
+            | (tabela_12['Liga'] == 'JAP') | (tabela_12['Liga'] == 'KOR') | (tabela_12['Liga'] == 'MEX') | (tabela_12['Liga'] == 'MOR') 
+            | (tabela_12['Liga'] == 'NOR') | (tabela_12['Liga'] == 'PAR') | (tabela_12['Liga'] == 'PER') | (tabela_12['Liga'] == 'POL') 
+            | (tabela_12['Liga'] == 'POR1') | (tabela_12['Liga'] == 'POR2') | (tabela_12['Liga'] == 'QAT') | (tabela_12['Liga'] == 'ROM') 
+            | (tabela_12['Liga'] == 'RUS') | (tabela_12['Liga'] == 'SAUD') | (tabela_12['Liga'] == 'SCT') | (tabela_12['Liga'] == 'SER') 
+            | (tabela_12['Liga'] == 'SPA1') | (tabela_12['Liga'] == 'SPA2') | (tabela_12['Liga'] == 'SWE') | (tabela_12['Liga'] == 'SWZ') 
+            | (tabela_12['Liga'] == 'TUR') | (tabela_12['Liga'] == 'UAE') | (tabela_12['Liga'] == 'UKR')  | (tabela_12['Liga'] == 'URU')
+            | (tabela_12['Liga'] == 'USA') | (tabela_12['Liga'] == 'UZB') | (tabela_12['Liga'] == 'VEN')]
 
         tabela_11 = pd.merge(tabela_11, tabela_12[['Atleta', 'L_Rating', 'L_Ranking', 'L_Percentil', 'Size']], on="Atleta", how="left")
         tabela_11 = tabela_11.rename(columns={'Equipe_Janela_Análise':'Equipe', 'Versão_Temporada':'Janela de Análise', 
@@ -4099,26 +4281,40 @@ if choose == "Free Agents pelo Mundo":
         tabela_13 = pd.read_csv("14_Role_Segundo_Volante_Equilibrado_Full.csv")
         tabela_13 = tabela_13.loc[(tabela_13['Nacionalidade']==nacionalidade)&(tabela_13['Fim_Contrato']<=contrato)&(tabela_13['Versão_Temporada']==temporada)]   
         tabela_13 = tabela_13.iloc[:, np.r_[1, 3, 4, 7, 15, 9:12, 31]]
-        tabela_13 = tabela_13[(tabela_13['Liga'] == 'ENG1') | (tabela_13['Liga'] == 'ENG2') | (tabela_13['Liga'] == 'FRA1') | (tabela_13['Liga'] == 'FRA2') 
-            | (tabela_13['Liga'] == 'SPA1') | (tabela_13['Liga'] == 'ITA1') | (tabela_13['Liga'] == 'GER1') | (tabela_13['Liga'] == 'POR1') 
-            | (tabela_13['Liga'] == 'SWZ') | (tabela_13['Liga'] == 'RUS') | (tabela_13['Liga'] == 'UKR') | (tabela_13['Liga'] == 'BEL1') 
-            | (tabela_13['Liga'] == 'CHN') | (tabela_13['Liga'] == 'DEN') | (tabela_13['Liga'] == 'GRE') | (tabela_13['Liga'] == 'HOL') 
-            | (tabela_13['Liga'] == 'JAP') | (tabela_13['Liga'] == 'MEX') | (tabela_13['Liga'] == 'SAUD') | (tabela_13['Liga'] == 'TUR') 
-            | (tabela_13['Liga'] == 'UAE') | (tabela_13['Liga'] == 'USA') | (tabela_13['Liga'] == 'ITA2') | (tabela_13['Liga'] == 'GER2') 
-            | (tabela_13['Liga'] == 'POR2') | (tabela_13['Liga'] == 'BUL') | (tabela_13['Liga'] == 'AUT') | (tabela_13['Liga'] == 'QAT') 
-            | (tabela_13['Liga'] == 'BRA1') | (tabela_13['Liga'] == 'ARG1')]
+        tabela_13 = tabela_13[(tabela_13['Liga'] == 'ARG1') | (tabela_13['Liga'] == 'AUS') | (tabela_13['Liga'] == 'AUT') 
+            | (tabela_13['Liga'] == 'BEL1') | (tabela_13['Liga'] == 'BEL2') | (tabela_13['Liga'] == 'BOL') 
+            | (tabela_13['Liga'] == 'BRA1') | (tabela_13['Liga'] == 'BRA2') | (tabela_13['Liga'] == 'BUL') | (tabela_13['Liga'] == 'CHI')
+            | (tabela_13['Liga'] == 'CHN') | (tabela_13['Liga'] == 'COL') | (tabela_13['Liga'] == 'CRO') | (tabela_13['Liga'] == 'CZH')
+            | (tabela_13['Liga'] == 'DEN') | (tabela_13['Liga'] == 'ECU') | (tabela_13['Liga'] == 'ENG1') | (tabela_13['Liga'] == 'ENG2') 
+            | (tabela_13['Liga'] == 'FIN') | (tabela_13['Liga'] == 'FRA1') | (tabela_13['Liga'] == 'FRA2') | (tabela_13['Liga'] == 'GEO')  
+            | (tabela_13['Liga'] == 'GER1') | (tabela_13['Liga'] == 'GER2') | (tabela_13['Liga'] == 'GRE') | (tabela_13['Liga'] == 'HOL') 
+            | (tabela_13['Liga'] == 'IND') | (tabela_13['Liga'] == 'INDO') | (tabela_13['Liga'] == 'ITA1') | (tabela_13['Liga'] == 'ITA2') 
+            | (tabela_13['Liga'] == 'JAP') | (tabela_13['Liga'] == 'KOR') | (tabela_13['Liga'] == 'MEX') | (tabela_13['Liga'] == 'MOR') 
+            | (tabela_13['Liga'] == 'NOR') | (tabela_13['Liga'] == 'PAR') | (tabela_13['Liga'] == 'PER') | (tabela_13['Liga'] == 'POL') 
+            | (tabela_13['Liga'] == 'POR1') | (tabela_13['Liga'] == 'POR2') | (tabela_13['Liga'] == 'QAT') | (tabela_13['Liga'] == 'ROM') 
+            | (tabela_13['Liga'] == 'RUS') | (tabela_13['Liga'] == 'SAUD') | (tabela_13['Liga'] == 'SCT') | (tabela_13['Liga'] == 'SER') 
+            | (tabela_13['Liga'] == 'SPA1') | (tabela_13['Liga'] == 'SPA2') | (tabela_13['Liga'] == 'SWE') | (tabela_13['Liga'] == 'SWZ') 
+            | (tabela_13['Liga'] == 'TUR') | (tabela_13['Liga'] == 'UAE') | (tabela_13['Liga'] == 'UKR')  | (tabela_13['Liga'] == 'URU')
+            | (tabela_13['Liga'] == 'USA') | (tabela_13['Liga'] == 'UZB') | (tabela_13['Liga'] == 'VEN')]
 
         tabela_14 = pd.read_csv("PlayerAnalysis_Role_14_Full.csv")
         tabela_14 = tabela_14.loc[(tabela_14['Nacionalidade']==nacionalidade)&(tabela_14['Fim_Contrato']<=contrato)&(tabela_14['Versão_Temporada']==temporada)]
         tabela_14 = tabela_14.iloc[:, np.r_[15, 32, 36:40]]
-        tabela_14 = tabela_14[(tabela_14['Liga'] == 'ENG1') | (tabela_14['Liga'] == 'ENG2') | (tabela_14['Liga'] == 'FRA1') | (tabela_14['Liga'] == 'FRA2') 
-            | (tabela_14['Liga'] == 'SPA1') | (tabela_14['Liga'] == 'ITA1') | (tabela_14['Liga'] == 'GER1') | (tabela_14['Liga'] == 'POR1') 
-            | (tabela_14['Liga'] == 'SWZ') | (tabela_14['Liga'] == 'RUS') | (tabela_14['Liga'] == 'UKR') | (tabela_14['Liga'] == 'BEL1') 
-            | (tabela_14['Liga'] == 'CHN') | (tabela_14['Liga'] == 'DEN') | (tabela_14['Liga'] == 'GRE') | (tabela_14['Liga'] == 'HOL') 
-            | (tabela_14['Liga'] == 'JAP') | (tabela_14['Liga'] == 'MEX') | (tabela_14['Liga'] == 'SAUD') | (tabela_14['Liga'] == 'TUR') 
-            | (tabela_14['Liga'] == 'UAE') | (tabela_14['Liga'] == 'USA') | (tabela_14['Liga'] == 'ITA2') | (tabela_14['Liga'] == 'GER2') 
-            | (tabela_14['Liga'] == 'POR2') | (tabela_14['Liga'] == 'BUL') | (tabela_14['Liga'] == 'AUT') | (tabela_14['Liga'] == 'QAT') 
-            | (tabela_14['Liga'] == 'BRA1') | (tabela_14['Liga'] == 'ARG1')]
+        tabela_14 = tabela_14[(tabela_14['Liga'] == 'ARG1') | (tabela_14['Liga'] == 'AUS') | (tabela_14['Liga'] == 'AUT') 
+            | (tabela_14['Liga'] == 'BEL1') | (tabela_14['Liga'] == 'BEL2') | (tabela_14['Liga'] == 'BOL') 
+            | (tabela_14['Liga'] == 'BRA1') | (tabela_14['Liga'] == 'BRA2') | (tabela_14['Liga'] == 'BUL') | (tabela_14['Liga'] == 'CHI')
+            | (tabela_14['Liga'] == 'CHN') | (tabela_14['Liga'] == 'COL') | (tabela_14['Liga'] == 'CRO') | (tabela_14['Liga'] == 'CZH')
+            | (tabela_14['Liga'] == 'DEN') | (tabela_14['Liga'] == 'ECU') | (tabela_14['Liga'] == 'ENG1') | (tabela_14['Liga'] == 'ENG2') 
+            | (tabela_14['Liga'] == 'FIN') | (tabela_14['Liga'] == 'FRA1') | (tabela_14['Liga'] == 'FRA2') | (tabela_14['Liga'] == 'GEO')  
+            | (tabela_14['Liga'] == 'GER1') | (tabela_14['Liga'] == 'GER2') | (tabela_14['Liga'] == 'GRE') | (tabela_14['Liga'] == 'HOL') 
+            | (tabela_14['Liga'] == 'IND') | (tabela_14['Liga'] == 'INDO') | (tabela_14['Liga'] == 'ITA1') | (tabela_14['Liga'] == 'ITA2') 
+            | (tabela_14['Liga'] == 'JAP') | (tabela_14['Liga'] == 'KOR') | (tabela_14['Liga'] == 'MEX') | (tabela_14['Liga'] == 'MOR') 
+            | (tabela_14['Liga'] == 'NOR') | (tabela_14['Liga'] == 'PAR') | (tabela_14['Liga'] == 'PER') | (tabela_14['Liga'] == 'POL') 
+            | (tabela_14['Liga'] == 'POR1') | (tabela_14['Liga'] == 'POR2') | (tabela_14['Liga'] == 'QAT') | (tabela_14['Liga'] == 'ROM') 
+            | (tabela_14['Liga'] == 'RUS') | (tabela_14['Liga'] == 'SAUD') | (tabela_14['Liga'] == 'SCT') | (tabela_14['Liga'] == 'SER') 
+            | (tabela_14['Liga'] == 'SPA1') | (tabela_14['Liga'] == 'SPA2') | (tabela_14['Liga'] == 'SWE') | (tabela_14['Liga'] == 'SWZ') 
+            | (tabela_14['Liga'] == 'TUR') | (tabela_14['Liga'] == 'UAE') | (tabela_14['Liga'] == 'UKR')  | (tabela_14['Liga'] == 'URU')
+            | (tabela_14['Liga'] == 'USA') | (tabela_14['Liga'] == 'UZB') | (tabela_14['Liga'] == 'VEN')]
 
         tabela_13 = pd.merge(tabela_13, tabela_14[['Atleta', 'L_Rating', 'L_Ranking', 'L_Percentil', 'Size']], on="Atleta", how="left")
         tabela_13 = tabela_13.rename(columns={'Equipe_Janela_Análise':'Equipe', 'Versão_Temporada':'Janela de Análise', 
@@ -4182,26 +4378,40 @@ if choose == "Free Agents pelo Mundo":
         tabela_9 = pd.read_csv("15_Role_Meia_Organizador_Full.csv")
         tabela_9 = tabela_9.loc[(tabela_9['Nacionalidade']==nacionalidade)&(tabela_9['Fim_Contrato']<=contrato)&(tabela_9['Versão_Temporada']==temporada)]   
         tabela_9 = tabela_9.iloc[:, np.r_[1, 3, 4, 7, 15, 9:12, 28]]
-        tabela_9 = tabela_9[(tabela_9['Liga'] == 'ENG1') | (tabela_9['Liga'] == 'ENG2') | (tabela_9['Liga'] == 'FRA1') | (tabela_9['Liga'] == 'FRA2') 
-            | (tabela_9['Liga'] == 'SPA1') | (tabela_9['Liga'] == 'ITA1') | (tabela_9['Liga'] == 'GER1') | (tabela_9['Liga'] == 'POR1') 
-            | (tabela_9['Liga'] == 'SWZ') | (tabela_9['Liga'] == 'RUS') | (tabela_9['Liga'] == 'UKR') | (tabela_9['Liga'] == 'BEL1') 
-            | (tabela_9['Liga'] == 'CHN') | (tabela_9['Liga'] == 'DEN') | (tabela_9['Liga'] == 'GRE') | (tabela_9['Liga'] == 'HOL') 
-            | (tabela_9['Liga'] == 'JAP') | (tabela_9['Liga'] == 'MEX') | (tabela_9['Liga'] == 'SAUD') | (tabela_9['Liga'] == 'TUR') 
-            | (tabela_9['Liga'] == 'UAE') | (tabela_9['Liga'] == 'USA') | (tabela_9['Liga'] == 'ITA2') | (tabela_9['Liga'] == 'GER2') 
-            | (tabela_9['Liga'] == 'POR2') | (tabela_9['Liga'] == 'BUL') | (tabela_9['Liga'] == 'AUT') | (tabela_9['Liga'] == 'QAT') 
-            | (tabela_9['Liga'] == 'BRA1') | (tabela_9['Liga'] == 'ARG1')]
+        tabela_9 = tabela_9[(tabela_9['Liga'] == 'ARG1') | (tabela_9['Liga'] == 'AUS') | (tabela_9['Liga'] == 'AUT') 
+            | (tabela_9['Liga'] == 'BEL1') | (tabela_9['Liga'] == 'BEL2') | (tabela_9['Liga'] == 'BOL') 
+            | (tabela_9['Liga'] == 'BRA1') | (tabela_9['Liga'] == 'BRA2') | (tabela_9['Liga'] == 'BUL') | (tabela_9['Liga'] == 'CHI')
+            | (tabela_9['Liga'] == 'CHN') | (tabela_9['Liga'] == 'COL') | (tabela_9['Liga'] == 'CRO') | (tabela_9['Liga'] == 'CZH')
+            | (tabela_9['Liga'] == 'DEN') | (tabela_9['Liga'] == 'ECU') | (tabela_9['Liga'] == 'ENG1') | (tabela_9['Liga'] == 'ENG2') 
+            | (tabela_9['Liga'] == 'FIN') | (tabela_9['Liga'] == 'FRA1') | (tabela_9['Liga'] == 'FRA2') | (tabela_9['Liga'] == 'GEO')  
+            | (tabela_9['Liga'] == 'GER1') | (tabela_9['Liga'] == 'GER2') | (tabela_9['Liga'] == 'GRE') | (tabela_9['Liga'] == 'HOL') 
+            | (tabela_9['Liga'] == 'IND') | (tabela_9['Liga'] == 'INDO') | (tabela_9['Liga'] == 'ITA1') | (tabela_9['Liga'] == 'ITA2') 
+            | (tabela_9['Liga'] == 'JAP') | (tabela_9['Liga'] == 'KOR') | (tabela_9['Liga'] == 'MEX') | (tabela_9['Liga'] == 'MOR') 
+            | (tabela_9['Liga'] == 'NOR') | (tabela_9['Liga'] == 'PAR') | (tabela_9['Liga'] == 'PER') | (tabela_9['Liga'] == 'POL') 
+            | (tabela_9['Liga'] == 'POR1') | (tabela_9['Liga'] == 'POR2') | (tabela_9['Liga'] == 'QAT') | (tabela_9['Liga'] == 'ROM') 
+            | (tabela_9['Liga'] == 'RUS') | (tabela_9['Liga'] == 'SAUD') | (tabela_9['Liga'] == 'SCT') | (tabela_9['Liga'] == 'SER') 
+            | (tabela_9['Liga'] == 'SPA1') | (tabela_9['Liga'] == 'SPA2') | (tabela_9['Liga'] == 'SWE') | (tabela_9['Liga'] == 'SWZ') 
+            | (tabela_9['Liga'] == 'TUR') | (tabela_9['Liga'] == 'UAE') | (tabela_9['Liga'] == 'UKR')  | (tabela_9['Liga'] == 'URU')
+            | (tabela_9['Liga'] == 'USA') | (tabela_9['Liga'] == 'UZB') | (tabela_9['Liga'] == 'VEN')]
 
         tabela_10 = pd.read_csv("PlayerAnalysis_Role_15_Full.csv")
         tabela_10 = tabela_10.loc[(tabela_10['Nacionalidade']==nacionalidade)&(tabela_10['Fim_Contrato']<=contrato)&(tabela_10['Versão_Temporada']==temporada)]
         tabela_10 = tabela_10.iloc[:, np.r_[12, 29, 33:37]]
-        tabela_10 = tabela_10[(tabela_10['Liga'] == 'ENG1') | (tabela_10['Liga'] == 'ENG2') | (tabela_10['Liga'] == 'FRA1') | (tabela_10['Liga'] == 'FRA2') 
-            | (tabela_10['Liga'] == 'SPA1') | (tabela_10['Liga'] == 'ITA1') | (tabela_10['Liga'] == 'GER1') | (tabela_10['Liga'] == 'POR1') 
-            | (tabela_10['Liga'] == 'SWZ') | (tabela_10['Liga'] == 'RUS') | (tabela_10['Liga'] == 'UKR') | (tabela_10['Liga'] == 'BEL1') 
-            | (tabela_10['Liga'] == 'CHN') | (tabela_10['Liga'] == 'DEN') | (tabela_10['Liga'] == 'GRE') | (tabela_10['Liga'] == 'HOL') 
-            | (tabela_10['Liga'] == 'JAP') | (tabela_10['Liga'] == 'MEX') | (tabela_10['Liga'] == 'SAUD') | (tabela_10['Liga'] == 'TUR') 
-            | (tabela_10['Liga'] == 'UAE') | (tabela_10['Liga'] == 'USA') | (tabela_10['Liga'] == 'ITA2') | (tabela_10['Liga'] == 'GER2') 
-            | (tabela_10['Liga'] == 'POR2') | (tabela_10['Liga'] == 'BUL') | (tabela_10['Liga'] == 'AUT') | (tabela_10['Liga'] == 'QAT') 
-            | (tabela_10['Liga'] == 'BRA1') | (tabela_10['Liga'] == 'ARG1')]
+        tabela_10 = tabela_10[(tabela_10['Liga'] == 'ARG1') | (tabela_10['Liga'] == 'AUS') | (tabela_10['Liga'] == 'AUT') 
+            | (tabela_10['Liga'] == 'BEL1') | (tabela_10['Liga'] == 'BEL2') | (tabela_10['Liga'] == 'BOL') 
+            | (tabela_10['Liga'] == 'BRA1') | (tabela_10['Liga'] == 'BRA2') | (tabela_10['Liga'] == 'BUL') | (tabela_10['Liga'] == 'CHI')
+            | (tabela_10['Liga'] == 'CHN') | (tabela_10['Liga'] == 'COL') | (tabela_10['Liga'] == 'CRO') | (tabela_10['Liga'] == 'CZH')
+            | (tabela_10['Liga'] == 'DEN') | (tabela_10['Liga'] == 'ECU') | (tabela_10['Liga'] == 'ENG1') | (tabela_10['Liga'] == 'ENG2') 
+            | (tabela_10['Liga'] == 'FIN') | (tabela_10['Liga'] == 'FRA1') | (tabela_10['Liga'] == 'FRA2') | (tabela_10['Liga'] == 'GEO')  
+            | (tabela_10['Liga'] == 'GER1') | (tabela_10['Liga'] == 'GER2') | (tabela_10['Liga'] == 'GRE') | (tabela_10['Liga'] == 'HOL') 
+            | (tabela_10['Liga'] == 'IND') | (tabela_10['Liga'] == 'INDO') | (tabela_10['Liga'] == 'ITA1') | (tabela_10['Liga'] == 'ITA2') 
+            | (tabela_10['Liga'] == 'JAP') | (tabela_10['Liga'] == 'KOR') | (tabela_10['Liga'] == 'MEX') | (tabela_10['Liga'] == 'MOR') 
+            | (tabela_10['Liga'] == 'NOR') | (tabela_10['Liga'] == 'PAR') | (tabela_10['Liga'] == 'PER') | (tabela_10['Liga'] == 'POL') 
+            | (tabela_10['Liga'] == 'POR1') | (tabela_10['Liga'] == 'POR2') | (tabela_10['Liga'] == 'QAT') | (tabela_10['Liga'] == 'ROM') 
+            | (tabela_10['Liga'] == 'RUS') | (tabela_10['Liga'] == 'SAUD') | (tabela_10['Liga'] == 'SCT') | (tabela_10['Liga'] == 'SER') 
+            | (tabela_10['Liga'] == 'SPA1') | (tabela_10['Liga'] == 'SPA2') | (tabela_10['Liga'] == 'SWE') | (tabela_10['Liga'] == 'SWZ') 
+            | (tabela_10['Liga'] == 'TUR') | (tabela_10['Liga'] == 'UAE') | (tabela_10['Liga'] == 'UKR')  | (tabela_10['Liga'] == 'URU')
+            | (tabela_10['Liga'] == 'USA') | (tabela_10['Liga'] == 'UZB') | (tabela_10['Liga'] == 'VEN')]
 
         tabela_9 = pd.merge(tabela_9, tabela_10[['Atleta', 'L_Rating', 'L_Ranking', 'L_Percentil', 'Size']], on="Atleta", how="left")
         tabela_9 = tabela_9.rename(columns={'Equipe_Janela_Análise':'Equipe', 'Versão_Temporada':'Janela de Análise', 
@@ -4261,26 +4471,40 @@ if choose == "Free Agents pelo Mundo":
         tabela_11 = pd.read_csv("16_Role_Meia_Atacante_Full.csv")
         tabela_11 = tabela_11.loc[(tabela_11['Nacionalidade']==nacionalidade)&(tabela_11['Fim_Contrato']<=contrato)&(tabela_11['Versão_Temporada']==temporada)]   
         tabela_11 = tabela_11.iloc[:, np.r_[1, 3, 4, 7, 15, 9:12, 35]]
-        tabela_11 = tabela_11[(tabela_11['Liga'] == 'ENG1') | (tabela_11['Liga'] == 'ENG2') | (tabela_11['Liga'] == 'FRA1') | (tabela_11['Liga'] == 'FRA2') 
-            | (tabela_11['Liga'] == 'SPA1') | (tabela_11['Liga'] == 'ITA1') | (tabela_11['Liga'] == 'GER1') | (tabela_11['Liga'] == 'POR1') 
-            | (tabela_11['Liga'] == 'SWZ') | (tabela_11['Liga'] == 'RUS') | (tabela_11['Liga'] == 'UKR') | (tabela_11['Liga'] == 'BEL1') 
-            | (tabela_11['Liga'] == 'CHN') | (tabela_11['Liga'] == 'DEN') | (tabela_11['Liga'] == 'GRE') | (tabela_11['Liga'] == 'HOL') 
-            | (tabela_11['Liga'] == 'JAP') | (tabela_11['Liga'] == 'MEX') | (tabela_11['Liga'] == 'SAUD') | (tabela_11['Liga'] == 'TUR') 
-            | (tabela_11['Liga'] == 'UAE') | (tabela_11['Liga'] == 'USA') | (tabela_11['Liga'] == 'ITA2') | (tabela_11['Liga'] == 'GER2') 
-            | (tabela_11['Liga'] == 'POR2') | (tabela_11['Liga'] == 'BUL') | (tabela_11['Liga'] == 'AUT') | (tabela_11['Liga'] == 'QAT') 
-            | (tabela_11['Liga'] == 'BRA1') | (tabela_11['Liga'] == 'ARG1')]
+        tabela_11 = tabela_11[(tabela_11['Liga'] == 'ARG1') | (tabela_11['Liga'] == 'AUS') | (tabela_11['Liga'] == 'AUT') 
+            | (tabela_11['Liga'] == 'BEL1') | (tabela_11['Liga'] == 'BEL2') | (tabela_11['Liga'] == 'BOL') 
+            | (tabela_11['Liga'] == 'BRA1') | (tabela_11['Liga'] == 'BRA2') | (tabela_11['Liga'] == 'BUL') | (tabela_11['Liga'] == 'CHI')
+            | (tabela_11['Liga'] == 'CHN') | (tabela_11['Liga'] == 'COL') | (tabela_11['Liga'] == 'CRO') | (tabela_11['Liga'] == 'CZH')
+            | (tabela_11['Liga'] == 'DEN') | (tabela_11['Liga'] == 'ECU') | (tabela_11['Liga'] == 'ENG1') | (tabela_11['Liga'] == 'ENG2') 
+            | (tabela_11['Liga'] == 'FIN') | (tabela_11['Liga'] == 'FRA1') | (tabela_11['Liga'] == 'FRA2') | (tabela_11['Liga'] == 'GEO')  
+            | (tabela_11['Liga'] == 'GER1') | (tabela_11['Liga'] == 'GER2') | (tabela_11['Liga'] == 'GRE') | (tabela_11['Liga'] == 'HOL') 
+            | (tabela_11['Liga'] == 'IND') | (tabela_11['Liga'] == 'INDO') | (tabela_11['Liga'] == 'ITA1') | (tabela_11['Liga'] == 'ITA2') 
+            | (tabela_11['Liga'] == 'JAP') | (tabela_11['Liga'] == 'KOR') | (tabela_11['Liga'] == 'MEX') | (tabela_11['Liga'] == 'MOR') 
+            | (tabela_11['Liga'] == 'NOR') | (tabela_11['Liga'] == 'PAR') | (tabela_11['Liga'] == 'PER') | (tabela_11['Liga'] == 'POL') 
+            | (tabela_11['Liga'] == 'POR1') | (tabela_11['Liga'] == 'POR2') | (tabela_11['Liga'] == 'QAT') | (tabela_11['Liga'] == 'ROM') 
+            | (tabela_11['Liga'] == 'RUS') | (tabela_11['Liga'] == 'SAUD') | (tabela_11['Liga'] == 'SCT') | (tabela_11['Liga'] == 'SER') 
+            | (tabela_11['Liga'] == 'SPA1') | (tabela_11['Liga'] == 'SPA2') | (tabela_11['Liga'] == 'SWE') | (tabela_11['Liga'] == 'SWZ') 
+            | (tabela_11['Liga'] == 'TUR') | (tabela_11['Liga'] == 'UAE') | (tabela_11['Liga'] == 'UKR')  | (tabela_11['Liga'] == 'URU')
+            | (tabela_11['Liga'] == 'USA') | (tabela_11['Liga'] == 'UZB') | (tabela_11['Liga'] == 'VEN')]
 
         tabela_12 = pd.read_csv("PlayerAnalysis_Role_16_Full.csv")
         tabela_12 = tabela_12.loc[(tabela_12['Nacionalidade']==nacionalidade)&(tabela_12['Fim_Contrato']<=contrato)&(tabela_12['Versão_Temporada']==temporada)]
         tabela_12 = tabela_12.iloc[:, np.r_[19, 36, 40:44]]
-        tabela_12 = tabela_12[(tabela_12['Liga'] == 'ENG1') | (tabela_12['Liga'] == 'ENG2') | (tabela_12['Liga'] == 'FRA1') | (tabela_12['Liga'] == 'FRA2') 
-            | (tabela_12['Liga'] == 'SPA1') | (tabela_12['Liga'] == 'ITA1') | (tabela_12['Liga'] == 'GER1') | (tabela_12['Liga'] == 'POR1') 
-            | (tabela_12['Liga'] == 'SWZ') | (tabela_12['Liga'] == 'RUS') | (tabela_12['Liga'] == 'UKR') | (tabela_12['Liga'] == 'BEL1') 
-            | (tabela_12['Liga'] == 'CHN') | (tabela_12['Liga'] == 'DEN') | (tabela_12['Liga'] == 'GRE') | (tabela_12['Liga'] == 'HOL') 
-            | (tabela_12['Liga'] == 'JAP') | (tabela_12['Liga'] == 'MEX') | (tabela_12['Liga'] == 'SAUD') | (tabela_12['Liga'] == 'TUR') 
-            | (tabela_12['Liga'] == 'UAE') | (tabela_12['Liga'] == 'USA') | (tabela_12['Liga'] == 'ITA2') | (tabela_12['Liga'] == 'GER2') 
-            | (tabela_12['Liga'] == 'POR2') | (tabela_12['Liga'] == 'BUL') | (tabela_12['Liga'] == 'AUT') | (tabela_12['Liga'] == 'QAT') 
-            | (tabela_12['Liga'] == 'BRA1') | (tabela_12['Liga'] == 'ARG1')]
+        tabela_12 = tabela_12[(tabela_12['Liga'] == 'ARG1') | (tabela_12['Liga'] == 'AUS') | (tabela_12['Liga'] == 'AUT') 
+            | (tabela_12['Liga'] == 'BEL1') | (tabela_12['Liga'] == 'BEL2') | (tabela_12['Liga'] == 'BOL') 
+            | (tabela_12['Liga'] == 'BRA1') | (tabela_12['Liga'] == 'BRA2') | (tabela_12['Liga'] == 'BUL') | (tabela_12['Liga'] == 'CHI')
+            | (tabela_12['Liga'] == 'CHN') | (tabela_12['Liga'] == 'COL') | (tabela_12['Liga'] == 'CRO') | (tabela_12['Liga'] == 'CZH')
+            | (tabela_12['Liga'] == 'DEN') | (tabela_12['Liga'] == 'ECU') | (tabela_12['Liga'] == 'ENG1') | (tabela_12['Liga'] == 'ENG2') 
+            | (tabela_12['Liga'] == 'FIN') | (tabela_12['Liga'] == 'FRA1') | (tabela_12['Liga'] == 'FRA2') | (tabela_12['Liga'] == 'GEO')  
+            | (tabela_12['Liga'] == 'GER1') | (tabela_12['Liga'] == 'GER2') | (tabela_12['Liga'] == 'GRE') | (tabela_12['Liga'] == 'HOL') 
+            | (tabela_12['Liga'] == 'IND') | (tabela_12['Liga'] == 'INDO') | (tabela_12['Liga'] == 'ITA1') | (tabela_12['Liga'] == 'ITA2') 
+            | (tabela_12['Liga'] == 'JAP') | (tabela_12['Liga'] == 'KOR') | (tabela_12['Liga'] == 'MEX') | (tabela_12['Liga'] == 'MOR') 
+            | (tabela_12['Liga'] == 'NOR') | (tabela_12['Liga'] == 'PAR') | (tabela_12['Liga'] == 'PER') | (tabela_12['Liga'] == 'POL') 
+            | (tabela_12['Liga'] == 'POR1') | (tabela_12['Liga'] == 'POR2') | (tabela_12['Liga'] == 'QAT') | (tabela_12['Liga'] == 'ROM') 
+            | (tabela_12['Liga'] == 'RUS') | (tabela_12['Liga'] == 'SAUD') | (tabela_12['Liga'] == 'SCT') | (tabela_12['Liga'] == 'SER') 
+            | (tabela_12['Liga'] == 'SPA1') | (tabela_12['Liga'] == 'SPA2') | (tabela_12['Liga'] == 'SWE') | (tabela_12['Liga'] == 'SWZ') 
+            | (tabela_12['Liga'] == 'TUR') | (tabela_12['Liga'] == 'UAE') | (tabela_12['Liga'] == 'UKR')  | (tabela_12['Liga'] == 'URU')
+            | (tabela_12['Liga'] == 'USA') | (tabela_12['Liga'] == 'UZB') | (tabela_12['Liga'] == 'VEN')]
 
         tabela_11 = pd.merge(tabela_11, tabela_12[['Atleta', 'L_Rating', 'L_Ranking', 'L_Percentil', 'Size']], on="Atleta", how="left")
         tabela_11 = tabela_11.rename(columns={'Equipe_Janela_Análise':'Equipe', 'Versão_Temporada':'Janela de Análise', 
@@ -4345,26 +4569,40 @@ if choose == "Free Agents pelo Mundo":
         tabela_9 = pd.read_csv("17_Role_Extremo_Organizador_Full.csv")
         tabela_9 = tabela_9.loc[(tabela_9['Nacionalidade']==nacionalidade)&(tabela_9['Fim_Contrato']<=contrato)&(tabela_9['Versão_Temporada']==temporada)]   
         tabela_9 = tabela_9.iloc[:, np.r_[1, 3, 4, 7, 15, 9:12, 31]]
-        tabela_9 = tabela_9[(tabela_9['Liga'] == 'ENG1') | (tabela_9['Liga'] == 'ENG2') | (tabela_9['Liga'] == 'FRA1') | (tabela_9['Liga'] == 'FRA2') 
-            | (tabela_9['Liga'] == 'SPA1') | (tabela_9['Liga'] == 'ITA1') | (tabela_9['Liga'] == 'GER1') | (tabela_9['Liga'] == 'POR1') 
-            | (tabela_9['Liga'] == 'SWZ') | (tabela_9['Liga'] == 'RUS') | (tabela_9['Liga'] == 'UKR') | (tabela_9['Liga'] == 'BEL1') 
-            | (tabela_9['Liga'] == 'CHN') | (tabela_9['Liga'] == 'DEN') | (tabela_9['Liga'] == 'GRE') | (tabela_9['Liga'] == 'HOL') 
-            | (tabela_9['Liga'] == 'JAP') | (tabela_9['Liga'] == 'MEX') | (tabela_9['Liga'] == 'SAUD') | (tabela_9['Liga'] == 'TUR') 
-            | (tabela_9['Liga'] == 'UAE') | (tabela_9['Liga'] == 'USA') | (tabela_9['Liga'] == 'ITA2') | (tabela_9['Liga'] == 'GER2') 
-            | (tabela_9['Liga'] == 'POR2') | (tabela_9['Liga'] == 'BUL') | (tabela_9['Liga'] == 'AUT') | (tabela_9['Liga'] == 'QAT') 
-            | (tabela_9['Liga'] == 'BRA1') | (tabela_9['Liga'] == 'ARG1')]
+        tabela_9 = tabela_9[(tabela_9['Liga'] == 'ARG1') | (tabela_9['Liga'] == 'AUS') | (tabela_9['Liga'] == 'AUT') 
+            | (tabela_9['Liga'] == 'BEL1') | (tabela_9['Liga'] == 'BEL2') | (tabela_9['Liga'] == 'BOL') 
+            | (tabela_9['Liga'] == 'BRA1') | (tabela_9['Liga'] == 'BRA2') | (tabela_9['Liga'] == 'BUL') | (tabela_9['Liga'] == 'CHI')
+            | (tabela_9['Liga'] == 'CHN') | (tabela_9['Liga'] == 'COL') | (tabela_9['Liga'] == 'CRO') | (tabela_9['Liga'] == 'CZH')
+            | (tabela_9['Liga'] == 'DEN') | (tabela_9['Liga'] == 'ECU') | (tabela_9['Liga'] == 'ENG1') | (tabela_9['Liga'] == 'ENG2') 
+            | (tabela_9['Liga'] == 'FIN') | (tabela_9['Liga'] == 'FRA1') | (tabela_9['Liga'] == 'FRA2') | (tabela_9['Liga'] == 'GEO')  
+            | (tabela_9['Liga'] == 'GER1') | (tabela_9['Liga'] == 'GER2') | (tabela_9['Liga'] == 'GRE') | (tabela_9['Liga'] == 'HOL') 
+            | (tabela_9['Liga'] == 'IND') | (tabela_9['Liga'] == 'INDO') | (tabela_9['Liga'] == 'ITA1') | (tabela_9['Liga'] == 'ITA2') 
+            | (tabela_9['Liga'] == 'JAP') | (tabela_9['Liga'] == 'KOR') | (tabela_9['Liga'] == 'MEX') | (tabela_9['Liga'] == 'MOR') 
+            | (tabela_9['Liga'] == 'NOR') | (tabela_9['Liga'] == 'PAR') | (tabela_9['Liga'] == 'PER') | (tabela_9['Liga'] == 'POL') 
+            | (tabela_9['Liga'] == 'POR1') | (tabela_9['Liga'] == 'POR2') | (tabela_9['Liga'] == 'QAT') | (tabela_9['Liga'] == 'ROM') 
+            | (tabela_9['Liga'] == 'RUS') | (tabela_9['Liga'] == 'SAUD') | (tabela_9['Liga'] == 'SCT') | (tabela_9['Liga'] == 'SER') 
+            | (tabela_9['Liga'] == 'SPA1') | (tabela_9['Liga'] == 'SPA2') | (tabela_9['Liga'] == 'SWE') | (tabela_9['Liga'] == 'SWZ') 
+            | (tabela_9['Liga'] == 'TUR') | (tabela_9['Liga'] == 'UAE') | (tabela_9['Liga'] == 'UKR')  | (tabela_9['Liga'] == 'URU')
+            | (tabela_9['Liga'] == 'USA') | (tabela_9['Liga'] == 'UZB') | (tabela_9['Liga'] == 'VEN')]
 
         tabela_10 = pd.read_csv("PlayerAnalysis_Role_17_Full.csv")
         tabela_10 = tabela_10.loc[(tabela_10['Nacionalidade']==nacionalidade)&(tabela_10['Fim_Contrato']<=contrato)&(tabela_10['Versão_Temporada']==temporada)]
         tabela_10 = tabela_10.iloc[:, np.r_[15, 32, 36:40]]
-        tabela_10 = tabela_10[(tabela_10['Liga'] == 'ENG1') | (tabela_10['Liga'] == 'ENG2') | (tabela_10['Liga'] == 'FRA1') | (tabela_10['Liga'] == 'FRA2') 
-            | (tabela_10['Liga'] == 'SPA1') | (tabela_10['Liga'] == 'ITA1') | (tabela_10['Liga'] == 'GER1') | (tabela_10['Liga'] == 'POR1') 
-            | (tabela_10['Liga'] == 'SWZ') | (tabela_10['Liga'] == 'RUS') | (tabela_10['Liga'] == 'UKR') | (tabela_10['Liga'] == 'BEL1') 
-            | (tabela_10['Liga'] == 'CHN') | (tabela_10['Liga'] == 'DEN') | (tabela_10['Liga'] == 'GRE') | (tabela_10['Liga'] == 'HOL') 
-            | (tabela_10['Liga'] == 'JAP') | (tabela_10['Liga'] == 'MEX') | (tabela_10['Liga'] == 'SAUD') | (tabela_10['Liga'] == 'TUR') 
-            | (tabela_10['Liga'] == 'UAE') | (tabela_10['Liga'] == 'USA') | (tabela_10['Liga'] == 'ITA2') | (tabela_10['Liga'] == 'GER2') 
-            | (tabela_10['Liga'] == 'POR2') | (tabela_10['Liga'] == 'BUL') | (tabela_10['Liga'] == 'AUT') | (tabela_10['Liga'] == 'QAT') 
-            | (tabela_10['Liga'] == 'BRA1') | (tabela_10['Liga'] == 'ARG1')]
+        tabela_10 = tabela_10[(tabela_10['Liga'] == 'ARG1') | (tabela_10['Liga'] == 'AUS') | (tabela_10['Liga'] == 'AUT') 
+            | (tabela_10['Liga'] == 'BEL1') | (tabela_10['Liga'] == 'BEL2') | (tabela_10['Liga'] == 'BOL') 
+            | (tabela_10['Liga'] == 'BRA1') | (tabela_10['Liga'] == 'BRA2') | (tabela_10['Liga'] == 'BUL') | (tabela_10['Liga'] == 'CHI')
+            | (tabela_10['Liga'] == 'CHN') | (tabela_10['Liga'] == 'COL') | (tabela_10['Liga'] == 'CRO') | (tabela_10['Liga'] == 'CZH')
+            | (tabela_10['Liga'] == 'DEN') | (tabela_10['Liga'] == 'ECU') | (tabela_10['Liga'] == 'ENG1') | (tabela_10['Liga'] == 'ENG2') 
+            | (tabela_10['Liga'] == 'FIN') | (tabela_10['Liga'] == 'FRA1') | (tabela_10['Liga'] == 'FRA2') | (tabela_10['Liga'] == 'GEO')  
+            | (tabela_10['Liga'] == 'GER1') | (tabela_10['Liga'] == 'GER2') | (tabela_10['Liga'] == 'GRE') | (tabela_10['Liga'] == 'HOL') 
+            | (tabela_10['Liga'] == 'IND') | (tabela_10['Liga'] == 'INDO') | (tabela_10['Liga'] == 'ITA1') | (tabela_10['Liga'] == 'ITA2') 
+            | (tabela_10['Liga'] == 'JAP') | (tabela_10['Liga'] == 'KOR') | (tabela_10['Liga'] == 'MEX') | (tabela_10['Liga'] == 'MOR') 
+            | (tabela_10['Liga'] == 'NOR') | (tabela_10['Liga'] == 'PAR') | (tabela_10['Liga'] == 'PER') | (tabela_10['Liga'] == 'POL') 
+            | (tabela_10['Liga'] == 'POR1') | (tabela_10['Liga'] == 'POR2') | (tabela_10['Liga'] == 'QAT') | (tabela_10['Liga'] == 'ROM') 
+            | (tabela_10['Liga'] == 'RUS') | (tabela_10['Liga'] == 'SAUD') | (tabela_10['Liga'] == 'SCT') | (tabela_10['Liga'] == 'SER') 
+            | (tabela_10['Liga'] == 'SPA1') | (tabela_10['Liga'] == 'SPA2') | (tabela_10['Liga'] == 'SWE') | (tabela_10['Liga'] == 'SWZ') 
+            | (tabela_10['Liga'] == 'TUR') | (tabela_10['Liga'] == 'UAE') | (tabela_10['Liga'] == 'UKR')  | (tabela_10['Liga'] == 'URU')
+            | (tabela_10['Liga'] == 'USA') | (tabela_10['Liga'] == 'UZB') | (tabela_10['Liga'] == 'VEN')]
 
         tabela_9 = pd.merge(tabela_9, tabela_10[['Atleta', 'L_Rating', 'L_Ranking', 'L_Percentil', 'Size']], on="Atleta", how="left")
         tabela_9 = tabela_9.rename(columns={'Equipe_Janela_Análise':'Equipe', 'Versão_Temporada':'Janela de Análise', 
@@ -4424,26 +4662,41 @@ if choose == "Free Agents pelo Mundo":
         tabela_11 = pd.read_csv("18_Role_Extremo_Tático_Full.csv")
         tabela_11 = tabela_11.loc[(tabela_11['Nacionalidade']==nacionalidade)&(tabela_11['Fim_Contrato']<=contrato)&(tabela_11['Versão_Temporada']==temporada)]   
         tabela_11 = tabela_11.iloc[:, np.r_[1, 3, 4, 7, 15, 9:12, 25]]
-        tabela_11 = tabela_11[(tabela_11['Liga'] == 'ENG1') | (tabela_11['Liga'] == 'ENG2') | (tabela_11['Liga'] == 'FRA1') | (tabela_11['Liga'] == 'FRA2') 
-            | (tabela_11['Liga'] == 'SPA1') | (tabela_11['Liga'] == 'ITA1') | (tabela_11['Liga'] == 'GER1') | (tabela_11['Liga'] == 'POR1') 
-            | (tabela_11['Liga'] == 'SWZ') | (tabela_11['Liga'] == 'RUS') | (tabela_11['Liga'] == 'UKR') | (tabela_11['Liga'] == 'BEL1') 
-            | (tabela_11['Liga'] == 'CHN') | (tabela_11['Liga'] == 'DEN') | (tabela_11['Liga'] == 'GRE') | (tabela_11['Liga'] == 'HOL') 
-            | (tabela_11['Liga'] == 'JAP') | (tabela_11['Liga'] == 'MEX') | (tabela_11['Liga'] == 'SAUD') | (tabela_11['Liga'] == 'TUR') 
-            | (tabela_11['Liga'] == 'UAE') | (tabela_11['Liga'] == 'USA') | (tabela_11['Liga'] == 'ITA2') | (tabela_11['Liga'] == 'GER2') 
-            | (tabela_11['Liga'] == 'POR2') | (tabela_11['Liga'] == 'BUL') | (tabela_11['Liga'] == 'AUT') | (tabela_11['Liga'] == 'QAT') 
-            | (tabela_11['Liga'] == 'BRA1') | (tabela_11['Liga'] == 'ARG1')]
+        tabela_11 = tabela_11[(tabela_11['Liga'] == 'ARG1') | (tabela_11['Liga'] == 'AUS') | (tabela_11['Liga'] == 'AUT') 
+            | (tabela_11['Liga'] == 'BEL1') | (tabela_11['Liga'] == 'BEL2') | (tabela_11['Liga'] == 'BOL') 
+            | (tabela_11['Liga'] == 'BRA1') | (tabela_11['Liga'] == 'BRA2') | (tabela_11['Liga'] == 'BUL') | (tabela_11['Liga'] == 'CHI')
+            | (tabela_11['Liga'] == 'CHN') | (tabela_11['Liga'] == 'COL') | (tabela_11['Liga'] == 'CRO') | (tabela_11['Liga'] == 'CZH')
+            | (tabela_11['Liga'] == 'DEN') | (tabela_11['Liga'] == 'ECU') | (tabela_11['Liga'] == 'ENG1') | (tabela_11['Liga'] == 'ENG2') 
+            | (tabela_11['Liga'] == 'FIN') | (tabela_11['Liga'] == 'FRA1') | (tabela_11['Liga'] == 'FRA2') | (tabela_11['Liga'] == 'GEO')  
+            | (tabela_11['Liga'] == 'GER1') | (tabela_11['Liga'] == 'GER2') | (tabela_11['Liga'] == 'GRE') | (tabela_11['Liga'] == 'HOL') 
+            | (tabela_11['Liga'] == 'IND') | (tabela_11['Liga'] == 'INDO') | (tabela_11['Liga'] == 'ITA1') | (tabela_11['Liga'] == 'ITA2') 
+            | (tabela_11['Liga'] == 'JAP') | (tabela_11['Liga'] == 'KOR') | (tabela_11['Liga'] == 'MEX') | (tabela_11['Liga'] == 'MOR') 
+            | (tabela_11['Liga'] == 'NOR') | (tabela_11['Liga'] == 'PAR') | (tabela_11['Liga'] == 'PER') | (tabela_11['Liga'] == 'POL') 
+            | (tabela_11['Liga'] == 'POR1') | (tabela_11['Liga'] == 'POR2') | (tabela_11['Liga'] == 'QAT') | (tabela_11['Liga'] == 'ROM') 
+            | (tabela_11['Liga'] == 'RUS') | (tabela_11['Liga'] == 'SAUD') | (tabela_11['Liga'] == 'SCT') | (tabela_11['Liga'] == 'SER') 
+            | (tabela_11['Liga'] == 'SPA1') | (tabela_11['Liga'] == 'SPA2') | (tabela_11['Liga'] == 'SWE') | (tabela_11['Liga'] == 'SWZ') 
+            | (tabela_11['Liga'] == 'TUR') | (tabela_11['Liga'] == 'UAE') | (tabela_11['Liga'] == 'UKR')  | (tabela_11['Liga'] == 'URU')
+            | (tabela_11['Liga'] == 'USA') | (tabela_11['Liga'] == 'UZB') | (tabela_11['Liga'] == 'VEN')]
 
         tabela_12 = pd.read_csv("PlayerAnalysis_Role_18_Full.csv")
         tabela_12 = tabela_12.loc[(tabela_12['Nacionalidade']==nacionalidade)&(tabela_12['Fim_Contrato']<=contrato)&(tabela_12['Versão_Temporada']==temporada)]
         tabela_12 = tabela_12.iloc[:, np.r_[9, 26, 30:34]]
-        tabela_12 = tabela_12[(tabela_12['Liga'] == 'ENG1') | (tabela_12['Liga'] == 'ENG2') | (tabela_12['Liga'] == 'FRA1') | (tabela_12['Liga'] == 'FRA2') 
-            | (tabela_12['Liga'] == 'SPA1') | (tabela_12['Liga'] == 'ITA1') | (tabela_12['Liga'] == 'GER1') | (tabela_12['Liga'] == 'POR1') 
-            | (tabela_12['Liga'] == 'SWZ') | (tabela_12['Liga'] == 'RUS') | (tabela_12['Liga'] == 'UKR') | (tabela_12['Liga'] == 'BEL1') 
-            | (tabela_12['Liga'] == 'CHN') | (tabela_12['Liga'] == 'DEN') | (tabela_12['Liga'] == 'GRE') | (tabela_12['Liga'] == 'HOL') 
-            | (tabela_12['Liga'] == 'JAP') | (tabela_12['Liga'] == 'MEX') | (tabela_12['Liga'] == 'SAUD') | (tabela_12['Liga'] == 'TUR') 
-            | (tabela_12['Liga'] == 'UAE') | (tabela_12['Liga'] == 'USA') | (tabela_12['Liga'] == 'ITA2') | (tabela_12['Liga'] == 'GER2') 
-            | (tabela_12['Liga'] == 'POR2') | (tabela_12['Liga'] == 'BUL') | (tabela_12['Liga'] == 'AUT') | (tabela_12['Liga'] == 'QAT')
-            | (tabela_12['Liga'] == 'BRA1') | (tabela_12['Liga'] == 'ARG1')]
+        tabela_12 = tabela_12[(tabela_12['Liga'] == 'ARG1') | (tabela_12['Liga'] == 'AUS') | (tabela_12['Liga'] == 'AUT') 
+            | (tabela_12['Liga'] == 'BEL1') | (tabela_12['Liga'] == 'BEL2') | (tabela_12['Liga'] == 'BOL') 
+            | (tabela_12['Liga'] == 'BRA1') | (tabela_12['Liga'] == 'BRA2') | (tabela_12['Liga'] == 'BUL') | (tabela_12['Liga'] == 'CHI')
+            | (tabela_12['Liga'] == 'CHN') | (tabela_12['Liga'] == 'COL') | (tabela_12['Liga'] == 'CRO') | (tabela_12['Liga'] == 'CZH')
+            | (tabela_12['Liga'] == 'DEN') | (tabela_12['Liga'] == 'ECU') | (tabela_12['Liga'] == 'ENG1') | (tabela_12['Liga'] == 'ENG2') 
+            | (tabela_12['Liga'] == 'FIN') | (tabela_12['Liga'] == 'FRA1') | (tabela_12['Liga'] == 'FRA2') | (tabela_12['Liga'] == 'GEO')  
+            | (tabela_12['Liga'] == 'GER1') | (tabela_12['Liga'] == 'GER2') | (tabela_12['Liga'] == 'GRE') | (tabela_12['Liga'] == 'HOL') 
+            | (tabela_12['Liga'] == 'IND') | (tabela_12['Liga'] == 'INDO') | (tabela_12['Liga'] == 'ITA1') | (tabela_12['Liga'] == 'ITA2') 
+            | (tabela_12['Liga'] == 'JAP') | (tabela_12['Liga'] == 'KOR') | (tabela_12['Liga'] == 'MEX') | (tabela_12['Liga'] == 'MOR') 
+            | (tabela_12['Liga'] == 'NOR') | (tabela_12['Liga'] == 'PAR') | (tabela_12['Liga'] == 'PER') | (tabela_12['Liga'] == 'POL') 
+            | (tabela_12['Liga'] == 'POR1') | (tabela_12['Liga'] == 'POR2') | (tabela_12['Liga'] == 'QAT') | (tabela_12['Liga'] == 'ROM') 
+            | (tabela_12['Liga'] == 'RUS') | (tabela_12['Liga'] == 'SAUD') | (tabela_12['Liga'] == 'SCT') | (tabela_12['Liga'] == 'SER') 
+            | (tabela_12['Liga'] == 'SPA1') | (tabela_12['Liga'] == 'SPA2') | (tabela_12['Liga'] == 'SWE') | (tabela_12['Liga'] == 'SWZ') 
+            | (tabela_12['Liga'] == 'TUR') | (tabela_12['Liga'] == 'UAE') | (tabela_12['Liga'] == 'UKR')  | (tabela_12['Liga'] == 'URU')
+            | (tabela_12['Liga'] == 'USA') | (tabela_12['Liga'] == 'UZB') | (tabela_12['Liga'] == 'VEN')]
+
 
         tabela_11 = pd.merge(tabela_11, tabela_12[['Atleta', 'L_Rating', 'L_Ranking', 'L_Percentil', 'Size']], on="Atleta", how="left")
         tabela_11 = tabela_11.rename(columns={'Equipe_Janela_Análise':'Equipe', 'Versão_Temporada':'Janela de Análise', 
@@ -4503,26 +4756,40 @@ if choose == "Free Agents pelo Mundo":
         tabela_13 = pd.read_csv("19_Role_Extremo_Agudo_Full.csv")
         tabela_13 = tabela_13.loc[(tabela_13['Nacionalidade']==nacionalidade)&(tabela_13['Fim_Contrato']<=contrato)&(tabela_13['Versão_Temporada']==temporada)]   
         tabela_13 = tabela_13.iloc[:, np.r_[1, 3, 4, 7, 15, 9:12, 31]]
-        tabela_13 = tabela_13[(tabela_13['Liga'] == 'ENG1') | (tabela_13['Liga'] == 'ENG2') | (tabela_13['Liga'] == 'FRA1') | (tabela_13['Liga'] == 'FRA2') 
-            | (tabela_13['Liga'] == 'SPA1') | (tabela_13['Liga'] == 'ITA1') | (tabela_13['Liga'] == 'GER1') | (tabela_13['Liga'] == 'POR1') 
-            | (tabela_13['Liga'] == 'SWZ') | (tabela_13['Liga'] == 'RUS') | (tabela_13['Liga'] == 'UKR') | (tabela_13['Liga'] == 'BEL1') 
-            | (tabela_13['Liga'] == 'CHN') | (tabela_13['Liga'] == 'DEN') | (tabela_13['Liga'] == 'GRE') | (tabela_13['Liga'] == 'HOL') 
-            | (tabela_13['Liga'] == 'JAP') | (tabela_13['Liga'] == 'MEX') | (tabela_13['Liga'] == 'SAUD') | (tabela_13['Liga'] == 'TUR') 
-            | (tabela_13['Liga'] == 'UAE') | (tabela_13['Liga'] == 'USA') | (tabela_13['Liga'] == 'ITA2') | (tabela_13['Liga'] == 'GER2') 
-            | (tabela_13['Liga'] == 'POR2') | (tabela_13['Liga'] == 'BUL') | (tabela_13['Liga'] == 'AUT') | (tabela_13['Liga'] == 'QAT')
-            | (tabela_13['Liga'] == 'BRA1') | (tabela_13['Liga'] == 'ARG1')]
+        tabela_13 = tabela_13[(tabela_13['Liga'] == 'ARG1') | (tabela_13['Liga'] == 'AUS') | (tabela_13['Liga'] == 'AUT') 
+            | (tabela_13['Liga'] == 'BEL1') | (tabela_13['Liga'] == 'BEL2') | (tabela_13['Liga'] == 'BOL') 
+            | (tabela_13['Liga'] == 'BRA1') | (tabela_13['Liga'] == 'BRA2') | (tabela_13['Liga'] == 'BUL') | (tabela_13['Liga'] == 'CHI')
+            | (tabela_13['Liga'] == 'CHN') | (tabela_13['Liga'] == 'COL') | (tabela_13['Liga'] == 'CRO') | (tabela_13['Liga'] == 'CZH')
+            | (tabela_13['Liga'] == 'DEN') | (tabela_13['Liga'] == 'ECU') | (tabela_13['Liga'] == 'ENG1') | (tabela_13['Liga'] == 'ENG2') 
+            | (tabela_13['Liga'] == 'FIN') | (tabela_13['Liga'] == 'FRA1') | (tabela_13['Liga'] == 'FRA2') | (tabela_13['Liga'] == 'GEO')  
+            | (tabela_13['Liga'] == 'GER1') | (tabela_13['Liga'] == 'GER2') | (tabela_13['Liga'] == 'GRE') | (tabela_13['Liga'] == 'HOL') 
+            | (tabela_13['Liga'] == 'IND') | (tabela_13['Liga'] == 'INDO') | (tabela_13['Liga'] == 'ITA1') | (tabela_13['Liga'] == 'ITA2') 
+            | (tabela_13['Liga'] == 'JAP') | (tabela_13['Liga'] == 'KOR') | (tabela_13['Liga'] == 'MEX') | (tabela_13['Liga'] == 'MOR') 
+            | (tabela_13['Liga'] == 'NOR') | (tabela_13['Liga'] == 'PAR') | (tabela_13['Liga'] == 'PER') | (tabela_13['Liga'] == 'POL') 
+            | (tabela_13['Liga'] == 'POR1') | (tabela_13['Liga'] == 'POR2') | (tabela_13['Liga'] == 'QAT') | (tabela_13['Liga'] == 'ROM') 
+            | (tabela_13['Liga'] == 'RUS') | (tabela_13['Liga'] == 'SAUD') | (tabela_13['Liga'] == 'SCT') | (tabela_13['Liga'] == 'SER') 
+            | (tabela_13['Liga'] == 'SPA1') | (tabela_13['Liga'] == 'SPA2') | (tabela_13['Liga'] == 'SWE') | (tabela_13['Liga'] == 'SWZ') 
+            | (tabela_13['Liga'] == 'TUR') | (tabela_13['Liga'] == 'UAE') | (tabela_13['Liga'] == 'UKR')  | (tabela_13['Liga'] == 'URU')
+            | (tabela_13['Liga'] == 'USA') | (tabela_13['Liga'] == 'UZB') | (tabela_13['Liga'] == 'VEN')]
 
         tabela_14 = pd.read_csv("PlayerAnalysis_Role_19_Full.csv")
         tabela_14 = tabela_14.loc[(tabela_14['Nacionalidade']==nacionalidade)&(tabela_14['Fim_Contrato']<=contrato)&(tabela_14['Versão_Temporada']==temporada)]
         tabela_14 = tabela_14.iloc[:, np.r_[15, 32, 36:40]]
-        tabela_14 = tabela_14[(tabela_14['Liga'] == 'ENG1') | (tabela_14['Liga'] == 'ENG2') | (tabela_14['Liga'] == 'FRA1') | (tabela_14['Liga'] == 'FRA2') 
-            | (tabela_14['Liga'] == 'SPA1') | (tabela_14['Liga'] == 'ITA1') | (tabela_14['Liga'] == 'GER1') | (tabela_14['Liga'] == 'POR1') 
-            | (tabela_14['Liga'] == 'SWZ') | (tabela_14['Liga'] == 'RUS') | (tabela_14['Liga'] == 'UKR') | (tabela_14['Liga'] == 'BEL1') 
-            | (tabela_14['Liga'] == 'CHN') | (tabela_14['Liga'] == 'DEN') | (tabela_14['Liga'] == 'GRE') | (tabela_14['Liga'] == 'HOL') 
-            | (tabela_14['Liga'] == 'JAP') | (tabela_14['Liga'] == 'MEX') | (tabela_14['Liga'] == 'SAUD') | (tabela_14['Liga'] == 'TUR') 
-            | (tabela_14['Liga'] == 'UAE') | (tabela_14['Liga'] == 'USA') | (tabela_14['Liga'] == 'ITA2') | (tabela_14['Liga'] == 'GER2') 
-            | (tabela_14['Liga'] == 'POR2') | (tabela_14['Liga'] == 'BUL') | (tabela_14['Liga'] == 'AUT') | (tabela_14['Liga'] == 'QAT') 
-            | (tabela_14['Liga'] == 'BRA1') | (tabela_14['Liga'] == 'ARG1')]
+        tabela_14 = tabela_14[(tabela_14['Liga'] == 'ARG1') | (tabela_14['Liga'] == 'AUS') | (tabela_14['Liga'] == 'AUT') 
+            | (tabela_14['Liga'] == 'BEL1') | (tabela_14['Liga'] == 'BEL2') | (tabela_14['Liga'] == 'BOL') 
+            | (tabela_14['Liga'] == 'BRA1') | (tabela_14['Liga'] == 'BRA2') | (tabela_14['Liga'] == 'BUL') | (tabela_14['Liga'] == 'CHI')
+            | (tabela_14['Liga'] == 'CHN') | (tabela_14['Liga'] == 'COL') | (tabela_14['Liga'] == 'CRO') | (tabela_14['Liga'] == 'CZH')
+            | (tabela_14['Liga'] == 'DEN') | (tabela_14['Liga'] == 'ECU') | (tabela_14['Liga'] == 'ENG1') | (tabela_14['Liga'] == 'ENG2') 
+            | (tabela_14['Liga'] == 'FIN') | (tabela_14['Liga'] == 'FRA1') | (tabela_14['Liga'] == 'FRA2') | (tabela_14['Liga'] == 'GEO')  
+            | (tabela_14['Liga'] == 'GER1') | (tabela_14['Liga'] == 'GER2') | (tabela_14['Liga'] == 'GRE') | (tabela_14['Liga'] == 'HOL') 
+            | (tabela_14['Liga'] == 'IND') | (tabela_14['Liga'] == 'INDO') | (tabela_14['Liga'] == 'ITA1') | (tabela_14['Liga'] == 'ITA2') 
+            | (tabela_14['Liga'] == 'JAP') | (tabela_14['Liga'] == 'KOR') | (tabela_14['Liga'] == 'MEX') | (tabela_14['Liga'] == 'MOR') 
+            | (tabela_14['Liga'] == 'NOR') | (tabela_14['Liga'] == 'PAR') | (tabela_14['Liga'] == 'PER') | (tabela_14['Liga'] == 'POL') 
+            | (tabela_14['Liga'] == 'POR1') | (tabela_14['Liga'] == 'POR2') | (tabela_14['Liga'] == 'QAT') | (tabela_14['Liga'] == 'ROM') 
+            | (tabela_14['Liga'] == 'RUS') | (tabela_14['Liga'] == 'SAUD') | (tabela_14['Liga'] == 'SCT') | (tabela_14['Liga'] == 'SER') 
+            | (tabela_14['Liga'] == 'SPA1') | (tabela_14['Liga'] == 'SPA2') | (tabela_14['Liga'] == 'SWE') | (tabela_14['Liga'] == 'SWZ') 
+            | (tabela_14['Liga'] == 'TUR') | (tabela_14['Liga'] == 'UAE') | (tabela_14['Liga'] == 'UKR')  | (tabela_14['Liga'] == 'URU')
+            | (tabela_14['Liga'] == 'USA') | (tabela_14['Liga'] == 'UZB') | (tabela_14['Liga'] == 'VEN')]
 
         tabela_13 = pd.merge(tabela_13, tabela_14[['Atleta', 'L_Rating', 'L_Ranking', 'L_Percentil', 'Size']], on="Atleta", how="left")
         tabela_13 = tabela_13.rename(columns={'Equipe_Janela_Análise':'Equipe', 'Versão_Temporada':'Janela de Análise', 
@@ -4586,26 +4853,40 @@ if choose == "Free Agents pelo Mundo":
         tabela_9 = pd.read_csv("20_Role_Atacante_Referência_Full.csv")
         tabela_9 = tabela_9.loc[(tabela_9['Nacionalidade']==nacionalidade)&(tabela_9['Fim_Contrato']<=contrato)&(tabela_9['Versão_Temporada']==temporada)]   
         tabela_9 = tabela_9.iloc[:, np.r_[1, 3, 4, 7, 15, 9:12, 28]]
-        tabela_9 = tabela_9[(tabela_9['Liga'] == 'ENG1') | (tabela_9['Liga'] == 'ENG2') | (tabela_9['Liga'] == 'FRA1') | (tabela_9['Liga'] == 'FRA2') 
-            | (tabela_9['Liga'] == 'SPA1') | (tabela_9['Liga'] == 'ITA1') | (tabela_9['Liga'] == 'GER1') | (tabela_9['Liga'] == 'POR1') 
-            | (tabela_9['Liga'] == 'SWZ') | (tabela_9['Liga'] == 'RUS') | (tabela_9['Liga'] == 'UKR') | (tabela_9['Liga'] == 'BEL1') 
-            | (tabela_9['Liga'] == 'CHN') | (tabela_9['Liga'] == 'DEN') | (tabela_9['Liga'] == 'GRE') | (tabela_9['Liga'] == 'HOL') 
-            | (tabela_9['Liga'] == 'JAP') | (tabela_9['Liga'] == 'MEX') | (tabela_9['Liga'] == 'SAUD') | (tabela_9['Liga'] == 'TUR') 
-            | (tabela_9['Liga'] == 'UAE') | (tabela_9['Liga'] == 'USA') | (tabela_9['Liga'] == 'ITA2') | (tabela_9['Liga'] == 'GER2') 
-            | (tabela_9['Liga'] == 'POR2') | (tabela_9['Liga'] == 'BUL') | (tabela_9['Liga'] == 'AUT') | (tabela_9['Liga'] == 'QAT') 
-            | (tabela_9['Liga'] == 'BRA1') | (tabela_9['Liga'] == 'ARG1')]
+        tabela_9 = tabela_9[(tabela_9['Liga'] == 'ARG1') | (tabela_9['Liga'] == 'AUS') | (tabela_9['Liga'] == 'AUT') 
+            | (tabela_9['Liga'] == 'BEL1') | (tabela_9['Liga'] == 'BEL2') | (tabela_9['Liga'] == 'BOL') 
+            | (tabela_9['Liga'] == 'BRA1') | (tabela_9['Liga'] == 'BRA2') | (tabela_9['Liga'] == 'BUL') | (tabela_9['Liga'] == 'CHI')
+            | (tabela_9['Liga'] == 'CHN') | (tabela_9['Liga'] == 'COL') | (tabela_9['Liga'] == 'CRO') | (tabela_9['Liga'] == 'CZH')
+            | (tabela_9['Liga'] == 'DEN') | (tabela_9['Liga'] == 'ECU') | (tabela_9['Liga'] == 'ENG1') | (tabela_9['Liga'] == 'ENG2') 
+            | (tabela_9['Liga'] == 'FIN') | (tabela_9['Liga'] == 'FRA1') | (tabela_9['Liga'] == 'FRA2') | (tabela_9['Liga'] == 'GEO')  
+            | (tabela_9['Liga'] == 'GER1') | (tabela_9['Liga'] == 'GER2') | (tabela_9['Liga'] == 'GRE') | (tabela_9['Liga'] == 'HOL') 
+            | (tabela_9['Liga'] == 'IND') | (tabela_9['Liga'] == 'INDO') | (tabela_9['Liga'] == 'ITA1') | (tabela_9['Liga'] == 'ITA2') 
+            | (tabela_9['Liga'] == 'JAP') | (tabela_9['Liga'] == 'KOR') | (tabela_9['Liga'] == 'MEX') | (tabela_9['Liga'] == 'MOR') 
+            | (tabela_9['Liga'] == 'NOR') | (tabela_9['Liga'] == 'PAR') | (tabela_9['Liga'] == 'PER') | (tabela_9['Liga'] == 'POL') 
+            | (tabela_9['Liga'] == 'POR1') | (tabela_9['Liga'] == 'POR2') | (tabela_9['Liga'] == 'QAT') | (tabela_9['Liga'] == 'ROM') 
+            | (tabela_9['Liga'] == 'RUS') | (tabela_9['Liga'] == 'SAUD') | (tabela_9['Liga'] == 'SCT') | (tabela_9['Liga'] == 'SER') 
+            | (tabela_9['Liga'] == 'SPA1') | (tabela_9['Liga'] == 'SPA2') | (tabela_9['Liga'] == 'SWE') | (tabela_9['Liga'] == 'SWZ') 
+            | (tabela_9['Liga'] == 'TUR') | (tabela_9['Liga'] == 'UAE') | (tabela_9['Liga'] == 'UKR')  | (tabela_9['Liga'] == 'URU')
+            | (tabela_9['Liga'] == 'USA') | (tabela_9['Liga'] == 'UZB') | (tabela_9['Liga'] == 'VEN')]
 
         tabela_10 = pd.read_csv("PlayerAnalysis_Role_20_Full.csv")
         tabela_10 = tabela_10.loc[(tabela_10['Nacionalidade']==nacionalidade)&(tabela_10['Fim_Contrato']<=contrato)&(tabela_10['Versão_Temporada']==temporada)]
         tabela_10 = tabela_10.iloc[:, np.r_[12, 29, 33:37]]
-        tabela_10 = tabela_10[(tabela_10['Liga'] == 'ENG1') | (tabela_10['Liga'] == 'ENG2') | (tabela_10['Liga'] == 'FRA1') | (tabela_10['Liga'] == 'FRA2') 
-            | (tabela_10['Liga'] == 'SPA1') | (tabela_10['Liga'] == 'ITA1') | (tabela_10['Liga'] == 'GER1') | (tabela_10['Liga'] == 'POR1') 
-            | (tabela_10['Liga'] == 'SWZ') | (tabela_10['Liga'] == 'RUS') | (tabela_10['Liga'] == 'UKR') | (tabela_10['Liga'] == 'BEL1') 
-            | (tabela_10['Liga'] == 'CHN') | (tabela_10['Liga'] == 'DEN') | (tabela_10['Liga'] == 'GRE') | (tabela_10['Liga'] == 'HOL') 
-            | (tabela_10['Liga'] == 'JAP') | (tabela_10['Liga'] == 'MEX') | (tabela_10['Liga'] == 'SAUD') | (tabela_10['Liga'] == 'TUR') 
-            | (tabela_10['Liga'] == 'UAE') | (tabela_10['Liga'] == 'USA') | (tabela_10['Liga'] == 'ITA2') | (tabela_10['Liga'] == 'GER2') 
-            | (tabela_10['Liga'] == 'POR2') | (tabela_10['Liga'] == 'BUL') | (tabela_10['Liga'] == 'AUT') | (tabela_10['Liga'] == 'QAT') 
-            | (tabela_10['Liga'] == 'BRA1') | (tabela_10['Liga'] == 'ARG1')]
+        tabela_10 = tabela_10[(tabela_10['Liga'] == 'ARG1') | (tabela_10['Liga'] == 'AUS') | (tabela_10['Liga'] == 'AUT') 
+            | (tabela_10['Liga'] == 'BEL1') | (tabela_10['Liga'] == 'BEL2') | (tabela_10['Liga'] == 'BOL') 
+            | (tabela_10['Liga'] == 'BRA1') | (tabela_10['Liga'] == 'BRA2') | (tabela_10['Liga'] == 'BUL') | (tabela_10['Liga'] == 'CHI')
+            | (tabela_10['Liga'] == 'CHN') | (tabela_10['Liga'] == 'COL') | (tabela_10['Liga'] == 'CRO') | (tabela_10['Liga'] == 'CZH')
+            | (tabela_10['Liga'] == 'DEN') | (tabela_10['Liga'] == 'ECU') | (tabela_10['Liga'] == 'ENG1') | (tabela_10['Liga'] == 'ENG2') 
+            | (tabela_10['Liga'] == 'FIN') | (tabela_10['Liga'] == 'FRA1') | (tabela_10['Liga'] == 'FRA2') | (tabela_10['Liga'] == 'GEO')  
+            | (tabela_10['Liga'] == 'GER1') | (tabela_10['Liga'] == 'GER2') | (tabela_10['Liga'] == 'GRE') | (tabela_10['Liga'] == 'HOL') 
+            | (tabela_10['Liga'] == 'IND') | (tabela_10['Liga'] == 'INDO') | (tabela_10['Liga'] == 'ITA1') | (tabela_10['Liga'] == 'ITA2') 
+            | (tabela_10['Liga'] == 'JAP') | (tabela_10['Liga'] == 'KOR') | (tabela_10['Liga'] == 'MEX') | (tabela_10['Liga'] == 'MOR') 
+            | (tabela_10['Liga'] == 'NOR') | (tabela_10['Liga'] == 'PAR') | (tabela_10['Liga'] == 'PER') | (tabela_10['Liga'] == 'POL') 
+            | (tabela_10['Liga'] == 'POR1') | (tabela_10['Liga'] == 'POR2') | (tabela_10['Liga'] == 'QAT') | (tabela_10['Liga'] == 'ROM') 
+            | (tabela_10['Liga'] == 'RUS') | (tabela_10['Liga'] == 'SAUD') | (tabela_10['Liga'] == 'SCT') | (tabela_10['Liga'] == 'SER') 
+            | (tabela_10['Liga'] == 'SPA1') | (tabela_10['Liga'] == 'SPA2') | (tabela_10['Liga'] == 'SWE') | (tabela_10['Liga'] == 'SWZ') 
+            | (tabela_10['Liga'] == 'TUR') | (tabela_10['Liga'] == 'UAE') | (tabela_10['Liga'] == 'UKR')  | (tabela_10['Liga'] == 'URU')
+            | (tabela_10['Liga'] == 'USA') | (tabela_10['Liga'] == 'UZB') | (tabela_10['Liga'] == 'VEN')]
 
         tabela_9 = pd.merge(tabela_9, tabela_10[['Atleta', 'L_Rating', 'L_Ranking', 'L_Percentil', 'Size']], on="Atleta", how="left")
         tabela_9 = tabela_9.rename(columns={'Equipe_Janela_Análise':'Equipe', 'Versão_Temporada':'Janela de Análise', 
@@ -4665,26 +4946,41 @@ if choose == "Free Agents pelo Mundo":
         tabela_11 = pd.read_csv("21_Role_Atacante_Móvel_Full.csv")
         tabela_11 = tabela_11.loc[(tabela_11['Nacionalidade']==nacionalidade)&(tabela_11['Fim_Contrato']<=contrato)&(tabela_11['Versão_Temporada']==temporada)]   
         tabela_11 = tabela_11.iloc[:, np.r_[1, 3, 4, 7, 15, 9:12, 27]]
-        tabela_11 = tabela_11[(tabela_11['Liga'] == 'ENG1') | (tabela_11['Liga'] == 'ENG2') | (tabela_11['Liga'] == 'FRA1') | (tabela_11['Liga'] == 'FRA2') 
-            | (tabela_11['Liga'] == 'SPA1') | (tabela_11['Liga'] == 'ITA1') | (tabela_11['Liga'] == 'GER1') | (tabela_11['Liga'] == 'POR1') 
-            | (tabela_11['Liga'] == 'SWZ') | (tabela_11['Liga'] == 'RUS') | (tabela_11['Liga'] == 'UKR') | (tabela_11['Liga'] == 'BEL1') 
-            | (tabela_11['Liga'] == 'CHN') | (tabela_11['Liga'] == 'DEN') | (tabela_11['Liga'] == 'GRE') | (tabela_11['Liga'] == 'HOL') 
-            | (tabela_11['Liga'] == 'JAP') | (tabela_11['Liga'] == 'MEX') | (tabela_11['Liga'] == 'SAUD') | (tabela_11['Liga'] == 'TUR') 
-            | (tabela_11['Liga'] == 'UAE') | (tabela_11['Liga'] == 'USA') | (tabela_11['Liga'] == 'ITA2') | (tabela_11['Liga'] == 'GER2') 
-            | (tabela_11['Liga'] == 'POR2') | (tabela_11['Liga'] == 'BUL') | (tabela_11['Liga'] == 'AUT') | (tabela_11['Liga'] == 'QAT') 
-            | (tabela_11['Liga'] == 'BRA1') | (tabela_11['Liga'] == 'ARG1')]
+        tabela_11 = tabela_11[(tabela_11['Liga'] == 'ARG1') | (tabela_11['Liga'] == 'AUS') | (tabela_11['Liga'] == 'AUT') 
+            | (tabela_11['Liga'] == 'BEL1') | (tabela_11['Liga'] == 'BEL2') | (tabela_11['Liga'] == 'BOL') 
+            | (tabela_11['Liga'] == 'BRA1') | (tabela_11['Liga'] == 'BRA2') | (tabela_11['Liga'] == 'BUL') | (tabela_11['Liga'] == 'CHI')
+            | (tabela_11['Liga'] == 'CHN') | (tabela_11['Liga'] == 'COL') | (tabela_11['Liga'] == 'CRO') | (tabela_11['Liga'] == 'CZH')
+            | (tabela_11['Liga'] == 'DEN') | (tabela_11['Liga'] == 'ECU') | (tabela_11['Liga'] == 'ENG1') | (tabela_11['Liga'] == 'ENG2') 
+            | (tabela_11['Liga'] == 'FIN') | (tabela_11['Liga'] == 'FRA1') | (tabela_11['Liga'] == 'FRA2') | (tabela_11['Liga'] == 'GEO')  
+            | (tabela_11['Liga'] == 'GER1') | (tabela_11['Liga'] == 'GER2') | (tabela_11['Liga'] == 'GRE') | (tabela_11['Liga'] == 'HOL') 
+            | (tabela_11['Liga'] == 'IND') | (tabela_11['Liga'] == 'INDO') | (tabela_11['Liga'] == 'ITA1') | (tabela_11['Liga'] == 'ITA2') 
+            | (tabela_11['Liga'] == 'JAP') | (tabela_11['Liga'] == 'KOR') | (tabela_11['Liga'] == 'MEX') | (tabela_11['Liga'] == 'MOR') 
+            | (tabela_11['Liga'] == 'NOR') | (tabela_11['Liga'] == 'PAR') | (tabela_11['Liga'] == 'PER') | (tabela_11['Liga'] == 'POL') 
+            | (tabela_11['Liga'] == 'POR1') | (tabela_11['Liga'] == 'POR2') | (tabela_11['Liga'] == 'QAT') | (tabela_11['Liga'] == 'ROM') 
+            | (tabela_11['Liga'] == 'RUS') | (tabela_11['Liga'] == 'SAUD') | (tabela_11['Liga'] == 'SCT') | (tabela_11['Liga'] == 'SER') 
+            | (tabela_11['Liga'] == 'SPA1') | (tabela_11['Liga'] == 'SPA2') | (tabela_11['Liga'] == 'SWE') | (tabela_11['Liga'] == 'SWZ') 
+            | (tabela_11['Liga'] == 'TUR') | (tabela_11['Liga'] == 'UAE') | (tabela_11['Liga'] == 'UKR')  | (tabela_11['Liga'] == 'URU')
+            | (tabela_11['Liga'] == 'USA') | (tabela_11['Liga'] == 'UZB') | (tabela_11['Liga'] == 'VEN')]
 
         tabela_12 = pd.read_csv("PlayerAnalysis_Role_21_Full.csv")
         tabela_12 = tabela_12.loc[(tabela_12['Nacionalidade']==nacionalidade)&(tabela_12['Fim_Contrato']<=contrato)&(tabela_12['Versão_Temporada']==temporada)]
         tabela_12 = tabela_12.iloc[:, np.r_[11, 28, 32:36]]
-        tabela_12 = tabela_12[(tabela_12['Liga'] == 'ENG1') | (tabela_12['Liga'] == 'ENG2') | (tabela_12['Liga'] == 'FRA1') | (tabela_12['Liga'] == 'FRA2') 
-            | (tabela_12['Liga'] == 'SPA1') | (tabela_12['Liga'] == 'ITA1') | (tabela_12['Liga'] == 'GER1') | (tabela_12['Liga'] == 'POR1') 
-            | (tabela_12['Liga'] == 'SWZ') | (tabela_12['Liga'] == 'RUS') | (tabela_12['Liga'] == 'UKR') | (tabela_12['Liga'] == 'BEL1') 
-            | (tabela_12['Liga'] == 'CHN') | (tabela_12['Liga'] == 'DEN') | (tabela_12['Liga'] == 'GRE') | (tabela_12['Liga'] == 'HOL') 
-            | (tabela_12['Liga'] == 'JAP') | (tabela_12['Liga'] == 'MEX') | (tabela_12['Liga'] == 'SAUD') | (tabela_12['Liga'] == 'TUR') 
-            | (tabela_12['Liga'] == 'UAE') | (tabela_12['Liga'] == 'USA') | (tabela_12['Liga'] == 'ITA2') | (tabela_12['Liga'] == 'GER2') 
-            | (tabela_12['Liga'] == 'POR2') | (tabela_12['Liga'] == 'BUL') | (tabela_12['Liga'] == 'AUT') | (tabela_12['Liga'] == 'QAT') 
-            | (tabela_12['Liga'] == 'BRA1') | (tabela_12['Liga'] == 'ARG1')]
+        tabela_12 = tabela_12[(tabela_12['Liga'] == 'ARG1') | (tabela_12['Liga'] == 'AUS') | (tabela_12['Liga'] == 'AUT') 
+            | (tabela_12['Liga'] == 'BEL1') | (tabela_12['Liga'] == 'BEL2') | (tabela_12['Liga'] == 'BOL') 
+            | (tabela_12['Liga'] == 'BRA1') | (tabela_12['Liga'] == 'BRA2') | (tabela_12['Liga'] == 'BUL') | (tabela_12['Liga'] == 'CHI')
+            | (tabela_12['Liga'] == 'CHN') | (tabela_12['Liga'] == 'COL') | (tabela_12['Liga'] == 'CRO') | (tabela_12['Liga'] == 'CZH')
+            | (tabela_12['Liga'] == 'DEN') | (tabela_12['Liga'] == 'ECU') | (tabela_12['Liga'] == 'ENG1') | (tabela_12['Liga'] == 'ENG2') 
+            | (tabela_12['Liga'] == 'FIN') | (tabela_12['Liga'] == 'FRA1') | (tabela_12['Liga'] == 'FRA2') | (tabela_12['Liga'] == 'GEO')  
+            | (tabela_12['Liga'] == 'GER1') | (tabela_12['Liga'] == 'GER2') | (tabela_12['Liga'] == 'GRE') | (tabela_12['Liga'] == 'HOL') 
+            | (tabela_12['Liga'] == 'IND') | (tabela_12['Liga'] == 'INDO') | (tabela_12['Liga'] == 'ITA1') | (tabela_12['Liga'] == 'ITA2') 
+            | (tabela_12['Liga'] == 'JAP') | (tabela_12['Liga'] == 'KOR') | (tabela_12['Liga'] == 'MEX') | (tabela_12['Liga'] == 'MOR') 
+            | (tabela_12['Liga'] == 'NOR') | (tabela_12['Liga'] == 'PAR') | (tabela_12['Liga'] == 'PER') | (tabela_12['Liga'] == 'POL') 
+            | (tabela_12['Liga'] == 'POR1') | (tabela_12['Liga'] == 'POR2') | (tabela_12['Liga'] == 'QAT') | (tabela_12['Liga'] == 'ROM') 
+            | (tabela_12['Liga'] == 'RUS') | (tabela_12['Liga'] == 'SAUD') | (tabela_12['Liga'] == 'SCT') | (tabela_12['Liga'] == 'SER') 
+            | (tabela_12['Liga'] == 'SPA1') | (tabela_12['Liga'] == 'SPA2') | (tabela_12['Liga'] == 'SWE') | (tabela_12['Liga'] == 'SWZ') 
+            | (tabela_12['Liga'] == 'TUR') | (tabela_12['Liga'] == 'UAE') | (tabela_12['Liga'] == 'UKR')  | (tabela_12['Liga'] == 'URU')
+            | (tabela_12['Liga'] == 'USA') | (tabela_12['Liga'] == 'UZB') | (tabela_12['Liga'] == 'VEN')]
+
 
         tabela_11 = pd.merge(tabela_11, tabela_12[['Atleta', 'L_Rating', 'L_Ranking', 'L_Percentil', 'Size']], on="Atleta", how="left")
         tabela_11 = tabela_11.rename(columns={'Equipe_Janela_Análise':'Equipe', 'Versão_Temporada':'Janela de Análise', 
@@ -4745,26 +5041,40 @@ if choose == "Free Agents pelo Mundo":
         tabela_13 = pd.read_csv("22_Role_Segundo_Atacante_Full.csv")
         tabela_13 = tabela_13.loc[(tabela_13['Nacionalidade']==nacionalidade)&(tabela_13['Fim_Contrato']<=contrato)&(tabela_13['Versão_Temporada']==temporada)]   
         tabela_13 = tabela_13.iloc[:, np.r_[1, 3, 4, 7, 15, 9:12, 31]]
-        tabela_13 = tabela_13[(tabela_13['Liga'] == 'ENG1') | (tabela_13['Liga'] == 'ENG2') | (tabela_13['Liga'] == 'FRA1') | (tabela_13['Liga'] == 'FRA2') 
-            | (tabela_13['Liga'] == 'SPA1') | (tabela_13['Liga'] == 'ITA1') | (tabela_13['Liga'] == 'GER1') | (tabela_13['Liga'] == 'POR1') 
-            | (tabela_13['Liga'] == 'SWZ') | (tabela_13['Liga'] == 'RUS') | (tabela_13['Liga'] == 'UKR') | (tabela_13['Liga'] == 'BEL1') 
-            | (tabela_13['Liga'] == 'CHN') | (tabela_13['Liga'] == 'DEN') | (tabela_13['Liga'] == 'GRE') | (tabela_13['Liga'] == 'HOL') 
-            | (tabela_13['Liga'] == 'JAP') | (tabela_13['Liga'] == 'MEX') | (tabela_13['Liga'] == 'SAUD') | (tabela_13['Liga'] == 'TUR') 
-            | (tabela_13['Liga'] == 'UAE') | (tabela_13['Liga'] == 'USA') | (tabela_13['Liga'] == 'ITA2') | (tabela_13['Liga'] == 'GER2') 
-            | (tabela_13['Liga'] == 'POR2') | (tabela_13['Liga'] == 'BUL') | (tabela_13['Liga'] == 'AUT') | (tabela_13['Liga'] == 'QAT') 
-            | (tabela_13['Liga'] == 'BRA1') | (tabela_13['Liga'] == 'ARG1')]
+        tabela_13 = tabela_13[(tabela_13['Liga'] == 'ARG1') | (tabela_13['Liga'] == 'AUS') | (tabela_13['Liga'] == 'AUT') 
+            | (tabela_13['Liga'] == 'BEL1') | (tabela_13['Liga'] == 'BEL2') | (tabela_13['Liga'] == 'BOL') 
+            | (tabela_13['Liga'] == 'BRA1') | (tabela_13['Liga'] == 'BRA2') | (tabela_13['Liga'] == 'BUL') | (tabela_13['Liga'] == 'CHI')
+            | (tabela_13['Liga'] == 'CHN') | (tabela_13['Liga'] == 'COL') | (tabela_13['Liga'] == 'CRO') | (tabela_13['Liga'] == 'CZH')
+            | (tabela_13['Liga'] == 'DEN') | (tabela_13['Liga'] == 'ECU') | (tabela_13['Liga'] == 'ENG1') | (tabela_13['Liga'] == 'ENG2') 
+            | (tabela_13['Liga'] == 'FIN') | (tabela_13['Liga'] == 'FRA1') | (tabela_13['Liga'] == 'FRA2') | (tabela_13['Liga'] == 'GEO')  
+            | (tabela_13['Liga'] == 'GER1') | (tabela_13['Liga'] == 'GER2') | (tabela_13['Liga'] == 'GRE') | (tabela_13['Liga'] == 'HOL') 
+            | (tabela_13['Liga'] == 'IND') | (tabela_13['Liga'] == 'INDO') | (tabela_13['Liga'] == 'ITA1') | (tabela_13['Liga'] == 'ITA2') 
+            | (tabela_13['Liga'] == 'JAP') | (tabela_13['Liga'] == 'KOR') | (tabela_13['Liga'] == 'MEX') | (tabela_13['Liga'] == 'MOR') 
+            | (tabela_13['Liga'] == 'NOR') | (tabela_13['Liga'] == 'PAR') | (tabela_13['Liga'] == 'PER') | (tabela_13['Liga'] == 'POL') 
+            | (tabela_13['Liga'] == 'POR1') | (tabela_13['Liga'] == 'POR2') | (tabela_13['Liga'] == 'QAT') | (tabela_13['Liga'] == 'ROM') 
+            | (tabela_13['Liga'] == 'RUS') | (tabela_13['Liga'] == 'SAUD') | (tabela_13['Liga'] == 'SCT') | (tabela_13['Liga'] == 'SER') 
+            | (tabela_13['Liga'] == 'SPA1') | (tabela_13['Liga'] == 'SPA2') | (tabela_13['Liga'] == 'SWE') | (tabela_13['Liga'] == 'SWZ') 
+            | (tabela_13['Liga'] == 'TUR') | (tabela_13['Liga'] == 'UAE') | (tabela_13['Liga'] == 'UKR')  | (tabela_13['Liga'] == 'URU')
+            | (tabela_13['Liga'] == 'USA') | (tabela_13['Liga'] == 'UZB') | (tabela_13['Liga'] == 'VEN')]
 
         tabela_14 = pd.read_csv("PlayerAnalysis_Role_22_Full.csv")
         tabela_14 = tabela_14.loc[(tabela_14['Nacionalidade']==nacionalidade)&(tabela_14['Fim_Contrato']<=contrato)&(tabela_14['Versão_Temporada']==temporada)]
         tabela_14 = tabela_14.iloc[:, np.r_[15, 32, 36:40]]
-        tabela_14 = tabela_14[(tabela_14['Liga'] == 'ENG1') | (tabela_14['Liga'] == 'ENG2') | (tabela_14['Liga'] == 'FRA1') | (tabela_14['Liga'] == 'FRA2') 
-            | (tabela_14['Liga'] == 'SPA1') | (tabela_14['Liga'] == 'ITA1') | (tabela_14['Liga'] == 'GER1') | (tabela_14['Liga'] == 'POR1') 
-            | (tabela_14['Liga'] == 'SWZ') | (tabela_14['Liga'] == 'RUS') | (tabela_14['Liga'] == 'UKR') | (tabela_14['Liga'] == 'BEL1') 
-            | (tabela_14['Liga'] == 'CHN') | (tabela_14['Liga'] == 'DEN') | (tabela_14['Liga'] == 'GRE') | (tabela_14['Liga'] == 'HOL') 
-            | (tabela_14['Liga'] == 'JAP') | (tabela_14['Liga'] == 'MEX') | (tabela_14['Liga'] == 'SAUD') | (tabela_14['Liga'] == 'TUR') 
-            | (tabela_14['Liga'] == 'UAE') | (tabela_14['Liga'] == 'USA') | (tabela_14['Liga'] == 'ITA2') | (tabela_14['Liga'] == 'GER2') 
-            | (tabela_14['Liga'] == 'POR2') | (tabela_14['Liga'] == 'BUL') | (tabela_14['Liga'] == 'AUT') | (tabela_14['Liga'] == 'QAT')
-            | (tabela_14['Liga'] == 'BRA1') | (tabela_14['Liga'] == 'ARG1')]
+        tabela_14 = tabela_14[(tabela_14['Liga'] == 'ARG1') | (tabela_14['Liga'] == 'AUS') | (tabela_14['Liga'] == 'AUT') 
+            | (tabela_14['Liga'] == 'BEL1') | (tabela_14['Liga'] == 'BEL2') | (tabela_14['Liga'] == 'BOL') 
+            | (tabela_14['Liga'] == 'BRA1') | (tabela_14['Liga'] == 'BRA2') | (tabela_14['Liga'] == 'BUL') | (tabela_14['Liga'] == 'CHI')
+            | (tabela_14['Liga'] == 'CHN') | (tabela_14['Liga'] == 'COL') | (tabela_14['Liga'] == 'CRO') | (tabela_14['Liga'] == 'CZH')
+            | (tabela_14['Liga'] == 'DEN') | (tabela_14['Liga'] == 'ECU') | (tabela_14['Liga'] == 'ENG1') | (tabela_14['Liga'] == 'ENG2') 
+            | (tabela_14['Liga'] == 'FIN') | (tabela_14['Liga'] == 'FRA1') | (tabela_14['Liga'] == 'FRA2') | (tabela_14['Liga'] == 'GEO')  
+            | (tabela_14['Liga'] == 'GER1') | (tabela_14['Liga'] == 'GER2') | (tabela_14['Liga'] == 'GRE') | (tabela_14['Liga'] == 'HOL') 
+            | (tabela_14['Liga'] == 'IND') | (tabela_14['Liga'] == 'INDO') | (tabela_14['Liga'] == 'ITA1') | (tabela_14['Liga'] == 'ITA2') 
+            | (tabela_14['Liga'] == 'JAP') | (tabela_14['Liga'] == 'KOR') | (tabela_14['Liga'] == 'MEX') | (tabela_14['Liga'] == 'MOR') 
+            | (tabela_14['Liga'] == 'NOR') | (tabela_14['Liga'] == 'PAR') | (tabela_14['Liga'] == 'PER') | (tabela_14['Liga'] == 'POL') 
+            | (tabela_14['Liga'] == 'POR1') | (tabela_14['Liga'] == 'POR2') | (tabela_14['Liga'] == 'QAT') | (tabela_14['Liga'] == 'ROM') 
+            | (tabela_14['Liga'] == 'RUS') | (tabela_14['Liga'] == 'SAUD') | (tabela_14['Liga'] == 'SCT') | (tabela_14['Liga'] == 'SER') 
+            | (tabela_14['Liga'] == 'SPA1') | (tabela_14['Liga'] == 'SPA2') | (tabela_14['Liga'] == 'SWE') | (tabela_14['Liga'] == 'SWZ') 
+            | (tabela_14['Liga'] == 'TUR') | (tabela_14['Liga'] == 'UAE') | (tabela_14['Liga'] == 'UKR')  | (tabela_14['Liga'] == 'URU')
+            | (tabela_14['Liga'] == 'USA') | (tabela_14['Liga'] == 'UZB') | (tabela_14['Liga'] == 'VEN')]
 
         tabela_13 = pd.merge(tabela_13, tabela_14[['Atleta', 'L_Rating', 'L_Ranking', 'L_Percentil', 'Size']], on="Atleta", how="left")
         tabela_13 = tabela_13.rename(columns={'Equipe_Janela_Análise':'Equipe', 'Versão_Temporada':'Janela de Análise', 
