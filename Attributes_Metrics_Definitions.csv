@@ -1,0 +1,113 @@
+Atributos e Métricas,Definições de Atributos e Métricas:
+‘Intensidade defensiva’,"Iniciativas bem-sucedidas de um jogador para recuperar a posse da bola e interromper os ataques do adversário. Combina as seguintes métricas:  ‘Sucesso em desarmes (%)’,  ‘Posses recuperadas (p90)’,  ‘Ações defensivas (p90)’ e ‘Sucesso em 1v1 defensivo (%)’."
+ ‘Sucesso em desarmes (%)’,Porcentagem de sucessos em 1v1 defensivo e carrinhos.
+ ‘Posses recuperadas (p90)’,Número de posses recuperadas.
+ ‘Ações defensivas (p90)’,"Número de ações defensivas bem-sucedidas (duelos defensivos, desarmes, interceptações, recuperações e cortes)."
+ ‘Sucesso em 1v1 defensivo (%)’,Porcentagem de tentativas bem-sucedidas de um jogador para impedir que um adversário em posse da bola o ultrapasse.
+ ‘Ameaça aérea’,"Habilidade de um jogador de gerar perigo ofensivo em bolas aéreas. Combina as seguintes métricas:  ‘Jogadas de cabeça (p90)’,  ‘Duelos aéreos vencidos no ataque (%)’,  ‘Duelos aéreos vencidos no ataque (p90)’,  ‘Duelos aéreos vencidos (%)’ e  ‘Duelos aéreos vencidos (p90)’"
+ ‘Jogadas de cabeça (p90)’,Número de passes ou finalizações de cabeça bem-sucedidos na metade ofensiva.
+ ‘Duelos aéreos vencidos no ataque (%)’,Porcentagem de duelos aéreos ofensivos vencidos em 60% do campo ofensivo.
+ ‘Duelos aéreos vencidos no ataque (p90)’,Número de duelos aéreos ofensivos vencidos em 60% do campo ofensivo.
+ ‘Duelos aéreos vencidos (%)’,Porcentagem de duelos aéreos vencidos. 
+ ‘Duelos aéreos vencidos (p90)’,Número de duelos aéreos vencidos.
+ ‘Ameaça ofensiva’,"Avalia a capacidade de um jogador de causar impacto dentro e ao redor da área adversária. Combina as seguintes métricas:  ‘Recepções na área adversária (p90)’,  ‘xG (p90)’,  ‘Gols (p90)’,  ‘Entradas na área (p90)’ e  ‘Toques na área (p90)’"
+ ‘Recepções na área adversária (p90)’,Número de recepções bem-sucedidas dentro da área adversária.
+ ‘xG (p90)’,Gols esperados acumulados (exceto pênaltis).
+ ‘Gols (p90)’,Número de gols (exceto pênaltis)
+ ‘Entradas na área (p90)’,Número de penetrações na área adversária por meio de conduções.
+ ‘Toques na área (p90)’,"Número de toques (passes, finalizações, conduções, dribles, toques) na área adversária (exceto bolas paradas), enquanto em posse."
+ ‘Controle defensivo’,"Mede a capacidade de um jogador em impedir diretamente que o adversário chegue a boas posições de finalização quanto sua habilidade em bloquear passes perigosos dentro de sua área defensiva. Combina as seguintes métricas:  ‘Passes progressivos do adversário na área defensiva (%)’,  ‘xT do adversário na área defensiva (p100 passes)’,  ‘xG do adversário na área defensiva (p100 posses)’ e ‘xG do adversário após ação defensiva (p100 posses)’."
+ ‘Passes progressivos do adversário na área defensiva (%)’,"Porcentagem de passes do adversário que se originam dentro da área defensiva do jogador e que são bem-sucedidos, progressivos e terminam na metade ofensiva do campo."
+ ‘xT do adversário na área defensiva (p100 passes)’,"xT acumulado, originado dentro da área defensiva do jogador, por 100 passes bem-sucedidos do adversário."
+ ‘xG do adversário na área defensiva (p100 posses)’,"xG acumulado (exceto pênaltis) das finalizações do adversário, cuja cadeia de posse que o originou teve pelo menos um passe bem-sucedido dentro da área defensiva do jogador. Medido por 100 posses do adversário."
+ ‘xG do adversário após ação defensiva (p100 posses)’,"xG acumulado (exceto pênaltis) das finalizações do adversário em que o jogador realizou a última ação defensiva antes da finalização, e esta ocorreu dentro de 8 segundos após a ação, medido por 100 posses."
+ ‘Resistência à pressão’,"Capacidade de permanecer calmo, focado e tomar decisões acertadas, especialmente em situações de alta pressão. Isso envolve manter o controle da bola sob pressão e evitar perder a posse em situações perigosas. Combina as seguintes métricas:  ‘Retenção de posse sob pressão (p90)’,  ‘Resistência à pressão (%)’,  ‘Perdas de posse (p90)’,  ‘Perdas de posse na linha baixa (p90)’ e ‘Erros (p100 passes)’."
+ ‘Retenção de posse sob pressão (p90)’,Número de ações bem-sucedidas sob pressão no primeiro ou segundo terço.
+ ‘Resistência à pressão (%)’,Percentagem de ações bem-sucedidas sob pressão no primeiro ou segundo terço.
+ ‘Perdas de posse (p90)’,"Número de ações que resultam na perda da posse do time (passes, duelos ofensivos, toques)."
+ ‘Perdas de posse na linha baixa (p90)’,"Número de posses perdidas (passes errados, erros de domínio ou duelos ofensivos perdidos) nos 40% do campo defensivo do time."
+ ‘Erros (p100 passes)’,Número de erros (erros de domínio e falhas que resultam em finalizações do adversário) por 100 passes do jogador.
+ ‘Bola aérea defensiva,"Capacidade de vencer duelos aéreos nos 60% defensivos do campo. Combina as seguintes métricas:  ‘Duelos aéreos defensivos vencidos (%)’,  ‘Duelos aéreos defensivos vencidos (p90)’,  ‘Duelos aéreos vencidos (%)’ e  ‘Duelos aéreos vencidos (p90)’."
+ ‘Duelos aéreos defensivos vencidos (%)’,Porcentagem de duelos aéreos defensivos vencidos nos 60% defensivos do campo.
+ ‘Duelos aéreos defensivos vencidos (p90)’,Número de duelos aéreos defensivos vencidos nos 60% defensivos do campo.
+ ‘Duelos aéreos vencidos (%)’,Porcentagem de duelos aéreos vencidos.
+ ‘Duelos aéreos vencidos (p90)’,Número de duelos aéreos vencidos.
+ ‘Drible’,"Autoexplicativo. Combina as seguintes métricas:  ‘Resistência à pressão (%)’,  ‘xG Dribles (p90)’,  ‘xT Dribles (p90)’ e  ‘Dribles bem sucedidos (%)’."
+ ‘Resistência à pressão (%)’,Porcentagem de ações bem-sucedidas sob pressão.
+ ‘xG Dribles (p90)’,"xG acumulado das finalizações realizadas dentro de 5 segundos após dribles na mesma posse, atribuído ao driblador."
+ ‘xT Dribles (p90)’,"xT acumulado, originado por dribles bem-sucedidos."
+ ‘Dribles bem sucedidos (%)’,Porcentagem de dribles bem-sucedidos.
+ ‘Efetividade’,"Mede o impacto de cada ação nas fases ofensiva e defensiva do jogo. Jogadores efetivos aproveitam ao máximo seus toques, raramente perdem a bola em situações perigosas e frequentemente desmontam os ataques do adversário. Combina as seguintes métricas: ‘xG (pFinalização)’,  ‘(xG + xA) (p100 toques)’,  ‘Posses recuperadas (pPosse adversária)’,  ‘Perdas de posse (pRecepção na linha baixa)’,  ‘xG Chain (pPosse)’,  ‘xT Conduções (p100 Recepções)’ e  ‘xT Passes (p100 Recepções)’."
+ ‘xG (pFinalização)’,Razão entre o xG acumulado (exceto pênaltis) das finalizações e o total de finalizações realizadas.
+ ‘(xG + xA) (p100 toques)’,"Soma de xG acumulado (exceto pênaltis) e xA, por 100 toques."
+ ‘Posses recuperadas (pPosse adversária)’,Razão entre o número de posses recuperadas e o total de posses do adversário.
+ ‘Perdas de posse (pRecepção na linha baixa)’,"Razão entre o número de posses perdidas (passes errados, toques ruins ou duelos ofensivos perdidos) e o número total de recepções de bola nos 40% do campo defensivo da equipe."
+ ‘xG Chain (pPosse)’,"Razão entre o xG acumulado (exceto pênaltis) em posses nas quais o jogador participou em pelo menos um evento, dividido pelo número total de participações em posse."
+ ‘xT Conduções (p100 Recepções)’,"Razão entre o xT acumulado de conduções e número de recepções. Mede a contribuição das conduções de um jogador para a chance de sua equipe marcar, relativamente ao número de vezes que ele recebe a bola."
+ ‘xT Passes (p100 Recepções)’,xT acumulado de passes por 100 recepções.
+ ‘Finalização’,"Capacidade de um jogador de converter oportunidades em gols. Combina asseguintes métricas:  ‘(Gols - xG)’,  ‘xGOT (xG no alvo) (p90)’,  ‘Conversão de finalizações (%)’ e  ‘Gols (p90)’."
+ ‘(Gols - xG)’,Diferença acumulada entre gols marcados (exceto pênaltis) e gols esperados (exceto pênaltis).
+ ‘xGOT (xG no alvo) (p90)’,xG acumulado (exceto pênaltis) de finalizações no alvo.
+ ‘Conversão de finalizações (%)’,Porcentagem de finalizações (exceto pênaltis) que resultam em gols.
+ ‘Gols (p90)’,Número de gols (exceto pênaltis).
+ ‘Conexão ofensiva’,"Mede a habilidade de um atacante, frequentemente um centroavante, de receber e controlar a bola de forma eficaz enquanto está sob pressão de defensores. O objetivo principal é manter a posse de bola para permitir que sua equipe avance no campo e envolva outros companheiros no ataque. Combina as seguintes métricas:  ‘Perdas de posse (p90)’,  ‘Retenção de posse sob pressão (p90)’,  ‘Resistência à pressão (%)’,  ‘Duelos aéreos vencidos (%)’,  ‘Recepção de bolas longas (p90)’ e  ‘Conexões ofensivas (p90)’."
+ ‘Perdas de posse (p90)’,"Número de ações que resultam na perda da posse do time (passes, duelos ofensivos, toques)."
+ ‘Retenção de posse sob pressão (p90)’,Número de ações bem-sucedidas sob pressão no primeiro ou segundo terço.
+ ‘Resistência à pressão (%)’,Porcentagem de ações bem-sucedidas sob pressão.
+ ‘Duelos aéreos vencidos (%)’,Porcentagem de duelos aéreos vencidos.
+ ‘Recepção de bolas longas (p90)’,Número de recepções de bolas longas bem-sucedidas.
+ ‘Conexões ofensivas (p90)’,Número de conexões bem-sucedidas (ação em que um jogador ofensivo recebe um passe de um defensor ou meio-campista (supostamente) de costas para o gol adversário).
+ ‘Inteligência defensiva’,"Capacidade de um jogador de interpretar o jogo, antecipar as ações dos adversários e tomar decisões bem informadas para interromper os ataques do oponente, reagindo rapidamente à perda de posse. Combina as seguintes métricas:  ‘Interceptações (p90)’,  ‘Contra-pressão (p90)’ e  ‘Recuperações de bola (p90)’."
+ ‘Interceptações (p90)’,Número de interceptações.
+ ‘Contra-pressão (p90)’,Número de recuperações em duelos que retomam a posse em até 5 segundos após a perda da posse.
+ ‘Recuperações de bola (p90)’,"Número de recuperações de bola que não ocorrem por uma ação defensiva ativa (desarmes, duelos ou interceptações)."
+ ‘Participação’,"Mede o engajamento do jogador, considerando com que frequência ele toca na bola, realiza ações defensivas e participa de duelos aéreos e ataques que resultam em finalizações. Um alto nível de envolvimento sugere que o jogador contribui significativamente para o desempenho de sua equipe por meio de uma participação ativa e frequente em vários aspectos do jogo. Combina as seguintes métricas:  ‘xG gerado na construção (p90)’,  ‘Toques (p90)’,  ‘Ações defensivas (p90)’ e  ‘Disputas aéreas (p90)’."
+ ‘xG gerado na construção (p90)’,"xG acumulado (exceto pênaltis) em posses nas quais o jogador esteve envolvido em pelo menos um evento, exceto finalizações e assistências."
+ ‘Toques (p90)’,"Número de toques (exceto bolas paradas) durante a posse de bola (passes, finalizações, conduções, dribles, toques)."
+ ‘Ações defensivas (p90)’,"Número de ações defensivas bem-sucedidas (duelos defensivos, desarmes, interceptações, recuperações e cortes)."
+ ‘Disputas aéreas (p90)’,Número de duelos aéreos.
+ ‘Impacto do passe’,"Mede a capacidade de gerar perigo por meio de passes. Combina as seguintes métricas:  ‘Passes criativos (p90)’,  ‘xT Passes no último terço (p90)’,  ‘xT Passes para último terço (p90)’,  ‘xT Passes (p90)’ e ‘xT Cruzamentos (p90)’."
+ ‘Passes criativos (p90)’,"Número de assistências, passes-chave e segundas assistências."
+ ‘xT Passes no último terço (p90)’,xT acumulado em passes bem-sucedidos dentro do terço final.
+ ‘xT Passes para último terço (p90)’,xT acumulado em passes bem-sucedidos para o terço final.
+ ‘xT Passes (p90)’,xT acumulado em passes bem-sucedidos.
+ ‘xT Cruzamentos (p90)’,xT acumulado em cruzamentos.
+ ‘Oportunismo’,"Habilidade de se posicionar bem dentro da área adversária, criando ou aproveitando oportunidades de gol. Combina as seguintes métricas:  ‘xG (pToque na área)’,  ‘Gols (pToque na área)’,  ‘xG (pFinalização)’ e  ‘xG (p90)’."
+ ‘xG (pToque na área)’,Razão entre o xG acumulado (exceto pênaltis) e o número de toques na área adversária.
+ ‘Gols (pToque na área)’,Razão entre o número de gols (exceto pênaltis) e o número de toques na área adversária.
+ ‘xG (pFinalização)’,Razão entre o xG acumulado (exceto pênaltis) e o número de finalizações.
+ ‘xG (p90)’,Gols esperados acumulados (exceto pênaltis).
+ ‘Pressão na linha alta’,"Mede o esforço para pressionar o adversário em posse de bola, levando em consideração o número de ações defensivas realizadas, com ênfase em contra-pressão e recuperações em áreas avançadas. Combina as seguintes métricas:  ‘Contra-pressão (p90)’,  ‘Interceptações (p90)’,  ‘Recuperações linha alta (p90)’ e  ‘Intensidade defensiva (p90)’."
+ ‘Contra-pressão (p90)’,Número de recuperações em duelos que retomam a posse em até 5 segundos após a perda da posse.
+ ‘Interceptações (p90)’,Número de interceptações.
+ ‘Recuperações linha alta (p90)’,Número de posses recuperadas na metade ofensiva.
+ ‘Intensidade defensiva (p90)’,"Número de duelos defensivos, disputas por bolas livres, interceptações, desarmes e faltas quando fora de posse de bola."
+ ‘Transição ofensiva’,"Mede a capacidade de avançar com a bola pelo campo e contribuir para o jogo ofensivo de sua equipe, aumentando assim a probabilidade de gerar oportunidades de gol. Combina as seguintes métricas:  ‘Passes de criação de jogadas (90)’,  ‘xT Passes para último terço (p90)’ e  ‘xT Progressão com bola (p90)’."
+ ‘Passes de criação de jogadas (90)’,"Número de passes progressivos, passes inteligentes, passes em profundidade e passes para o terço final bem-sucedidos."
+ ‘xT Passes para último terço (p90)’,xT acumulado em passes bem-sucedidos para o terço final.
+ ‘xT Progressão com bola (p90)’,xT gerado por passes progressivos bem-sucedidos e conduções progressivas que terminam na metade ofensiva.
+ ‘Criação de oportunidades’,"Habilidade de criar oportunidades de gol para os companheiros de equipe. Combina as seguintes métricas:  ‘xG Criado (p90)’,  ‘Segundas assistências (p90)’,  ‘Passes chave (p90)’,  ‘Deep completions (p90)’,  ‘xA (p90)’ e  ‘Assistências (p90)’."
+ ‘xG Criado (p90)’,"xG acumulado (exceto pênaltis) de finalizações realizadas em até 5 segundos após passes na mesma posse, atribuído ao passador."
+ ‘Segundas assistências (p90)’,Número de últimas ações de um jogador que resultam em assistências de um companheiro de equipe.
+ ‘Passes chave (p90)’,Número de passes que criam imediatamente uma clara oportunidade de gol para um companheiro.
+ ‘Deep completions (p90)’,Número de passes bem-sucedidos para a área distante até 20 metros do gol adversário.
+ ‘xA (p90)’,xA acumulado.
+ ‘Assistências (p90)’,Número de assistências.
+ ‘Movimentação ofensiva’,"Habilidade dos jogadores de criar oportunidades de gol por meio de movimentação inteligente. Combina as seguintes métricas:  ‘Recepções na área (p90)’,  ‘xT Conduções (p90)’,  ‘xT Corridas em profundidade (p90)’ e  ‘Entradas na área (p90)’."
+ ‘Recepções na área (p90)’,Número de recepções bem-sucedidas de passes dentro da área adversária.
+ ‘xT Conduções (p90)’,xT acumulado por meio de conduções.
+ ‘xT Corridas em profundidade (p90)’,xT acumulado gerado em recepções de passes em profundidade.
+ ‘Entradas na área (p90)’,Número de conduções de bola para dentro da área adversária.
+ ‘Controle de espaço’,"Mede quão bem o jogador controla o espaço no campo, tanto em termos do tamanho da área defensiva, quanto da capacidade de impedir que a bola entre nessa área. Essa métrica destaca a eficácia de um jogador em cobrir o terreno defensivo e prevenir ataques adversários dentro de seu território defensivo. Combina as seguintes métricas:  ‘Passes adversários bem-sucedidos na área defensiva (%)’,  ‘xT Adversário para a área defensiva (p90)’,  ‘Área defensiva (m²)’ e  ‘Altura da linha defensiva (m)’."
+ ‘Passes adversários bem-sucedidos na área defensiva (%)’,Porcentagem de passes do adversário para a área defensiva do jogador que são bem-sucedidos.
+ ‘xT Adversário para a área defensiva (p90)’,xT acumulado a cada 100 passes bem-sucedidos do adversário para a área defensiva do jogador.
+ ‘Área defensiva (m²)’,"Tamanho da área, medido em metros quadrados, que um jogador cobre defensivamente (exceto bolas paradas). É medido como a área que cobre 68% das ações defensivas."
+ ‘Altura da linha defensiva (m)’,"Altura média, medida em metros, das ações defensivas."
+ ‘Superioridade em duelos’,"Mede o desempenho de um jogador em desafios individuais, incluindo tanto disputas aéreas quanto duelos defensivos no chão. Destaca a qualidade em confrontos diretos com adversários. Combina as seguintes métricas:  ‘Sucesso em desarmes (%)’,  ‘Desarmes vencidos (p90)’,  ‘Sucesso em 1v1 (p90)’,  ‘Duelos defensivos vencidos (%)’,  ‘Duelos defensivos vencidos (p90)’,  ‘Duelos aéreos vencidos (%)’ e  ‘Duelos aéreos vencidos (p90)’."
+ ‘Sucesso em desarmes (%)’,Porcentagem de sucessos em 1v1 defensivo e carrinhos.
+ ‘Desarmes vencidos (p90)’,Número de desarmes em 1v1 e carrinhos que interromperam o progresso de um jogador ou recuperaram a posse.
+ ‘Sucesso em 1v1 (p90)’,Número de tentativas bem-sucedidas de impedir que um jogador adversário em posse da bola drible o jogador.
+ ‘Duelos defensivos vencidos (%)’,"Porcentagem de duelos defensivos (no chão) que interromperam o progresso de um jogador ou recuperaram a posse, ajustado pela posse do adversário."
+ ‘Duelos defensivos vencidos (p90)’,"Porcentagem de duelos defensivos (no chão) que interromperam o progresso de um jogador ou recuperaram a posse, ajustado pela posse do adversário."
+ ‘Duelos aéreos vencidos (%)’,Porcentagem de duelos aéreos vencidos. É calculada dividindo o número de duelos aéreos vencidos (no primeiro contato) pelo número total de duelos aéreos disputados. Essa métrica indica a eficácia de um jogador em vencer desafios aéreos.
+ ‘Duelos aéreos vencidos (p90)’,Número de duelos aéreos vencidos.
