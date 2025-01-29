@@ -20,7 +20,7 @@ metrics_participação_4 = metrics.iloc[:, 3].tolist()
 metrics_y = [0] * len(metrics_participação_1)
 
 # The specific data point you want to highlight
-highlight = attribute_chart_z1[(attribute_chart_z1['Atleta']==jogadores)]
+highlight = attribute_chart_z1[(attribute_chart_z1['Atleta']==jogadores) & (attribute_chart_z1['Clube']==equipe)]
 highlight = highlight.iloc[:, np.r_[72, 73, 31, 74]].reset_index(drop=True)
 highlight_participação_1 = highlight.iloc[:, 0].tolist()
 highlight_participação_2 = highlight.iloc[:, 1].tolist()
@@ -317,8 +317,16 @@ st.plotly_chart(fig, use_container_width=True)
 st.markdown("<h3 style='text-align: center; color: blue; '>Percentis das Métricas do Jogador na Liga em 2024</h3>", unsafe_allow_html=True)
 attribute_chart = pd.read_csv("patch_code.csv")
 attribute_chart_per = pd.read_csv('patch_code_per.csv')
-attribute_chart_1 = attribute_chart[(attribute_chart['Atleta']==jogadores)&(attribute_chart['Liga']==liga)&(attribute_chart['Temporada']==temporada) & (attribute_chart['função']=="Atacante")]
-attribute_chart_per_1 = attribute_chart_per[(attribute_chart_per['Atleta']==jogadores)&(attribute_chart_per['Liga']==liga)&(attribute_chart_per['Temporada']==temporada) & (attribute_chart_per['função']=="Atacante")]
+attribute_chart_1 = attribute_chart[(attribute_chart['Atleta']==jogadores)&
+                                    (attribute_chart['Liga']==liga)&
+                                    (attribute_chart['Temporada']==temporada) & 
+                                    (attribute_chart['função']=="Atacante") & 
+                                    (attribute_chart['Clube']==equipe)]
+attribute_chart_per_1 = attribute_chart_per[(attribute_chart_per['Atleta']==jogadores)&
+                                            (attribute_chart_per['Liga']==liga)&
+                                            (attribute_chart_per['Temporada']==temporada) & 
+                                            (attribute_chart_per['função']=="Atacante") & 
+                                            (attribute_chart_per['Clube']==equipe)]
 #Collecting data to plot
 metrics = attribute_chart_1.iloc[:, np.r_[52, 53, 11, 54]].reset_index(drop=True)
 percent = attribute_chart_per_1.iloc[:, np.r_[72, 73, 31, 74]].reset_index(drop=True)
@@ -468,7 +476,8 @@ st.pyplot(legend_fig)
 st.markdown(f"<h3 style='text-align: center; color: blue; '>Comparação com a Média da Liga em {temporada}</h3>", unsafe_allow_html=True)
 
 attribute_chart_1 = attribute_chart[(attribute_chart['Atleta']==jogadores)&(attribute_chart['Liga']==liga)&
-                                    (attribute_chart['Temporada']==temporada) & (attribute_chart['função']=="Atacante")]
+                                    (attribute_chart['Temporada']==temporada) & (attribute_chart['função']=="Atacante")&
+                                    (attribute_chart['Clube']==equipe)]
 attribute_chart_2 = attribute_chart[(attribute_chart['Liga']==liga)&
                                     (attribute_chart['Temporada']==temporada) & (attribute_chart['função']=="Atacante")]
 attribute_chart_mean = attribute_chart[(attribute_chart['Liga']==liga)&
@@ -558,7 +567,7 @@ metrics_pressão_4 = metrics.iloc[:, 3].tolist()
 metrics_y = [0] * len(metrics_pressão_1)
 
 # The specific data point you want to highlight
-highlight = attribute_chart_z1[(attribute_chart_z1['Atleta']==jogadores)]
+highlight = attribute_chart_z1[(attribute_chart_z1['Atleta']==jogadores) & (attribute_chart_z1['Clube']==equipe)]
 highlight = highlight.iloc[:, np.r_[70, 69, 82, 83]].reset_index(drop=True)
 highlight_pressão_1 = highlight.iloc[:, 0].tolist()
 highlight_pressão_2 = highlight.iloc[:, 1].tolist()
@@ -859,8 +868,12 @@ attribute_chart_per = pd.read_csv('patch_code_per.csv')
 attribute_chart.rename(columns={'counterpressing': 'Contra-pressão (p90)'}, inplace=True)
 attribute_chart_per.rename(columns={'counterpressing': 'Contra-pressão (p90)'}, inplace=True)
 
-attribute_chart_1 = attribute_chart[(attribute_chart['Atleta']==jogadores)&(attribute_chart['Liga']==liga)&(attribute_chart['Temporada']==temporada) & (attribute_chart['função']=="Atacante")]
-attribute_chart_per_1 = attribute_chart_per[(attribute_chart_per['Atleta']==jogadores)&(attribute_chart_per['Liga']==liga)&(attribute_chart_per['Temporada']==temporada) & (attribute_chart_per['função']=="Atacante")]
+attribute_chart_1 = attribute_chart[(attribute_chart['Atleta']==jogadores)&(attribute_chart['Liga']==liga)&
+                                    (attribute_chart['Temporada']==temporada) & (attribute_chart['função']=="Atacante")& 
+                                    (attribute_chart['Clube']==equipe)]
+attribute_chart_per_1 = attribute_chart_per[(attribute_chart_per['Atleta']==jogadores)&
+                                            (attribute_chart_per['Liga']==liga)&(attribute_chart_per['Temporada']==temporada) & 
+                                            (attribute_chart_per['função']=="Atacante") & (attribute_chart_per['Clube']==equipe)]
 #Collecting data to plot
 metrics = attribute_chart_1.iloc[:, np.r_[50, 49, 62, 63]].reset_index(drop=True)
 percent = attribute_chart_per_1.iloc[:, np.r_[70, 69, 82, 83]].reset_index(drop=True)
@@ -1011,7 +1024,8 @@ st.markdown(f"<h3 style='text-align: center; color: blue; '>Comparação com a M
 
 attribute_chart.rename(columns={'counterpressing': 'Contra-pressão (p90)'}, inplace=True)
 attribute_chart_1 = attribute_chart[(attribute_chart['Atleta']==jogadores)&(attribute_chart['Liga']==liga)&
-                                    (attribute_chart['Temporada']==temporada) & (attribute_chart['função']=="Atacante")]
+                                    (attribute_chart['Temporada']==temporada) & (attribute_chart['função']=="Atacante")& 
+                                    (attribute_chart['Clube']==equipe)]
 attribute_chart_2 = attribute_chart[(attribute_chart['Liga']==liga)&
                                     (attribute_chart['Temporada']==temporada) & (attribute_chart['função']=="Atacante")]
 attribute_chart_mean = attribute_chart[(attribute_chart['Liga']==liga)&
@@ -1101,7 +1115,7 @@ metrics_ameaça_aérea_5 = metrics.iloc[:, 4].tolist()
 metrics_y = [0] * len(metrics_ameaça_aérea_1)
 
 # The specific data point you want to highlight
-highlight = attribute_chart_z1[(attribute_chart_z1['Atleta']==jogadores)]
+highlight = attribute_chart_z1[(attribute_chart_z1['Atleta']==jogadores)& (attribute_chart_z1['Clube']==equipe)]
 highlight = highlight.iloc[:, np.r_[33:38]].reset_index(drop=True)
 highlight_ameaça_aérea_1 = highlight.iloc[:, 0].tolist()
 highlight_ameaça_aérea_2 = highlight.iloc[:, 1].tolist()
@@ -1414,8 +1428,12 @@ st.plotly_chart(fig, use_container_width=True)
 st.markdown("<h3 style='text-align: center; color: blue; '>Percentis das Métricas do Jogador na Liga em 2024</h3>", unsafe_allow_html=True)
 attribute_chart = pd.read_csv("patch_code.csv")
 attribute_chart_per = pd.read_csv('patch_code_per.csv')
-attribute_chart_1 = attribute_chart[(attribute_chart['Atleta']==jogadores)&(attribute_chart['Liga']==liga)&(attribute_chart['Temporada']==temporada) & (attribute_chart['função']=="Atacante")]
-attribute_chart_per_1 = attribute_chart_per[(attribute_chart_per['Atleta']==jogadores)&(attribute_chart_per['Liga']==liga)&(attribute_chart_per['Temporada']==temporada) & (attribute_chart_per['função']=="Atacante")]
+attribute_chart_1 = attribute_chart[(attribute_chart['Atleta']==jogadores)&(attribute_chart['Liga']==liga)&
+                                    (attribute_chart['Temporada']==temporada) & (attribute_chart['função']=="Atacante") & 
+                                    (attribute_chart['Clube']==equipe)]
+attribute_chart_per_1 = attribute_chart_per[(attribute_chart_per['Atleta']==jogadores)&
+                                            (attribute_chart_per['Liga']==liga)&(attribute_chart_per['Temporada']==temporada) & 
+                                            (attribute_chart_per['função']=="Atacante") & (attribute_chart_per['Clube']==equipe)]
 #Collecting data to plot
 metrics = attribute_chart_1.iloc[:, np.r_[13:18]].reset_index(drop=True)
 percent = attribute_chart_per_1.iloc[:, np.r_[33:38]].reset_index(drop=True)
@@ -1565,7 +1583,8 @@ st.pyplot(legend_fig)
 st.markdown(f"<h3 style='text-align: center; color: blue; '>Comparação com a Média da Liga em {temporada}</h3>", unsafe_allow_html=True)
 
 attribute_chart_1 = attribute_chart[(attribute_chart['Atleta']==jogadores)&(attribute_chart['Liga']==liga)&
-                                    (attribute_chart['Temporada']==temporada) & (attribute_chart['função']=="Atacante")]
+                                    (attribute_chart['Temporada']==temporada) & (attribute_chart['função']=="Atacante") 
+                                    & (attribute_chart['Clube']==equipe)]
 attribute_chart_2 = attribute_chart[(attribute_chart['Liga']==liga)&
                                     (attribute_chart['Temporada']==temporada) & (attribute_chart['função']=="Atacante")]
 attribute_chart_mean = attribute_chart[(attribute_chart['Liga']==liga)&
@@ -1660,7 +1679,7 @@ metrics_conexão_ofensiva_6 = metrics.iloc[:, 5].tolist()
 metrics_y = [0] * len(metrics_conexão_ofensiva_1)
 
 # The specific data point you want to highlight
-highlight = attribute_chart_z1[(attribute_chart_z1['Atleta']==jogadores)]
+highlight = attribute_chart_z1[(attribute_chart_z1['Atleta']==jogadores) & (attribute_chart_z1['Clube']==equipe)]
 highlight = highlight.iloc[:, np.r_[49, 47, 48, 36, 67, 68]].reset_index(drop=True)
 highlight_conexão_ofensiva_1 = highlight.iloc[:, 0].tolist()
 highlight_conexão_ofensiva_2 = highlight.iloc[:, 1].tolist()
@@ -1986,8 +2005,12 @@ attribute_chart.rename(columns={'Rentenção de posse sob pressão (p90)': 'Rete
 attribute_chart_per = pd.read_csv('patch_code_per.csv')
 attribute_chart_per.rename(columns={'Rentenção de posse sob pressão (p90)': 'Retenção de posse sob pressão (p90)'}, inplace=True)
 
-attribute_chart_1 = attribute_chart[(attribute_chart['Atleta']==jogadores)&(attribute_chart['Liga']==liga)&(attribute_chart['Temporada']==temporada) & (attribute_chart['função']=="Atacante")]
-attribute_chart_per_1 = attribute_chart_per[(attribute_chart_per['Atleta']==jogadores)&(attribute_chart_per['Liga']==liga)&(attribute_chart_per['Temporada']==temporada) & (attribute_chart_per['função']=="Atacante")]
+attribute_chart_1 = attribute_chart[(attribute_chart['Atleta']==jogadores)&(attribute_chart['Liga']==liga)&
+                                    (attribute_chart['Temporada']==temporada) & (attribute_chart['função']=="Atacante") & 
+                                    (attribute_chart['Clube']==equipe)]
+attribute_chart_per_1 = attribute_chart_per[(attribute_chart_per['Atleta']==jogadores)&
+                                            (attribute_chart_per['Liga']==liga)&(attribute_chart_per['Temporada']==temporada) & 
+                                            (attribute_chart_per['função']=="Atacante") & (attribute_chart_per['Clube']==equipe)]
 #Collecting data to plot
 metrics = attribute_chart_1.iloc[:, np.r_[29, 27, 28, 16, 47, 48]].reset_index(drop=True)
 percent = attribute_chart_per_1.iloc[:, np.r_[49, 47, 48, 36, 67, 68]].reset_index(drop=True)
@@ -2137,7 +2160,8 @@ st.pyplot(legend_fig)
 st.markdown(f"<h3 style='text-align: center; color: blue; '>Comparação com a Média da Liga em {temporada}</h3>", unsafe_allow_html=True)
 
 attribute_chart_1 = attribute_chart[(attribute_chart['Atleta']==jogadores)&(attribute_chart['Liga']==liga)&
-                                    (attribute_chart['Temporada']==temporada) & (attribute_chart['função']=="Atacante")]
+                                    (attribute_chart['Temporada']==temporada) & (attribute_chart['função']=="Atacante") & 
+                                    (attribute_chart['Clube']==equipe)]
 attribute_chart_2 = attribute_chart[(attribute_chart['Liga']==liga)&
                                     (attribute_chart['Temporada']==temporada) & (attribute_chart['função']=="Atacante")]
 attribute_chart_mean = attribute_chart[(attribute_chart['Liga']==liga)&
@@ -2228,7 +2252,7 @@ metrics_movimentação_ofensiva_4 = metrics.iloc[:, 3].tolist()
 metrics_y = [0] * len(metrics_movimentação_ofensiva_1)
 
 # The specific data point you want to highlight
-highlight = attribute_chart_z1[(attribute_chart_z1['Atleta']==jogadores)]
+highlight = attribute_chart_z1[(attribute_chart_z1['Atleta']==jogadores) & (attribute_chart_z1['Clube']==equipe)]
 highlight = highlight.iloc[:, np.r_[38, 92, 93, 41]].reset_index(drop=True)
 highlight_movimentação_ofensiva_1 = highlight.iloc[:, 0].tolist()
 highlight_movimentação_ofensiva_2 = highlight.iloc[:, 1].tolist()
@@ -2525,8 +2549,12 @@ st.plotly_chart(fig, use_container_width=True)
 st.markdown("<h3 style='text-align: center; color: blue; '>Percentis das Métricas do Jogador na Liga em 2024</h3>", unsafe_allow_html=True)
 attribute_chart = pd.read_csv("patch_code.csv")
 attribute_chart_per = pd.read_csv('patch_code_per.csv')
-attribute_chart_1 = attribute_chart[(attribute_chart['Atleta']==jogadores)&(attribute_chart['Liga']==liga)&(attribute_chart['Temporada']==temporada) & (attribute_chart['função']=="Atacante")]
-attribute_chart_per_1 = attribute_chart_per[(attribute_chart_per['Atleta']==jogadores)&(attribute_chart_per['Liga']==liga)&(attribute_chart_per['Temporada']==temporada) & (attribute_chart_per['função']=="Atacante")]
+attribute_chart_1 = attribute_chart[(attribute_chart['Atleta']==jogadores)&
+                                    (attribute_chart['Liga']==liga)&(attribute_chart['Temporada']==temporada) & 
+                                    (attribute_chart['função']=="Atacante") & (attribute_chart['Clube']==equipe)]
+attribute_chart_per_1 = attribute_chart_per[(attribute_chart_per['Atleta']==jogadores)&
+                                            (attribute_chart_per['Liga']==liga)&(attribute_chart_per['Temporada']==temporada) & 
+                                            (attribute_chart_per['função']=="Atacante") & (attribute_chart_per['Clube']==equipe)]
 #Collecting data to plot
 metrics = attribute_chart_1.iloc[:, np.r_[18, 72, 73, 21]].reset_index(drop=True)
 percent = attribute_chart_per_1.iloc[:, np.r_[38, 92, 93, 41]].reset_index(drop=True)
@@ -2676,7 +2704,8 @@ st.pyplot(legend_fig)
 st.markdown(f"<h3 style='text-align: center; color: blue; '>Comparação com a Média da Liga em {temporada}</h3>", unsafe_allow_html=True)
 
 attribute_chart_1 = attribute_chart[(attribute_chart['Atleta']==jogadores)&(attribute_chart['Liga']==liga)&
-                                    (attribute_chart['Temporada']==temporada) & (attribute_chart['função']=="Atacante")]
+                                    (attribute_chart['Temporada']==temporada) & (attribute_chart['função']=="Atacante") & 
+                                    (attribute_chart['Clube']==equipe)]
 attribute_chart_2 = attribute_chart[(attribute_chart['Liga']==liga)&
                                     (attribute_chart['Temporada']==temporada) & (attribute_chart['função']=="Atacante")]
 attribute_chart_mean = attribute_chart[(attribute_chart['Liga']==liga)&
@@ -2766,7 +2795,7 @@ metrics_criação_oportunidades_5 = metrics.iloc[:, 4].tolist()
 metrics_y = [0] * len(metrics_criação_oportunidades_1)
 
 # The specific data point you want to highlight
-highlight = attribute_chart_z1[(attribute_chart_z1['Atleta']==jogadores)]
+highlight = attribute_chart_z1[(attribute_chart_z1['Atleta']==jogadores) & (attribute_chart_z1['Clube']==equipe)]
 highlight = highlight.iloc[:, np.r_[86, 88:92]].reset_index(drop=True)
 highlight_criação_oportunidades_1 = highlight.iloc[:, 0].tolist()
 highlight_criação_oportunidades_2 = highlight.iloc[:, 1].tolist()
@@ -3079,8 +3108,12 @@ st.plotly_chart(fig, use_container_width=True)
 st.markdown("<h3 style='text-align: center; color: blue; '>Percentis das Métricas do Jogador na Liga em 2024</h3>", unsafe_allow_html=True)
 attribute_chart = pd.read_csv("patch_code.csv")
 attribute_chart_per = pd.read_csv('patch_code_per.csv')
-attribute_chart_1 = attribute_chart[(attribute_chart['Atleta']==jogadores)&(attribute_chart['Liga']==liga)&(attribute_chart['Temporada']==temporada) & (attribute_chart['função']=="Atacante")]
-attribute_chart_per_1 = attribute_chart_per[(attribute_chart_per['Atleta']==jogadores)&(attribute_chart_per['Liga']==liga)&(attribute_chart_per['Temporada']==temporada) & (attribute_chart_per['função']=="Atacante")]
+attribute_chart_1 = attribute_chart[(attribute_chart['Atleta']==jogadores)&
+                                    (attribute_chart['Liga']==liga)&(attribute_chart['Temporada']==temporada) & 
+                                    (attribute_chart['função']=="Atacante") & (attribute_chart['Clube']==equipe)]
+attribute_chart_per_1 = attribute_chart_per[(attribute_chart_per['Atleta']==jogadores)&
+                                            (attribute_chart_per['Liga']==liga)&(attribute_chart_per['Temporada']==temporada) & 
+                                            (attribute_chart_per['função']=="Atacante") & (attribute_chart_per['Clube']==equipe)]
 #Collecting data to plot
 metrics = attribute_chart_1.iloc[:, np.r_[66, 68:72]].reset_index(drop=True)
 percent = attribute_chart_per_1.iloc[:, np.r_[86, 88:92]].reset_index(drop=True)
@@ -3230,7 +3263,8 @@ st.pyplot(legend_fig)
 st.markdown(f"<h3 style='text-align: center; color: blue; '>Comparação com a Média da Liga em {temporada}</h3>", unsafe_allow_html=True)
 
 attribute_chart_1 = attribute_chart[(attribute_chart['Atleta']==jogadores)&(attribute_chart['Liga']==liga)&
-                                    (attribute_chart['Temporada']==temporada) & (attribute_chart['função']=="Atacante")]
+                                    (attribute_chart['Temporada']==temporada) & (attribute_chart['função']=="Atacante") & 
+                                    (attribute_chart['Clube']==equipe)]
 attribute_chart_2 = attribute_chart[(attribute_chart['Liga']==liga)&
                                     (attribute_chart['Temporada']==temporada) & (attribute_chart['função']=="Atacante")]
 attribute_chart_mean = attribute_chart[(attribute_chart['Liga']==liga)&
@@ -3319,7 +3353,7 @@ metrics_finalização_4 = metrics.iloc[:, 3].tolist()
 metrics_y = [0] * len(metrics_finalização_1)
 
 # The specific data point you want to highlight
-highlight = attribute_chart_z1[(attribute_chart_z1['Atleta']==jogadores)]
+highlight = attribute_chart_z1[(attribute_chart_z1['Atleta']==jogadores) & (attribute_chart_z1['Clube']==equipe)]
 highlight = highlight.iloc[:, np.r_[64:67, 40]].reset_index(drop=True)
 highlight_finalização_1 = highlight.iloc[:, 0].tolist()
 highlight_finalização_2 = highlight.iloc[:, 1].tolist()
@@ -3619,8 +3653,12 @@ st.markdown("<h3 style='text-align: center; color: blue; '>Percentis das Métric
 attribute_chart = pd.read_csv("patch_code.csv")
 attribute_chart_per = pd.read_csv('patch_code_per.csv')
 
-attribute_chart_1 = attribute_chart[(attribute_chart['Atleta']==jogadores)&(attribute_chart['Liga']==liga)&(attribute_chart['Temporada']==temporada) & (attribute_chart['função']=="Atacante")]
-attribute_chart_per_1 = attribute_chart_per[(attribute_chart_per['Atleta']==jogadores)&(attribute_chart_per['Liga']==liga)&(attribute_chart_per['Temporada']==temporada) & (attribute_chart_per['função']=="Atacante")]
+attribute_chart_1 = attribute_chart[(attribute_chart['Atleta']==jogadores)&
+                                    (attribute_chart['Liga']==liga)&(attribute_chart['Temporada']==temporada) & 
+                                    (attribute_chart['função']=="Atacante") & (attribute_chart['Clube']==equipe)]
+attribute_chart_per_1 = attribute_chart_per[(attribute_chart_per['Atleta']==jogadores)&
+                                            (attribute_chart_per['Liga']==liga)&(attribute_chart_per['Temporada']==temporada) & 
+                                            (attribute_chart_per['função']=="Atacante") & (attribute_chart_per['Clube']==equipe)]
 #Collecting data to plot
 metrics = attribute_chart_1.iloc[:, np.r_[44:47, 20]].reset_index(drop=True)
 percent = attribute_chart_per_1.iloc[:, np.r_[64:67, 40]].reset_index(drop=True)
@@ -3768,7 +3806,8 @@ st.pyplot(legend_fig)
 st.markdown(f"<h3 style='text-align: center; color: blue; '>Comparação com a Média da Liga em {temporada}</h3>", unsafe_allow_html=True)
 
 attribute_chart_1 = attribute_chart[(attribute_chart['Atleta']==jogadores)&(attribute_chart['Liga']==liga)&
-                                    (attribute_chart['Temporada']==temporada) & (attribute_chart['função']=="Atacante")]
+                                    (attribute_chart['Temporada']==temporada) & (attribute_chart['função']=="Atacante") & 
+                                    (attribute_chart['Clube']==equipe)]
 attribute_chart_2 = attribute_chart[(attribute_chart['Liga']==liga)&
                                     (attribute_chart['Temporada']==temporada) & (attribute_chart['função']=="Atacante")]
 attribute_chart_mean = attribute_chart[(attribute_chart['Liga']==liga)&
@@ -3868,7 +3907,7 @@ metrics_oportunismo_4 = metrics.iloc[:, 3].tolist()
 metrics_y = [0] * len(metrics_oportunismo_1)
 
 # The specific data point you want to highlight
-highlight = attribute_chart_z1[(attribute_chart_z1['Atleta']==jogadores)]
+highlight = attribute_chart_z1[(attribute_chart_z1['Atleta']==jogadores) & (attribute_chart_z1['Clube']==equipe)]
 highlight = highlight.iloc[:, np.r_[80, 81, 57, 39]].reset_index(drop=True)
 highlight_oportunismo_1 = highlight.iloc[:, 0].tolist()
 highlight_oportunismo_2 = highlight.iloc[:, 1].tolist()
@@ -4170,8 +4209,12 @@ attribute_chart_per = pd.read_csv('patch_code_per.csv')
 attribute_chart_per = attribute_chart_per.rename(columns={'xG_box_touch':'xG (pToque na área)', 
                                                         'goals_box_touch':'Gols (pToque na área)'})
 
-attribute_chart_1 = attribute_chart[(attribute_chart['Atleta']==jogadores)&(attribute_chart['Liga']==liga)&(attribute_chart['Temporada']==temporada) & (attribute_chart['função']=="Atacante")]
-attribute_chart_per_1 = attribute_chart_per[(attribute_chart_per['Atleta']==jogadores)&(attribute_chart_per['Liga']==liga)&(attribute_chart_per['Temporada']==temporada) & (attribute_chart_per['função']=="Atacante")]
+attribute_chart_1 = attribute_chart[(attribute_chart['Atleta']==jogadores)&
+                                    (attribute_chart['Liga']==liga)&(attribute_chart['Temporada']==temporada) & 
+                                    (attribute_chart['função']=="Atacante") & (attribute_chart['Clube']==equipe)]
+attribute_chart_per_1 = attribute_chart_per[(attribute_chart_per['Atleta']==jogadores)&
+                                            (attribute_chart_per['Liga']==liga)&(attribute_chart_per['Temporada']==temporada) & 
+                                            (attribute_chart_per['função']=="Atacante") & (attribute_chart_per['Clube']==equipe)]
 #Collecting data to plot
 metrics = attribute_chart_1.iloc[:, np.r_[60, 61, 37, 19]].reset_index(drop=True)
 percent = attribute_chart_per_1.iloc[:, np.r_[80, 81, 57, 39]].reset_index(drop=True)
@@ -4319,7 +4362,8 @@ st.pyplot(legend_fig)
 st.markdown(f"<h3 style='text-align: center; color: blue; '>Comparação com a Média da Liga em {temporada}</h3>", unsafe_allow_html=True)
 
 attribute_chart_1 = attribute_chart[(attribute_chart['Atleta']==jogadores)&(attribute_chart['Liga']==liga)&
-                                    (attribute_chart['Temporada']==temporada) & (attribute_chart['função']=="Atacante")]
+                                    (attribute_chart['Temporada']==temporada) & (attribute_chart['função']=="Atacante") & 
+                                    (attribute_chart['Clube']==equipe)]
 attribute_chart_2 = attribute_chart[(attribute_chart['Liga']==liga)&
                                     (attribute_chart['Temporada']==temporada) & (attribute_chart['função']=="Atacante")]
 attribute_chart_mean = attribute_chart[(attribute_chart['Liga']==liga)&
