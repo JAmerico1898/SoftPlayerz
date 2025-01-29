@@ -57,7 +57,7 @@ fig, (ax1, ax2, ax3, ax4) = plt.subplots(4, 1)
 rows_count = attribute_chart_z1[(attribute_chart_z1['Liga'] == liga) & (attribute_chart_z1['função'] == "Extremo")].shape[0]
 
 # Function to determine player's rank in attribute in league
-def get_player_rank(player_name, liga, column_name, dataframe):
+def get_player_rank(player_name, liga, column_name, dataframe, clube):
     # Filter the dataframe for the specified Liga
     filtered_df = dataframe[dataframe['Liga'] == liga]
     
@@ -65,7 +65,7 @@ def get_player_rank(player_name, liga, column_name, dataframe):
     filtered_df['Rank'] = filtered_df[column_name].rank(ascending=False, method='min')
     
     # Find the rank of the specified player
-    player_row = filtered_df[filtered_df['Atleta'] == player_name]
+    player_row = filtered_df[(filtered_df['Atleta'] == player_name) & (filtered_df['Clube'] == clube)]
     if not player_row.empty:
         return int(player_row['Rank'].iloc[0])
     else:
@@ -73,7 +73,7 @@ def get_player_rank(player_name, liga, column_name, dataframe):
 
 # Building the Extended Title"
 # Determining player's rank in attribute in league
-participação_1_ranking_value = (get_player_rank(jogadores, liga, "xG gerado na construção (p90)", attribute_chart_z1))
+participação_1_ranking_value = (get_player_rank(jogadores, liga, "xG gerado na construção (p90)", attribute_chart_z1, equipe))
 
 # Data to plot
 output_str = f"({participação_1_ranking_value}/{rows_count})"
@@ -81,7 +81,7 @@ full_title_participação_1 = f"xG gerado na construção (p90) {output_str} {hi
 
 # Building the Extended Title"
 # Determining player's rank in attribute in league
-participação_2_ranking_value = (get_player_rank(jogadores, liga, "Toques (p90)", attribute_chart_z1))
+participação_2_ranking_value = (get_player_rank(jogadores, liga, "Toques (p90)", attribute_chart_z1, equipe))
 
 # Data to plot
 output_str = f"({participação_2_ranking_value}/{rows_count})"
@@ -89,7 +89,7 @@ full_title_participação_2 = f"Toques (p90) {output_str} {highlight_participaç
 
 # Building the Extended Title"
 # Determining player's rank in attribute in league
-participação_3_ranking_value = (get_player_rank(jogadores, liga, "Ações defensivas (p90)", attribute_chart_z1))
+participação_3_ranking_value = (get_player_rank(jogadores, liga, "Ações defensivas (p90)", attribute_chart_z1, equipe))
 
 # Data to plot
 output_str = f"({participação_3_ranking_value}/{rows_count})"
@@ -97,7 +97,7 @@ full_title_participação_3 = f"Ações defensivas (p90) {output_str} {highlight
 
 # Building the Extended Title"
 # Determining player's rank in attribute in league
-participação_4_ranking_value = (get_player_rank(jogadores, liga, "Disputas aéreas (p90)", attribute_chart_z1))
+participação_4_ranking_value = (get_player_rank(jogadores, liga, "Disputas aéreas (p90)", attribute_chart_z1, equipe))
 
 # Data to plot
 output_str = f"({participação_4_ranking_value}/{rows_count})"
@@ -125,7 +125,7 @@ def prepare_data(tabela_a, metrics_cols):
     
     return metrics_data
 
-def create_player_attributes_plot(tabela_a, jogadores, min_value, max_value):
+def create_player_attributes_plot(tabela_a, jogadores, min_value, max_value, equipe):
     """
     Create an interactive plot showing player attributes with hover information
     
@@ -144,15 +144,16 @@ def create_player_attributes_plot(tabela_a, jogadores, min_value, max_value):
     # Prepare all the data
     metrics_data = prepare_data(tabela_a, metrics_list)
     
-    # Calculate highlight data
+    # Calculate highlight data with additional filtering for Clube
     highlight_data = {
-        f'highlight_{metric}': tabela_a[tabela_a['Atleta'] == jogadores][metric].iloc[0]
+        f'highlight_{metric}': tabela_a[(tabela_a['Atleta'] == jogadores) & (tabela_a['Clube'] == equipe)][metric].iloc[0]
         for metric in metrics_list
     }
-    
-    # Calculate highlight ranks
+
     highlight_ranks = {
-        metric: int(pd.Series(tabela_a[metric]).rank(ascending=False)[tabela_a['Atleta'] == jogadores].iloc[0])
+        metric: int(
+            pd.Series(tabela_a[metric]).rank(ascending=False)[(tabela_a['Atleta'] == jogadores) & (tabela_a['Clube'] == equipe)].iloc[0]
+        )
         for metric in metrics_list
     }
     
@@ -307,7 +308,8 @@ fig = create_player_attributes_plot(
     tabela_a=attribute_chart_z1,  # Your main dataframe
     jogadores=jogadores,  # Name of player to highlight
     min_value= min_value,  # Minimum value for x-axis
-    max_value= max_value    # Maximum value for x-axis
+    max_value= max_value,    # Maximum value for x-axis
+    equipe = equipe
 )
 
 st.plotly_chart(fig, use_container_width=True)
@@ -599,7 +601,7 @@ fig, (ax1, ax2, ax3, ax4) = plt.subplots(4, 1)
 rows_count = attribute_chart_z1[(attribute_chart_z1['Liga'] == liga) & (attribute_chart_z1['função'] == "Extremo")].shape[0]
 
 # Function to determine player's rank in attribute in league
-def get_player_rank(player_name, liga, column_name, dataframe):
+def get_player_rank(player_name, liga, column_name, dataframe, clube):
     # Filter the dataframe for the specified Liga
     filtered_df = dataframe[dataframe['Liga'] == liga]
     
@@ -607,7 +609,7 @@ def get_player_rank(player_name, liga, column_name, dataframe):
     filtered_df['Rank'] = filtered_df[column_name].rank(ascending=False, method='min')
     
     # Find the rank of the specified player
-    player_row = filtered_df[filtered_df['Atleta'] == player_name]
+    player_row = filtered_df[(filtered_df['Atleta'] == player_name) & (filtered_df['Clube'] == clube)]
     if not player_row.empty:
         return int(player_row['Rank'].iloc[0])
     else:
@@ -615,7 +617,7 @@ def get_player_rank(player_name, liga, column_name, dataframe):
 
 # Building the Extended Title"
 # Determining player's rank in attribute in league
-pressão_1_ranking_value = (get_player_rank(jogadores, liga, "Contra-pressão (p90)", attribute_chart_z1))
+pressão_1_ranking_value = (get_player_rank(jogadores, liga, "Contra-pressão (p90)", attribute_chart_z1, equipe))
 
 # Data to plot
 output_str = f"({pressão_1_ranking_value}/{rows_count})"
@@ -623,7 +625,7 @@ full_title_pressão_1 = f"Contra-pressão (p90) {output_str} {highlight_pressão
 
 # Building the Extended Title"
 # Determining player's rank in attribute in league
-pressão_2_ranking_value = (get_player_rank(jogadores, liga, "Interceptações (p90)", attribute_chart_z1))
+pressão_2_ranking_value = (get_player_rank(jogadores, liga, "Interceptações (p90)", attribute_chart_z1, equipe))
 
 # Data to plot
 output_str = f"({pressão_2_ranking_value}/{rows_count})"
@@ -631,7 +633,7 @@ full_title_pressão_2 = f"Interceptações (p90) {output_str} {highlight_pressã
 
 # Building the Extended Title"
 # Determining player's rank in attribute in league
-pressão_3_ranking_value = (get_player_rank(jogadores, liga, "Recuperações linha alta (p90)", attribute_chart_z1))
+pressão_3_ranking_value = (get_player_rank(jogadores, liga, "Recuperações linha alta (p90)", attribute_chart_z1, equipe))
 
 # Data to plot
 output_str = f"({pressão_3_ranking_value}/{rows_count})"
@@ -639,7 +641,7 @@ full_title_pressão_3 = f"Recuperações linha alta (p90) {output_str} {highligh
 
 # Building the Extended Title"
 # Determining player's rank in attribute in league
-pressão_4_ranking_value = (get_player_rank(jogadores, liga, "Intensidade defensiva (p90)", attribute_chart_z1))
+pressão_4_ranking_value = (get_player_rank(jogadores, liga, "Intensidade defensiva (p90)", attribute_chart_z1, equipe))
 
 # Data to plot
 output_str = f"({pressão_4_ranking_value}/{rows_count})"
@@ -667,7 +669,7 @@ def prepare_data(tabela_a, metrics_cols):
     
     return metrics_data
 
-def create_player_attributes_plot(tabela_a, jogadores, min_value, max_value):
+def create_player_attributes_plot(tabela_a, jogadores, min_value, max_value, equipe):
     """
     Create an interactive plot showing player attributes with hover information
     
@@ -686,15 +688,16 @@ def create_player_attributes_plot(tabela_a, jogadores, min_value, max_value):
     # Prepare all the data
     metrics_data = prepare_data(tabela_a, metrics_list)
     
-    # Calculate highlight data
+    # Calculate highlight data with additional filtering for Clube
     highlight_data = {
-        f'highlight_{metric}': tabela_a[tabela_a['Atleta'] == jogadores][metric].iloc[0]
+        f'highlight_{metric}': tabela_a[(tabela_a['Atleta'] == jogadores) & (tabela_a['Clube'] == equipe)][metric].iloc[0]
         for metric in metrics_list
     }
-    
-    # Calculate highlight ranks
+
     highlight_ranks = {
-        metric: int(pd.Series(tabela_a[metric]).rank(ascending=False)[tabela_a['Atleta'] == jogadores].iloc[0])
+        metric: int(
+            pd.Series(tabela_a[metric]).rank(ascending=False)[(tabela_a['Atleta'] == jogadores) & (tabela_a['Clube'] == equipe)].iloc[0]
+        )
         for metric in metrics_list
     }
     
@@ -849,7 +852,8 @@ fig = create_player_attributes_plot(
     tabela_a=attribute_chart_z1,  # Your main dataframe
     jogadores=jogadores,  # Name of player to highlight
     min_value= min_value,  # Minimum value for x-axis
-    max_value= max_value    # Maximum value for x-axis
+    max_value= max_value,    # Maximum value for x-axis
+    equipe = equipe
 )
 
 st.plotly_chart(fig, use_container_width=True)
@@ -1156,7 +1160,7 @@ fig, (ax1, ax2, ax3, ax4, ax5) = plt.subplots(5, 1)
 rows_count = attribute_chart_z1[(attribute_chart_z1['Liga'] == liga) & (attribute_chart_z1['Posição'] == "Extremo")].shape[0]
 
 # Function to determine player's rank in attribute in league
-def get_player_rank(player_name, liga, column_name, dataframe):
+def get_player_rank(player_name, liga, column_name, dataframe, clube):
     # Filter the dataframe for the specified Liga
     filtered_df = dataframe[dataframe['Liga'] == liga]
     
@@ -1164,7 +1168,7 @@ def get_player_rank(player_name, liga, column_name, dataframe):
     filtered_df['Rank'] = filtered_df[column_name].rank(ascending=False, method='min')
     
     # Find the rank of the specified player
-    player_row = filtered_df[filtered_df['Atleta'] == player_name]
+    player_row = filtered_df[(filtered_df['Atleta'] == player_name) & (filtered_df['Clube'] == clube)]
     if not player_row.empty:
         return int(player_row['Rank'].iloc[0])
     else:
@@ -1172,7 +1176,7 @@ def get_player_rank(player_name, liga, column_name, dataframe):
 
 # Building the Extended Title"
 # Determining player's rank in attribute in league
-impacto_passe_1_ranking_value = (get_player_rank(jogadores, liga, "Passes criativos (p90)", attribute_chart_z1))
+impacto_passe_1_ranking_value = (get_player_rank(jogadores, liga, "Passes criativos (p90)", attribute_chart_z1, equipe))
 
 # Data to plot
 output_str = f"({impacto_passe_1_ranking_value}/{rows_count})"
@@ -1180,7 +1184,7 @@ full_title_impacto_passe_1 = f"Passes criativos (p90) {output_str} {highlight_im
 
 # Building the Extended Title"
 # Determining player's rank in attribute in league
-impacto_passe_2_ranking_value = (get_player_rank(jogadores, liga, "xT Passes no último terço (p90)", attribute_chart_z1))
+impacto_passe_2_ranking_value = (get_player_rank(jogadores, liga, "xT Passes no último terço (p90)", attribute_chart_z1, equipe))
 
 # Data to plot
 output_str = f"({impacto_passe_2_ranking_value}/{rows_count})"
@@ -1188,7 +1192,7 @@ full_title_impacto_passe_2 = f"xT Passes no último terço (p90) {output_str} {h
 
 # Building the Extended Title"
 # Determining player's rank in attribute in league
-impacto_passe_3_ranking_value = (get_player_rank(jogadores, liga, "xT Passes para último terço (p90)", attribute_chart_z1))
+impacto_passe_3_ranking_value = (get_player_rank(jogadores, liga, "xT Passes para último terço (p90)", attribute_chart_z1, equipe))
 
 # Data to plot
 output_str = f"({impacto_passe_3_ranking_value}/{rows_count})"
@@ -1196,7 +1200,7 @@ full_title_impacto_passe_3 = f"xT Passes para último terço (p90) {output_str} 
 
 # Building the Extended Title"
 # Determining player's rank in attribute in league
-impacto_passe_4_ranking_value = (get_player_rank(jogadores, liga, "xT Passes (p90)", attribute_chart_z1))
+impacto_passe_4_ranking_value = (get_player_rank(jogadores, liga, "xT Passes (p90)", attribute_chart_z1, equipe))
 
 # Data to plot
 output_str = f"({impacto_passe_4_ranking_value}/{rows_count})"
@@ -1204,7 +1208,7 @@ full_title_impacto_passe_4 = f"xT Passes (p90) {output_str} {highlight_impacto_p
 
 # Building the Extended Title"
 # Determining player's rank in attribute in league
-impacto_passe_5_ranking_value = (get_player_rank(jogadores, liga, "xT Cruzamentos (p90)", attribute_chart_z1))
+impacto_passe_5_ranking_value = (get_player_rank(jogadores, liga, "xT Cruzamentos (p90)", attribute_chart_z1, equipe))
 
 # Data to plot
 output_str = f"({impacto_passe_5_ranking_value}/{rows_count})"
@@ -1232,7 +1236,7 @@ def prepare_data(tabela_a, metrics_cols):
     
     return metrics_data
 
-def create_player_attributes_plot(tabela_a, jogadores, min_value, max_value):
+def create_player_attributes_plot(tabela_a, jogadores, min_value, max_value, equipe):
     """
     Create an interactive plot showing player attributes with hover information
     
@@ -1252,15 +1256,16 @@ def create_player_attributes_plot(tabela_a, jogadores, min_value, max_value):
     # Prepare all the data
     metrics_data = prepare_data(tabela_a, metrics_list)
     
-    # Calculate highlight data
+    # Calculate highlight data with additional filtering for Clube
     highlight_data = {
-        f'highlight_{metric}': tabela_a[tabela_a['Atleta'] == jogadores][metric].iloc[0]
+        f'highlight_{metric}': tabela_a[(tabela_a['Atleta'] == jogadores) & (tabela_a['Clube'] == equipe)][metric].iloc[0]
         for metric in metrics_list
     }
-    
-    # Calculate highlight ranks
+
     highlight_ranks = {
-        metric: int(pd.Series(tabela_a[metric]).rank(ascending=False)[tabela_a['Atleta'] == jogadores].iloc[0])
+        metric: int(
+            pd.Series(tabela_a[metric]).rank(ascending=False)[(tabela_a['Atleta'] == jogadores) & (tabela_a['Clube'] == equipe)].iloc[0]
+        )
         for metric in metrics_list
     }
     
@@ -1417,7 +1422,8 @@ fig = create_player_attributes_plot(
     tabela_a=attribute_chart_z1,  # Your main dataframe
     jogadores=jogadores,  # Name of player to highlight
     min_value= min_value,  # Minimum value for x-axis
-    max_value= max_value    # Maximum value for x-axis
+    max_value= max_value,    # Maximum value for x-axis
+    equipe = equipe
 )
 
 st.plotly_chart(fig, use_container_width=True)
@@ -1715,7 +1721,7 @@ fig, (ax1, ax2, ax3, ax4) = plt.subplots(4, 1)
 rows_count = attribute_chart_z1[(attribute_chart_z1['Liga'] == liga) & (attribute_chart_z1['função'] == "Extremo")].shape[0]
 
 # Function to determine player's rank in attribute in league
-def get_player_rank(player_name, liga, column_name, dataframe):
+def get_player_rank(player_name, liga, column_name, dataframe, clube):
     # Filter the dataframe for the specified Liga
     filtered_df = dataframe[dataframe['Liga'] == liga]
     
@@ -1723,7 +1729,7 @@ def get_player_rank(player_name, liga, column_name, dataframe):
     filtered_df['Rank'] = filtered_df[column_name].rank(ascending=False, method='min')
     
     # Find the rank of the specified player
-    player_row = filtered_df[filtered_df['Atleta'] == player_name]
+    player_row = filtered_df[(filtered_df['Atleta'] == player_name) & (filtered_df['Clube'] == clube)]
     if not player_row.empty:
         return int(player_row['Rank'].iloc[0])
     else:
@@ -1731,7 +1737,7 @@ def get_player_rank(player_name, liga, column_name, dataframe):
 
 # Building the Extended Title"
 # Determining player's rank in attribute in league
-movimentação_ofensiva_1_ranking_value = (get_player_rank(jogadores, liga, "Recepções na área (p90)", attribute_chart_z1))
+movimentação_ofensiva_1_ranking_value = (get_player_rank(jogadores, liga, "Recepções na área (p90)", attribute_chart_z1, equipe))
 
 # Data to plot
 output_str = f"({movimentação_ofensiva_1_ranking_value}/{rows_count})"
@@ -1739,7 +1745,7 @@ full_title_movimentação_ofensiva_1 = f"Recepções na área (p90) {output_str}
 
 # Building the Extended Title"
 # Determining player's rank in attribute in league
-movimentação_ofensiva_2_ranking_value = (get_player_rank(jogadores, liga, "xT Conduções (p90)", attribute_chart_z1))
+movimentação_ofensiva_2_ranking_value = (get_player_rank(jogadores, liga, "xT Conduções (p90)", attribute_chart_z1, equipe))
 
 # Data to plot
 output_str = f"({movimentação_ofensiva_2_ranking_value}/{rows_count})"
@@ -1747,7 +1753,7 @@ full_title_movimentação_ofensiva_2 = f"xT Conduções (p90) {output_str} {high
 
 # Building the Extended Title"
 # Determining player's rank in attribute in league
-movimentação_ofensiva_3_ranking_value = (get_player_rank(jogadores, liga, "xT Corridas em profundidade (p90)", attribute_chart_z1))
+movimentação_ofensiva_3_ranking_value = (get_player_rank(jogadores, liga, "xT Corridas em profundidade (p90)", attribute_chart_z1, equipe))
 
 # Data to plot
 output_str = f"({movimentação_ofensiva_3_ranking_value}/{rows_count})"
@@ -1755,7 +1761,7 @@ full_title_movimentação_ofensiva_3 = f"xT Corridas em profundidade (p90) {outp
 
 # Building the Extended Title"
 # Determining player's rank in attribute in league
-movimentação_ofensiva_4_ranking_value = (get_player_rank(jogadores, liga, "Entradas na área (p90)", attribute_chart_z1))
+movimentação_ofensiva_4_ranking_value = (get_player_rank(jogadores, liga, "Entradas na área (p90)", attribute_chart_z1, equipe))
 
 # Data to plot
 output_str = f"({movimentação_ofensiva_4_ranking_value}/{rows_count})"
@@ -1783,7 +1789,7 @@ def prepare_data(tabela_a, metrics_cols):
     
     return metrics_data
 
-def create_player_attributes_plot(tabela_a, jogadores, min_value, max_value):
+def create_player_attributes_plot(tabela_a, jogadores, min_value, max_value, equipe):
     """
     Create an interactive plot showing player attributes with hover information
     
@@ -1802,15 +1808,16 @@ def create_player_attributes_plot(tabela_a, jogadores, min_value, max_value):
     # Prepare all the data
     metrics_data = prepare_data(tabela_a, metrics_list)
     
-    # Calculate highlight data
+    # Calculate highlight data with additional filtering for Clube
     highlight_data = {
-        f'highlight_{metric}': tabela_a[tabela_a['Atleta'] == jogadores][metric].iloc[0]
+        f'highlight_{metric}': tabela_a[(tabela_a['Atleta'] == jogadores) & (tabela_a['Clube'] == equipe)][metric].iloc[0]
         for metric in metrics_list
     }
-    
-    # Calculate highlight ranks
+
     highlight_ranks = {
-        metric: int(pd.Series(tabela_a[metric]).rank(ascending=False)[tabela_a['Atleta'] == jogadores].iloc[0])
+        metric: int(
+            pd.Series(tabela_a[metric]).rank(ascending=False)[(tabela_a['Atleta'] == jogadores) & (tabela_a['Clube'] == equipe)].iloc[0]
+        )
         for metric in metrics_list
     }
     
@@ -1965,7 +1972,8 @@ fig = create_player_attributes_plot(
     tabela_a=attribute_chart_z1,  # Your main dataframe
     jogadores=jogadores,  # Name of player to highlight
     min_value= min_value,  # Minimum value for x-axis
-    max_value= max_value    # Maximum value for x-axis
+    max_value= max_value,    # Maximum value for x-axis
+    equipe = equipe
 )
 
 st.plotly_chart(fig, use_container_width=True)
@@ -2255,7 +2263,7 @@ fig, (ax1, ax2, ax3, ax4) = plt.subplots(4, 1)
 rows_count = attribute_chart_z1[(attribute_chart_z1['Liga'] == liga) & (attribute_chart_z1['função'] == "Extremo")].shape[0]
 
 # Function to determine player's rank in attribute in league
-def get_player_rank(player_name, liga, column_name, dataframe):
+def get_player_rank(player_name, liga, column_name, dataframe, clube):
     # Filter the dataframe for the specified Liga
     filtered_df = dataframe[dataframe['Liga'] == liga]
     
@@ -2263,7 +2271,7 @@ def get_player_rank(player_name, liga, column_name, dataframe):
     filtered_df['Rank'] = filtered_df[column_name].rank(ascending=False, method='min')
     
     # Find the rank of the specified player
-    player_row = filtered_df[filtered_df['Atleta'] == player_name]
+    player_row = filtered_df[(filtered_df['Atleta'] == player_name) & (filtered_df['Clube'] == clube)]
     if not player_row.empty:
         return int(player_row['Rank'].iloc[0])
     else:
@@ -2271,7 +2279,7 @@ def get_player_rank(player_name, liga, column_name, dataframe):
 
 # Building the Extended Title"
 # Determining player's rank in attribute in league
-dribles_1_ranking_value = (get_player_rank(jogadores, liga, "Resistência à pressão (%)", attribute_chart_z1))
+dribles_1_ranking_value = (get_player_rank(jogadores, liga, "Resistência à pressão (%)", attribute_chart_z1, equipe))
 
 # Data to plot
 output_str = f"({dribles_1_ranking_value}/{rows_count})"
@@ -2279,7 +2287,7 @@ full_title_dribles_1 = f"Resistência à pressão (%) {output_str} {highlight_dr
 
 # Building the Extended Title"
 # Determining player's rank in attribute in league
-dribles_2_ranking_value = (get_player_rank(jogadores, liga, "xG Dribles (p90)", attribute_chart_z1))
+dribles_2_ranking_value = (get_player_rank(jogadores, liga, "xG Dribles (p90)", attribute_chart_z1, equipe))
 
 # Data to plot
 output_str = f"({dribles_2_ranking_value}/{rows_count})"
@@ -2287,7 +2295,7 @@ full_title_dribles_2 = f"xG Dribles (p90) {output_str} {highlight_dribles_2_valu
 
 # Building the Extended Title"
 # Determining player's rank in attribute in league
-dribles_3_ranking_value = (get_player_rank(jogadores, liga, "xT Dribles (p90)", attribute_chart_z1))
+dribles_3_ranking_value = (get_player_rank(jogadores, liga, "xT Dribles (p90)", attribute_chart_z1, equipe))
 
 # Data to plot
 output_str = f"({dribles_3_ranking_value}/{rows_count})"
@@ -2295,7 +2303,7 @@ full_title_dribles_3 = f"xT Dribles (p90) {output_str} {highlight_dribles_3_valu
 
 # Building the Extended Title"
 # Determining player's rank in attribute in league
-dribles_4_ranking_value = (get_player_rank(jogadores, liga, "Dribles bem sucedidos (%)", attribute_chart_z1))
+dribles_4_ranking_value = (get_player_rank(jogadores, liga, "Dribles bem sucedidos (%)", attribute_chart_z1, equipe))
 
 # Data to plot
 output_str = f"({dribles_4_ranking_value}/{rows_count})"
@@ -2323,7 +2331,7 @@ def prepare_data(tabela_a, metrics_cols):
     
     return metrics_data
 
-def create_player_attributes_plot(tabela_a, jogadores, min_value, max_value):
+def create_player_attributes_plot(tabela_a, jogadores, min_value, max_value, equipe):
     """
     Create an interactive plot showing player attributes with hover information
     
@@ -2342,15 +2350,16 @@ def create_player_attributes_plot(tabela_a, jogadores, min_value, max_value):
     # Prepare all the data
     metrics_data = prepare_data(tabela_a, metrics_list)
     
-    # Calculate highlight data
+    # Calculate highlight data with additional filtering for Clube
     highlight_data = {
-        f'highlight_{metric}': tabela_a[tabela_a['Atleta'] == jogadores][metric].iloc[0]
+        f'highlight_{metric}': tabela_a[(tabela_a['Atleta'] == jogadores) & (tabela_a['Clube'] == equipe)][metric].iloc[0]
         for metric in metrics_list
     }
-    
-    # Calculate highlight ranks
+
     highlight_ranks = {
-        metric: int(pd.Series(tabela_a[metric]).rank(ascending=False)[tabela_a['Atleta'] == jogadores].iloc[0])
+        metric: int(
+            pd.Series(tabela_a[metric]).rank(ascending=False)[(tabela_a['Atleta'] == jogadores) & (tabela_a['Clube'] == equipe)].iloc[0]
+        )
         for metric in metrics_list
     }
     
@@ -2505,7 +2514,8 @@ fig = create_player_attributes_plot(
     tabela_a=attribute_chart_z1,  # Your main dataframe
     jogadores=jogadores,  # Name of player to highlight
     min_value= min_value,  # Minimum value for x-axis
-    max_value= max_value    # Maximum value for x-axis
+    max_value= max_value,    # Maximum value for x-axis
+    equipe = equipe
 )
 
 st.plotly_chart(fig, use_container_width=True)
@@ -2816,7 +2826,7 @@ fig, (ax1, ax2, ax3, ax4, ax5) = plt.subplots(5, 1)
 rows_count = attribute_chart_z1[(attribute_chart_z1['Liga'] == liga) & (attribute_chart_z1['função'] == "Extremo")].shape[0]
 
 # Function to determine player's rank in attribute in league
-def get_player_rank(player_name, liga, column_name, dataframe):
+def get_player_rank(player_name, liga, column_name, dataframe, clube):
     # Filter the dataframe for the specified Liga
     filtered_df = dataframe[dataframe['Liga'] == liga]
     
@@ -2824,7 +2834,7 @@ def get_player_rank(player_name, liga, column_name, dataframe):
     filtered_df['Rank'] = filtered_df[column_name].rank(ascending=False, method='min')
     
     # Find the rank of the specified player
-    player_row = filtered_df[filtered_df['Atleta'] == player_name]
+    player_row = filtered_df[(filtered_df['Atleta'] == player_name) & (filtered_df['Clube'] == clube)]
     if not player_row.empty:
         return int(player_row['Rank'].iloc[0])
     else:
@@ -2832,7 +2842,7 @@ def get_player_rank(player_name, liga, column_name, dataframe):
 
 # Building the Extended Title"
 # Determining player's rank in attribute in league
-efetividade_1_ranking_value = (get_player_rank(jogadores, liga, "xG (pFinalização)", attribute_chart_z1))
+efetividade_1_ranking_value = (get_player_rank(jogadores, liga, "xG (pFinalização)", attribute_chart_z1, equipe))
 
 # Data to plot
 output_str = f"({efetividade_1_ranking_value}/{rows_count})"
@@ -2840,7 +2850,7 @@ full_title_efetividade_1 = f"xG (pFinalização) {output_str} {highlight_efetivi
 
 # Building the Extended Title"
 # Determining player's rank in attribute in league
-efetividade_2_ranking_value = (get_player_rank(jogadores, liga, "(xG + xA) (p100 toques)", attribute_chart_z1))
+efetividade_2_ranking_value = (get_player_rank(jogadores, liga, "(xG + xA) (p100 toques)", attribute_chart_z1, equipe))
 
 # Data to plot
 output_str = f"({efetividade_2_ranking_value}/{rows_count})"
@@ -2848,7 +2858,7 @@ full_title_efetividade_2 = f"(xG + xA) (p100 toques) {output_str} {highlight_efe
 
 # Building the Extended Title"
 # Determining player's rank in attribute in league
-efetividade_3_ranking_value = (get_player_rank(jogadores, liga, "Posses recuperadas (pPosse adversária)", attribute_chart_z1))
+efetividade_3_ranking_value = (get_player_rank(jogadores, liga, "Posses recuperadas (pPosse adversária)", attribute_chart_z1, equipe))
 
 # Data to plot
 output_str = f"({efetividade_3_ranking_value}/{rows_count})"
@@ -2856,7 +2866,7 @@ full_title_efetividade_3 = f"Posses recuperadas (pPosse adversária) {output_str
 
 # Building the Extended Title"
 # Determining player's rank in attribute in league
-efetividade_4_ranking_value = (get_player_rank(jogadores, liga, "Perdas de posse (pRecepção na linha baixa)", attribute_chart_z1))
+efetividade_4_ranking_value = (get_player_rank(jogadores, liga, "Perdas de posse (pRecepção na linha baixa)", attribute_chart_z1, equipe))
 
 # Data to plot
 output_str = f"({efetividade_4_ranking_value}/{rows_count})"
@@ -2864,7 +2874,7 @@ full_title_efetividade_4 = f"Perdas de posse (pRecepção na linha baixa) {outpu
 
 # Building the Extended Title"
 # Determining player's rank in attribute in league
-efetividade_5_ranking_value = (get_player_rank(jogadores, liga, "xG Chain (pPosse)", attribute_chart_z1))
+efetividade_5_ranking_value = (get_player_rank(jogadores, liga, "xG Chain (pPosse)", attribute_chart_z1, equipe))
 
 # Data to plot
 output_str = f"({efetividade_5_ranking_value}/{rows_count})"
@@ -2872,7 +2882,7 @@ full_title_efetividade_5 = f"xG Chain (pPosse) {output_str} {highlight_efetivida
 
 # Building the Extended Title"
 # Determining player's rank in attribute in league
-efetividade_6_ranking_value = (get_player_rank(jogadores, liga, "xT Conduções (p100 Recepções)", attribute_chart_z1))
+efetividade_6_ranking_value = (get_player_rank(jogadores, liga, "xT Conduções (p100 Recepções)", attribute_chart_z1, equipe))
 
 # Data to plot
 output_str = f"({efetividade_6_ranking_value}/{rows_count})"
@@ -2880,7 +2890,7 @@ full_title_efetividade_6 = f"xT Conduções (p100 Recepções) {output_str} {hig
 
 # Building the Extended Title"
 # Determining player's rank in attribute in league
-efetividade_7_ranking_value = (get_player_rank(jogadores, liga, "xT Passes (p100 Recepções)", attribute_chart_z1))
+efetividade_7_ranking_value = (get_player_rank(jogadores, liga, "xT Passes (p100 Recepções)", attribute_chart_z1, equipe))
 
 # Data to plot
 output_str = f"({efetividade_7_ranking_value}/{rows_count})"
@@ -2908,7 +2918,7 @@ def prepare_data(tabela_a, metrics_cols):
     
     return metrics_data
 
-def create_player_attributes_plot(tabela_a, jogadores, min_value, max_value):
+def create_player_attributes_plot(tabela_a, jogadores, min_value, max_value, equipe):
     """
     Create an interactive plot showing player attributes with hover information
     
@@ -2928,15 +2938,16 @@ def create_player_attributes_plot(tabela_a, jogadores, min_value, max_value):
     # Prepare all the data
     metrics_data = prepare_data(tabela_a, metrics_list)
     
-    # Calculate highlight data
+    # Calculate highlight data with additional filtering for Clube
     highlight_data = {
-        f'highlight_{metric}': tabela_a[tabela_a['Atleta'] == jogadores][metric].iloc[0]
+        f'highlight_{metric}': tabela_a[(tabela_a['Atleta'] == jogadores) & (tabela_a['Clube'] == equipe)][metric].iloc[0]
         for metric in metrics_list
     }
-    
-    # Calculate highlight ranks
+
     highlight_ranks = {
-        metric: int(pd.Series(tabela_a[metric]).rank(ascending=False)[tabela_a['Atleta'] == jogadores].iloc[0])
+        metric: int(
+            pd.Series(tabela_a[metric]).rank(ascending=False)[(tabela_a['Atleta'] == jogadores) & (tabela_a['Clube'] == equipe)].iloc[0]
+        )
         for metric in metrics_list
     }
     
@@ -3095,7 +3106,8 @@ fig = create_player_attributes_plot(
     tabela_a=attribute_chart_z1,  # Your main dataframe
     jogadores=jogadores,  # Name of player to highlight
     min_value= min_value,  # Minimum value for x-axis
-    max_value= max_value    # Maximum value for x-axis
+    max_value= max_value,    # Maximum value for x-axis
+    equipe = equipe
 )
 
 st.plotly_chart(fig, use_container_width=True)
@@ -3410,7 +3422,7 @@ fig, (ax1, ax2, ax3, ax4, ax5) = plt.subplots(5, 1)
 rows_count = attribute_chart_z1[(attribute_chart_z1['Liga'] == liga) & (attribute_chart_z1['função'] == "Extremo")].shape[0]
 
 # Function to determine player's rank in attribute in league
-def get_player_rank(player_name, liga, column_name, dataframe):
+def get_player_rank(player_name, liga, column_name, dataframe, clube):
     # Filter the dataframe for the specified Liga
     filtered_df = dataframe[dataframe['Liga'] == liga]
     
@@ -3418,7 +3430,7 @@ def get_player_rank(player_name, liga, column_name, dataframe):
     filtered_df['Rank'] = filtered_df[column_name].rank(ascending=False, method='min')
     
     # Find the rank of the specified player
-    player_row = filtered_df[filtered_df['Atleta'] == player_name]
+    player_row = filtered_df[(filtered_df['Atleta'] == player_name) & (filtered_df['Clube'] == clube)]
     if not player_row.empty:
         return int(player_row['Rank'].iloc[0])
     else:
@@ -3426,7 +3438,7 @@ def get_player_rank(player_name, liga, column_name, dataframe):
 
 # Building the Extended Title"
 # Determining player's rank in attribute in league
-criação_oportunidades_1_ranking_value = (get_player_rank(jogadores, liga, "xG Criado (p90)", attribute_chart_z1))
+criação_oportunidades_1_ranking_value = (get_player_rank(jogadores, liga, "xG Criado (p90)", attribute_chart_z1, equipe))
 
 # Data to plot
 output_str = f"({criação_oportunidades_1_ranking_value}/{rows_count})"
@@ -3434,7 +3446,7 @@ full_title_criação_oportunidades_1 = f"xG Criado (p90) {output_str} {highlight
 
 # Building the Extended Title"
 # Determining player's rank in attribute in league
-criação_oportunidades_2_ranking_value = (get_player_rank(jogadores, liga, "Passes chave (p90)", attribute_chart_z1))
+criação_oportunidades_2_ranking_value = (get_player_rank(jogadores, liga, "Passes chave (p90)", attribute_chart_z1, equipe))
 
 # Data to plot
 output_str = f"({criação_oportunidades_2_ranking_value}/{rows_count})"
@@ -3442,7 +3454,7 @@ full_title_criação_oportunidades_2 = f"Passes chave (p90) {output_str} {highli
 
 # Building the Extended Title"
 # Determining player's rank in attribute in league
-criação_oportunidades_3_ranking_value = (get_player_rank(jogadores, liga, "Deep completions (p90)", attribute_chart_z1))
+criação_oportunidades_3_ranking_value = (get_player_rank(jogadores, liga, "Deep completions (p90)", attribute_chart_z1, equipe))
 
 # Data to plot
 output_str = f"({criação_oportunidades_3_ranking_value}/{rows_count})"
@@ -3450,7 +3462,7 @@ full_title_criação_oportunidades_3 = f"Deep completions (p90) {output_str} {hi
 
 # Building the Extended Title"
 # Determining player's rank in attribute in league
-criação_oportunidades_4_ranking_value = (get_player_rank(jogadores, liga, "xA (p90)", attribute_chart_z1))
+criação_oportunidades_4_ranking_value = (get_player_rank(jogadores, liga, "xA (p90)", attribute_chart_z1, equipe))
 
 # Data to plot
 output_str = f"({criação_oportunidades_4_ranking_value}/{rows_count})"
@@ -3458,7 +3470,7 @@ full_title_criação_oportunidades_4 = f"xA (p90) {output_str} {highlight_criaç
 
 # Building the Extended Title"
 # Determining player's rank in attribute in league
-criação_oportunidades_5_ranking_value = (get_player_rank(jogadores, liga, "Assistências (p90)", attribute_chart_z1))
+criação_oportunidades_5_ranking_value = (get_player_rank(jogadores, liga, "Assistências (p90)", attribute_chart_z1, equipe))
 
 # Data to plot
 output_str = f"({criação_oportunidades_5_ranking_value}/{rows_count})"
@@ -3486,7 +3498,7 @@ def prepare_data(tabela_a, metrics_cols):
     
     return metrics_data
 
-def create_player_attributes_plot(tabela_a, jogadores, min_value, max_value):
+def create_player_attributes_plot(tabela_a, jogadores, min_value, max_value, equipe):
     """
     Create an interactive plot showing player attributes with hover information
     
@@ -3506,15 +3518,16 @@ def create_player_attributes_plot(tabela_a, jogadores, min_value, max_value):
     # Prepare all the data
     metrics_data = prepare_data(tabela_a, metrics_list)
     
-    # Calculate highlight data
+    # Calculate highlight data with additional filtering for Clube
     highlight_data = {
-        f'highlight_{metric}': tabela_a[tabela_a['Atleta'] == jogadores][metric].iloc[0]
+        f'highlight_{metric}': tabela_a[(tabela_a['Atleta'] == jogadores) & (tabela_a['Clube'] == equipe)][metric].iloc[0]
         for metric in metrics_list
     }
-    
-    # Calculate highlight ranks
+
     highlight_ranks = {
-        metric: int(pd.Series(tabela_a[metric]).rank(ascending=False)[tabela_a['Atleta'] == jogadores].iloc[0])
+        metric: int(
+            pd.Series(tabela_a[metric]).rank(ascending=False)[(tabela_a['Atleta'] == jogadores) & (tabela_a['Clube'] == equipe)].iloc[0]
+        )
         for metric in metrics_list
     }
     
@@ -3671,7 +3684,8 @@ fig = create_player_attributes_plot(
     tabela_a=attribute_chart_z1,  # Your main dataframe
     jogadores=jogadores,  # Name of player to highlight
     min_value= min_value,  # Minimum value for x-axis
-    max_value= max_value    # Maximum value for x-axis
+    max_value= max_value,    # Maximum value for x-axis
+    equipe = equipe
 )
 
 st.plotly_chart(fig, use_container_width=True)
@@ -3970,7 +3984,7 @@ fig, (ax1, ax2, ax3, ax4, ax5) = plt.subplots(5, 1)
 rows_count = attribute_chart_z1[(attribute_chart_z1['Liga'] == liga) & (attribute_chart_z1['função'] == "Extremo")].shape[0]
 
 # Function to determine player's rank in attribute in league
-def get_player_rank(player_name, liga, column_name, dataframe):
+def get_player_rank(player_name, liga, column_name, dataframe, clube):
     # Filter the dataframe for the specified Liga
     filtered_df = dataframe[dataframe['Liga'] == liga]
     
@@ -3978,7 +3992,7 @@ def get_player_rank(player_name, liga, column_name, dataframe):
     filtered_df['Rank'] = filtered_df[column_name].rank(ascending=False, method='min')
     
     # Find the rank of the specified player
-    player_row = filtered_df[filtered_df['Atleta'] == player_name]
+    player_row = filtered_df[(filtered_df['Atleta'] == player_name) & (filtered_df['Clube'] == clube)]
     if not player_row.empty:
         return int(player_row['Rank'].iloc[0])
     else:
@@ -3986,7 +4000,7 @@ def get_player_rank(player_name, liga, column_name, dataframe):
 
 # Building the Extended Title"
 # Determining player's rank in attribute in league
-ameaça_ofensiva_1_ranking_value = (get_player_rank(jogadores, liga, "Recepções na área (p90)", attribute_chart_z1))
+ameaça_ofensiva_1_ranking_value = (get_player_rank(jogadores, liga, "Recepções na área (p90)", attribute_chart_z1, equipe))
 
 # Data to plot
 output_str = f"({ameaça_ofensiva_1_ranking_value}/{rows_count})"
@@ -3994,7 +4008,7 @@ full_title_ameaça_ofensiva_1 = f"Recepções na área (p90) {output_str} {highl
 
 # Building the Extended Title"
 # Determining player's rank in attribute in league
-ameaça_ofensiva_2_ranking_value = (get_player_rank(jogadores, liga, "xG (p90)", attribute_chart_z1))
+ameaça_ofensiva_2_ranking_value = (get_player_rank(jogadores, liga, "xG (p90)", attribute_chart_z1, equipe))
 
 # Data to plot
 output_str = f"({ameaça_ofensiva_2_ranking_value}/{rows_count})"
@@ -4002,7 +4016,7 @@ full_title_ameaça_ofensiva_2 = f"xG (p90) {output_str} {highlight_ameaça_ofens
 
 # Building the Extended Title"
 # Determining player's rank in attribute in league
-ameaça_ofensiva_3_ranking_value = (get_player_rank(jogadores, liga, "Gols (p90)", attribute_chart_z1))
+ameaça_ofensiva_3_ranking_value = (get_player_rank(jogadores, liga, "Gols (p90)", attribute_chart_z1, equipe))
 
 # Data to plot
 output_str = f"({ameaça_ofensiva_3_ranking_value}/{rows_count})"
@@ -4010,7 +4024,7 @@ full_title_ameaça_ofensiva_3 = f"Gols (p90) {output_str} {highlight_ameaça_ofe
 
 # Building the Extended Title"
 # Determining player's rank in attribute in league
-ameaça_ofensiva_4_ranking_value = (get_player_rank(jogadores, liga, "Entradas na área (p90)", attribute_chart_z1))
+ameaça_ofensiva_4_ranking_value = (get_player_rank(jogadores, liga, "Entradas na área (p90)", attribute_chart_z1, equipe))
 
 # Data to plot
 output_str = f"({ameaça_ofensiva_4_ranking_value}/{rows_count})"
@@ -4018,7 +4032,7 @@ full_title_ameaça_ofensiva_4 = f"Entradas na área (p90) {output_str} {highligh
 
 # Building the Extended Title"
 # Determining player's rank in attribute in league
-ameaça_ofensiva_5_ranking_value = (get_player_rank(jogadores, liga, "Toques na área (p90)", attribute_chart_z1))
+ameaça_ofensiva_5_ranking_value = (get_player_rank(jogadores, liga, "Toques na área (p90)", attribute_chart_z1, equipe))
 
 # Data to plot
 output_str = f"({ameaça_ofensiva_5_ranking_value}/{rows_count})"
@@ -4046,7 +4060,7 @@ def prepare_data(tabela_a, metrics_cols):
     
     return metrics_data
 
-def create_player_attributes_plot(tabela_a, jogadores, min_value, max_value):
+def create_player_attributes_plot(tabela_a, jogadores, min_value, max_value, equipe):
     """
     Create an interactive plot showing player attributes with hover information
     
@@ -4066,15 +4080,16 @@ def create_player_attributes_plot(tabela_a, jogadores, min_value, max_value):
     # Prepare all the data
     metrics_data = prepare_data(tabela_a, metrics_list)
     
-    # Calculate highlight data
+    # Calculate highlight data with additional filtering for Clube
     highlight_data = {
-        f'highlight_{metric}': tabela_a[tabela_a['Atleta'] == jogadores][metric].iloc[0]
+        f'highlight_{metric}': tabela_a[(tabela_a['Atleta'] == jogadores) & (tabela_a['Clube'] == equipe)][metric].iloc[0]
         for metric in metrics_list
     }
-    
-    # Calculate highlight ranks
+
     highlight_ranks = {
-        metric: int(pd.Series(tabela_a[metric]).rank(ascending=False)[tabela_a['Atleta'] == jogadores].iloc[0])
+        metric: int(
+            pd.Series(tabela_a[metric]).rank(ascending=False)[(tabela_a['Atleta'] == jogadores) & (tabela_a['Clube'] == equipe)].iloc[0]
+        )
         for metric in metrics_list
     }
     
@@ -4231,7 +4246,8 @@ fig = create_player_attributes_plot(
     tabela_a=attribute_chart_z1,  # Your main dataframe
     jogadores=jogadores,  # Name of player to highlight
     min_value= min_value,  # Minimum value for x-axis
-    max_value= max_value    # Maximum value for x-axis
+    max_value= max_value,    # Maximum value for x-axis
+    equipe = equipe
 )
 
 st.plotly_chart(fig, use_container_width=True)
@@ -4521,7 +4537,7 @@ fig, (ax1, ax2, ax3, ax4) = plt.subplots(4, 1)
 rows_count = attribute_chart_z1[(attribute_chart_z1['Liga'] == liga) & (attribute_chart_z1['função'] == "Extremo")].shape[0]
 
 # Function to determine player's rank in attribute in league
-def get_player_rank(player_name, liga, column_name, dataframe):
+def get_player_rank(player_name, liga, column_name, dataframe, clube):
     # Filter the dataframe for the specified Liga
     filtered_df = dataframe[dataframe['Liga'] == liga]
     
@@ -4529,7 +4545,7 @@ def get_player_rank(player_name, liga, column_name, dataframe):
     filtered_df['Rank'] = filtered_df[column_name].rank(ascending=False, method='min')
     
     # Find the rank of the specified player
-    player_row = filtered_df[filtered_df['Atleta'] == player_name]
+    player_row = filtered_df[(filtered_df['Atleta'] == player_name) & (filtered_df['Clube'] == clube)]
     if not player_row.empty:
         return int(player_row['Rank'].iloc[0])
     else:
@@ -4539,7 +4555,7 @@ def get_player_rank(player_name, liga, column_name, dataframe):
 
 # Building the Extended Title"
 # Determining player's rank in attribute in league
-finalização_1_ranking_value = (get_player_rank(jogadores, liga, "(Gols - xG)", attribute_chart_z1))
+finalização_1_ranking_value = (get_player_rank(jogadores, liga, "(Gols - xG)", attribute_chart_z1, equipe))
 
 # Data to plot
 output_str = f"({finalização_1_ranking_value}/{rows_count})"
@@ -4547,7 +4563,7 @@ full_title_finalização_1 = f"(Gols - xG) {output_str} {highlight_finalização
 
 # Building the Extended Title"
 # Determining player's rank in attribute in league
-finalização_2_ranking_value = (get_player_rank(jogadores, liga, "xGOT (xG no alvo) (p90)", attribute_chart_z1))
+finalização_2_ranking_value = (get_player_rank(jogadores, liga, "xGOT (xG no alvo) (p90)", attribute_chart_z1, equipe))
 
 # Data to plot
 output_str = f"({finalização_2_ranking_value}/{rows_count})"
@@ -4555,7 +4571,7 @@ full_title_finalização_2 = f"xGOT (xG no alvo) (p90) {output_str} {highlight_f
 
 # Building the Extended Title"
 # Determining player's rank in attribute in league
-finalização_3_ranking_value = (get_player_rank(jogadores, liga, "Conversão de finalizações (%)", attribute_chart_z1))
+finalização_3_ranking_value = (get_player_rank(jogadores, liga, "Conversão de finalizações (%)", attribute_chart_z1, equipe))
 
 # Data to plot
 output_str = f"({finalização_3_ranking_value}/{rows_count})"
@@ -4563,7 +4579,7 @@ full_title_finalização_3 = f"Conversão de finalizações (%) {output_str} {hi
 
 # Building the Extended Title"
 # Determining player's rank in attribute in league
-finalização_4_ranking_value = (get_player_rank(jogadores, liga, "Gols (p90)", attribute_chart_z1))
+finalização_4_ranking_value = (get_player_rank(jogadores, liga, "Gols (p90)", attribute_chart_z1, equipe))
 
 # Data to plot
 output_str = f"({finalização_4_ranking_value}/{rows_count})"
@@ -4591,7 +4607,7 @@ def prepare_data(tabela_a, metrics_cols):
     
     return metrics_data
 
-def create_player_attributes_plot(tabela_a, jogadores, min_value, max_value):
+def create_player_attributes_plot(tabela_a, jogadores, min_value, max_value, equipe):
     """
     Create an interactive plot showing player attributes with hover information
     
@@ -4610,15 +4626,16 @@ def create_player_attributes_plot(tabela_a, jogadores, min_value, max_value):
     # Prepare all the data
     metrics_data = prepare_data(tabela_a, metrics_list)
     
-    # Calculate highlight data
+    # Calculate highlight data with additional filtering for Clube
     highlight_data = {
-        f'highlight_{metric}': tabela_a[tabela_a['Atleta'] == jogadores][metric].iloc[0]
+        f'highlight_{metric}': tabela_a[(tabela_a['Atleta'] == jogadores) & (tabela_a['Clube'] == equipe)][metric].iloc[0]
         for metric in metrics_list
     }
-    
-    # Calculate highlight ranks
+
     highlight_ranks = {
-        metric: int(pd.Series(tabela_a[metric]).rank(ascending=False)[tabela_a['Atleta'] == jogadores].iloc[0])
+        metric: int(
+            pd.Series(tabela_a[metric]).rank(ascending=False)[(tabela_a['Atleta'] == jogadores) & (tabela_a['Clube'] == equipe)].iloc[0]
+        )
         for metric in metrics_list
     }
     
@@ -4773,7 +4790,8 @@ fig = create_player_attributes_plot(
     tabela_a=attribute_chart_z1,  # Your main dataframe
     jogadores=jogadores,  # Name of player to highlight
     min_value= min_value,  # Minimum value for x-axis
-    max_value= max_value    # Maximum value for x-axis
+    max_value= max_value,    # Maximum value for x-axis
+    equipe = equipe
 )
 
 st.plotly_chart(fig, use_container_width=True)
