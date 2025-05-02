@@ -280,7 +280,7 @@ def create_player_attributes_plot(tabela_a, jogadores, min_value, max_value):
         x=0.5,
         y=0.47,
         showarrow=False,
-        font=dict(size=16, color='blue', weight='bold')
+        font=dict(size=16, color='blue')
     )
 
     return fig
@@ -815,7 +815,7 @@ def create_player_attributes_plot(tabela_a, jogadores, min_value, max_value):
         x=0.5,
         y=0.47,
         showarrow=False,
-        font=dict(size=16, color='blue', weight='bold')
+        font=dict(size=16, color='blue')
     )
 
     return fig
@@ -1339,7 +1339,7 @@ def create_player_attributes_plot(tabela_a, jogadores, min_value, max_value):
         x=0.5,
         y=0.47,
         showarrow=False,
-        font=dict(size=16, color='black', weight='bold')
+        font=dict(size=16, color='black')
     )
 
     return fig
@@ -1865,7 +1865,7 @@ def create_player_attributes_plot(tabela_a, jogadores, min_value, max_value):
         x=0.5,
         y=0.47,
         showarrow=False,
-        font=dict(size=16, color='black', weight='bold')
+        font=dict(size=16, color='black')
     )
 
     return fig
@@ -2413,7 +2413,7 @@ def create_player_attributes_plot(tabela_a, jogadores, min_value, max_value):
         x=0.5,
         y=0.32,
         showarrow=False,
-        font=dict(size=16, color='black', weight='bold')
+        font=dict(size=16, color='black')
     )
 
     return fig
@@ -2952,7 +2952,7 @@ def create_player_attributes_plot(tabela_a, jogadores, min_value, max_value):
         x=0.5,
         y=0.47,
         showarrow=False,
-        font=dict(size=16, color='black', weight='bold')
+        font=dict(size=16, color='black')
     )
 
     return fig
@@ -3502,7 +3502,7 @@ def create_player_attributes_plot(tabela_a, jogadores, min_value, max_value):
         x=0.5,
         y=0.29,
         showarrow=False,
-        font=dict(size=16, color='black', weight='bold')
+        font=dict(size=16, color='black')
     )
 
     return fig
