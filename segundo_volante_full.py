@@ -292,8 +292,8 @@ min(metrics_participação_3), min(metrics_participação_4),
 ])  # Add padding of 0.5
 
 max_value_test = max([
-min(metrics_participação_1), min(metrics_participação_2), 
-min(metrics_participação_3), min(metrics_participação_4),
+max(metrics_participação_1), max(metrics_participação_2), 
+max(metrics_participação_3), max(metrics_participação_4),
 ])  # Add padding of 0.5
 
 min_value = -max(abs(min_value_test), max_value_test) -0.03

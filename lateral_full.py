@@ -293,8 +293,8 @@ min(metrics_participação_3), min(metrics_participação_4),
 ])  # Add padding of 0.5
 
 max_value_test = max([
-min(metrics_participação_1), min(metrics_participação_2), 
-min(metrics_participação_3), min(metrics_participação_4),
+max(metrics_participação_1), max(metrics_participação_2), 
+max(metrics_participação_3), max(metrics_participação_4),
 ])  # Add padding of 0.5
 
 min_value = -max(abs(min_value_test), max_value_test) -0.03
@@ -837,8 +837,8 @@ min(metrics_intensidade_defensiva_3), min(metrics_intensidade_defensiva_4),
 ])  # Add padding of 0.5
 
 max_value_test = max([
-min(metrics_intensidade_defensiva_1), min(metrics_intensidade_defensiva_2), 
-min(metrics_intensidade_defensiva_3), min(metrics_intensidade_defensiva_4),
+max(metrics_intensidade_defensiva_1), max(metrics_intensidade_defensiva_2), 
+max(metrics_intensidade_defensiva_3), max(metrics_intensidade_defensiva_4),
 ])  # Add padding of 0.5
 
 min_value = -max(abs(min_value_test), max_value_test) -0.03
@@ -1360,8 +1360,8 @@ min(metrics_inteligência_defensiva_3)
 ])  # Add padding of 0.5
 
 max_value_test = max([
-min(metrics_inteligência_defensiva_1), min(metrics_inteligência_defensiva_2), 
-min(metrics_inteligência_defensiva_3)
+max(metrics_inteligência_defensiva_1), max(metrics_inteligência_defensiva_2), 
+max(metrics_inteligência_defensiva_3)
 ])  # Add padding of 0.5
 
 min_value = -max(abs(min_value_test), max_value_test) -0.03
