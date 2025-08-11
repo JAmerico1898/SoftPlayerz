@@ -1,13 +1,13 @@
-streamlit==1.39.0
-streamlit-option-menu==0.3.13
-numpy==2.3.0
-pandas==2.2.3
-plotly==5.24.1
-matplotlib==3.9.2
-soccerplots==1.1.7
-scikit-learn==1.5.2
-Pillow==10.4.0
-seaborn==0.13.2
-google-generativeai==0.8.3
-python-dotenv==1.0.1
+streamlit
+streamlit-option-menu
+numpy
+pandas
+plotly
+matplotlib
+soccerplots
+scikit-learn
+pillow
+seaborn
+google-generativeai
+python-dotenv
 
