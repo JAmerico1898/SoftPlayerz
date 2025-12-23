@@ -56,7 +56,10 @@ df7 = pd.read_csv("temporadas.csv")
 df8 = pd.read_csv("nacionalidades.csv")
 df9 = pd.read_csv("contratos.csv")
 df10 = pd.read_csv('jogadores_similares_2.csv')
-df14 = pd.read_csv("performance_historica.csv")
+df14 = pd.read_csv(
+    "performance_historica.csv.zip",
+    compression="zip"
+)
 df_comp = pd.read_csv("jogadores_comp_wyscout.csv")
 special_leagues = ['BEL1', 'BRA1', 'ENG1', 'ENG2', 'FRA1', 'GER1', 'HOL', 'ITA1', 'POR1', 'RUS', 'SCT', 'SPA1', 'TUR', 'USA']
 special_posições = ['Zagueiro', 'Lateral', 'Meio Campo', 'Extremo', 'Atacante']
