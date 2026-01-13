@@ -61,9 +61,6 @@ df14 = pd.read_csv(
     compression="zip"
 )
 df_comp = pd.read_csv("jogadores_comp_wyscout.csv")
-special_leagues = ['BEL1', 'BRA1', 'ENG1', 'ENG2', 'FRA1', 'GER1', 'HOL', 'ITA1', 'POR1', 'RUS', 'SCT', 'SPA1', 'TUR', 'USA']
-special_posições = ['Zagueiro', 'Lateral', 'Meio Campo', 'Extremo', 'Atacante']
-special_funções = ['Primeiro Volante', 'Segundo Volante', 'Meia']
 jogadores = df1["Atleta"]
 
 # Define your options
