@@ -5509,6 +5509,145 @@ if st.session_state.selected_option == "Free Agents pelo Mundo":
 ###############################################################################################################################
 
 if st.session_state.selected_option == "Sobre o APP":
+
+    st.markdown("<h4 style='text-align: center;  color: black;'>Ligas cobertas pelo Aplicativo</b></h4>", unsafe_allow_html=True)
+    st.markdown("---")
+
+    st.set_page_config(layout="wide")
+    #st.title("Ligas cobertas pelo Aplicativo")
+
+    # ── 1. Carregar dados ────────────────────────────────────────────────
+    df = pd.read_csv("cobertura_ligas.csv")
+
+    # Agrupar Escócia junto com Inglaterra (ambos = GBR no mapa)
+    df.loc[df["País"] == "Escócia", "País"] = "Inglaterra"    
+
+    # ── 2. Mapeamento País → código ISO-3 (alpha-3) para o Plotly ───────
+    PAIS_PARA_ISO3 = {
+        "Argentina": "ARG",
+        "Austrália": "AUS",
+        "Áustria": "AUT",
+        "Bélgica": "BEL",
+        "Bolívia": "BOL",
+        "Brasil": "BRA",
+        "Bulgária": "BGR",
+        "Canada": "CAN",
+        "Chile": "CHL",
+        "China": "CHN",
+        "Colômbia": "COL",
+        "Costa Rica": "CRI",
+        "Croácia": "HRV",
+        "Rep Tcheca": "CZE",
+        "Dinamarca": "DNK",
+        "Equador": "ECU",
+        "Inglaterra": "GBR",
+        "Finlândia": "FIN",
+        "França": "FRA",
+        "Georgia": "GEO",
+        "Alemanha": "DEU",
+        "Grécia": "GRC",
+        "Holanda": "NLD",
+        "Índia": "IND",
+        "Indonésia": "IDN",
+        "Itália": "ITA",
+        "Japão": "JPN",
+        "Coréia": "KOR",
+        "México": "MEX",
+        "Marrocos": "MAR",
+        "Noruega": "NOR",
+        "Paraguay": "PRY",
+        "Peru": "PER",
+        "Polônia": "POL",
+        "Portugal": "PRT",
+        "Qatar": "QAT",
+        "Romênia": "ROU",
+        "Rússia": "RUS",
+        "Arábia Saudita": "SAU",
+        "Escócia": "GBR",
+        "Sérvia": "SRB",
+        "Espanha": "ESP",
+        "Suécia": "SWE",
+        "Suiça": "CHE",
+        "Turquia": "TUR",
+        "Emirados Árabes Unidos": "ARE",
+        "Ucrânia": "UKR",
+        "Uruguay": "URY",
+        "EUA": "USA",
+        "Uzbequistão": "UZB",
+        "Venezuela": "VEN",
+    }
+
+    df["iso_alpha3"] = df["País"].map(PAIS_PARA_ISO3)
+
+    sem_mapa = df[df["iso_alpha3"].isna()]["País"].unique()
+    if len(sem_mapa) > 0:
+        st.warning(f"Países sem código ISO-3: {', '.join(sem_mapa)}")
+
+    df = df.dropna(subset=["iso_alpha3"])
+
+    # ── 3. Agrupar países com múltiplas ligas ────────────────────────────
+    # Usa MAX para pegar a MENOR divisão (3 > 2 > 1), diferenciando cores
+    df_agrupado = (
+        df.groupby(["País", "iso_alpha3"])
+        .agg(
+            Divisão_max=("Divisão", "max"),
+            Códigos=("Código", lambda x: ", ".join(sorted(x.unique()))),
+            Ligas=("Liga", lambda x: " | ".join(x)),
+            Divisões=("Divisão", lambda x: ", ".join(str(d) for d in sorted(x.unique()))),
+        )
+        .reset_index()
+    )
+
+    LABEL_DIVISAO = {1: "1ª Divisão", 2: "2ª Divisão", 3: "3ª Divisão"}
+    df_agrupado["Divisão"] = df_agrupado["Divisão_max"].map(LABEL_DIVISAO)
+
+    # ── 4. Plotar mapa ──────────────────────────────────────────────────
+    cores = {
+        "1ª Divisão": "#1a9641",   # verde
+        "2ª Divisão": "#fdae61",   # laranja
+        "3ª Divisão": "#d7191c",   # vermelho
+    }
+
+    fig = px.choropleth(
+        df_agrupado,
+        locations="iso_alpha3",
+        color="Divisão",
+        color_discrete_map=cores,
+        category_orders={"Divisão": ["1ª Divisão", "2ª Divisão", "3ª Divisão"]},
+        hover_name="País",
+        hover_data={
+            "Códigos": True,
+            "Ligas": True,
+            "Divisões": True,
+            "iso_alpha3": False,
+            "Divisão": False,
+            "Divisão_max": False,
+        },
+        labels={
+            "Códigos": "Código(s) no App",
+            "Ligas": "Liga(s)",
+            "Divisões": "Divisão(ões)",
+        }
+    )
+
+    fig.update_layout(
+        geo=dict(
+            showframe=False,
+            showcoastlines=True,
+            coastlinecolor="gray",
+            projection_type="natural earth",
+            bgcolor="#f0f0f0",
+        ),
+        legend_title_text="Menor divisão coberta",
+        #title_font_size=20,
+        margin=dict(l=0, r=0, t=50, b=0),
+        height=600,
+    )
+
+    # ── 5. Exibir no Streamlit (na própria tela) ────────────────────────
+    st.plotly_chart(fig, use_container_width=True)
+
+    st.markdown("---")
     st.markdown("<h4 style='text-align: center;  color: black;'>Sobre o APP</b></h4>", unsafe_allow_html=True)
     st.markdown("---")
 
