@@ -74,7 +74,8 @@ options = [
             "Histórico do Jogador",
             "Sobre o APP",
             "Compare Jogadores",
-            "Seleção da Liga"
+            "Seleção da Liga",
+            "Dúvidas, Sugestões"
 ]
 
 ###############################################################################################################################
@@ -328,6 +329,31 @@ with col18:
     else:
         # Display default (gray) button
         st.button(options[8], key="btn10", use_container_width=True, on_click=select_option, args=(options[8],))
+
+# Create three columns for the initial choices
+col19, col20, col21 = st.columns([3, 3, 3])
+
+# Row 5
+with col20:
+    badge_novo = '<span style="color: gold; font-size: 0.75em; font-weight: bold;">novo</span>'
+    
+    if st.session_state.selected_option == options[10]:
+        st.markdown(
+            f"""
+            <div data-testid="stButton">
+                <button class="selected-button">
+                    {options[10]} {badge_novo}
+                </button>
+            </div>
+            """, 
+            unsafe_allow_html=True
+        )
+    else:
+        st.button(options[10], key="btn12", use_container_width=True, on_click=select_option, args=(options[10],))
+        st.markdown(
+            '<p style="text-align: right; margin-top: -62px; margin-right: 12px; font-size: 0.70em; color: gold; font-weight: bold; pointer-events: none;">novo</p>',
+            unsafe_allow_html=True
+        )
 
 st.markdown("<hr style='border:0.5px solid black;'>", unsafe_allow_html=True)
 
@@ -695,6 +721,15 @@ if st.session_state.selected_option == "Seleção da Liga":
             st.pyplot(fig)
             plt.close(fig)
         
+
+###########################################################################################################
+###########################################################################################################
+
+if st.session_state.selected_option == "Dúvidas, Sugestões":
+    
+    st.markdown("<h2 style='text-align: center;'>Caso identifique um erro ou tenha uma sugestão de melhoria, envie uma mensagem!</h2>", unsafe_allow_html=True)
+    from caixa_sugestoes import render
+    render()
 
 ###########################################################################################################
 ###########################################################################################################
