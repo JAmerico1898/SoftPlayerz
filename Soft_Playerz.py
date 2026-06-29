@@ -26,7 +26,7 @@ from matplotlib.patches import FancyBboxPatch, Arc
    
 #CABEÇALHO DO FORM
 st.markdown("<h2 style='text-align: center;'>Plataforma de Scouting</h2>", unsafe_allow_html=True)
-st.markdown("<h6 style='text-align: center;'>Atualizado em 19Dez2025.</h6>", unsafe_allow_html=True)
+st.markdown("<h6 style='text-align: center;'>Atualizado em 26Jun2026.</h6>", unsafe_allow_html=True)
 
 st.markdown("""
 <style>
@@ -409,9 +409,9 @@ def carregar_dados_perfil(perfil, liga, ranking, pe=None):
         
         df = pd.read_csv(arquivo)
         
-        # Filtrar por temporada 2025 e liga
+        # Filtrar por temporada 2026 e liga
         df_filtrado = df[
-            (df["Versão_Temporada"] == 2025) & 
+            (df["Versão_Temporada"] == 2026) & 
             (df["Liga"] == liga)
         ]
 
@@ -670,7 +670,7 @@ def criar_selecao_liga(liga, ranking):
     
     # Título
     ranking_texto = {1: "Melhores", 2: "2° Melhores", 3: "3° Melhores"}
-    plt.title(f"Seleção da Liga - {liga}\n{ranking_texto[ranking]} Jogadores por Perfil - Temporada 2025", 
+    plt.title(f"Seleção da Liga - {liga}\n{ranking_texto[ranking]} Jogadores por Perfil - Temporada 2026", 
               fontsize=24, fontweight='bold', color='#1B4D3E', pad=25)
     
     plt.tight_layout()
@@ -685,7 +685,7 @@ def criar_selecao_liga(liga, ranking):
 if st.session_state.selected_option == "Seleção da Liga":
     
     st.markdown("<h2 style='text-align: center;'>Seleção da Liga</h2>", unsafe_allow_html=True)
-    st.markdown("<h3 style='text-align: center;'>2025</h3>", unsafe_allow_html=True)
+    st.markdown("<h3 style='text-align: center;'>2026</h3>", unsafe_allow_html=True)
     
     # Obter ligas disponíveis
     ligas = df5["Liga"].unique().tolist()
@@ -737,7 +737,7 @@ if st.session_state.selected_option == "Dúvidas, Sugestões":
 if st.session_state.selected_option == "Histórico do Jogador":
            
     st.markdown("<h2 style='text-align: center;'>Histórico do Jogador</h2>", unsafe_allow_html=True)
-    st.markdown("<h3 style='text-align: center;'>2021-2025</h3>", unsafe_allow_html=True)
+    st.markdown("<h3 style='text-align: center;'>2022-2026</h3>", unsafe_allow_html=True)
     nacionalidades = df8["Nacionalidade"]
     historico = pd.read_csv("base_bruta.csv")
     jogadores = st.selectbox("Digite o nome do seu jogador. A grafia deve ser exata!", options=jogadores, index=None, placeholder="Jogador")
@@ -748,7 +748,7 @@ if st.session_state.selected_option == "Histórico do Jogador":
         nacionalidade = st.selectbox("Escolha a Nacionalidade do Jogador", options=nacionalidades)
    
 #    if jogadores and nacionalidade:
-        st.markdown("<h4 style='text-align: center;'>Histórico do Jogador<br>Temporadas 2021/2022/2023/2024/2025</b></h4>", unsafe_allow_html=True)
+        st.markdown("<h4 style='text-align: center;'>Histórico do Jogador<br>Temporadas 2022/2022/2023/2024/2026</b></h4>", unsafe_allow_html=True)
         historico = historico.loc[(historico['Atleta']==jogadores)&(historico['Nacionalidade']==nacionalidade)]
         historico = historico.iloc[:, np.r_[0, 2, 9, 10, 13, 15, 19]]
         historico = historico.rename(columns={"Equipe_Janela_Análise": "Equipe",
@@ -805,10 +805,10 @@ if st.session_state.selected_option == "Histórico do Jogador":
 
 if st.session_state.selected_option == "10 Melhores da Liga":
     st.markdown("<h2 style='text-align: center;'>10 Melhores da Liga</h2>", unsafe_allow_html=True)
-    st.markdown("<h3 style='text-align: center;'>2022-2025</h3>", unsafe_allow_html=True)
+    st.markdown("<h3 style='text-align: center;'>2023-2026</h3>", unsafe_allow_html=True)
     ligas = df5["Liga"]
     posições = df6["Posição"]
-    temporadas = (2025, 2024, 2023, 2022)
+    temporadas = (2026, 2025, 2024, 2023)
     liga = st.selectbox("Escolha a Liga", options=ligas)
     temporada = st.selectbox("Escolha a Temporada", options=temporadas)
     posição = st.selectbox("Escolha a Posição", options=posições, index=None, placeholder="Atacante")
@@ -2034,7 +2034,7 @@ if st.session_state.selected_option == "10 Melhores da Liga":
 
 if st.session_state.selected_option == "Nacionais pelo Mundo":
     st.markdown("<h2 style='text-align: center;'>Nacionais pelo Mundo</h2>", unsafe_allow_html=True)
-    st.markdown("<h3 style='text-align: center;'>2025</h3>", unsafe_allow_html=True)
+    st.markdown("<h3 style='text-align: center;'>2026</h3>", unsafe_allow_html=True)
     nacionalidades = df8["Nacionalidade"]
     posições = df6["Posição"]
     temporadas = df7["Versão_Temporada"]
@@ -2042,7 +2042,7 @@ if st.session_state.selected_option == "Nacionais pelo Mundo":
              'DEN', 'GRE', 'HOL', 'JAP', 'MEX', 'SAUD', 'SCT', 'TUR', 'UAE', 'USA', 'BUL', 'AUT', 'QAT']
     nacionalidade = st.selectbox("Escolha a Nacionalidade do Atleta", options=nacionalidades)
     posição = st.selectbox("Escolha a Posição do Atleta", options=posições)
-    temporada = 2025
+    temporada = 2026
     
     if nacionalidade and temporada:
         if posição == "Goleiro":
@@ -3461,8 +3461,8 @@ if st.session_state.selected_option == "Free Agents pelo Mundo":
     st.markdown("<h2 style='text-align: center;'>Free Agents pelo Mundo</h2>", unsafe_allow_html=True)
     nacionalidades = df8["Nacionalidade"]
     posições = df6["Posição"]
-    contratos = ["2025-12-31", "2026-01-31", "2026-02-28", "2026-06-30", "2026-09-30", "2026-12-31", "2027-06-30"]
-    temporada = 2025
+    contratos = ["2026-06-30", "2026-09-30", "2026-12-31", "2027-06-30"]
+    temporada = 2026
     #mundo_options = df5["Liga"]#['BRA1', 'ARG1', 'ENG1', 'ENG2', 'FRA1', 'FRA2', 'SPA1', 'SPA2', 'ITA1', 'ITA2', 'GER1', 'POR1', 'POR2', 'SWZ', 'CZH', 'CRO', 'SER', 'RUS', 'UKR', 'BEL1', 'BEL2', 'CHN',
              #'DEN', 'GRE', 'HOL', 'JAP', 'MEX', 'SAUD', 'SCT', 'TUR', 'UAE', 'USA', 'BUL', 'AUT', 'QAT']
     nacionalidade = st.selectbox("Escolha a Nacionalidade do Atleta", options=nacionalidades)
@@ -5712,13 +5712,13 @@ if st.session_state.selected_option == "Sobre o APP":
 
 if st.session_state.selected_option == "Histórico de Performance":
     st.markdown("<h2 style='text-align: center;'>Histórico de Performance de Jogadores</h2>", unsafe_allow_html=True)
-    st.markdown("<h3 style='text-align: center;'>2022-2025</h3>", unsafe_allow_html=True)
+    st.markdown("<h3 style='text-align: center;'>2022-2026</h3>", unsafe_allow_html=True)
     jogadores = st.selectbox("Digite o nome do seu jogador. A grafia deve ser exata!", options=jogadores, index=None, placeholder="Jogador")
     if jogadores:
         #Determinar a Equipe
         df50 = df14.loc[(df14['Atleta']==jogadores)]
         equipes = df50['Equipe atual'].unique()
-        equipe_atual = st.selectbox("Equipe em que o Jogador atua (Dezembro/2025)", options=equipes)
+        equipe_atual = st.selectbox("Equipe em que o Jogador atua (Junho/2026)", options=equipes)
         if equipe_atual:
             performance_historica = df14.loc[(df14['Atleta']==jogadores) & (df14['Equipe atual']==equipe_atual)]
             unique_ids = performance_historica['ID'].unique()
@@ -5727,7 +5727,7 @@ if st.session_state.selected_option == "Histórico de Performance":
                 if ids:
                     performance_historica = df14.loc[(df14['Atleta']==jogadores) & (df14['Equipe atual']==equipe_atual) & (df14['ID']==ids)]
                     st.markdown("<h4 style='text-align: center;'>Performance do Jogador</b></h4>", unsafe_allow_html=True)
-                    st.markdown("<h5 style='text-align: center;'>Temporadas 2022-2025</b></h5>", unsafe_allow_html=True)
+                    st.markdown("<h5 style='text-align: center;'>Temporadas 2022-2026</b></h5>", unsafe_allow_html=True)
                     fontsize=25
                     markdown_amount_1 = f"<div style='text-align:center; font-size:{fontsize}px; font-weight:bold'>{jogadores}</div>"
                     st.markdown(markdown_amount_1, unsafe_allow_html=True)
@@ -5864,7 +5864,7 @@ if st.session_state.selected_option == "Histórico de Performance":
             else:
                 performance_historica = df14.loc[(df14['Atleta']==jogadores) & (df14['Equipe atual']==equipe_atual)]
                 st.markdown("<h4 style='text-align: center;'>Performance do Jogador</b></h4>", unsafe_allow_html=True)
-                st.markdown("<h5 style='text-align: center;'>Temporadas 2022-2025</b></h5>", unsafe_allow_html=True)
+                st.markdown("<h5 style='text-align: center;'>Temporadas 2022-2026</b></h5>", unsafe_allow_html=True)
                 fontsize=25
                 markdown_amount_1 = f"<div style='text-align:center; font-size:{fontsize}px; font-weight:bold'>{jogadores}</div>"
                 st.markdown(markdown_amount_1, unsafe_allow_html=True)
@@ -5986,7 +5986,7 @@ if st.session_state.selected_option == "Histórico de Performance":
                     # Adjust the left spine to create padding
                     ax.spines['left'].set_position(('outward', 18))  # Adjust this value as needed
                     ax.spines['left'].set_visible(False)
-                    ax.set_xticks([2022, 2023, 2024, 2025])  # Set x-ticks to the desired years
+                    ax.set_xticks([2022, 2023, 2024, 2025, 2026])  # Set x-ticks to the desired years
                     ax.tick_params(axis='x', labelsize=12)
                     plt.setp(ax.get_xticklabels(), fontweight='bold')
                     ax.tick_params(axis='y', labelsize=12, length=0)
@@ -12174,7 +12174,7 @@ jogadores_similares = df10["Atleta"].unique()
 fontsize = 20
 if st.session_state.selected_option == "Jogadores Similares":
     st.markdown("<h2 style='text-align: center;'>Jogadores Similares</h2>", unsafe_allow_html=True)
-    st.markdown("<h3 style='text-align: center;'>Ligas Selecionadas - 2025</h3>", unsafe_allow_html=True)
+    st.markdown("<h3 style='text-align: center;'>Ligas Selecionadas - 2026</h3>", unsafe_allow_html=True)
     jogador_similar = st.selectbox("Digite o nome de seu jogador. A grafia deve ser exata!", options=jogadores_similares, index=None, placeholder="Jogador")
     if jogador_similar:
         #Determinar a Liga (pode haver duplicidades)
