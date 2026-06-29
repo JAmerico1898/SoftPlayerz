@@ -6223,7 +6223,7 @@ if st.session_state.selected_option == "Ranking de Jogadores ":
                             formatter = {first_column_name: "{:.2f}", "Média da Liga": "{:.2f}", "Percentil na Liga": "{:.0f}"}
 
                             # Apply the color formatting to "Percentil na Liga" column
-                            styled_df = df.style.format(formatter).applymap(color_percentil, subset=["Percentil na Liga"])
+                            styled_df = df.style.format(formatter).map(color_percentil, subset=["Percentil na Liga"])
 
                             # Additional table styles
                             styled_df = styled_df.set_table_styles(
@@ -6872,7 +6872,7 @@ if st.session_state.selected_option == "Ranking de Jogadores ":
                             formatter = {first_column_name: "{:.2f}", "Média da Liga": "{:.2f}", "Percentil na Liga": "{:.0f}"}
                 
                             # Apply the color formatting to "Percentil na Liga" column
-                            styled_df = df.style.format(formatter).applymap(color_percentil, subset=["Percentil na Liga"])
+                            styled_df = df.style.format(formatter).map(color_percentil, subset=["Percentil na Liga"])
 
                             # Additional table styles
                             styled_df = styled_df.set_table_styles(
@@ -7439,7 +7439,7 @@ if st.session_state.selected_option == "Ranking de Jogadores ":
                             # Ensure 'Rating' is rounded and formatted to 2 decimal places during styling
                             formatter = {first_column_name: "{:.2f}", "Média da Liga": "{:.2f}", "Percentil na Liga": "{:.0f}"}
                             # Apply the color formatting to "Percentil na Liga" column
-                            styled_df = df.style.format(formatter).applymap(color_percentil, subset=["Percentil na Liga"])
+                            styled_df = df.style.format(formatter).map(color_percentil, subset=["Percentil na Liga"])
 
                             # Additional table styles
                             styled_df = styled_df.set_table_styles(
@@ -8014,7 +8014,7 @@ if st.session_state.selected_option == "Ranking de Jogadores ":
                             # Ensure 'Rating' is rounded and formatted to 2 decimal places during styling
                             formatter = {first_column_name: "{:.2f}", "Média da Liga": "{:.2f}", "Percentil na Liga": "{:.0f}"}
                             # Apply the color formatting to "Percentil na Liga" column
-                            styled_df = df.style.format(formatter).applymap(color_percentil, subset=["Percentil na Liga"])
+                            styled_df = df.style.format(formatter).map(color_percentil, subset=["Percentil na Liga"])
 
                             # Additional table styles
                             styled_df = styled_df.set_table_styles(
@@ -8580,7 +8580,7 @@ if st.session_state.selected_option == "Ranking de Jogadores ":
                             formatter = {first_column_name: "{:.2f}", "Média da Liga": "{:.2f}", "Percentil na Liga": "{:.0f}"}
                 
                             # Apply the color formatting to "Percentil na Liga" column
-                            styled_df = df.style.format(formatter).applymap(color_percentil, subset=["Percentil na Liga"])
+                            styled_df = df.style.format(formatter).map(color_percentil, subset=["Percentil na Liga"])
 
                             # Additional table styles
                             styled_df = styled_df.set_table_styles(
@@ -9077,7 +9077,7 @@ if st.session_state.selected_option == "Ranking de Jogadores ":
                             formatter = {first_column_name: "{:.2f}", "Média da Liga": "{:.2f}", "Percentil na Liga": "{:.0f}"}
 
                             # Apply the color formatting to "Percentil na Liga" column
-                            styled_df = df.style.format(formatter).applymap(color_percentil, subset=["Percentil na Liga"])
+                            styled_df = df.style.format(formatter).map(color_percentil, subset=["Percentil na Liga"])
 
                             # Additional table styles
                             styled_df = styled_df.set_table_styles(
@@ -9494,7 +9494,7 @@ if st.session_state.selected_option == "Ranking de Jogadores ":
 
                 
                             # Apply the color formatting to "Percentil na Liga" column
-                            styled_df = df.style.format(formatter).applymap(color_percentil, subset=["Percentil na Liga"])
+                            styled_df = df.style.format(formatter).map(color_percentil, subset=["Percentil na Liga"])
 
                             # Additional table styles
                             styled_df = styled_df.set_table_styles(
@@ -10007,7 +10007,7 @@ if st.session_state.selected_option == "Ranking de Jogadores ":
                             # Ensure 'Rating' is rounded and formatted to 2 decimal places during styling
                             formatter = {first_column_name: "{:.2f}", "Média da Liga": "{:.2f}", "Percentil na Liga": "{:.0f}"}
                             # Apply the color formatting to "Percentil na Liga" column
-                            styled_df = df.style.format(formatter).applymap(color_percentil, subset=["Percentil na Liga"])
+                            styled_df = df.style.format(formatter).map(color_percentil, subset=["Percentil na Liga"])
 
                             # Additional table styles
                             styled_df = styled_df.set_table_styles(
@@ -10424,7 +10424,7 @@ if st.session_state.selected_option == "Ranking de Jogadores ":
                             formatter = {first_column_name: "{:.2f}", "Média da Liga": "{:.2f}", "Percentil na Liga": "{:.0f}"}
 
                             # Apply the color formatting to "Percentil na Liga" column
-                            styled_df = df.style.format(formatter).applymap(color_percentil, subset=["Percentil na Liga"])
+                            styled_df = df.style.format(formatter).map(color_percentil, subset=["Percentil na Liga"])
 
                             # Additional table styles
                             styled_df = styled_df.set_table_styles(
@@ -10797,7 +10797,7 @@ if st.session_state.selected_option == "Ranking de Jogadores ":
                             # Ensure 'Rating' is rounded and formatted to 2 decimal places during styling
                             formatter = {first_column_name: "{:.2f}", "Média da Liga": "{:.2f}", "Percentil na Liga": "{:.0f}"}
                             # Apply the color formatting to "Percentil na Liga" column
-                            styled_df = df.style.format(formatter).applymap(color_percentil, subset=["Percentil na Liga"])
+                            styled_df = df.style.format(formatter).map(color_percentil, subset=["Percentil na Liga"])
 
                             # Additional table styles
                             styled_df = styled_df.set_table_styles(
@@ -11495,7 +11495,7 @@ if st.session_state.selected_option == "Ranking de Jogadores ":
                             # Ensure 'Rating' is rounded and formatted to 2 decimal places during styling
                             formatter = {first_column_name: "{:.2f}", "Média da Liga": "{:.2f}", "Percentil na Liga": "{:.0f}"}
                             # Apply the color formatting to "Percentil na Liga" column
-                            styled_df = df.style.format(formatter).applymap(color_percentil, subset=["Percentil na Liga"])
+                            styled_df = df.style.format(formatter).map(color_percentil, subset=["Percentil na Liga"])
 
                             # Additional table styles
                             styled_df = styled_df.set_table_styles(
@@ -11917,7 +11917,7 @@ if st.session_state.selected_option == "Ranking de Jogadores ":
                             formatter = {first_column_name: "{:.2f}", "Média da Liga": "{:.2f}", "Percentil na Liga": "{:.0f}"}
                 
                             # Apply the color formatting to "Percentil na Liga" column
-                            styled_df = df.style.format(formatter).applymap(color_percentil, subset=["Percentil na Liga"])
+                            styled_df = df.style.format(formatter).map(color_percentil, subset=["Percentil na Liga"])
 
                             # Additional table styles
                             styled_df = styled_df.set_table_styles(
